@@ -1,0 +1,61 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="1044" measuredH="568" mockupW="983" mockupH="540">
+  <controls>
+    <control controlID="94" controlTypeID="com.balsamiq.mockups::TitleWindow" x="61" y="28" w="713" h="540" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Window%20Name</text>
+        <topheight>26</topheight>
+        <verticalScrollbar>false</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="95" controlTypeID="com.balsamiq.mockups::MenuBar" x="68" y="56" w="-1" h="-1" measuredW="189" measuredH="29" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>File%2C%20Edit%2C%20View%2C%20Help</text>
+      </controlProperties>
+    </control>
+    <control controlID="96" controlTypeID="com.balsamiq.mockups::ButtonBar" x="68" y="132" w="446" h="27" measuredW="351" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Git%3A%20sourcelineproject%2C%20SVN%3A%20kuzya%2C%20Git%3A%20linuxkernel</text>
+      </controlProperties>
+    </control>
+    <control controlID="97" controlTypeID="com.balsamiq.mockups::Canvas" x="68" y="159" w="224" h="380" measuredW="100" measuredH="70" zOrder="3" locked="false" isInGroup="-1"/>
+    <control controlID="98" controlTypeID="com.balsamiq.mockups::Canvas" x="292" y="159" w="482" h="208" measuredW="100" measuredH="70" zOrder="4" locked="false" isInGroup="-1"/>
+    <control controlID="99" controlTypeID="com.balsamiq.mockups::Canvas" x="292" y="367" w="482" h="172" measuredW="100" measuredH="70" zOrder="5" locked="false" isInGroup="-1"/>
+    <control controlID="101" controlTypeID="com.balsamiq.mockups::SiteMap" x="130" y="181" w="-1" h="-1" measuredW="100" measuredH="310" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>working%20copy%0A-%20a1gdj2344%0A--%20a1gccffd44</text>
+      </controlProperties>
+    </control>
+    <control controlID="102" controlTypeID="com.balsamiq.mockups::Icon" x="926" y="381" w="-1" h="-1" measuredW="48" measuredH="48" zOrder="7" locked="false" isInGroup="-1"/>
+    <control controlID="103" controlTypeID="com.balsamiq.mockups::iPadPopover" x="835" y="291" w="209" h="90" measuredW="222" measuredH="187" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <popoverArrowSide>bottom</popoverArrowSide>
+        <text>Source%20Line%20Tray%20Icon</text>
+      </controlProperties>
+    </control>
+    <control controlID="104" controlTypeID="com.balsamiq.mockups::TextArea" x="292" y="367" w="482" h="172" measuredW="200" measuredH="140" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>c%3A%3E</text>
+      </controlProperties>
+    </control>
+    <control controlID="108" controlTypeID="com.balsamiq.mockups::Label" x="78" y="100" w="-1" h="-1" measuredW="52" measuredH="21" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Toolbar....</text>
+      </controlProperties>
+    </control>
+    <control controlID="110" controlTypeID="com.balsamiq.mockups::IconLabel" x="319" y="174" w="-1" h="-1" measuredW="48" measuredH="63" zOrder="11" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>File%201</text>
+      </controlProperties>
+    </control>
+    <control controlID="111" controlTypeID="com.balsamiq.mockups::IconLabel" x="398" y="174" w="-1" h="-1" measuredW="48" measuredH="63" zOrder="12" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>File%202</text>
+      </controlProperties>
+    </control>
+    <control controlID="112" controlTypeID="com.balsamiq.mockups::IconLabel" x="477" y="174" w="-1" h="-1" measuredW="48" measuredH="63" zOrder="13" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>File%203</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
