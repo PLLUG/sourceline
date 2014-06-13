@@ -1,0 +1,69 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="667" measuredH="393" mockupW="575" mockupH="333">
+  <controls>
+    <control controlID="37" controlTypeID="com.balsamiq.mockups::Menu" x="517" y="150" w="-1" h="-1" measuredW="150" measuredH="104" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Open%20in%20External%20Editor%2CCTRL+O%0A---%0AAdd%0AUpdate%0A---%0AInfo...</text>
+      </controlProperties>
+    </control>
+    <control controlID="38" controlTypeID="com.balsamiq.mockups::Canvas" x="92" y="60" w="553" h="333" measuredW="100" measuredH="70" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <borderStyle>square</borderStyle>
+        <value>0</value>
+        <verticalScrollbar>false</verticalScrollbar>
+      </controlProperties>
+    </control>
+    <control controlID="39" controlTypeID="com.balsamiq.mockups::IconLabel" x="132" y="97" w="-1" h="-1" measuredW="53" measuredH="63" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocEmptyIcon%7Clarge</icon>
+        <text>main.cpp</text>
+      </controlProperties>
+    </control>
+    <control controlID="40" controlTypeID="com.balsamiq.mockups::IconLabel" x="214" y="97" w="-1" h="-1" measuredW="61" measuredH="63" zOrder="3" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocEmptyIcon%7Clarge</icon>
+        <text>class1.cpp</text>
+      </controlProperties>
+    </control>
+    <control controlID="41" controlTypeID="com.balsamiq.mockups::IconLabel" x="309" y="97" w="-1" h="-1" measuredW="48" measuredH="63" zOrder="4" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocEmptyIcon%7Clarge</icon>
+        <text>class1.h</text>
+      </controlProperties>
+    </control>
+    <control controlID="42" controlTypeID="com.balsamiq.mockups::IconLabel" x="380" y="97" w="-1" h="-1" measuredW="64" measuredH="63" zOrder="5" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>DocEmptyIcon%7Clarge</icon>
+        <text>class2.cpp</text>
+      </controlProperties>
+    </control>
+    <control controlID="43" controlTypeID="com.balsamiq.mockups::IconLabel" x="468" y="97" w="-1" h="-1" measuredW="51" measuredH="63" zOrder="6" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bold>true</bold>
+        <borderStyle>square</borderStyle>
+        <icon>DocEmptyIcon%7Clarge</icon>
+        <labelPosition>bottom</labelPosition>
+        <text>class2.h</text>
+      </controlProperties>
+    </control>
+    <control controlID="45" controlTypeID="com.balsamiq.mockups::Icon" x="169" y="126" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="7" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>CheckMarkIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="46" controlTypeID="com.balsamiq.mockups::Icon" x="257" y="126" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="8" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>AlertIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="47" controlTypeID="com.balsamiq.mockups::Icon" x="348" y="126" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="9" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>PencilIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+    <control controlID="48" controlTypeID="com.balsamiq.mockups::Icon" x="420" y="126" w="-1" h="-1" measuredW="24" measuredH="24" zOrder="10" locked="false" isInGroup="-1">
+      <controlProperties>
+        <icon>PlusBigIcon%7Csmall</icon>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
