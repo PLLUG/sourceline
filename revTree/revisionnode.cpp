@@ -25,6 +25,15 @@ QString RevisionNode::revId() const
     return _revId;
 }
 
+int RevisionNode::row() const
+{
+    if ( parent )
+    {
+        return parent->children.indexOf(const_cast<RevisionNode*>(this));
+    }
+    return 0;
+}
+
 //void RevisionNode::addChild(RevisionNode *node)
 //{
 //    if ( node )

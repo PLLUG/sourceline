@@ -17,12 +17,16 @@ SOURCES += main.cpp\
     revisionview.cpp \
     revisionmodel.cpp \
     revisionnode.cpp \
-    createtree.cpp
+    createtree.cpp \
+    revisionnodeitem.cpp \
+    view/revisionnodeitem.cpp
 
 HEADERS  += mainwindow.h \
     revisionview.h \
     revisionmodel.h \
     revisionnode.h \
-    createtree.h
+    createtree.h \
+    revisionnodeitem.h \
+    view/revisionnodeitem.h
 
 FORMS    += mainwindow.ui
