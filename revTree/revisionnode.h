@@ -15,6 +15,8 @@ public:
     void setRevId(const QString &id);
     QString revId() const;
 
+    int row() const;
+
 //    void addChild(RevisionNode *node);
     void addChildren(RevisionNode *nodes);
 
