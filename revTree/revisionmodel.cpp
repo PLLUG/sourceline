@@ -5,7 +5,7 @@ RevisionModel::RevisionModel(QObject *parent) :
     QAbstractItemModel(parent)
 {
     CreateTree ct;
-    root = ct.create();
+    mRoot = ct.create();
 }
 
 int RevisionModel::columnCount(const QModelIndex &parent) const
@@ -17,7 +17,7 @@ int RevisionModel::rowCount(const QModelIndex &parent) const
 {
     RevisionNode *node = 0;
     if ( !parent.isValid() )
-        node = root;
+        node = mRoot;
     else
         node = static_cast<RevisionNode *>(parent.internalPointer());
     if ( node )
@@ -44,7 +44,7 @@ QModelIndex RevisionModel::index(int row, int column, const QModelIndex &parent)
 
     RevisionNode *parentNode;
     if ( !parent.isValid() )
-        parentNode = root;
+        parentNode = mRoot;
     else
         parentNode = static_cast<RevisionNode *>(parent.internalPointer());
 
@@ -66,8 +66,13 @@ QModelIndex RevisionModel::parent(const QModelIndex &child) const
     RevisionNode *childItem = static_cast<RevisionNode*>(child.internalPointer());
     RevisionNode *parentItem = childItem->parent;
 
-    if ( parentItem == root )
+    if ( parentItem == mRoot )
         return QModelIndex();
 
     return createIndex(parentItem->row(), 0, parentItem);
+}
+
+RevisionNode *RevisionModel::root() const
+{
+    return mRoot;
 }

@@ -14,6 +14,8 @@ RevisionNode *CreateTree::create() const
     addCommit(root->children.last(), createSimpleNode("My brunch: second commit", QString("%1").arg(revCount++)));
     addCommit(root->children.last(), createSimpleNode("My brunch: third commit", QString("%1").arg(revCount++)));
 
+    addCommit(root->children.last()->children.last(), createSimpleNode("My second brunch: first commit", QString("%1").arg(revCount++)));
+
     addCommit(root, createSimpleNode("second commit", QString("%1").arg(revCount++)));
     addCommit(root, createSimpleNode("third commit", QString("%1").arg(revCount++)));
     return root;

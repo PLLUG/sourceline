@@ -17,8 +17,10 @@ public:
     QModelIndex index(int row, int column, const QModelIndex &parent) const;
     QModelIndex parent(const QModelIndex &child) const;
 
+    RevisionNode *root() const;
+
 protected:
-    RevisionNode *root;
+    RevisionNode *mRoot;
 
 signals:
 
