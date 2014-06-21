@@ -12,6 +12,8 @@ public:
 
     QRectF boundingRect() const;
     void addChild(RevisionNodeItem *child);
+    void addChildren(RevisionNodeItem *child);
+    RevisionNodeItem *parent;
 
 protected:
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
@@ -21,6 +23,7 @@ protected:
 private:
     QSizeF mSize;
     RevisionNode *mData;
+    RevisionNodeItem *mChild;
     QList<RevisionNodeItem *> mChildren;
 };
 

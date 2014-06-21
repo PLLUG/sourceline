@@ -19,7 +19,8 @@ SOURCES += main.cpp\
     revisionnode.cpp \
     createtree.cpp \
     view/revisionnodeitem.cpp \
-    view/revisiongrid.cpp
+    view/revisiongrid.cpp \
+    view/graphicsview.cpp
 
 HEADERS  += mainwindow.h \
     revisionview.h \
@@ -27,6 +28,7 @@ HEADERS  += mainwindow.h \
     revisionnode.h \
     createtree.h \
     view/revisionnodeitem.h \
-    view/revisiongrid.h
+    view/revisiongrid.h \
+    view/graphicsview.h
 
 FORMS    += mainwindow.ui

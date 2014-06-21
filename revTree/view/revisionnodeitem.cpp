@@ -8,7 +8,9 @@
 
 RevisionNodeItem::RevisionNodeItem(RevisionNode *dataNode, QGraphicsItem *parent) :
     QGraphicsItem(parent),
-    mData(dataNode)
+    mData(dataNode),
+    parent(0),
+    mChild(0)
 {
     mSize = QSize(10, 10);
     setAcceptHoverEvents(true);
@@ -21,7 +23,12 @@ QRectF RevisionNodeItem::boundingRect() const
 
 void RevisionNodeItem::addChild(RevisionNodeItem *child)
 {
-    //
+    mChild = child;
+}
+
+void RevisionNodeItem::addChildren(RevisionNodeItem *child)
+{
+    mChildren.append(child);
 }
 
 void RevisionNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)

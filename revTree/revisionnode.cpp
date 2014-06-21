@@ -1,7 +1,10 @@
 #include "revisionnode.h"
+#include <QDebug>
 
 RevisionNode::RevisionNode() :
-    parent(0)
+    parent(0),
+    child(0),
+    graphicsItem(0)
 {
 }
 
@@ -34,14 +37,14 @@ int RevisionNode::row() const
     return 0;
 }
 
-//void RevisionNode::addChild(RevisionNode *node)
-//{
-//    if ( node )
-//    {
-//        child = node;
-//        node->parent = this;
-//    }
-//}
+void RevisionNode::addChild(RevisionNode *node)
+{
+    if ( node )
+    {
+        child = node;
+        child->parent = this;
+    }
+}
 
 void RevisionNode::addChildren(RevisionNode *nodes)
 {
@@ -49,4 +52,18 @@ void RevisionNode::addChildren(RevisionNode *nodes)
         children.append(nodes);
         nodes->parent = this;
     }
+}
+
+RevisionNode *RevisionNode::HEAD() const
+{
+    RevisionNode *head = child;
+    while ( head != 0 )
+    {
+        if ( head->child == 0 )
+            break;
+        head = head->child;
+    }
+    if ( !head )
+        head = const_cast<RevisionNode *>(this);
+    return head;
 }

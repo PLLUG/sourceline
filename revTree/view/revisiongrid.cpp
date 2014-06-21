@@ -1,6 +1,7 @@
 #include "revisiongrid.h"
 
 #include <QPainter>
+#include <QDebug>
 
 RevisionGrid::RevisionGrid()
 {
@@ -21,7 +22,8 @@ void RevisionGrid::setBoundingRect(qreal w, qreal h)
 void RevisionGrid::view(RevisionNode *root)
 {
     mRoot = root;
-    drawItems(mRoot->children, gridStep());
+    drawNode(mRoot, gridStep());
+    drawLines(root);
 }
 
 QRectF RevisionGrid::boundingRect() const
@@ -63,18 +65,58 @@ void RevisionGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *opti
     }
 }
 
-void RevisionGrid::drawItems(const QList<RevisionNode *> &items, int currentCol)
+void RevisionGrid::drawNode(RevisionNode *item, int currentCol)
 {
     static int currentRow = gridStep();
     int currentColumn = currentCol;
-    for (int i = 0; i < items.size(); ++i)
+    RevisionNode *node = item;
+    while ( node != 0 )
     {
-        RevisionNodeItem *it = new RevisionNodeItem(items.at(i), this);
+        RevisionNodeItem *it = new RevisionNodeItem(node, this);
+        node->graphicsItem = it;
         it->setPos(startPoint() + QPoint(currentColumn, -currentRow));
         currentRow += gridStep();
-        if ( !items.at(i)->children.isEmpty() )
+        if ( !node->children.isEmpty() )
         {
-            drawItems(items.at(i)->children, currentCol + gridStep());
+            for (int i = 0; i < node->children.size(); ++i)
+            {
+                drawNode(node->children.at(i), currentCol + gridStep());
+            }
+        }
+        node = node->child;
+    }
+}
+
+void RevisionGrid::drawLines(RevisionNode *root)
+{
+    RevisionNode *next = root;
+    while ( next )
+    {
+        if ( next->child )
+        {
+            drawLine(next->graphicsItem, next->child->graphicsItem);
+            if ( !next->children.isEmpty() )
+            {
+                drawLine(next->graphicsItem, next->children.first()->graphicsItem);
+                drawLines(next->children.first());
+            }
+            next = next->child;
+        }
+        else
+        {
+            if ( !next->children.isEmpty() )
+            {
+                drawLine(next->graphicsItem, next->children.first()->graphicsItem);
+                drawLines(next->children.first());
+            }
+            break;
         }
     }
+}
+
+void RevisionGrid::drawLine(RevisionNodeItem *from, RevisionNodeItem *to)
+{
+    QGraphicsLineItem *line = new QGraphicsLineItem(this);
+    line->setPen(QPen(Qt::red));
+    line->setLine(QLineF(from->pos() + from->boundingRect().center(), to->pos() + to->boundingRect().center()));
 }

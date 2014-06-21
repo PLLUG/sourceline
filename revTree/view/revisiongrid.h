@@ -30,7 +30,10 @@ private:
     QString mText;
     QPointF mTextPos;
 
-    void drawItems(const QList<RevisionNode *> &items, int currentCol);
+    void drawNode(RevisionNode *item, int currentCol);
+    void drawLines(RevisionNode *root);
+
+    void drawLine(RevisionNodeItem *from, RevisionNodeItem *to);
 
 };
 

@@ -13,6 +13,7 @@ public:
 private:
     RevisionNode *createSimpleNode(const QString &message, const QString &id) const;
     void addCommit(RevisionNode *head, RevisionNode *commit) const;
+    void addBranch(RevisionNode *from, RevisionNode *to) const;
 };
 
 #endif // CREATETREE_H
