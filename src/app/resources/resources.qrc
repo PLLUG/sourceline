@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/splash">
+        <file>img/barload_only.png</file>
+        <file>img/SL_Splash_load.png</file>
+    </qresource>
+</RCC>
