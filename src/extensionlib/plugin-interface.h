@@ -1,3 +1,5 @@
+#ifndef PLUGININTERFACE_H
+#define PLUGININTERFACE_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -20,9 +22,6 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-
-#ifndef PLUGININTERFACE_H
-#define PLUGININTERFACE_H
 #include <QtPlugin>
 
 class PluginInterface

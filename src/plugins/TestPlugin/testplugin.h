@@ -22,12 +22,15 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
+
 #include "plugin.h"
 
 class EXTENSIONSSHARED_EXPORT TestPlugin :
         public Plugin
 {
     Q_OBJECT
+    Q_INTERFACES(PluginInterface)
+    Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDummyPlugin" FILE "TestPlugin.json")
 public:
     explicit TestPlugin(QObject *pParent = 0);
 };

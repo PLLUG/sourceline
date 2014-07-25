@@ -34,7 +34,3 @@ void FakeComponent::baseFunctionality()
     qDebug() << "base functionality done";
 }
 
-void FakeComponent::newFunctionality()
-{
-
-}

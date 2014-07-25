@@ -39,7 +39,8 @@ SOURCES += \
     ui/mainwindow.cpp \
     ui/pagemanager.cpp \
     ui/revisiontable.cpp \
-    ui/viewsettings.cpp
+    ui/viewsettings.cpp \
+    pluginsupport/componentsorter.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -56,7 +57,9 @@ HEADERS += \
     ui/mainwindow.h \
     ui/pagemanager.h \
     ui/revisiontable.h \
-    ui/viewsettings.h
+    ui/viewsettings.h \
+    pluginsupport/componentsorter.h \
+    pluginsupport/supliers/componentsupplier.h
 
 INCLUDEPATH += \
     ./ui
