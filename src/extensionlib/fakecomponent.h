@@ -32,7 +32,6 @@ class EXTENSIONSSHARED_EXPORT FakeComponent : public QObject
     Q_OBJECT
 public:
     explicit FakeComponent(QObject *parent = 0);
-    FakeComponent();
     void baseFunctionality();
     virtual void newFunctionality();
 };

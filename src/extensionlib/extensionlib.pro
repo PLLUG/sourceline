@@ -23,7 +23,7 @@
 
 QT       -= gui
 
-PLUGINAPI_PATH=$$_PRO_FILE_PWD_/../app/pluginapi
+PLUGINAPI_PATH=$$_PRO_FILE_PWD_/../pluginapi
 
 TARGET = extensions
 DESTDIR = $$PLUGINAPI_PATH/lib
