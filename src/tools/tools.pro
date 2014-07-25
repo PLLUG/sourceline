@@ -23,8 +23,5 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS += \
-    extensionlib \
-    plugins \
-    app \
-    tools
+OTHER_FILES += \
+    templates/source-header-template.txt
