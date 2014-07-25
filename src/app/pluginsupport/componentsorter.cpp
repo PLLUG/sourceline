@@ -1,64 +1,64 @@
-/*******************************************************************************
-***                                                                          ***
-***    SourceLine - Crossplatform VCS Client.                                ***
-***    Copyright (C) 2014  by                                                ***
-***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
-***                                                                          ***
-***    This file is part of SourceLine Project.                              ***
-***                                                                          ***
-***    SourceLine is free software: you can redistribute it and/or modify    ***
-***    it under the terms of the GNU General Public License as published by  ***
-***    the Free Software Foundation, either version 3 of the License, or     ***
-***    (at your option) any later version.                                   ***
-***                                                                          ***
-***    SourceLine is distributed in the hope that it will be useful,         ***
-***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
-***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
-***    GNU General Public License for more details.                          ***
-***                                                                          ***
-***    You should have received a copy of the GNU General Public License     ***
-***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
-***                                                                          ***
-*******************************************************************************/
-#include "componentsorter.h"
+///*******************************************************************************
+//***                                                                          ***
+//***    SourceLine - Crossplatform VCS Client.                                ***
+//***    Copyright (C) 2014  by                                                ***
+//***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
+//***                                                                          ***
+//***    This file is part of SourceLine Project.                              ***
+//***                                                                          ***
+//***    SourceLine is free software: you can redistribute it and/or modify    ***
+//***    it under the terms of the GNU General Public License as published by  ***
+//***    the Free Software Foundation, either version 3 of the License, or     ***
+//***    (at your option) any later version.                                   ***
+//***                                                                          ***
+//***    SourceLine is distributed in the hope that it will be useful,         ***
+//***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+//***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+//***    GNU General Public License for more details.                          ***
+//***                                                                          ***
+//***    You should have received a copy of the GNU General Public License     ***
+//***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+//***                                                                          ***
+//*******************************************************************************/
+//#include "componentsorter.h"
 
-#include "componentsupplier.h"
-#include <string>
+//#include "componentsupplier.h"
+//#include <string>
 
-ComponentSorter::ComponentSorter(QObject *parent) :
-    QObject(parent)
-{
-}
+//ComponentSorter::ComponentSorter(QObject *parent) :
+//    QObject(parent)
+//{
+//}
 
-void ComponentSorter::setComponents(int pCategory, QObjectList pComponents)
-{
-    foreach (QObject *lComponent, pComponents)
-    {
-        ComponentSupplier *lSupplier = supplierForComponent(lComponent);
-        if (lSupplier)
-        {
-            lSupplier->supply(lComponent);
-        }
-    }
-}
+//void ComponentSorter::setComponents(int pCategory, QObjectList pComponents)
+//{
+//    foreach (QObject *lComponent, pComponents)
+//    {
+//        ComponentSupplier *lSupplier = supplierForComponent(lComponent);
+//        if (lSupplier)
+//        {
+//            lSupplier->supply(lComponent);
+//        }
+//    }
+//}
 
-void ComponentSorter::addSupplier(QString pName, ComponentSupplier *pSupplier)
-{
-    mSupplierByClassName.insert(pName, pSupplier);
-}
+//void ComponentSorter::addSupplier(QString pName, ComponentSupplier *pSupplier)
+//{
+//    mSupplierByClassName.insert(pName, pSupplier);
+//}
 
 
-ComponentSupplier *ComponentSorter::supplierForComponent(QObject *pComponent)
-{
-    ComponentSupplier *lSupplier = 0;
+//ComponentSupplier *ComponentSorter::supplierForComponent(QObject *pComponent)
+//{
+//    ComponentSupplier *lSupplier = 0;
 
-    foreach (QString lClassName, mSupplierByClassName.keys())
-    {
-        if (pComponent->inherits(lClassName.toUtf8().data()))
-        {
-            lSupplier = mSupplierByClassName.value(lClassName);
-        }
-    }
+//    foreach (QString lClassName, mSupplierByClassName.keys())
+//    {
+//        if (pComponent->inherits(lClassName.toUtf8().data()))
+//        {
+//            lSupplier = mSupplierByClassName.value(lClassName);
+//        }
+//    }
 
-    return lSupplier;
-}
+//    return lSupplier;
+//}

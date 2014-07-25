@@ -36,10 +36,11 @@ SOURCES += \
     plugin.cpp
 
 HEADERS +=\
-        extensions_global.h \
-    plugin-interface.h \
-    fakecomponent.h \
-    plugin.h
+    extensions_global.h\
+    fakecomponent.h\
+    plugin-interface.h\
+    plugin.h\
+
 
 unix {
     target.path = /usr/lib
@@ -63,7 +64,7 @@ copytarget.files  += \
     $$files(extensions_global.h)
 ## wildcard for filename1 filename2 filename3 ...
 
-message("found files for copytarget: "$$copytarget.files)
+#message("found files for copytarget: "$$copytarget.files)
 
 ## === os specific dir separator ===
 
@@ -102,4 +103,3 @@ QMAKE_EXTRA_TARGETS += copyfiles
 PRE_TARGETDEPS     += copyfiles ## copy files after source compilation
 
 INSTALLS += copytarget
-

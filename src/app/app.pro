@@ -22,7 +22,7 @@
 ################################################################################
 
 TEMPLATE = app
-
+DESTDIR = $$_PRO_FILE_PWD_/../../bin/
 QT += widgets
 
 SOURCES += \
@@ -44,7 +44,8 @@ SOURCES += \
     settings_dialog/pluginsettings.cpp \
     settings_dialog/settingspage.cpp \
     settings_dialog/settingstorage.cpp \
-    ui/viewsettingpage.cpp
+    ui/viewsettingpage.cpp \
+    pluginsupport/componentsorter.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -66,7 +67,9 @@ HEADERS += \
     settings_dialog/pluginsettings.h \
     settings_dialog/settingspage.h \
     settings_dialog/settingstorage.h \
-    ui/viewsettingpage.h
+    ui/viewsettingpage.h \
+    pluginsupport/componentsorter.h \
+    pluginsupport/supliers/componentsupplier.h
 
 INCLUDEPATH += \
     ./ui

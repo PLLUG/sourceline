@@ -22,10 +22,11 @@
 *******************************************************************************/
 
 #include "testplugin.h"
+#include "gitfakecomponent.h"
 
-
-
-TestPlugin::TestPlugin(QObject *pParent)
+TestPlugin::TestPlugin(QObject *pParent) :
+    Plugin(pParent)
 {
-
+    GitFakeComponent *gitFakeComponent = new GitFakeComponent();
+    this->addComponent(gitFakeComponent);
 }

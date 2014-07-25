@@ -1,3 +1,5 @@
+#ifndef EXTENSIONS_GLOBAL_H
+#define EXTENSIONS_GLOBAL_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -20,10 +22,6 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-
-#ifndef EXTENSIONS_GLOBAL_H
-#define EXTENSIONS_GLOBAL_H
-
 #include <QtCore/qglobal.h>
 
 #if defined(EXTENSIONS_LIBRARY)

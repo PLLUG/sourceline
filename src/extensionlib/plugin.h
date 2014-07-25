@@ -1,3 +1,5 @@
+#ifndef PLUGIN_H
+#define PLUGIN_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -20,15 +22,11 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-
-#ifndef PLUGIN_H
-#define PLUGIN_H
-
 #include <QObject>
 #include "plugin-interface.h"
 #include "extensions_global.h"
 
-class EXTENSIONSSHARED_EXPORT Plugin:
+class EXTENSIONSSHARED_EXPORT Plugin :
         public QObject,
         public PluginInterface
 {

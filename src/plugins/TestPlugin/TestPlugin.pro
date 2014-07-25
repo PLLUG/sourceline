@@ -20,17 +20,24 @@
 ###    along with this program.  If not, see <http://www.gnu.org/licenses/>. ###
 ###                                                                          ###
 ################################################################################
-
 QT       -= gui
 
 TARGET = TestPlugin
+
 TEMPLATE = lib
+
+DESTDIR = $$_PRO_FILE_PWD_/../../../bin/plugins
+
+CONFIG += shared
 
 DEFINES += TESTPLUGIN_LIBRARY
 
-SOURCES += testplugin.cpp
+SOURCES += testplugin.cpp \
+    gitfakecomponent.cpp
 
-HEADERS += testplugin.h
+HEADERS += testplugin.h \
+    gitfakecomponent.h \
+    testplugin_global.h
 
 unix {
     target.path = /usr/lib
@@ -41,3 +48,6 @@ unix|win32: LIBS += -L$$PWD/../../pluginapi/lib/ -lextensions
 
 INCLUDEPATH += $$PWD/../../pluginapi/include
 DEPENDPATH += $$PWD/../../pluginapi/include
+
+OTHER_FILES += \
+    TestPlugin.json

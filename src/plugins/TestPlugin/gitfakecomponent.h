@@ -1,5 +1,5 @@
-#ifndef FAKECOMPONENT_H
-#define FAKECOMPONENT_H
+#ifndef GITFAKECOMPONENT_H
+#define GITFAKECOMPONENT_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,16 +22,13 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include "extensions_global.h"
-
-class EXTENSIONSSHARED_EXPORT FakeComponent : public QObject
+#include "fakecomponent.h"
+class GitFakeComponent : public FakeComponent
 {
     Q_OBJECT
 public:
-    explicit FakeComponent(QObject *parent = 0);
-    void baseFunctionality();
-    virtual void newFunctionality() = 0;
+    explicit GitFakeComponent(QObject *parent = 0);
+    void newFunctionality();
 };
 
-#endif // FAKECOMPONENT_H
+#endif // GITFAKECOMPONENT_H
