@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>305</width>
+    <width>263</width>
     <height>201</height>
    </rect>
   </property>
@@ -20,13 +20,6 @@
    <bool>true</bool>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QCheckBox" name="FileView">
-     <property name="text">
-      <string>File View</string>
-     </property>
-    </widget>
-   </item>
    <item row="0" column="2">
     <widget class="QCheckBox" name="EditorView">
      <property name="text">
@@ -41,10 +34,10 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="QCheckBox" name="HistoryTree">
+   <item row="0" column="0">
+    <widget class="QCheckBox" name="FileView">
      <property name="text">
-      <string>History Tree</string>
+      <string>File View</string>
      </property>
     </widget>
    </item>
@@ -55,39 +48,29 @@
      </property>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QPushButton" name="okButton">
+   <item row="1" column="2">
+    <widget class="QCheckBox" name="HistoryTree">
      <property name="text">
-      <string>OK</string>
+      <string>History Tree</string>
      </property>
     </widget>
    </item>
-   <item row="3" column="2">
-    <widget class="QPushButton" name="cancelButton">
+   <item row="2" column="0">
+    <widget class="QPushButton" name="pushButton">
      <property name="text">
-      <string>Cancel</string>
+      <string>PushButton</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QPushButton" name="pushButton_2">
+     <property name="text">
+      <string>PushButton</string>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>okButton</sender>
-   <signal>pressed()</signal>
-   <receiver>ViewSettings</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>92</x>
-     <y>159</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>144</x>
-     <y>150</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

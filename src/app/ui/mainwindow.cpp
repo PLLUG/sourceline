@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "viewsettingpage.h"
 #include <QMessageBox>
 #include <QFile>
 #include <QAction>
@@ -81,9 +82,13 @@ void MainWindow::on_actionClose_triggered()
 
 void MainWindow::showSettings()
 {
+    PluginSettings *lPluginSettings = new PluginSettings();
+    ViewSettingPage *lVSettingPage = new ViewSettingPage(lPluginSettings);
+    mSettingsDialog->addSettingsItem(lVSettingPage);
+
     mSettingsDialog->show();
-    //readSettings();
-    //mViewSettings->show();
+//    readSettings();
+//    mViewSettings->show();
 }
 
 void MainWindow::readSettings()

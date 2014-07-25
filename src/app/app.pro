@@ -43,7 +43,8 @@ SOURCES += \
     ui/appsettingsdialog.cpp \
     settings_dialog/pluginsettings.cpp \
     settings_dialog/settingspage.cpp \
-    settings_dialog/settingstorage.cpp
+    settings_dialog/settingstorage.cpp \
+    ui/viewsettingpage.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -64,7 +65,8 @@ HEADERS += \
     ui/appsettingsdialog.h \
     settings_dialog/pluginsettings.h \
     settings_dialog/settingspage.h \
-    settings_dialog/settingstorage.h
+    settings_dialog/settingstorage.h \
+    ui/viewsettingpage.h
 
 INCLUDEPATH += \
     ./ui
@@ -83,4 +85,5 @@ FORMS += \
     ui/mainwindow.ui \
     ui/revisiontable.ui \
     ui/viewsettings.ui \
-    ui/appsettingsdialog.ui
+    ui/appsettingsdialog.ui \
+    ui/viewsettingpage.ui
