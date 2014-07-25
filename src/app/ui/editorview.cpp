@@ -1,5 +1,6 @@
 #include "editorview.h"
 #include "ui_editorview.h"
+#include "guidefs.h"
 
 EditorView::EditorView(QWidget *parent) :
     GenericDockWidget(parent),
@@ -15,7 +16,7 @@ EditorView::~EditorView()
 
 DockTypes::DockType EditorView::type() const
 {
-    return DockTypes::DockType::EditorView;
+    return DockTypes::EditorView;
 }
 
 void EditorView::slotSetPage(int pPage)

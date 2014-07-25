@@ -1,5 +1,6 @@
 #include "historytree.h"
 #include "ui_historytree.h"
+#include "guidefs.h"
 
 HistoryTree::HistoryTree(QWidget *parent) :
     GenericDockWidget(parent),
@@ -15,7 +16,7 @@ HistoryTree::~HistoryTree()
 
 DockTypes::DockType HistoryTree::type() const
 {
-    return DockTypes::DockType::HistoryTree;
+    return DockTypes::HistoryTree;
 }
 
 void HistoryTree::slotSetPage(int pPage)

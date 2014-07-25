@@ -1,5 +1,6 @@
 #include "console.h"
 #include "ui_console.h"
+#include "guidefs.h"
 
 Console::Console(QWidget *parent) :
     GenericDockWidget(parent),
@@ -14,7 +15,7 @@ Console::~Console()
 
 DockTypes::DockType Console::type() const
 {
-    return DockTypes::DockType::Console;
+    return DockTypes::Console;
 }
 
 void Console::slotSetPage(int pPage)

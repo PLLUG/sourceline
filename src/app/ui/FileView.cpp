@@ -1,5 +1,6 @@
 #include "fileview.h"
 #include "ui_fileview.h"
+#include "guidefs.h"
 
 FileView::FileView(QWidget *parent) :
     GenericDockWidget(parent),
@@ -16,7 +17,7 @@ FileView::~FileView()
 
 DockTypes::DockType FileView::type() const
 {
-    return DockTypes::DockType::FileView;
+    return DockTypes::FileView;
 }
 
 void FileView::slotSetPage(int pPage)
