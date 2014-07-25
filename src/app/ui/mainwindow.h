@@ -8,6 +8,8 @@
 #include <QCloseEvent>
 #include <QApplication>
 #include "appsettingsdialog.h"
+#include "viewsettingpage.h"
+#include "settings_dialog/settingstorage.h"
 #include "viewsettings.h"
 #include "customtabbar.h"
 #include "pagemanager.h"

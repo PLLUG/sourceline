@@ -45,7 +45,7 @@ ViewSettingPage::ViewSettingPage(PluginSettings *pSettings, QWidget *parent) :
 
     setName("View");
     setIcon(QIcon(":/Icons/Icons/IconsLand.png"));
-    settings()->setSettingsPath("custom_plugin/group1");
+    settings()->setSettingsPath("view_settings/docks_visibility");
 }
 
 ViewSettingPage::~ViewSettingPage()

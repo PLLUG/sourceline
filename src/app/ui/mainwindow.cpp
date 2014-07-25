@@ -1,6 +1,5 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "viewsettingpage.h"
 #include <QMessageBox>
 #include <QFile>
 #include <QAction>
@@ -9,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), mViewSettings(new ViewSettings(this)), mSettingsDialog(new AppSettingsDialog(this))
+    ui(new Ui::MainWindow), mViewSettings(new ViewSettings(this))
 {
     ui->setupUi(this);
     trayMenu = new QMenu();
@@ -82,11 +81,18 @@ void MainWindow::on_actionClose_triggered()
 
 void MainWindow::showSettings()
 {
+    AppSettingsDialog *lSettingsDialog = new AppSettingsDialog;
+    SettingStorage *lStorage = new SettingStorage();
     PluginSettings *lPluginSettings = new PluginSettings();
     ViewSettingPage *lVSettingPage = new ViewSettingPage(lPluginSettings);
-    mSettingsDialog->addSettingsItem(lVSettingPage);
+    lSettingsDialog->addSettingsItem(lVSettingPage);
+  //  connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+  //          this, SLOT(slotPlugin1Settings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
+    lStorage->slotLoadSettings(lVSettingPage->settings()->settingsPath());
 
-    mSettingsDialog->show();
+    lSettingsDialog->show();
 //    readSettings();
 //    mViewSettings->show();
 }
