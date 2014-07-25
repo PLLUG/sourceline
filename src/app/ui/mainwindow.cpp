@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), mViewSettings(new ViewSettings(this))
+    ui(new Ui::MainWindow), mViewSettings(new ViewSettings(this)), mSettingsDialog(new AppSettingsDialog(this))
 {
     ui->setupUi(this);
     trayMenu = new QMenu();
@@ -81,8 +81,9 @@ void MainWindow::on_actionClose_triggered()
 
 void MainWindow::showSettings()
 {
-   readSettings();
-   mViewSettings->show();
+    mSettingsDialog->show();
+    //readSettings();
+    //mViewSettings->show();
 }
 
 void MainWindow::readSettings()

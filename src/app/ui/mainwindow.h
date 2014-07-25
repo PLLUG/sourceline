@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QCloseEvent>
 #include <QApplication>
+#include "appsettingsdialog.h"
 #include "viewsettings.h"
 #include "customtabbar.h"
 #include "pagemanager.h"
@@ -27,6 +28,7 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
+    AppSettingsDialog *mSettingsDialog;
     ViewSettings *mViewSettings;
     CustomTabBar *mTabBar;
     PageManager *mPageManager;
