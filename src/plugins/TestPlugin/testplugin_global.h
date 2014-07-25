@@ -1,5 +1,3 @@
-#ifndef GITFAKECOMPONENT_H
-#define GITFAKECOMPONENT_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,13 +20,16 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include "fakecomponent.h"
-class GitFakeComponent : public FakeComponent
-{
-    Q_OBJECT
-public:
-    explicit GitFakeComponent(QObject *parent = 0);
-    void newFunctionality();
-};
 
-#endif // GITFAKECOMPONENT_H
+#ifndef TESTPLUGIN_GLOBAL_H
+#define TESTPLUGIN_GLOBAL_H
+
+#include <QtCore/qglobal.h>
+
+#if defined(TESTPLUGIN_LIBRARY)
+#  define TESTPLUGINSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define TESTPLUGINSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // TESTPLUGIN_GLOBAL_H

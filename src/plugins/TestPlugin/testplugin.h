@@ -24,8 +24,9 @@
 *******************************************************************************/
 
 #include "plugin.h"
+#include "testplugin_global.h"
 
-class EXTENSIONSSHARED_EXPORT TestPlugin :
+class TESTPLUGINSHARED_EXPORT TestPlugin :
         public Plugin
 {
     Q_OBJECT

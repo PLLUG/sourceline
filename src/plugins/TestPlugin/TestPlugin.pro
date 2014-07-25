@@ -30,13 +30,14 @@ DESTDIR = $$_PRO_FILE_PWD_/../../../bin/plugins
 
 CONFIG += shared
 
-DEFINES += EXTENSIONS_LIBRARY
+DEFINES += TESTPLUGIN_LIBRARY
 
 SOURCES += testplugin.cpp \
     gitfakecomponent.cpp
 
 HEADERS += testplugin.h \
-    gitfakecomponent.h
+    gitfakecomponent.h \
+    testplugin_global.h
 
 unix {
     target.path = /usr/lib
