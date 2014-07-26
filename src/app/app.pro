@@ -39,13 +39,13 @@ SOURCES += \
     ui/mainwindow.cpp \
     ui/pagemanager.cpp \
     ui/revisiontable.cpp \
-    ui/viewsettings.cpp \
     ui/appsettingsdialog.cpp \
     settings_dialog/pluginsettings.cpp \
     settings_dialog/settingspage.cpp \
     settings_dialog/settingstorage.cpp \
     ui/viewsettingpage.cpp \
-    pluginsupport/componentsorter.cpp
+    pluginsupport/componentsorter.cpp \
+    settings_dialog/settingsmanager.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -62,14 +62,14 @@ HEADERS += \
     ui/mainwindow.h \
     ui/pagemanager.h \
     ui/revisiontable.h \
-    ui/viewsettings.h \
     ui/appsettingsdialog.h \
     settings_dialog/pluginsettings.h \
     settings_dialog/settingspage.h \
     settings_dialog/settingstorage.h \
     ui/viewsettingpage.h \
     pluginsupport/componentsorter.h \
-    pluginsupport/supliers/componentsupplier.h
+    pluginsupport/supliers/componentsupplier.h \
+    settings_dialog/settingsmanager.h
 
 INCLUDEPATH += \
     ./ui

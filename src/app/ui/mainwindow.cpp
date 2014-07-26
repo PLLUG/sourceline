@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), mViewSettings(new ViewSettings(this))
+    ui(new Ui::MainWindow), mSettingsManager(new SettingsManager(this))
 {
     ui->setupUi(this);
     trayMenu = new QMenu();
@@ -26,12 +26,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     ui->uiTabToolBar->addWidget(mTabBar);
-    ui->uiHistoryTree->setVisible(false);
-    ui->uiEditorView->setVisible(false);
+    readVisibilitySettings();
+//    ui->uiHistoryTree->setVisible(false);
+//    ui->uiEditorView->setVisible(false);
+
     connect(ui->actionSettings, SIGNAL(triggered()),
      this, SLOT(showSettings()), Qt::UniqueConnection);
-    connect(mViewSettings, SIGNAL(accepted()),
-     this, SLOT(slotPreferencesAccepted()), Qt::UniqueConnection);
 
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
@@ -85,70 +85,18 @@ void MainWindow::showSettings()
     SettingStorage *lStorage = new SettingStorage();
     PluginSettings *lPluginSettings = new PluginSettings();
     ViewSettingPage *lVSettingPage = new ViewSettingPage(lPluginSettings);
-    lSettingsDialog->addSettingsItem(lVSettingPage);
-  //  connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-  //          this, SLOT(slotPlugin1Settings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+    lVSettingPage->setMainUi(ui);
+    mSettingsManager->setStorage(lStorage);
+    mSettingsManager->addSettings("main_window", lVSettingPage->name(), lPluginSettings);
+    connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
     connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
                              lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(lVSettingPage->settings()->settingsPath());
+    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(lPluginSettings));
+    lSettingsDialog->addSettingsItem(lVSettingPage);
 
     lSettingsDialog->show();
-//    readSettings();
-//    mViewSettings->show();
 }
-
-void MainWindow::readSettings()
-{
-
- QSettings lSettings(QSettings::NativeFormat, QSettings::UserScope,
- "", qApp->applicationName());
- lSettings.beginGroup("SETTINGS_GROUP_VIEW");
- bool lShowFileView = lSettings.value("SETTING_SHOW_FileView", ui->uiFileView->isVisible()).toBool();
- mViewSettings->setFileViewVisible(lShowFileView);
-
- bool lShowRevisionTable = lSettings.value("SETTING_SHOW_RevisionTable", ui->uiRevisionTable->isVisible()).toBool();
- mViewSettings->setRevisionTableVisible(lShowRevisionTable);
-
- bool lShowConsole = lSettings.value("SETTING_SHOW_Console", ui->uiConsole->isVisible()).toBool();
- mViewSettings->setConsoleVisible(lShowConsole);
-
- bool lShowHistoryTree = lSettings.value("SETTING_SHOW_HistoryTree", ui->uiHistoryTree->isVisible()).toBool();
- mViewSettings->setHistoryTreeVisible(lShowHistoryTree);
-
- bool lShowEditorView = lSettings.value("SETTING_SHOW_EditorView", ui->uiEditorView->isVisible()).toBool();
- mViewSettings->setEditorViewVisible(lShowEditorView);
-
-}
-
-void MainWindow::writeSettings()
-{
-
- QSettings lSettings(QSettings::NativeFormat, QSettings::UserScope,
- "", qApp->applicationName());
- lSettings.beginGroup("SETTINGS_GROUP_VIEW");
- lSettings.setValue("SETTING_SHOW_FileView", mViewSettings->isFileViewVisible());
- lSettings.setValue("SETTING_SHOW_RevisionTable", mViewSettings->isRevisionTableVisible());
- lSettings.setValue("SETTING_SHOW_Console", mViewSettings->isConsoleVisible());
- lSettings.setValue("SETTING_SHOW_HistoryTree", mViewSettings->isHistoryTreeVisible());
- lSettings.setValue("SETTING_SHOW_EditorView", mViewSettings->isEditorViewVisible());
-
-}
-
-void MainWindow::applySettings()
-{
- ui->uiFileView->setVisible(mViewSettings->isFileViewVisible());
- ui->uiRevisionTable->setVisible(mViewSettings->isRevisionTableVisible());
- ui->uiConsole->setVisible(mViewSettings->isConsoleVisible());
- ui->uiHistoryTree->setVisible(mViewSettings->isHistoryTreeVisible());
- ui->uiEditorView->setVisible(mViewSettings->isEditorViewVisible());
-}
-
-void MainWindow::slotPreferencesAccepted()
-{
- writeSettings();
- applySettings();
-}
-
 
 void MainWindow::on_actionAdd_Page_triggered()
 {
@@ -159,5 +107,19 @@ void MainWindow::on_actionAdd_Page_triggered()
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
-       // ui->uiFileView->setMinimumHeight(this->height());
+    // ui->uiFileView->setMinimumHeight(this->height());
+}
+
+void MainWindow::readVisibilitySettings()
+{
+    SettingStorage *lStorage = new SettingStorage();
+    PluginSettings *lPluginSettings = new PluginSettings();
+    ViewSettingPage *lVSettingPage = new ViewSettingPage(lPluginSettings);
+    lVSettingPage->setMainUi(ui);
+    mSettingsManager->setStorage(lStorage);
+    mSettingsManager->addSettings("main_window", lVSettingPage->name(), lPluginSettings);
+
+    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
+    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(lPluginSettings));
 }

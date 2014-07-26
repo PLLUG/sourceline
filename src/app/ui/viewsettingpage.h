@@ -31,12 +31,19 @@
 #include <QLayout>
 #include "ui_viewsettingpage.h"
 
+namespace Ui {
+class MainWindow;
+}
+
 class ViewSettingPage : public SettingsPage
 {
     Q_OBJECT
 public:
     explicit ViewSettingPage(PluginSettings *pSettings, QWidget *parent = 0);
     ~ViewSettingPage();
+
+    void setMainUi(Ui::MainWindow *lMainUi);
+
 signals:
     void signalGetSettings(QString pPath);
 
@@ -48,7 +55,8 @@ public slots:
     void slotTreeChanged(QVariant pValue);
 
 private:
-    Ui::Form *ui;
+    Ui::Form *mDialogUi;
+    Ui::MainWindow *mMainUi;
 
 };
 

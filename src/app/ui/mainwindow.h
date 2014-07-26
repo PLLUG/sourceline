@@ -10,7 +10,7 @@
 #include "appsettingsdialog.h"
 #include "viewsettingpage.h"
 #include "settings_dialog/settingstorage.h"
-#include "viewsettings.h"
+#include "settings_dialog/settingsmanager.h"
 #include "customtabbar.h"
 #include "pagemanager.h"
 
@@ -30,17 +30,16 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
-    AppSettingsDialog *mSettingsDialog;
-    ViewSettings *mViewSettings;
+    SettingsManager *mSettingsManager;
     CustomTabBar *mTabBar;
     PageManager *mPageManager;
+
 signals:
     void mysignal();
+
 private:
-    void readSettings();
-    void writeSettings();
-    void applySettings();
     void resizeEvent(QResizeEvent *e);
+    void readVisibilitySettings();
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason);
@@ -49,8 +48,6 @@ private slots:
     void on_actionClose_triggered();
 
     void showSettings();
-    void slotPreferencesAccepted();
-    //void slotPreferencesAccepted();
 
     void on_actionAdd_Page_triggered();
 };
