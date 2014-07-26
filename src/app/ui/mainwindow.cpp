@@ -21,14 +21,20 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->show();
     TrayIcon->setContextMenu(trayMenu);
 
+    mSettingsDialog = new AppSettingsDialog(this);
+    mPluginSettings = new PluginSettings(this);
+    mVSettingPage = new ViewSettingPage(mPluginSettings);
+    mVSettingPage->setMainUi(ui);
+    mSettingsDialog->addSettingsItem(mVSettingPage);
+    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mPluginSettings);
+
     mPageManager = new PageManager(this);
     mTabBar = new CustomTabBar(this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     ui->uiTabToolBar->addWidget(mTabBar);
+
     readVisibilitySettings();
-//    ui->uiHistoryTree->setVisible(false);
-//    ui->uiEditorView->setVisible(false);
 
     connect(ui->actionSettings, SIGNAL(triggered()),
      this, SLOT(showSettings()), Qt::UniqueConnection);
@@ -81,21 +87,7 @@ void MainWindow::on_actionClose_triggered()
 
 void MainWindow::showSettings()
 {
-    AppSettingsDialog *lSettingsDialog = new AppSettingsDialog;
-    SettingStorage *lStorage = new SettingStorage();
-    PluginSettings *lPluginSettings = new PluginSettings();
-    ViewSettingPage *lVSettingPage = new ViewSettingPage(lPluginSettings);
-    lVSettingPage->setMainUi(ui);
-    mSettingsManager->setStorage(lStorage);
-    mSettingsManager->addSettings("main_window", lVSettingPage->name(), lPluginSettings);
-    connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
-    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(lPluginSettings));
-    lSettingsDialog->addSettingsItem(lVSettingPage);
-
-    lSettingsDialog->show();
+    mSettingsDialog->show();
 }
 
 void MainWindow::on_actionAdd_Page_triggered()
@@ -113,13 +105,13 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 void MainWindow::readVisibilitySettings()
 {
     SettingStorage *lStorage = new SettingStorage();
-    PluginSettings *lPluginSettings = new PluginSettings();
-    ViewSettingPage *lVSettingPage = new ViewSettingPage(lPluginSettings);
-    lVSettingPage->setMainUi(ui);
+    mVSettingPage->setMainUi(ui);
     mSettingsManager->setStorage(lStorage);
-    mSettingsManager->addSettings("main_window", lVSettingPage->name(), lPluginSettings);
+    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mPluginSettings);
 
+    connect(mVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
     connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(lPluginSettings));
+                             mVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
+    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(mPluginSettings));
 }

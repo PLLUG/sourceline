@@ -30,6 +30,9 @@ private:
     Ui::MainWindow *ui;
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
+    AppSettingsDialog *mSettingsDialog;
+    PluginSettings *mPluginSettings;
+    ViewSettingPage *mVSettingPage;
     SettingsManager *mSettingsManager;
     CustomTabBar *mTabBar;
     PageManager *mPageManager;
