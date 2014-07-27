@@ -17,6 +17,7 @@ private slots:
 public:
     void initUi();
     void loadPlugins();
+    void supplyComponents();
 
 private:
     SplashScreen *mSplashScreen;
