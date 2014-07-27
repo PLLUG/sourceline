@@ -24,8 +24,8 @@
 #ifndef VIEWSETTINGPAGE_H
 #define VIEWSETTINGPAGE_H
 
-#include "settings_dialog/settingspage.h"
-#include "settings_dialog/pluginsettings.h"
+#include "settingspage.h"
+#include "pluginsettings.h"
 #include <QVariant>
 #include <QDebug>
 #include <QLayout>

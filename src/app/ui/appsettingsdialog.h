@@ -24,7 +24,7 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "settings_dialog/settingspage.h"
+#include "settingspage.h"
 
 #include <QDialog>
 #include <QString>

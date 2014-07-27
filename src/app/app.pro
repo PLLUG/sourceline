@@ -72,7 +72,8 @@ HEADERS += \
     settings_dialog/settingsmanager.h
 
 INCLUDEPATH += \
-    ./ui
+    ./ui \
+    ./settings_dialog
 
 RESOURCES += \
     resources/resources.qrc \
