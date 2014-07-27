@@ -7,6 +7,9 @@
 #include "splashscreen.h"
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
+#include "pluginsupport/pluginloader.h"
+#include "pluginsupport/pluginmanager.h"
+
 
 // Ui
 #include "mainwindow.h"
@@ -61,10 +64,16 @@ void ApplicationBuilder::initUi()
 
 void ApplicationBuilder::loadPlugins()
 {
-    // ....
-    // TASK: create plugin loader
-    // TASK: create plugin manager
-    // TASK: create settings dialog mediator
+    PluginLoader *lPluginLoader = new PluginLoader();
+
+    PluginManager *lPluginManager =new PluginManager();
+    lPluginManager->setPluginLoader(lPluginLoader);
+
+    //DialogPlugins *lDialogPlugins = new DialogPlugins();
+
+    //PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
+    //lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
+    //lPluginSettingsMediator->setPluginManager(lPluginMamager);
     ProgressHandler::instance()->finishStage();
 }
 

@@ -5,7 +5,7 @@
 
 PluginLoader::PluginLoader(QObject *parent) :
     QObject(parent),
-    mPluginsFolder(QDir::currentPath() + "/debug/plugins")
+    mPluginsFolder(QDir::currentPath() + "/plugins")
 {
 }
 void PluginLoader::setPluginsFolder(QDir pPluginFolder)
