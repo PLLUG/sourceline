@@ -14,8 +14,6 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
 {
     ProgressHandler::instance()->setStageCount(2);
 
-    QTimer::singleShot(0, this, SLOT(slotBuild()));
-
     /// Init splash screen
     mSplashScreen = new SplashScreen;
     mSplashScreen->setSplashScreen(QPixmap(":/splash/img/SL_Splash_load.png"));
@@ -23,6 +21,8 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     connect(ProgressHandler::instance(), SIGNAL(progress(int)),
             mSplashScreen, SLOT(slotSetPercentage(int)), Qt::UniqueConnection);
     mSplashScreen->show();
+
+    QTimer::singleShot(0, this, SLOT(slotBuild()));
 }
 
 void ApplicationBuilder::slotBuild()
@@ -37,7 +37,7 @@ void ApplicationBuilder::slotBuild()
      */
     loadPlugins();
 
-    QTimer::singleShot(1000, mSplashScreen, SLOT(deleteLater()));
+    QTimer::singleShot(1500, mSplashScreen, SLOT(deleteLater()));
 }
 
 void ApplicationBuilder::initUi()
