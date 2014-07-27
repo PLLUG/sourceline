@@ -1,5 +1,3 @@
-#ifndef COMPONENTMANAGER_H
-#define COMPONENTMANAGER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,22 +20,25 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include <QMap>
 
-class ComponentSupplier;
-class ComponentSorter : public QObject
+#include "fakecomponentsupplier.h"
+
+FakeComponentSupplier::FakeComponentSupplier()
 {
-    Q_OBJECT
-public:
-    explicit ComponentSorter(QObject *parent = 0);
-    void setComponents(int pCategory, QObjectList pComponents);
-    void addSupplier(QString pName, ComponentSupplier * pSupplier);
-private:
-    ComponentSupplier *supplierForComponent(QObject *pComponent);
+}
 
-private:
-    QMap<QString, ComponentSupplier*> mSupplierByClassName;
-};
+QString FakeComponentSupplier::className() const
+{
+    return "Fake Component";
+}
 
-#endif // COMPONENTMANAGER_H
+void FakeComponentSupplier::supply(QObject *pComponent)
+{
+    //sending to object
+    //mDialog->sendCommonent(pComponent);
+}
+
+void FakeComponentSupplier::setDialog(Dialog *pDialog)
+{
+    mDialog = pDialog;
+}

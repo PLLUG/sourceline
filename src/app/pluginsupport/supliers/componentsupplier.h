@@ -30,5 +30,4 @@ public:
     virtual QString className() const = 0;
     virtual void supply(QObject *) = 0;
 };
-
 #endif // COMPONENTSUPPLIER_H
