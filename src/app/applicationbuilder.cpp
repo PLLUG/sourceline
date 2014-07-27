@@ -37,6 +37,12 @@ void ApplicationBuilder::slotBuild()
      */
     loadPlugins();
 
+    /*!
+     * Stage 3: Getting components
+     */
+    supplyComponents();
+
+
     QTimer::singleShot(1500, mSplashScreen, SLOT(deleteLater()));
 }
 
@@ -54,6 +60,16 @@ void ApplicationBuilder::initUi()
 void ApplicationBuilder::loadPlugins()
 {
     // ....
+    // TASK: create plugin loader
+    // TASK: create plugin manager
+    // TASK: create settings dialog mediator
     ProgressHandler::instance()->finishStage();
+}
+
+void ApplicationBuilder::supplyComponents()
+{
+    // ....
+    // TASK : create component suppliers
+    // TASK : create and initialize sorters
 }
 
