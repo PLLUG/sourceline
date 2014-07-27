@@ -9,7 +9,8 @@
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
 #include "pluginsupport/pluginloader.h"
 #include "pluginsupport/pluginmanager.h"
-
+#include "pluginsupport/pluginsettingsmediator.h"
+#include "../ui/dialogplugins.h"
 
 // Ui
 #include "mainwindow.h"
@@ -69,11 +70,11 @@ void ApplicationBuilder::loadPlugins()
     PluginManager *lPluginManager =new PluginManager();
     lPluginManager->setPluginLoader(lPluginLoader);
 
-    //DialogPlugins *lDialogPlugins = new DialogPlugins();
+    DialogPlugins *lDialogPlugins = new DialogPlugins();
 
-    //PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
-    //lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
-    //lPluginSettingsMediator->setPluginManager(lPluginMamager);
+    PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
+    lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
+    lPluginSettingsMediator->setPluginManager(lPluginManager);
     ProgressHandler::instance()->finishStage();
 }
 

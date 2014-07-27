@@ -37,7 +37,10 @@ MainWindow::MainWindow(QWidget *parent) :
     readVisibilitySettings();
 
     connect(ui->actionSettings, SIGNAL(triggered()),
-     this, SLOT(showSettings()), Qt::UniqueConnection);
+    this, SLOT(showSettings()), Qt::UniqueConnection);
+
+    connect(ui->actionPlugins, SIGNAL(triggered()),
+    this, SLOT(showSettings()), Qt::UniqueConnection);
 
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
