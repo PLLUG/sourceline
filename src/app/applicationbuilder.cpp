@@ -5,6 +5,8 @@
 // Loading
 #include "progresshandler.h"
 #include "splashscreen.h"
+#include "pluginsupport/componentsorter.h"
+#include "pluginsupport/supliers/fakecomponentsupplier.h"
 
 // Ui
 #include "mainwindow.h"
@@ -68,8 +70,8 @@ void ApplicationBuilder::loadPlugins()
 
 void ApplicationBuilder::supplyComponents()
 {
-    // ....
-    // TASK : create component suppliers
-    // TASK : create and initialize sorters
+    FakeComponentSupplier *pFakeComponentSupplier = new FakeComponentSupplier();
+    ComponentSorter *pComponentSorter = new ComponentSorter();
+    pComponentSorter->addSupplier("FakeComponent", pFakeComponentSupplier);
 }
 

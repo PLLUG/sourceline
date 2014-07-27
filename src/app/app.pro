@@ -46,7 +46,11 @@ SOURCES += \
     ui/viewsettingpage.cpp \
     pluginsupport/componentsorter.cpp \
     settings_dialog/settingsmanager.cpp \
-    pluginsupport/supliers/fakecomponentsupplier.cpp
+    pluginsupport/supliers/fakecomponentsupplier.cpp \
+    pluginsupport/plugininfo.cpp \
+    pluginsupport/pluginloader.cpp \
+    pluginsupport/pluginmanager.cpp \
+    pluginsupport/pluginsettingsmediator.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -71,7 +75,11 @@ HEADERS += \
     pluginsupport/componentsorter.h \
     pluginsupport/supliers/componentsupplier.h \
     settings_dialog/settingsmanager.h \
-    pluginsupport/supliers/fakecomponentsupplier.h
+    pluginsupport/supliers/fakecomponentsupplier.h \
+    pluginsupport/plugininfo.h \
+    pluginsupport/pluginloader.h \
+    pluginsupport/pluginmanager.h \
+    pluginsupport/pluginsettingsmediator.h
 
 INCLUDEPATH += \
     ./ui \
