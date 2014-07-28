@@ -183,7 +183,7 @@
   <action name="actionOpen">
    <property name="icon">
     <iconset>
-     <normalon>:/Icons/Icons/folder_open.png</normalon>
+     <normalon>:/splash/img/folder_open.png</normalon>
     </iconset>
    </property>
    <property name="text">
@@ -203,7 +203,7 @@
   <action name="actionAdd_Page">
    <property name="icon">
     <iconset>
-     <normalon>:/Icons/Icons/addIcon.png</normalon>
+     <normalon>:/splash/img/addIcon.png</normalon>
     </iconset>
    </property>
    <property name="text">
