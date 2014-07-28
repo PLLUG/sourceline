@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayMenu->addAction("Quit",this,SLOT(CloseWindow()));
     trayMenu->activeAction();
     TrayIcon = new QSystemTrayIcon();
-    TrayIcon->setIcon(QIcon(":/splash/img/soutceline.ico"));
+    TrayIcon->setIcon(QIcon(":/splash/img/sourceline.ico"));
     TrayIcon->setVisible(true);
     TrayIcon->show();
     TrayIcon->setContextMenu(trayMenu);
