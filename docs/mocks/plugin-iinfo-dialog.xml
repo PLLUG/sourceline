@@ -1,0 +1,21 @@
+<mockup version="1.0" skin="sketch" fontFace="Balsamiq Sans" measuredW="521" measuredH="294" mockupW="461" mockupH="274">
+  <controls>
+    <control controlID="64" controlTypeID="com.balsamiq.mockups::TitleWindow" x="60" y="20" w="461" h="274" measuredW="450" measuredH="400" zOrder="0" locked="false" isInGroup="-1">
+      <controlProperties>
+        <bottomheight>0</bottomheight>
+        <close>true</close>
+        <text>Plugin%20Info</text>
+      </controlProperties>
+    </control>
+    <control controlID="65" controlTypeID="com.balsamiq.mockups::DataGrid" x="75" y="62" w="431" h="190" measuredW="213" measuredH="141" zOrder="1" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Category%2C%20Info%0AAuthor%2C%20Alex%20Chmykhalo%0AYear%2C%202014%0AOrganization%2C%20PLLUG%20Community%0ALicense%2C%20GPL%20v3%0A%7B65L%2C%2065L%7D</text>
+      </controlProperties>
+    </control>
+    <control controlID="66" controlTypeID="com.balsamiq.mockups::Button" x="262" y="259" w="-1" h="-1" measuredW="40" measuredH="27" zOrder="2" locked="false" isInGroup="-1">
+      <controlProperties>
+        <text>Ok</text>
+      </controlProperties>
+    </control>
+  </controls>
+</mockup>
