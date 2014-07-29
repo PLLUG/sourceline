@@ -12,7 +12,7 @@
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent)
 {
-    ProgressHandler::instance()->setStageCount(2);
+    ProgressHandler::instance()->setStageCount(3);
 
     /// Init splash screen
     mSplashScreen = new SplashScreen;
@@ -72,5 +72,7 @@ void ApplicationBuilder::supplyComponents()
     // ....
     // TASK : create component suppliers
     // TASK : create and initialize sorters
+
+    ProgressHandler::instance()->finishStage();
 }
 
