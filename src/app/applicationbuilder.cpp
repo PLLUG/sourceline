@@ -54,6 +54,7 @@ void ApplicationBuilder::initUi()
     lMainWindow->lower();
     lMainWindow->show();
 
+
     ProgressHandler::instance()->finishStage();
 }
 

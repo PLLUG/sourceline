@@ -52,6 +52,7 @@
      <string>About</string>
     </property>
     <addaction name="actionAbout_SourceLine"/>
+    <addaction name="actionPlugin_Settings"/>
    </widget>
    <widget class="QMenu" name="menuView">
     <property name="title">
@@ -208,6 +209,11 @@
    </property>
    <property name="text">
     <string>Add Page</string>
+   </property>
+  </action>
+  <action name="actionPlugin_Settings">
+   <property name="text">
+    <string>Plugin Settings...</string>
    </property>
   </action>
  </widget>

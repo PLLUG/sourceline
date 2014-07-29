@@ -13,8 +13,18 @@ namespace DockTypes
         RevisionTable,
         HistoryTree,
         Console,
-        EditorView
+        EditorView,
+        DOCK_TYPE_COUNT
     };
 }
+
+
+enum MenuGroups {
+    UknownMenuGroup = 0,
+    FileMenuGroup,
+    EditMenuGroup,
+    HelpMenuGroup,
+    MENU_GROUP_COUNT
+};
 
 #endif // GUIDEFS_H
