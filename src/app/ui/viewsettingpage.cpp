@@ -46,7 +46,7 @@ ViewSettingPage::ViewSettingPage(PluginSettings *pSettings, QWidget *parent) :
     settings()->subscribe("history_tree_visible", this, "slotTreeChanged");
 
     setName("View");
-    setIcon(QIcon(":/Icons/Icons/IconsLand.png"));
+    setIcon(QIcon(":/splash/img/sourceline.ico"));
     settings()->setSettingsPath("view_settings/docks_visibility");
 }
 
