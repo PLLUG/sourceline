@@ -89,27 +89,27 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 {
     QAction *lActionOpen = new QAction(tr("&Open"), this);
     //connect(lActionOpen, SIGNAL(triggered()), this, SLOT(newFile()));
-    mActionManager->add(FileMenuGroup, "", lActionOpen);
+    mActionManager->addBack(FileMenuGroup, "", lActionOpen);
 
     QAction *lActionAddPage = new QAction(tr("&Add Page"), this);
     connect(lActionAddPage, SIGNAL(triggered()), pMainWindow, SLOT(slotAddPage()));
-    mActionManager->add(FileMenuGroup, "", lActionAddPage);
+    mActionManager->addBack(FileMenuGroup, "", lActionAddPage);
 
     QAction *lActionQuit = new QAction(tr("&Quit"), this);
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->add(FileMenuGroup, "", lActionQuit);
+    mActionManager->addBack(FileMenuGroup, "", lActionQuit);
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
-    mActionManager->add(ViewMenuGroup, "", lActionSettings);
+    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 
     QAction *lActionAboutSL = new QAction(tr("&About SourseLine"), this);
     //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->add(HelpMenuGroup, "", lActionAboutSL);
+    mActionManager->addBack(HelpMenuGroup, "", lActionAboutSL);
 
     QAction *lActionPluginSettings = new QAction(tr("&Plugins Settings"), this);
     //connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
-    mActionManager->add(HelpMenuGroup, "", lActionPluginSettings);
+    mActionManager->addBack(HelpMenuGroup, "", lActionPluginSettings);
 }
 
 

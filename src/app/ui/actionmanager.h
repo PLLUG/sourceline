@@ -34,7 +34,8 @@ class ActionManager : public QObject
     Q_OBJECT
 public:
     explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroups pMenuGroups, QString pCategory, QAction *pAction);
+    void addBack(MenuGroups pMenuGroups, QString pCategory, QAction *pAction);
+    void addAt(MenuGroups pMenuGroups, unsigned pIndex , QString pCategory, QAction *pAction);
     QList<QAction *> actions(MenuGroups pMenuGroups) const;
 signals:
 
