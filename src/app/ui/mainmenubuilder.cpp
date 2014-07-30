@@ -1,5 +1,3 @@
-#ifndef ACTIONMANAGER_H
-#define ACTIONMANAGER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,26 +20,32 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include "guidefs.h"
-#include <QMap>
-#include <QAction>
-#include <QString>
-#include <QList>
 
-class ActionManager : public QObject
+#include "mainmenubuilder.h"
+#include "actionmanager.h"
+#include <QMenuBar>
+
+MainMenuBuilder::MainMenuBuilder(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroups pMenuGroups, QString pCategory, QAction *pAction);
-    QList<QAction *> actions(MenuGroups pMenuGroups) const;
-signals:
+}
 
-public slots:
-private:
-    QMap<MenuGroups, QList<QAction *> > mActions;
+void MainMenuBuilder::setActionManager(ActionManager *pActionManager)
+{
+    mActionManager = pActionManager;
+}
 
-};
+void MainMenuBuilder::setMenuBar(QMenuBar *pMenuBar)
+{
+    mMenuBar = pMenuBar;
+}
 
-#endif // ACTIONMANAGER_H
+void MainMenuBuilder::initMenu()
+{
+    for (int lMenuGroups = FileMenuGroup; lMenuGroups < MENU_GROUP_COUNT; ++lMenuGroups)
+    {
+        QList<QAction *> lActions = mActionManager->actions(MenuGroups(lMenuGroups));
+        QMenu *lOpenMenu = mMenuBar->addMenu(gMenuGroups[MenuGroups(lMenuGroups)]);
+        lOpenMenu->addActions(lActions);
+    }
+}

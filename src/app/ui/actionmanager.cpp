@@ -30,10 +30,10 @@ ActionManager::ActionManager(QObject *parent) :
 
 void ActionManager::add(MenuGroups pMenuGroups, QString pCategory, QAction *pAction)
 {
-    mActions.insert(pMenuGroups, pAction);
+    mActions[pMenuGroups].push_back(pAction);
 }
 
 QList<QAction *> ActionManager::actions(MenuGroups pMenuGroups) const
 {
-    return mActions.values(pMenuGroups);
+    return mActions[pMenuGroups];
 }

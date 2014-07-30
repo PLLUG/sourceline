@@ -4,6 +4,9 @@
 #include <QObject>
 
 class SplashScreen;
+class ActionManager;
+class MainWindow;
+class MainMenuBuilder;
 
 class ApplicationBuilder : public QObject
 {
@@ -18,9 +21,11 @@ public:
     void initUi();
     void loadPlugins();
     void supplyComponents();
-
+    void createUiActions(MainWindow *pMainWindow);
 private:
     SplashScreen *mSplashScreen;
+    ActionManager *mActionManager;
+    MainMenuBuilder *mMainMenuBuilder;
 };
 
 #endif // APPLICATIONBUILDER_H

@@ -1,5 +1,5 @@
-#ifndef ACTIONMANAGER_H
-#define ACTIONMANAGER_H
+#ifndef MAINMENUBUILDER_H
+#define MAINMENUBUILDER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -23,25 +23,25 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <QObject>
-#include "guidefs.h"
-#include <QMap>
-#include <QAction>
-#include <QString>
-#include <QList>
 
-class ActionManager : public QObject
+class QMenuBar;
+class ActionManager;
+
+class MainMenuBuilder : public QObject
 {
     Q_OBJECT
 public:
-    explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroups pMenuGroups, QString pCategory, QAction *pAction);
-    QList<QAction *> actions(MenuGroups pMenuGroups) const;
+    explicit MainMenuBuilder(QObject *parent = 0);
+    void setActionManager(ActionManager *pActionManager);
+    void setMenuBar(QMenuBar *pMenuBar);
+    void initMenu();
 signals:
 
 public slots:
 private:
-    QMap<MenuGroups, QList<QAction *> > mActions;
+    QMenuBar *mMenuBar;
+    ActionManager *mActionManager;
 
 };
 
-#endif // ACTIONMANAGER_H
+#endif // MAINMENUBUILDER_H
