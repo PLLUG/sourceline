@@ -5,5 +5,6 @@
         <file>img/sourceline.ico</file>
         <file>img/addIcon.png</file>
         <file>img/folder_open.png</file>
+        <file>img/pluginInformation.gif</file>
     </qresource>
 </RCC>

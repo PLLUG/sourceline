@@ -51,7 +51,7 @@ SOURCES += \
     pluginsupport/pluginloader.cpp \
     pluginsupport/pluginmanager.cpp \
     pluginsupport/pluginsettingsmediator.cpp \
-    ui/dialogplugins.cpp
+    ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp
 
@@ -83,7 +83,7 @@ HEADERS += \
     pluginsupport/pluginloader.h \
     pluginsupport/pluginmanager.h \
     pluginsupport/pluginsettingsmediator.h \
-    ui/dialogplugins.h
+    ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h
 
@@ -109,3 +109,5 @@ FORMS += \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui
+
+OTHER_FILES +=

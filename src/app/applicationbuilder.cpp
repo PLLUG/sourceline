@@ -86,6 +86,11 @@ void ApplicationBuilder::loadPlugins()
     PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
     lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
     lPluginSettingsMediator->setPluginManager(lPluginManager);
+
+    QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
+    connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
+    mActionManager->addBack(ViewMenuGroup, "", lActionPlugins);
+
     ProgressHandler::instance()->finishStage();
 }
 
