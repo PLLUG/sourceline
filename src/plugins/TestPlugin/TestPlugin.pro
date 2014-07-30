@@ -20,7 +20,7 @@
 ###    along with this program.  If not, see <http://www.gnu.org/licenses/>. ###
 ###                                                                          ###
 ################################################################################
-QT       -= gui
+QT       += gui widgets
 
 TARGET = TestPlugin
 
@@ -33,11 +33,13 @@ CONFIG += shared
 DEFINES += TESTPLUGIN_LIBRARY
 
 SOURCES += testplugin.cpp \
-    gitfakecomponent.cpp
+    gitfakecomponent.cpp \
+    customsettingpage.cpp
 
 HEADERS += testplugin.h \
     gitfakecomponent.h \
-    testplugin_global.h
+    testplugin_global.h \
+    customsettingpage.h
 
 unix {
     target.path = /usr/lib

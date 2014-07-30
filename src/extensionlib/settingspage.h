@@ -1,8 +1,11 @@
+#ifndef SETTINGSPAGE_H
+#define SETTINGSPAGE_H
+
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
-***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
+***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -21,19 +24,35 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
 #include "pluginsettings.h"
-#include "customsettingpage.h"
 
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+#include <QWidget>
+#include <QIcon>
+#include <QDebug>
+#include "extensions_global.h"
+
+class EXTENSIONSSHARED_EXPORT SettingsPage : public QWidget
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent();
-    this->addComponent(gitFakeComponent);
+    Q_OBJECT
+public:
+    explicit SettingsPage(PluginSettings *pSettings, QWidget *parent = 0);
+    QString name() const;
+    QIcon icon() const;
+    PluginSettings *settings() const;
 
-    PluginSettings *lPSettings = new PluginSettings();
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
+public slots:
+    void slotApply();
+    void slotCancel();
 
-}
+protected:
+    void setName(const QString& pName);
+    void setIcon(const QIcon& pIcon);
+
+private:
+    QString mName;
+    QIcon mIcon;
+    PluginSettings *mSettings;
+
+};
+
+#endif // SETTINGSPAGE_H

@@ -1,8 +1,11 @@
+#ifndef CUSTOMSETTINGPAGE_H
+#define CUSTOMSETTINGPAGE_H
+
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
-***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
+***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -21,19 +24,27 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
+#include "settingspage.h"
 #include "pluginsettings.h"
-#include "customsettingpage.h"
+#include <QVariant>
+#include <QVBoxLayout>
+#include <QCheckBox>
+#include <QComboBox>
 
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+#include <QDebug>
+
+class CustomSettingPage : public SettingsPage
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent();
-    this->addComponent(gitFakeComponent);
+    Q_OBJECT
+public:
+    explicit CustomSettingPage(PluginSettings *pSettings, QWidget *parent = 0);
 
-    PluginSettings *lPSettings = new PluginSettings();
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
+signals:
+    void signalGetSettings(QString pPath);
 
-}
+public slots:
+    void slotSmthChanged(QVariant pValue);
+    void slotComboChanged(QVariant pValue);
+};
+
+#endif // CUSTOMSETTINGPAGE_H

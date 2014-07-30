@@ -20,8 +20,8 @@
 ###    along with this program.  If not, see <http://www.gnu.org/licenses/>. ###
 ###                                                                          ###
 ################################################################################
-
-QT       -= gui
+QT       += gui
+QT       += widgets
 
 PLUGINAPI_PATH=$$_PRO_FILE_PWD_/../pluginapi
 
@@ -33,13 +33,17 @@ DEFINES += EXTENSIONS_LIBRARY
 
 SOURCES += \
     fakecomponent.cpp \
-    plugin.cpp
+    plugin.cpp \
+    settingspage.cpp \
+    pluginsettings.cpp
 
 HEADERS +=\
     extensions_global.h\
     fakecomponent.h\
     plugin-interface.h\
     plugin.h\
+    settingspage.h \
+    pluginsettings.h
 
 
 unix {
@@ -61,7 +65,9 @@ copytarget.files  += \
     $$files(fakecomponent.h) \
     $$files(plugin.h) \
     $$files(plugin-interface.h) \
-    $$files(extensions_global.h)
+    $$files(extensions_global.h) \
+    $$files(pluginsettings.h) \
+    $$files(settingspage.h)
 ## wildcard for filename1 filename2 filename3 ...
 
 #message("found files for copytarget: "$$copytarget.files)
