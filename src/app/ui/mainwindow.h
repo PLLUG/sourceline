@@ -48,11 +48,11 @@ private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason);
     void CloseWindow();
 
-    void on_actionClose_triggered();
+    void slotQuit();
 
-    void showSettings();
+    void slotShowSettings();
 
-    void on_actionAdd_Page_triggered();
+    void slotAddPage();
 };
 
 #endif // MAINWINDOW_H

@@ -1,3 +1,5 @@
+#ifndef MAINMENUBUILDER_H
+#define MAINMENUBUILDER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -20,26 +22,26 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
+#include <QObject>
 
-#include "actionmanager.h"
+class QMenuBar;
+class ActionManager;
 
-ActionManager::ActionManager(QObject *parent) :
-    QObject(parent)
+class MainMenuBuilder : public QObject
 {
-}
+    Q_OBJECT
+public:
+    explicit MainMenuBuilder(QObject *parent = 0);
+    void setActionManager(ActionManager *pActionManager);
+    void setMenuBar(QMenuBar *pMenuBar);
+    void initMenu();
+signals:
 
-void ActionManager::addBack(MenuGroups pMenuGroups, QString pCategory, QAction *pAction)
-{
-    mActions[pMenuGroups].push_back(pAction);
+public slots:
+private:
+    QMenuBar *mMenuBar;
+    ActionManager *mActionManager;
 
-}
+};
 
-void ActionManager::addAt(MenuGroups pMenuGroups, unsigned pIndex, QString pCategory, QAction *pAction)
-{
-    mActions[pMenuGroups].insert(pIndex, pAction);
-}
-
-QList<QAction *> ActionManager::actions(MenuGroups pMenuGroups) const
-{
-    return mActions[pMenuGroups];
-}
+#endif // MAINMENUBUILDER_H

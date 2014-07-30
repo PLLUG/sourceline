@@ -21,25 +21,31 @@
 ***                                                                          ***
 *******************************************************************************/
 
+#include "mainmenubuilder.h"
 #include "actionmanager.h"
+#include <QMenuBar>
 
-ActionManager::ActionManager(QObject *parent) :
+MainMenuBuilder::MainMenuBuilder(QObject *parent) :
     QObject(parent)
 {
 }
 
-void ActionManager::addBack(MenuGroups pMenuGroups, QString pCategory, QAction *pAction)
+void MainMenuBuilder::setActionManager(ActionManager *pActionManager)
 {
-    mActions[pMenuGroups].push_back(pAction);
-
+    mActionManager = pActionManager;
 }
 
-void ActionManager::addAt(MenuGroups pMenuGroups, unsigned pIndex, QString pCategory, QAction *pAction)
+void MainMenuBuilder::setMenuBar(QMenuBar *pMenuBar)
 {
-    mActions[pMenuGroups].insert(pIndex, pAction);
+    mMenuBar = pMenuBar;
 }
 
-QList<QAction *> ActionManager::actions(MenuGroups pMenuGroups) const
+void MainMenuBuilder::initMenu()
 {
-    return mActions[pMenuGroups];
+    for (int lMenuGroups = FileMenuGroup; lMenuGroups < MENU_GROUP_COUNT; ++lMenuGroups)
+    {
+        QList<QAction *> lActions = mActionManager->actions(MenuGroups(lMenuGroups));
+        QMenu *lOpenMenu = mMenuBar->addMenu(gMenuGroups[MenuGroups(lMenuGroups)]);
+        lOpenMenu->addActions(lActions);
+    }
 }

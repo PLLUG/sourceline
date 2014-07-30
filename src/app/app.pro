@@ -46,7 +46,8 @@ SOURCES += \
     ui/viewsettingpage.cpp \
     pluginsupport/componentsorter.cpp \
     settings_dialog/settingsmanager.cpp \
-    ui/actionmanager.cpp
+    ui/actionmanager.cpp \
+    ui/mainmenubuilder.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -71,7 +72,8 @@ HEADERS += \
     pluginsupport/componentsorter.h \
     pluginsupport/supliers/componentsupplier.h \
     settings_dialog/settingsmanager.h \
-    ui/actionmanager.h
+    ui/actionmanager.h \
+    ui/mainmenubuilder.h
 
 INCLUDEPATH += \
     ./ui \

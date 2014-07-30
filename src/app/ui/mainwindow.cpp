@@ -36,8 +36,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     readVisibilitySettings();
 
-    connect(ui->actionSettings, SIGNAL(triggered()),
-     this, SLOT(showSettings()), Qt::UniqueConnection);
+    //actionBuiilder
+    //connect(ui->actionSettings, SIGNAL(triggered()),
+    // this, SLOT(slotShowSettings()), Qt::UniqueConnection);
 
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
@@ -80,17 +81,17 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
      }
  }
 
-void MainWindow::on_actionClose_triggered()
+void MainWindow::slotQuit()
 {
     qApp->quit();
 }
 
-void MainWindow::showSettings()
+void MainWindow::slotShowSettings()
 {
     mSettingsDialog->show();
 }
 
-void MainWindow::on_actionAdd_Page_triggered()
+void MainWindow::slotAddPage()
 {
     static int a = 0;
     QString lTabName = "Name" + QString::number(a++);
