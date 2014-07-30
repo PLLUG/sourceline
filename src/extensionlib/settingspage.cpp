@@ -2,7 +2,7 @@
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
-***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
+***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -21,19 +21,51 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
-#include "pluginsettings.h"
-#include "customsettingpage.h"
+#include "settingspage.h"
 
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+SettingsPage::SettingsPage(PluginSettings *pSettings, QWidget *parent) :
+    QWidget(parent),
+    mSettings(pSettings)
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent();
-    this->addComponent(gitFakeComponent);
+}
 
-    PluginSettings *lPSettings = new PluginSettings();
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
+QString SettingsPage::name() const
+{
+    return mName;
+}
 
+QIcon SettingsPage::icon() const
+{
+    return mIcon;
+}
+
+PluginSettings *SettingsPage::settings() const
+{
+    return mSettings;
+}
+
+void SettingsPage::slotApply()
+{
+    if (mSettings)
+    {
+        mSettings->commit();
+    }
+}
+
+void SettingsPage::slotCancel()
+{
+    if (mSettings)
+    {
+        mSettings->revert();
+    }
+}
+
+void SettingsPage::setName(const QString &pName)
+{
+    mName = pName;
+}
+
+void SettingsPage::setIcon(const QIcon &pIcon)
+{
+    mIcon = pIcon;
 }

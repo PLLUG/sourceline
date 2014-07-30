@@ -2,7 +2,7 @@
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
-***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
+***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -21,19 +21,39 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
-#include "pluginsettings.h"
 #include "customsettingpage.h"
 
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+CustomSettingPage::CustomSettingPage(PluginSettings *pSettings, QWidget *parent) :
+    SettingsPage(pSettings, parent)
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent();
-    this->addComponent(gitFakeComponent);
+    QVBoxLayout *lLayout = new QVBoxLayout;
+    setLayout(lLayout);
 
-    PluginSettings *lPSettings = new PluginSettings();
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
+    QCheckBox *lCheckBox = new QCheckBox("auto");
+    lLayout->addWidget(lCheckBox);
 
+    QComboBox *lComboBox = new QComboBox();
+    QStringList str;
+    str << "text1" << "text2" << "text3";
+    lComboBox->addItems(str);
+    lLayout->addWidget(lComboBox);
+
+    settings()->add("auto", lCheckBox, "checked");
+    settings()->subscribe("auto", this, "slotSmthChanged");
+    settings()->add("combo", lComboBox, "currentText");
+    settings()->subscribe("combo", this, "slotComboChanged");
+
+    setName("GitFake");
+    setIcon(QIcon(":/splash/img/sourceline.ico"));
+    settings()->setSettingsPath("fake_plugin/group1");
+}
+
+void CustomSettingPage::slotSmthChanged(QVariant pValue)
+{
+    qDebug() << "inside plugin : smth changed = " << pValue.toBool();
+}
+
+void CustomSettingPage::slotComboChanged(QVariant pValue)
+{
+    qDebug() << "inside plugin : combo changed = " << pValue.toString();
 }
