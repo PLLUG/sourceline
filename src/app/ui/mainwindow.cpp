@@ -16,7 +16,7 @@ MainWindow::MainWindow(QWidget *parent) :
     trayMenu->addAction("Quit",this,SLOT(CloseWindow()));
     trayMenu->activeAction();
     TrayIcon = new QSystemTrayIcon();
-    TrayIcon->setIcon(QIcon(":/Icons/Icons/IconsLand.png"));
+    TrayIcon->setIcon(QIcon(":/splash/img/sourceline.ico"));
     TrayIcon->setVisible(true);
     TrayIcon->show();
     TrayIcon->setContextMenu(trayMenu);
@@ -36,11 +36,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     readVisibilitySettings();
 
-    connect(ui->actionSettings, SIGNAL(triggered()),
-    this, SLOT(showSettings()), Qt::UniqueConnection);
-
-    connect(ui->actionPlugins, SIGNAL(triggered()),
-    this, SLOT(showSettings()), Qt::UniqueConnection);
 
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
@@ -83,17 +78,17 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
      }
  }
 
-void MainWindow::on_actionClose_triggered()
+void MainWindow::slotQuit()
 {
     qApp->quit();
 }
 
-void MainWindow::showSettings()
+void MainWindow::slotShowSettings()
 {
     mSettingsDialog->show();
 }
 
-void MainWindow::on_actionAdd_Page_triggered()
+void MainWindow::slotAddPage()
 {
     static int a = 0;
     QString lTabName = "Name" + QString::number(a++);

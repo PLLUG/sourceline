@@ -52,6 +52,8 @@ SOURCES += \
     pluginsupport/pluginmanager.cpp \
     pluginsupport/pluginsettingsmediator.cpp \
     ui/dialogplugins.cpp
+    ui/actionmanager.cpp \
+    ui/mainmenubuilder.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -82,14 +84,18 @@ HEADERS += \
     pluginsupport/pluginmanager.h \
     pluginsupport/pluginsettingsmediator.h \
     ui/dialogplugins.h
+    ui/actionmanager.h \
+    ui/mainmenubuilder.h
 
 INCLUDEPATH += \
     ./ui \
     ./settings_dialog
 
 RESOURCES += \
-    resources/resources.qrc \
-    resources/Icon.qrc
+    resources/resources.qrc
+
+RC_FILE += \
+    resources/appicon.rc
 
 FORMS += \
     ui/console.ui \
@@ -100,7 +106,6 @@ FORMS += \
     ui/historytree.ui \
     ui/mainwindow.ui \
     ui/revisiontable.ui \
-    ui/viewsettings.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui

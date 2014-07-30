@@ -1,5 +1,7 @@
 #ifndef GUIDEFS_H
 #define GUIDEFS_H
+#include <QObject>
+#include <QString>
 
 /*!
  * \file guidefs.h
@@ -13,8 +15,21 @@ namespace DockTypes
         RevisionTable,
         HistoryTree,
         Console,
-        EditorView
+        EditorView,
+        DOCK_TYPE_COUNT
     };
 }
+
+
+enum MenuGroups {
+    UknownMenuGroup = 0,
+    FileMenuGroup,
+    ViewMenuGroup,
+    EditMenuGroup,
+    HelpMenuGroup,
+    MENU_GROUP_COUNT
+};
+
+static const QString gMenuGroups[] = {QObject::tr("&Unknown"), QObject::tr("&File"), QObject::tr("&View"), QObject::tr("&Edit"), QObject::tr("&Help")};
 
 #endif // GUIDEFS_H

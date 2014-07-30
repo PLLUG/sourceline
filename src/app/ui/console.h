@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include "genericdockwidget.h"
+#include <string>
 namespace Ui {
 class Console;
 }
