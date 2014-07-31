@@ -35,7 +35,8 @@ SOURCES += \
     fakecomponent.cpp \
     plugin.cpp \
     settingspage.cpp \
-    pluginsettings.cpp
+    pluginsettings.cpp \
+    command.cpp
 
 HEADERS +=\
     extensions_global.h\
@@ -43,7 +44,8 @@ HEADERS +=\
     plugin-interface.h\
     plugin.h\
     settingspage.h \
-    pluginsettings.h
+    pluginsettings.h \
+    command.h
 
 
 unix {

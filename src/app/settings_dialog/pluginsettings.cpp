@@ -112,6 +112,8 @@ bool PluginSettings::isPropertyCouldBeAttached(QObject *pObject, const QString &
 
 bool PluginSettings::isMethodCouldBeSubscribed(QObject *pObject, const QString &pSignature)
 {
+    Q_UNUSED(pObject);
+    Q_UNUSED(pSignature);
     //.........
     return true;
 }
