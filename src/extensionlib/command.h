@@ -48,7 +48,7 @@ public:
      * \brief Returns visible to user name that describes command.
      * \return String with command name.
      */
-    QString name() const;
+    virtual QString name() const = 0;
 
     /*!
      * \brief Returns visible to user icon that describes command.
@@ -74,19 +74,12 @@ public slots:
 
 protected:
     /*!
-     * \brief Sets visible to user name that describes command.
-     * \param pName String with command name.
-     */
-    void setName(const QString &pName);
-
-    /*!
      * \brief Sets visible to user icon that describes command.
      * \param Command icon.
      */
     void setIcon(const QIcon &pIcon);
 
 private:
-    QString mName;
     QIcon mIcon;
 };
 

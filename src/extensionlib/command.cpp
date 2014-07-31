@@ -32,11 +32,6 @@ Command::Command(QObject *parent) :
 {
 }
 
-QString Command::name() const
-{
-    return mName;
-}
-
 QIcon Command::icon() const
 {
     return mIcon;
@@ -52,11 +47,6 @@ QString Command::toString() const
     return QString("%1 %2")
         .arg(commandString())
         .arg(parametersList().join(ARGUMENT_SEPARATOR));
-}
-
-void Command::setName(const QString &pName)
-{
-    mName = pName;
 }
 
 void Command::setIcon(const QIcon &pIcon)
