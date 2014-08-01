@@ -43,6 +43,7 @@ DialogPlugins::~DialogPlugins()
 void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
 {
     mPlugins = pPlugins;
+    ui->pluginsTree->clear();
     createPluginsTree();
     connect(ui->applyAndRestartButton, SIGNAL(clicked()), this, SLOT(slotApplyAndRestartPressed()), Qt::UniqueConnection);
 }
@@ -50,7 +51,7 @@ void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
 void DialogPlugins::createPluginsTree()
 {
     ui->pluginsTree->setColumnCount(4);
-    ui->pluginsTree->setHeaderLabels(QStringList()<< tr("Plugin Group/Name^") << tr("Ver") << tr("Short Description") << "");
+    ui->pluginsTree->setHeaderLabels(QStringList()  << tr("Plugin Group/Name^") << tr("Ver") << tr("Short Description") << "");
     mMapper = new QSignalMapper(this);
     foreach (const PluginInfo &lPluginInfo, mPlugins)
     {
@@ -109,13 +110,14 @@ void DialogPlugins::slotButtonPressed(QString pPluginId)
 }
 QString DialogPlugins::requestInfoForPlugin(QString pPluginId)
 {
-    QList<QTreeWidgetItem *> lCategoryList =  ui->pluginsTree->findItems("", Qt::MatchContains, 0);
-    foreach (QTreeWidgetItem* lCategoryItem, lCategoryList)
+    int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
+    for (int i = 0; i < lCountOfTopLevelItem; ++i)
     {
-        unsigned lCountOfPluginsInCategory = lCategoryItem->childCount();
+        QTreeWidgetItem* lCategoryIntem = ui->pluginsTree->topLevelItem(i);
+        unsigned lCountOfPluginsInCategory = lCategoryIntem->childCount();
         for (unsigned i = 0; i < lCountOfPluginsInCategory; ++i)
         {
-            QTreeWidgetItem* lPlugin = lCategoryItem->child(i);
+            QTreeWidgetItem* lPlugin = lCategoryIntem->child(i);
             if(lPlugin->text(0) == pPluginId)
             {
                 return lPlugin->text(2);
@@ -147,8 +149,8 @@ bool DialogPlugins::restartApplication()
 
 void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
 {
-    int countOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
-    for (int i = 0; i < countOfTopLevelItem; ++i)
+    int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
+    for (int i = 0; i < lCountOfTopLevelItem; ++i)
     {
         QTreeWidgetItem* lCategoryIndex = ui->pluginsTree->topLevelItem(i);
         int countOfPluginIndex = lCategoryIndex->childCount();
