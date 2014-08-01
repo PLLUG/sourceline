@@ -7,7 +7,9 @@
 
 int main(int argc, char *argv[])
 {
-    Checker<RevisionNode> ch;
+//    BOOST_CONCEPT_ASSERT((Checker<RevisionNode>));
+    boost::function_requires<Checker<RevisionNode> >();
+//    Checker<RevisionNode> checkConcept;
     QApplication a(argc, argv);
     MainWindow w;
     w.show();

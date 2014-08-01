@@ -34,29 +34,29 @@ using namespace boost;
 
 QT_FORWARD_DECLARE_CLASS(RevisionTableModel)
 
-//namespace boost
-//{
-//   template <> struct graph_traits<RevisionNode>
-//    {
-//        typedef int vertex_descriptor;
-//        typedef std::pair <vertex_descriptor, vertex_descriptor> edge_descriptor;
-//        typedef boost::undirected_tag directed_category;
-//        typedef boost::disallow_parallel_edge_tag edge_parallel_category;
-//        typedef vertex_list_graph_tag traversal_category;
+namespace boost
+{
+   template <> struct graph_traits<RevisionNode>
+    {
+        typedef int vertex_descriptor;
+        typedef std::pair <vertex_descriptor, vertex_descriptor> edge_descriptor;
+        typedef boost::undirected_tag directed_category;
+        typedef boost::disallow_parallel_edge_tag edge_parallel_category;
+        typedef vertex_list_graph_tag traversal_category;
 
-////        typedef VertexIteratorImpl vertex_iterator;
-////        typedef OutEdgeIteratorImpl out_edge_iterator;
-//        typedef int degree_size_type;
-//        typedef int vertices_size_type;
+//        typedef VertexIteratorImpl vertex_iterator;
+//        typedef OutEdgeIteratorImpl out_edge_iterator;
+        typedef int degree_size_type;
+        typedef int vertices_size_type;
 
-//        typedef void in_edge_iterator;
-//        typedef void edge_iterator;
-//        typedef void edges_size_type;
-//    };
-//}
+        typedef void in_edge_iterator;
+        typedef void edge_iterator;
+        typedef void edges_size_type;
+    };
+}
 
 typedef adjacency_list<boost::listS, boost::vecS, boost::directedS, RevisionNode> Graph;
-typedef graph_traits<Graph>::vertex_descriptor Vertex;
+typedef graph_traits<RevisionNode>::vertex_descriptor Vertex;
 
 class RevisionTree
 {

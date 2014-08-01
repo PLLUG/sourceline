@@ -81,9 +81,10 @@ RevisionNode RevisionTree::node(const Vertex &v) const
 
 int RevisionTree::vertexSize() const
 {
-    graph_traits < Graph >::vertex_iterator i, end;
-    tie(i, end) = vertices(g);
-    return (end - i);
+    return num_vertices(g);
+//    graph_traits < Graph >::vertex_iterator i, end;
+//    tie(i, end) = vertices(g);
+//    return (end - i);
 }
 
 QString RevisionTree::currentBranch() const
