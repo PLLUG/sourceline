@@ -38,9 +38,10 @@ class EXTENSIONSSHARED_EXPORT Command : public QObject
 {
     Q_OBJECT
 public:
-    enum CommandFlags {
+    enum CommandFlag {
         NoFlags = 0x0000
     };
+    Q_DECLARE_FLAGS(CommandFlags, CommandFlag)
 
     explicit Command(QObject *parent = 0);
 
@@ -59,13 +60,18 @@ public:
     /*!
      * \brief Returns flags that describes command type and behavior for application. Aplication takes
      *  this flags into accoutn when command will be supplied from plugin.
-     * \return CommandFlags enum.
+     * \return CommandFlags class.
      */
     virtual CommandFlags flags() const;
 
     virtual QString commandString() const = 0;
     virtual QStringList parametersList() const = 0;
 
+    /*!
+     * \brief Returns string that equivalent to command in command line to execute current Command
+     *  instance.
+     * \return String with command and parameters.
+     */
     QString toString() const;
 
 signals:
@@ -82,5 +88,7 @@ protected:
 private:
     QIcon mIcon;
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(Command::CommandFlags)
 
 #endif // COMMAND_H
