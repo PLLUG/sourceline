@@ -25,7 +25,7 @@
 #include "ui_mainwindow.h"
 
 
-ViewSettingPage::ViewSettingPage(PluginSettings *pSettings, QWidget *parent) :
+ViewSettingPage::ViewSettingPage(Settings *pSettings, QWidget *parent) :
     SettingsPage(pSettings, parent)
 {
     mDialogUi = new Ui::Form;

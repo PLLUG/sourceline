@@ -25,7 +25,7 @@
 *******************************************************************************/
 
 #include "settingspage.h"
-#include "pluginsettings.h"
+#include "settings.h"
 #include <QVariant>
 #include <QVBoxLayout>
 #include <QCheckBox>
@@ -37,7 +37,7 @@ class CustomSettingPage : public SettingsPage
 {
     Q_OBJECT
 public:
-    explicit CustomSettingPage(PluginSettings *pSettings, QWidget *parent = 0);
+    explicit CustomSettingPage(Settings *pSettings, QWidget *parent = 0);
 
 signals:
     void signalGetSettings(QString pPath);

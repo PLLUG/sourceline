@@ -31,7 +31,7 @@ private:
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
     AppSettingsDialog *mSettingsDialog;
-    PluginSettings *mPluginSettings;
+    Settings *mPluginSettings;
     ViewSettingPage *mVSettingPage;
     SettingsManager *mSettingsManager;
     CustomTabBar *mTabBar;

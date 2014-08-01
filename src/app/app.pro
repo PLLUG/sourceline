@@ -40,7 +40,6 @@ SOURCES += \
     ui/pagemanager.cpp \
     ui/revisiontable.cpp \
     ui/appsettingsdialog.cpp \
-    settings_dialog/pluginsettings.cpp \
     settings_dialog/settingspage.cpp \
     settings_dialog/settingstorage.cpp \
     ui/viewsettingpage.cpp \
@@ -53,7 +52,8 @@ SOURCES += \
     pluginsupport/pluginsettingsmediator.cpp \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
-    ui/mainmenubuilder.cpp
+    ui/mainmenubuilder.cpp \
+    settings_dialog/settings.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -71,7 +71,6 @@ HEADERS += \
     ui/pagemanager.h \
     ui/revisiontable.h \
     ui/appsettingsdialog.h \
-    settings_dialog/pluginsettings.h \
     settings_dialog/settingspage.h \
     settings_dialog/settingstorage.h \
     ui/viewsettingpage.h \
@@ -85,7 +84,8 @@ HEADERS += \
     pluginsupport/pluginsettingsmediator.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
-    ui/mainmenubuilder.h
+    ui/mainmenubuilder.h \
+    settings_dialog/settings.h
 
 INCLUDEPATH += \
     ./ui \

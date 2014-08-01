@@ -24,7 +24,7 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "pluginsettings.h"
+#include "settings.h"
 
 #include <QWidget>
 #include <QIcon>
@@ -34,10 +34,10 @@ class SettingsPage : public QWidget
 {
     Q_OBJECT
 public:
-    explicit SettingsPage(PluginSettings *pSettings, QWidget *parent = 0);
+    explicit SettingsPage(Settings *pSettings, QWidget *parent = 0);
     QString name() const;
     QIcon icon() const;
-    PluginSettings *settings() const;
+    Settings *settings() const;
 
 public slots:
     void slotApply();
@@ -50,7 +50,7 @@ protected:
 private:
     QString mName;
     QIcon mIcon;
-    PluginSettings *mSettings;
+    Settings *mSettings;
 
 };
 

@@ -22,7 +22,7 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->setContextMenu(trayMenu);
 
     mSettingsDialog = new AppSettingsDialog(this);
-    mPluginSettings = new PluginSettings(this);
+    mPluginSettings = new Settings(this);
     mVSettingPage = new ViewSettingPage(mPluginSettings);
     mVSettingPage->setMainUi(ui);
     mSettingsDialog->addSettingsItem(mVSettingPage);

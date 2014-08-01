@@ -23,7 +23,7 @@
 
 #include "customsettingpage.h"
 
-CustomSettingPage::CustomSettingPage(PluginSettings *pSettings, QWidget *parent) :
+CustomSettingPage::CustomSettingPage(Settings *pSettings, QWidget *parent) :
     SettingsPage(pSettings, parent)
 {
     QVBoxLayout *lLayout = new QVBoxLayout;
