@@ -82,6 +82,7 @@ void Settings::commit()
         mSettingValueByName.insert(it.key(), it.value());
         notifySubscribers(it.key(), it.value());
     }
+    qDebug() << mModifiedSettingsByName;
     emit settingsChanged(mModifiedSettingsByName);
     mModifiedSettingsByName.clear();
 }

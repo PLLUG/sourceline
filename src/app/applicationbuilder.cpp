@@ -21,7 +21,9 @@
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent),
     mActionManager(new ActionManager(this)),
-    mMainMenuBuilder(new MainMenuBuilder(this))
+    mMainMenuBuilder(new MainMenuBuilder(this)),
+    mSettingsManager(new SettingsManager(this)),
+    mStorage(new SettingStorage)
 {
     ProgressHandler::instance()->setStageCount(3);
 
@@ -37,6 +39,7 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
 
     //init mActionManager for mMainMenuBuilder
     mMainMenuBuilder->setActionManager(mActionManager);
+    mSettingsManager->setStorage(mStorage);
 }
 
 void ApplicationBuilder::slotBuild()
@@ -87,11 +90,25 @@ void ApplicationBuilder::loadPlugins()
     PluginManager *lPluginManager =new PluginManager();
     lPluginManager->setPluginLoader(lPluginLoader);
 
-    DialogPlugins *lDialogPlugins = new DialogPlugins(new Settings(this));
+
+    DialogPlugins *lDialogPlugins = new DialogPlugins();
 
     PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
     lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
     lPluginSettingsMediator->setPluginManager(lPluginManager);
+
+    Settings *lSettings = new Settings(this);
+    lPluginSettingsMediator->setSettings(lSettings);
+    lSettings->add("plugins", lPluginManager, "activePlugins");
+    lSettings->setSettingsPath("active_plugins");
+    mSettingsManager->addSettings("main_window", "Plugins", lSettings);
+    connect(lSettings, SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+
+    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+                             lSettings, SLOT(slotSetSettings(QMap<QString,QVariant>)));
+
+    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lSettings));
 
     QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
     connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
@@ -102,22 +119,20 @@ void ApplicationBuilder::loadPlugins()
 
 void ApplicationBuilder::loadSettings()
 {
-    SettingsManager *lSettingsManager = new SettingsManager(this);
     AppSettingsDialog *lSettingsDialog = new AppSettingsDialog();
     Settings *lSettings = new Settings(this);
     ViewSettingPage *lVSettingPage = new ViewSettingPage(lSettings);
     lVSettingPage->setMainUi(mMainWindow->ui);
     lSettingsDialog->addSettingsItem(lVSettingPage);
-    lSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
-
-    SettingStorage *lStorage = new SettingStorage();
-    lSettingsManager->setStorage(lStorage);
+    mSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
 
     connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            lSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
-    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(lSettingsManager->pathBySettings(lVSettingPage->settings()));
+            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+
+//    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+//                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
+
+//    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lVSettingPage->settings()));
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), lSettingsDialog, SLOT(exec()));

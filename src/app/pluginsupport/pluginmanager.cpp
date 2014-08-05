@@ -48,4 +48,5 @@ QStringList PluginManager::activePlugins()
 void PluginManager::slotSetActivePlugins(const QStringList &pActivePlugins)
 {
     mActivePlugins = pActivePlugins;
+    emit activePluginsChanged(mActivePlugins);
 }

@@ -42,7 +42,7 @@ class DialogPlugins : public QDialog
     Q_OBJECT
 
 public:
-    explicit DialogPlugins(Settings *pSettings, QWidget *parent = 0);
+    explicit DialogPlugins(QWidget *parent = 0);
     ~DialogPlugins();
     /*!
      * \brief Adds plugin to list and all necessary information about it
@@ -72,7 +72,6 @@ public:
      */
     bool restartApplication();
     void setActivatedPlugins(QList<QString> pActivatedPlugins);
-    Settings* settings() const;
 
 private slots:
     /*!
@@ -113,11 +112,10 @@ private:
      */
     QWidget* createButton(QTreeWidgetItem* pPluginItem);
 
-private slots:
-    void slotSmthChanged();
+signals:
+    void signalStateChanged();
 
 private:
-    Settings *mSettings;
     Ui::DialogPlugins *ui;
     QSignalMapper *mMapper;
     bool mIsApplyAndRestartPressed;

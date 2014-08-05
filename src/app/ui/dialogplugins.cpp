@@ -30,11 +30,10 @@
 #include <QSignalMapper>
 #include <QDebug>
 
-DialogPlugins::DialogPlugins(Settings *pSettings, QWidget *parent) :
+DialogPlugins::DialogPlugins(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogPlugins),
-    mIsApplyAndRestartPressed(false),
-    mSettings(pSettings)
+    mIsApplyAndRestartPressed(false)
 {
     ui->setupUi(this);
 }
@@ -81,6 +80,7 @@ void DialogPlugins::addCategory(const QString& pCategory, const QString& pPlugin
       lCategoryItem->setText(0, pCategory);
       addPluginToCategory(lCategoryItem, pPluginId, pVer, pDescr);
 }
+
 void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString& pPluginId, const QString &pVer, const  QString &pDescr)
 {
     QTreeWidgetItem *lPluginItem =new QTreeWidgetItem(pParent);
@@ -91,12 +91,8 @@ void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString&
     lPluginItem->setFlags(lPluginItem->flags() | Qt::ItemIsUserCheckable);
     lPluginItem->setCheckState(0, Qt::Unchecked);
     pParent->addChild(lPluginItem);
-/////
-    //mSettings->add(pPluginId, lPluginItem, "checked");
-    //mSettings->subscribe(pPluginId, this, "slotSmthChanged");
-//////
-
 }
+
 QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
 {
     QSize lSize( 20,20 );
@@ -111,12 +107,7 @@ QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
     connect(lPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
     return lPushButton;
 }
-////
-void DialogPlugins::slotSmthChanged()
-{
-    qDebug() << "SMTH CHANGED!!";
-}
-////
+
 void DialogPlugins::slotButtonPressed(QString pPluginId)
 {
     qDebug() << requestInfoForPlugin(pPluginId) << " " << pPluginId;
@@ -177,11 +168,4 @@ void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
         }
     }
 }
-
-Settings *DialogPlugins::settings() const
-{
-    return mSettings;
-}
-
-
 
