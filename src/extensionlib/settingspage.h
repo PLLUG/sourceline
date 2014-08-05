@@ -44,6 +44,9 @@ public slots:
     void slotApply();
     void slotCancel();
 
+signals:
+    void signalSettingsStateChanged();
+
 protected:
     void setName(const QString& pName);
     void setIcon(const QIcon& pIcon);

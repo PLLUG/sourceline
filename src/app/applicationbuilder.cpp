@@ -87,7 +87,7 @@ void ApplicationBuilder::loadPlugins()
     PluginManager *lPluginManager =new PluginManager();
     lPluginManager->setPluginLoader(lPluginLoader);
 
-    DialogPlugins *lDialogPlugins = new DialogPlugins();
+    DialogPlugins *lDialogPlugins = new DialogPlugins(new Settings(this));
 
     PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
     lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
@@ -120,7 +120,7 @@ void ApplicationBuilder::loadSettings()
     lStorage->slotLoadSettings(lSettingsManager->pathBySettings(lVSettingPage->settings()));
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
-    connect(lActionSettings, SIGNAL(triggered()), lSettingsDialog, SLOT(show()));
+    connect(lActionSettings, SIGNAL(triggered()), lSettingsDialog, SLOT(exec()));
     mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 }
 

@@ -45,6 +45,12 @@ ViewSettingPage::ViewSettingPage(Settings *pSettings, QWidget *parent) :
     settings()->add("history_tree_visible", mDialogUi->checkBox_5, "checked");
     settings()->subscribe("history_tree_visible", this, "slotTreeChanged");
 
+    connect(mDialogUi->checkBox, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_2, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_3, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_4, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_5, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+
     setName("View");
     setIcon(QIcon(":/splash/img/sourceline.ico"));
     settings()->setSettingsPath("view_settings/docks_visibility");

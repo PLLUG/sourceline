@@ -30,7 +30,7 @@ AppSettingsDialog::AppSettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     settingsChanged = false;
-    ui->btnApply->setEnabled(settingsChanged);
+    ui->btnApply->setEnabled(settingsChanged);;
     connect(ui->btnOk, SIGNAL(clicked()), SLOT(slotBtnOk()));
     connect(ui->btnCancel, SIGNAL(clicked()), SLOT(slotBtnCancel()));
     connect(ui->btnApply, SIGNAL(clicked()), SLOT(slotBtnApply()));
@@ -45,6 +45,7 @@ AppSettingsDialog::~AppSettingsDialog()
 void AppSettingsDialog::addSettingsItem(SettingsPage *pSettingPage)
 {
     qDebug() << "Added settings item!";
+    mSPages.append(pSettingPage);
     settingsNameList.append(pSettingPage->name());
     QListWidgetItem* lwi = new QListWidgetItem(pSettingPage->icon(), pSettingPage->name());
     lwi->setSizeHint(QSize(0, 40));
@@ -53,28 +54,33 @@ void AppSettingsDialog::addSettingsItem(SettingsPage *pSettingPage)
     ui->stackedWidget->addWidget(pSettingPage);
     ui->stackedWidget->setCurrentIndex(0);
     connect(ui->btnOk, SIGNAL(clicked(bool)),
-                pSettingPage, SLOT(slotApply()), Qt::UniqueConnection);
+            this, SLOT(slotBtnOk()), Qt::UniqueConnection);
     connect(ui->btnCancel, SIGNAL(clicked(bool)),
             pSettingPage, SLOT(slotCancel()), Qt::UniqueConnection);
+    connect(pSettingPage, SIGNAL(signalSettingsStateChanged()),
+            this, SLOT(slotSettingsChanged()), Qt::UniqueConnection);
 }
 
 void AppSettingsDialog::slotBtnOk()
 {
     qDebug() << "btnOk pressed!";
     slotBtnApply();
-    //this->close();
+    this->close();
 }
 
 void AppSettingsDialog::slotBtnCancel()
 {
     qDebug() << "btnCancel pressed!";
-    //this->close();
+    mSPages.at(ui->stackedWidget->currentIndex())->settings()->revert();
+    settingsChanged = false;
+    ui->btnApply->setEnabled(settingsChanged);
+    this->close();
 }
 
 void AppSettingsDialog::slotBtnApply()
 {
     qDebug() << "btnApply pressed!";
-    writeSettings();
+    mSPages.at(ui->stackedWidget->currentIndex())->settings()->commit();
     settingsChanged = false;
     ui->btnApply->setEnabled(settingsChanged);
 }
@@ -91,7 +97,6 @@ void AppSettingsDialog::slotOnListItemClicked(int index)
     qDebug() << "On item click" << index;
     ui->stackedWidget->setCurrentIndex(index);
     emit signalSettingPageChanged(settingsNameList.at(index));
-    //readSettings();
 }
 
 void AppSettingsDialog::readSettings()

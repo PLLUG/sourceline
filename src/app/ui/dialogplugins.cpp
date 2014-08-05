@@ -22,6 +22,7 @@
 *******************************************************************************/
 #include "dialogplugins.h"
 #include "ui_dialogplugins.h"
+#include "settings.h"
 #include <QFile>
 #include <QTreeWidgetItem>
 #include <QTextStream>
@@ -29,12 +30,13 @@
 #include <QSignalMapper>
 #include <QDebug>
 
-DialogPlugins::DialogPlugins(QWidget *parent) :
+DialogPlugins::DialogPlugins(Settings *pSettings, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogPlugins),
-    mIsApplyAndRestartPressed(false)
+    mIsApplyAndRestartPressed(false),
+    mSettings(pSettings)
 {
-   ui->setupUi(this);
+    ui->setupUi(this);
 }
 DialogPlugins::~DialogPlugins()
 {
@@ -46,9 +48,6 @@ void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
     ui->pluginsTree->clear();
     createPluginsTree();
     connect(ui->applyAndRestartButton, SIGNAL(clicked()), this, SLOT(slotApplyAndRestartPressed()), Qt::UniqueConnection);
-//    QTreeWidgetItem* lCategoryIndex = ui->pluginsTree->topLevelItem(i);
-//        QTreeWidgetItem *lPluginIndex = lCategoryIndex->child(j);
-//       qDebug() << lPluginIndex->text(0);
 }
 
 void DialogPlugins::createPluginsTree()
@@ -92,6 +91,11 @@ void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString&
     lPluginItem->setFlags(lPluginItem->flags() | Qt::ItemIsUserCheckable);
     lPluginItem->setCheckState(0, Qt::Unchecked);
     pParent->addChild(lPluginItem);
+/////
+    //mSettings->add(pPluginId, lPluginItem, "checked");
+    //mSettings->subscribe(pPluginId, this, "slotSmthChanged");
+//////
+
 }
 QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
 {
@@ -107,6 +111,12 @@ QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
     connect(lPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
     return lPushButton;
 }
+////
+void DialogPlugins::slotSmthChanged()
+{
+    qDebug() << "SMTH CHANGED!!";
+}
+////
 void DialogPlugins::slotButtonPressed(QString pPluginId)
 {
     qDebug() << requestInfoForPlugin(pPluginId) << " " << pPluginId;
@@ -166,6 +176,11 @@ void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
             }
         }
     }
+}
+
+Settings *DialogPlugins::settings() const
+{
+    return mSettings;
 }
 
 
