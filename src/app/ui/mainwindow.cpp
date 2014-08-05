@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), mSettingsManager(new SettingsManager(this))
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     trayMenu = new QMenu();
@@ -21,21 +21,11 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->show();
     TrayIcon->setContextMenu(trayMenu);
 
-    mSettingsDialog = new AppSettingsDialog(this);
-    mSettings = new Settings(this);
-    mVSettingPage = new ViewSettingPage(mSettings);
-    mVSettingPage->setMainUi(ui);
-    mSettingsDialog->addSettingsItem(mVSettingPage);
-    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mSettings);
-
     mPageManager = new PageManager(this);
     mTabBar = new CustomTabBar(this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     ui->uiTabToolBar->addWidget(mTabBar);
-
-    readVisibilitySettings();
-
 
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
@@ -83,11 +73,6 @@ void MainWindow::slotQuit()
     qApp->quit();
 }
 
-void MainWindow::slotShowSettings()
-{
-    mSettingsDialog->show();
-}
-
 void MainWindow::slotAddPage()
 {
     static int a = 0;
@@ -98,18 +83,4 @@ void MainWindow::slotAddPage()
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     // ui->uiFileView->setMinimumHeight(this->height());
-}
-
-void MainWindow::readVisibilitySettings()
-{
-    SettingStorage *lStorage = new SettingStorage();
-    mVSettingPage->setMainUi(ui);
-    mSettingsManager->setStorage(lStorage);
-    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mSettings);
-
-    connect(mVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
-    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             mVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(mSettings));
 }

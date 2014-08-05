@@ -20,9 +20,12 @@ private slots:
 public:
     void initUi();
     void loadPlugins();
+    void loadSettings();
     void supplyComponents();
     void createUiActions(MainWindow *pMainWindow);
+
 private:
+    MainWindow *mMainWindow;
     SplashScreen *mSplashScreen;
     ActionManager *mActionManager;
     MainMenuBuilder *mMainMenuBuilder;

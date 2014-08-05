@@ -24,7 +24,7 @@ void SettingsManager::addSettings(const QString &pPluginId, const QString &pSett
     mPluginIdBySettings.insert(pSettings, pPluginId);
     mPageNameBySettings.insert(pSettings, pSettingsPageName);
     QString lFullSettingsPath = QString("%1/%2/%3").arg(pPluginId).arg(pSettingsPageName).arg(pSettings->settingsPath());
-    qDebug() << lFullSettingsPath;
+    qDebug() <<lFullSettingsPath;
 
     mPathBySettings.insert(pSettings, lFullSettingsPath);
 }

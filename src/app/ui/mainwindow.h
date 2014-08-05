@@ -26,15 +26,11 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    Ui::MainWindow *ui;
 
 private:
-    Ui::MainWindow *ui;
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
-    AppSettingsDialog *mSettingsDialog;
-    Settings *mSettings;
-    ViewSettingPage *mVSettingPage;
-    SettingsManager *mSettingsManager;
     CustomTabBar *mTabBar;
     PageManager *mPageManager;
 
@@ -43,15 +39,12 @@ signals:
 
 private:
     void resizeEvent(QResizeEvent *e);
-    void readVisibilitySettings();
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason);
     void CloseWindow();
 
     void slotQuit();
-
-    void slotShowSettings();
 
     void slotAddPage();
 };

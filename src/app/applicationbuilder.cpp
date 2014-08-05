@@ -52,7 +52,12 @@ void ApplicationBuilder::slotBuild()
     loadPlugins();
 
     /*!
-     * Stage 3: Getting components
+     * Stage 3: Load Settings
+     */
+    loadSettings();
+
+    /*!
+     * Stage 4: Getting components
      */
     supplyComponents();
 
@@ -66,11 +71,11 @@ void ApplicationBuilder::initUi()
 {
     // ....
 
-    MainWindow *lMainWindow = new MainWindow;
-    lMainWindow->lower();
-    lMainWindow->show();
-    mMainMenuBuilder->setMenuBar(lMainWindow->menuBar());
-    createUiActions(lMainWindow);
+    mMainWindow = new MainWindow;
+    mMainWindow->lower();
+    mMainWindow->show();
+    mMainMenuBuilder->setMenuBar(mMainWindow->menuBar());
+    createUiActions(mMainWindow);
 
     ProgressHandler::instance()->finishStage();
 }
@@ -95,6 +100,30 @@ void ApplicationBuilder::loadPlugins()
     ProgressHandler::instance()->finishStage();
 }
 
+void ApplicationBuilder::loadSettings()
+{
+    SettingsManager *lSettingsManager = new SettingsManager(this);
+    AppSettingsDialog *lSettingsDialog = new AppSettingsDialog();
+    Settings *lSettings = new Settings(this);
+    ViewSettingPage *lVSettingPage = new ViewSettingPage(lSettings);
+    lVSettingPage->setMainUi(mMainWindow->ui);
+    lSettingsDialog->addSettingsItem(lVSettingPage);
+    lSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
+
+    SettingStorage *lStorage = new SettingStorage();
+    lSettingsManager->setStorage(lStorage);
+
+    connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+            lSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
+    lStorage->slotLoadSettings(lSettingsManager->pathBySettings(lVSettingPage->settings()));
+
+    QAction *lActionSettings = new QAction(tr("&Settings"), this);
+    connect(lActionSettings, SIGNAL(triggered()), lSettingsDialog, SLOT(show()));
+    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
+}
+
 void ApplicationBuilder::supplyComponents()
 {
     FakeComponentSupplier *pFakeComponentSupplier = new FakeComponentSupplier();
@@ -117,9 +146,9 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
     mActionManager->addBack(FileMenuGroup, "", lActionQuit);
 
-    QAction *lActionSettings = new QAction(tr("&Settings"), this);
-    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
-    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
+//    QAction *lActionSettings = new QAction(tr("&Settings"), this);
+//    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
+//    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 
     QAction *lActionAboutSL = new QAction(tr("&About SourseLine"), this);
     //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
