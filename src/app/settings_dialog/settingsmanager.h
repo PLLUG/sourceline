@@ -5,7 +5,7 @@
 #include <QMap>
 #include <QVariant>
 
-class PluginSettings;
+class Settings;
 class SettingStorage;
 
 class SettingsManager : public QObject
@@ -15,9 +15,9 @@ public:
     explicit SettingsManager(QObject *parent = 0);
 
     void setStorage(SettingStorage *);
-    QString pathBySettings(PluginSettings *pSettings);
+    QString pathBySettings(Settings *pSettings);
 
-    void addSettings(const QString &pPluginId, const QString &pSettingsPageName, PluginSettings *pSettings);
+    void addSettings(const QString &pPluginId, const QString &pSettingsPageName, Settings *pSettings);
 
 signals:
 

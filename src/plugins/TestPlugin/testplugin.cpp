@@ -23,7 +23,7 @@
 
 #include "testplugin.h"
 #include "gitfakecomponent.h"
-#include "pluginsettings.h"
+#include "settings.h"
 #include "customsettingpage.h"
 
 TestPlugin::TestPlugin(QObject *pParent) :
@@ -32,7 +32,7 @@ TestPlugin::TestPlugin(QObject *pParent) :
     GitFakeComponent *gitFakeComponent = new GitFakeComponent();
     this->addComponent(gitFakeComponent);
 
-    PluginSettings *lPSettings = new PluginSettings();
+    Settings *lPSettings = new Settings();
     CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
     this->addComponent(lSettingPage);
 

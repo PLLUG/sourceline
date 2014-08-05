@@ -25,7 +25,7 @@
 #define VIEWSETTINGPAGE_H
 
 #include "settingspage.h"
-#include "pluginsettings.h"
+#include "settings.h"
 #include <QVariant>
 #include <QDebug>
 #include <QLayout>
@@ -39,7 +39,7 @@ class ViewSettingPage : public SettingsPage
 {
     Q_OBJECT
 public:
-    explicit ViewSettingPage(PluginSettings *pSettings, QWidget *parent = 0);
+    explicit ViewSettingPage(Settings *pSettings, QWidget *parent = 0);
     ~ViewSettingPage();
 
     void setMainUi(Ui::MainWindow *lMainUi);

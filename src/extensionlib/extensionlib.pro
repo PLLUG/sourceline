@@ -35,7 +35,7 @@ SOURCES += \
     fakecomponent.cpp \
     plugin.cpp \
     settingspage.cpp \
-    pluginsettings.cpp
+    settings.cpp
 
 HEADERS +=\
     extensions_global.h\
@@ -43,7 +43,7 @@ HEADERS +=\
     plugin-interface.h\
     plugin.h\
     settingspage.h \
-    pluginsettings.h
+    settings.h
 
 
 unix {
@@ -66,7 +66,7 @@ copytarget.files  += \
     $$files(plugin.h) \
     $$files(plugin-interface.h) \
     $$files(extensions_global.h) \
-    $$files(pluginsettings.h) \
+    $$files(settings.h) \
     $$files(settingspage.h)
 ## wildcard for filename1 filename2 filename3 ...
 

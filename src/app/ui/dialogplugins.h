@@ -54,7 +54,7 @@ public:
      */
     QString requestInfoForPlugin(QString pPluginId);
     /*!
-     * \brief  get information about plugins fron files
+     * \brief  get information about plugins from files
      * \return dictionary where key word is plugin category and value is object which include description about plugin
      */
     void setPlugins(QList<PluginInfo> pPlugins);

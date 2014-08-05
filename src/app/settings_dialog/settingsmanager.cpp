@@ -1,6 +1,6 @@
 #include "settingsmanager.h"
 
-#include "pluginsettings.h"
+#include "settings.h"
 #include "settingstorage.h"
 
 SettingsManager::SettingsManager(QObject *parent) :
@@ -14,17 +14,17 @@ void SettingsManager::setStorage(SettingStorage *pStorage)
     mStorage = pStorage;
 }
 
-QString SettingsManager::pathBySettings(PluginSettings *pSettings)
+QString SettingsManager::pathBySettings(Settings *pSettings)
 {
     return mPathBySettings.value(pSettings);
 }
 
-void SettingsManager::addSettings(const QString &pPluginId, const QString &pSettingsPageName, PluginSettings *pSettings)
+void SettingsManager::addSettings(const QString &pPluginId, const QString &pSettingsPageName, Settings *pSettings)
 {
     mPluginIdBySettings.insert(pSettings, pPluginId);
     mPageNameBySettings.insert(pSettings, pSettingsPageName);
     QString lFullSettingsPath = QString("%1/%2/%3").arg(pPluginId).arg(pSettingsPageName).arg(pSettings->settingsPath());
-    qDebug() << lFullSettingsPath;
+    qDebug() <<lFullSettingsPath;
 
     mPathBySettings.insert(pSettings, lFullSettingsPath);
 }
