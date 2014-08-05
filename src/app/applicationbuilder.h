@@ -22,10 +22,12 @@ public:
     void loadPlugins();
     void supplyComponents();
     void createUiActions(MainWindow *pMainWindow);
+
 private:
     SplashScreen *mSplashScreen;
     ActionManager *mActionManager;
     MainMenuBuilder *mMainMenuBuilder;
+    MainWindow *mMainWindow;
 };
 
 #endif // APPLICATIONBUILDER_H

@@ -58,6 +58,8 @@ void ApplicationBuilder::slotBuild()
     //initMenu
     mMainMenuBuilder->initMenu();
 
+    mMainWindow->show();
+
     QTimer::singleShot(1500, mSplashScreen, SLOT(deleteLater()));
 }
 
@@ -65,11 +67,10 @@ void ApplicationBuilder::initUi()
 {
     // ....
 
-    MainWindow *lMainWindow = new MainWindow;
-    lMainWindow->lower();
-    lMainWindow->show();
-    mMainMenuBuilder->setMenuBar(lMainWindow->menuBar());
-    createUiActions(lMainWindow);
+    mMainWindow = new MainWindow;
+    mMainWindow->lower();
+    mMainMenuBuilder->setMenuBar(mMainWindow->menuBar());
+    createUiActions(mMainWindow);
 
     ProgressHandler::instance()->finishStage();
 }
