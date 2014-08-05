@@ -152,7 +152,7 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 //    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 
     QAction *lActionAboutSL = new QAction(tr("&About SourseLine"), this);
-    //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
+    connect(lActionAboutSL, SIGNAL(triggered()), pMainWindow, SLOT(showAboutDialog()));
     mActionManager->addBack(HelpMenuGroup, "", lActionAboutSL);
 
     QAction *lActionPluginSettings = new QAction(tr("&Plugins Settings"), this);

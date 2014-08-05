@@ -1,0 +1,2 @@
+The aim of the project is to create a cross-platform client for popular version control systems (VCS), such as Subversion, Git, Mercurial.
+SourceLine is distributed in the hope that it will be usefull, but WITHOUT ANY WARRANTY, without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.

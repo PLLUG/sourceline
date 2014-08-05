@@ -51,7 +51,8 @@ SOURCES += \
     pluginsupport/pluginsettingsmediator.cpp \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
-    ui/mainmenubuilder.cpp
+    ui/mainmenubuilder.cpp \
+    ui/about.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -81,7 +82,8 @@ HEADERS += \
     pluginsupport/pluginsettingsmediator.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
-    ui/mainmenubuilder.h
+    ui/mainmenubuilder.h \
+    ui/about.h
 
 INCLUDEPATH += \
     ./ui \
@@ -110,7 +112,8 @@ FORMS += \
     ui/revisiontable.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
-    ui/dialogplugins.ui
+    ui/dialogplugins.ui \
+    ui/about.ui
 
 OTHER_FILES +=
 

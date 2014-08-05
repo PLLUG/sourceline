@@ -1,0 +1,11 @@
+SOURCE LINE TEAM (2014)
+-----------------
+
+Project Idea: Victor Sklyar
+Project Architect:
+
+- Version 0.0.1 - 0.0.4 -
+
+Project Leads (PLLUG Summer Camp 2014):
+
+Developers:

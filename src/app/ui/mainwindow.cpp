@@ -84,3 +84,9 @@ void MainWindow::resizeEvent(QResizeEvent *e)
 {
     // ui->uiFileView->setMinimumHeight(this->height());
 }
+
+void MainWindow::showAboutDialog()
+{
+    About *lAbout = new About;
+    lAbout->show();
+}
