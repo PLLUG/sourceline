@@ -5,6 +5,7 @@
 // Loading
 #include "progresshandler.h"
 #include "splashscreen.h"
+#include "settings.h"
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
 #include "pluginsupport/pluginloader.h"

@@ -26,6 +26,7 @@ private:
     SplashScreen *mSplashScreen;
     ActionManager *mActionManager;
     MainMenuBuilder *mMainMenuBuilder;
+
 };
 
 #endif // APPLICATIONBUILDER_H

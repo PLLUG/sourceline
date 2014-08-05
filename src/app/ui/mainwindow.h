@@ -7,6 +7,7 @@
 #include <QMenu>
 #include <QCloseEvent>
 #include <QApplication>
+#include "settings.h"
 #include "appsettingsdialog.h"
 #include "viewsettingpage.h"
 #include "settingstorage.h"
@@ -31,7 +32,7 @@ private:
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
     AppSettingsDialog *mSettingsDialog;
-    Settings *mPluginSettings;
+    Settings *mSettings;
     ViewSettingPage *mVSettingPage;
     SettingsManager *mSettingsManager;
     CustomTabBar *mTabBar;

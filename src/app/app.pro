@@ -40,7 +40,6 @@ SOURCES += \
     ui/pagemanager.cpp \
     ui/revisiontable.cpp \
     ui/appsettingsdialog.cpp \
-    settings_dialog/settingspage.cpp \
     settings_dialog/settingstorage.cpp \
     ui/viewsettingpage.cpp \
     pluginsupport/componentsorter.cpp \
@@ -52,8 +51,7 @@ SOURCES += \
     pluginsupport/pluginsettingsmediator.cpp \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
-    ui/mainmenubuilder.cpp \
-    settings_dialog/settings.cpp
+    ui/mainmenubuilder.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -71,7 +69,6 @@ HEADERS += \
     ui/pagemanager.h \
     ui/revisiontable.h \
     ui/appsettingsdialog.h \
-    settings_dialog/settingspage.h \
     settings_dialog/settingstorage.h \
     ui/viewsettingpage.h \
     pluginsupport/componentsorter.h \
@@ -84,12 +81,17 @@ HEADERS += \
     pluginsupport/pluginsettingsmediator.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
-    ui/mainmenubuilder.h \
-    settings_dialog/settings.h
+    ui/mainmenubuilder.h
 
 INCLUDEPATH += \
     ./ui \
     ./settings_dialog
+
+INCLUDEPATH += $$PWD/../pluginapi/include/
+DEPENDPATH += $$PWD/../pluginapi/include/
+
+unix|win32: LIBS += -L$$PWD/../pluginapi/lib/ -lextensions
+
 
 RESOURCES += \
     resources/resources.qrc
@@ -111,3 +113,4 @@ FORMS += \
     ui/dialogplugins.ui
 
 OTHER_FILES +=
+

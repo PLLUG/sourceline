@@ -22,11 +22,11 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->setContextMenu(trayMenu);
 
     mSettingsDialog = new AppSettingsDialog(this);
-    mPluginSettings = new Settings(this);
-    mVSettingPage = new ViewSettingPage(mPluginSettings);
+    mSettings = new Settings(this);
+    mVSettingPage = new ViewSettingPage(mSettings);
     mVSettingPage->setMainUi(ui);
     mSettingsDialog->addSettingsItem(mVSettingPage);
-    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mPluginSettings);
+    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mSettings);
 
     mPageManager = new PageManager(this);
     mTabBar = new CustomTabBar(this);
@@ -105,11 +105,11 @@ void MainWindow::readVisibilitySettings()
     SettingStorage *lStorage = new SettingStorage();
     mVSettingPage->setMainUi(ui);
     mSettingsManager->setStorage(lStorage);
-    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mPluginSettings);
+    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mSettings);
 
     connect(mVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
             mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
     connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
                              mVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(mPluginSettings));
+    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(mSettings));
 }

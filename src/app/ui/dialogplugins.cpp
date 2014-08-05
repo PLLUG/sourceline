@@ -46,6 +46,9 @@ void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
     ui->pluginsTree->clear();
     createPluginsTree();
     connect(ui->applyAndRestartButton, SIGNAL(clicked()), this, SLOT(slotApplyAndRestartPressed()), Qt::UniqueConnection);
+//    QTreeWidgetItem* lCategoryIndex = ui->pluginsTree->topLevelItem(i);
+//        QTreeWidgetItem *lPluginIndex = lCategoryIndex->child(j);
+//       qDebug() << lPluginIndex->text(0);
 }
 
 void DialogPlugins::createPluginsTree()
