@@ -44,7 +44,6 @@ AppSettingsDialog::~AppSettingsDialog()
 
 void AppSettingsDialog::addSettingsItem(SettingsPage *pSettingPage)
 {
-    qDebug() << "Added settings item!";
     settingsNameList.append(pSettingPage->name());
     QListWidgetItem* lwi = new QListWidgetItem(pSettingPage->icon(), pSettingPage->name());
     lwi->setSizeHint(QSize(0, 40));

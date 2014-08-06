@@ -75,6 +75,7 @@ QStringList PluginLoader::pluginIds()
     {
         rPluginsIdsList.append(info.baseName());
     }
+    return rPluginsIdsList;
 
 }
 QObject* PluginLoader::plugin(QString pPluginId)

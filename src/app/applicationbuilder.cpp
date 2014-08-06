@@ -94,7 +94,8 @@ void ApplicationBuilder::loadPlugins()
     mPluginManager = new PluginManager();
     mPluginManager->setPluginLoader(lPluginLoader);
     //temp filling Active Plugins
-    mPluginManager->slotSetActivePlugins(QStringList("TestPlugin"));
+    mPluginManager->slotSetActivePlugins(lPluginLoader->pluginIds());
+
 
     DialogPlugins *lDialogPlugins = new DialogPlugins();
 
@@ -111,22 +112,18 @@ void ApplicationBuilder::loadPlugins()
 
 void ApplicationBuilder::loadSettings()
 {
+    SettingStorage *lStorage = new SettingStorage();
+
     mSettingsManager = new SettingsManager(this);
+    mSettingsManager->setStorage(lStorage);
+
     mAppSettingsDialog = new AppSettingsDialog();
+
     Settings *lSettings = new Settings(this);
     ViewSettingPage *lVSettingPage = new ViewSettingPage(lSettings);
     lVSettingPage->setMainUi(mMainWindow->ui);
     mAppSettingsDialog->addSettingsItem(lVSettingPage);
     mSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
-
-    SettingStorage *lStorage = new SettingStorage();
-    mSettingsManager->setStorage(lStorage);
-
-    connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
-    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(lVSettingPage->settings()));
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
@@ -147,12 +144,17 @@ void ApplicationBuilder::supplyComponents()
 
 
     QStringList lActivePluginsList = mPluginManager->activePlugins();
+    int i = 0;
     foreach (QString lPluginId, lActivePluginsList)
     {
         PluginInfo lPluginInfo = mPluginManager->pluginInfo(lPluginId);
         Plugin *lPlugin = mPluginManager->plugin(lPluginId);
         QObjectList list = lPlugin->components();
         lComponentSorter->setComponents(lPlugin->components(), lPluginInfo);
+
+        ++i;
+        ProgressHandler::instance()->setCurrentStageProgress(i * 100 / lActivePluginsList.size());
+        QApplication::processEvents();
     }
     ProgressHandler::instance()->finishStage();
 }
