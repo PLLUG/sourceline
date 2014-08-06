@@ -1,3 +1,5 @@
+#ifndef SETTINGSMANAGERSUPLIERS_H
+#define SETTINGSMANAGERSUPLIERS_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -21,25 +23,22 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "settingsmanagersupliers.h"
-#include "../plugininfo.h"
-#include "../../settings_dialog/settingsmanager.h"
-#include <settingspage.h>
+#include "componentsupplier.h"
+class SettingsManager;
+class AppSettingsDialog;
 
-QString SettingsManagerSupliers::className() const
+class SettingsPageSuplier : public ComponentSupplier
 {
-    return SettingsPage::staticMetaObject.className();
-}
+public:
+    SettingsPageSuplier();
 
-void SettingsManagerSupliers::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
-{
-    if (SettingsPage* lSettingsPage = qobject_cast<SettingsPage*>(pComponent))
-    {
-        mSettingsManager->addSettings(pPluginInfo.pluginId(), lSettingsPage->name(), lSettingsPage->settings());
-    }
-}
+    QString className() const;
+    void supply(QObject *pComponent, const PluginInfo &pPluginInfo);
+    void setSettingsManager(SettingsManager *pSettingsManager);
+    void setAppSettingsDialog(AppSettingsDialog *pAppSettingsDialog);
+private:
+    SettingsManager *mSettingsManager;
+    AppSettingsDialog *mAppSettingsDialog;
+};
 
-void SettingsManagerSupliers::setSettingsManager(SettingsManager *pSettingsManager)
-{
-    mSettingsManager = pSettingsManager;
-}
+#endif // SETTINGSMANAGERSUPLIERS_H

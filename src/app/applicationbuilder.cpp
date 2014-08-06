@@ -8,11 +8,12 @@
 #include "settings.h"
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
-#include "pluginsupport/supliers/settingsmanagersupliers.h"
+#include "pluginsupport/supliers/settingspagesupplier.h"
 #include "pluginsupport/pluginloader.h"
 #include "pluginsupport/pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
 #include "../ui/dialogplugins.h"
+#include "plugin.h"
 
 // Ui
 #include "mainwindow.h"
@@ -21,8 +22,12 @@
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent),
+    mMainWindow(0),
     mActionManager(new ActionManager(this)),
-    mMainMenuBuilder(new MainMenuBuilder(this))
+    mMainMenuBuilder(new MainMenuBuilder(this)),
+    mSettingsManager(0),
+    mPluginManager(0),
+    mAppSettingsDialog(0)
 {
     ProgressHandler::instance()->setStageCount(3);
 
@@ -86,14 +91,16 @@ void ApplicationBuilder::loadPlugins()
 {
     PluginLoader *lPluginLoader = new PluginLoader();
 
-    PluginManager *lPluginManager =new PluginManager();
-    lPluginManager->setPluginLoader(lPluginLoader);
+    mPluginManager = new PluginManager();
+    mPluginManager->setPluginLoader(lPluginLoader);
+    //temp filling Active Plugins
+    mPluginManager->slotSetActivePlugins(QStringList("TestPlugin"));
 
     DialogPlugins *lDialogPlugins = new DialogPlugins();
 
     PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
     lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
-    lPluginSettingsMediator->setPluginManager(lPluginManager);
+    lPluginSettingsMediator->setPluginManager(mPluginManager);
 
     QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
     connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
@@ -104,12 +111,12 @@ void ApplicationBuilder::loadPlugins()
 
 void ApplicationBuilder::loadSettings()
 {
-    SettingsManager *mSettingsManager = new SettingsManager(this);
-    AppSettingsDialog *lSettingsDialog = new AppSettingsDialog();
+    mSettingsManager = new SettingsManager(this);
+    mAppSettingsDialog = new AppSettingsDialog();
     Settings *lSettings = new Settings(this);
     ViewSettingPage *lVSettingPage = new ViewSettingPage(lSettings);
     lVSettingPage->setMainUi(mMainWindow->ui);
-    lSettingsDialog->addSettingsItem(lVSettingPage);
+    mAppSettingsDialog->addSettingsItem(lVSettingPage);
     mSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
 
     SettingStorage *lStorage = new SettingStorage();
@@ -122,7 +129,7 @@ void ApplicationBuilder::loadSettings()
     lStorage->slotLoadSettings(mSettingsManager->pathBySettings(lVSettingPage->settings()));
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
-    connect(lActionSettings, SIGNAL(triggered()), lSettingsDialog, SLOT(show()));
+    connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
     mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 }
 
@@ -130,13 +137,23 @@ void ApplicationBuilder::supplyComponents()
 {
     FakeComponentSupplier *lFakeComponentSupplier = new FakeComponentSupplier();
 
-    SettingsManagerSupliers *lSettingsManagerSupliers = new SettingsManagerSupliers();
+    SettingsPageSuplier *lSettingsManagerSupliers = new SettingsPageSuplier();
     lSettingsManagerSupliers->setSettingsManager(mSettingsManager);
+    lSettingsManagerSupliers->setAppSettingsDialog(mAppSettingsDialog);
 
-    ComponentSorter *pComponentSorter = new ComponentSorter();
-    pComponentSorter->addSupplier("FakeComponent", lFakeComponentSupplier);
-    pComponentSorter->addSupplier(QString(SettingsPage::staticMetaObject.className()), lSettingsManagerSupliers);
+    ComponentSorter *lComponentSorter = new ComponentSorter();
+    lComponentSorter->addSupplier(lFakeComponentSupplier);
+    lComponentSorter->addSupplier(lSettingsManagerSupliers);
 
+
+    QStringList lActivePluginsList = mPluginManager->activePlugins();
+    foreach (QString lPluginId, lActivePluginsList)
+    {
+        PluginInfo lPluginInfo = mPluginManager->pluginInfo(lPluginId);
+        Plugin *lPlugin = mPluginManager->plugin(lPluginId);
+        QObjectList list = lPlugin->components();
+        lComponentSorter->setComponents(lPlugin->components(), lPluginInfo);
+    }
     ProgressHandler::instance()->finishStage();
 }
 

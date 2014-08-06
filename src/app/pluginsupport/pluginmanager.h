@@ -24,10 +24,13 @@
 *******************************************************************************/
 #include <QObject>
 #include <QStringList>
+#include <QMap>
 
+#include <plugin.h>
+#include "plugininfo.h"
 class PluginLoader;
-class PluginInfo;
-class PluginManager : public QObject
+
+class     PluginManager : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QStringList activePlugins READ activePlugins WRITE slotSetActivePlugins NOTIFY activePluginsChanged)
@@ -37,7 +40,8 @@ public:
     void setPluginLoader(PluginLoader *pPluginLoader);
 
     QList<PluginInfo> pluginsInfo();
-
+    PluginInfo pluginInfo(QString pPluginId);
+    Plugin* plugin(QString pPluginId);
     QStringList activePlugins();
 
 signals:
@@ -48,6 +52,7 @@ public slots:
 
 private:
     PluginLoader *mPluginLoader;
+    QMap<QString, PluginInfo> mPluginsInfo;
     QStringList mActivePlugins;
 };
 

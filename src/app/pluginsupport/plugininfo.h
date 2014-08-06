@@ -29,6 +29,7 @@ class PluginInfo
 {
 public:
     PluginInfo(QString pPluginId, QString pVer, QString pDescr, QString pCategory, QHash<QString, QString> pAdditionalInfo);
+    PluginInfo();
     QString pluginId() const;
     QString ver() const;
     QString description() const;

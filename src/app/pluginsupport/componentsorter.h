@@ -34,7 +34,7 @@ class ComponentSorter : public QObject
 public:
     explicit ComponentSorter(QObject *parent = 0);
     void setComponents(QObjectList pComponents, const PluginInfo &pPluginInfo);
-    void addSupplier(QString pName, ComponentSupplier * pSupplier);
+    void addSupplier(ComponentSupplier * pSupplier);
 private:
     ComponentSupplier *supplierForComponent(QObject *pComponent);
 

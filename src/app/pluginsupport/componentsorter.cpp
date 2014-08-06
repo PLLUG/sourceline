@@ -43,9 +43,9 @@ void ComponentSorter::setComponents(QObjectList pComponents, const PluginInfo &p
     }
 }
 
-void ComponentSorter::addSupplier(QString pName, ComponentSupplier *pSupplier)
+void ComponentSorter::addSupplier(ComponentSupplier *pSupplier)
 {
-    mSupplierByClassName.insert(pName, pSupplier);
+    mSupplierByClassName.insert(pSupplier->className(), pSupplier);
 }
 
 

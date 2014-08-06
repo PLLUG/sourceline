@@ -38,15 +38,17 @@ public:
     void setPluginsFolder(QDir);
     QStringList pluginIds();
     QObject* plugin(QString);
+    PluginInfo pluginInfo(const QString &pPluginId);
     QList<QObject*> allPlugins();
     QList<PluginInfo> pluginsInfo();
-    static QStringList pluginsExtension();
+    QString libPath(const QString &pPluginId);
+    static QString pluginsExtension();
+    static QStringList pluginsExtensionFilters();
 signals:
 
 public slots:
 private:
     QDir mPluginsFolder;
-
 };
 
 #endif // PLUGINLOADER_H

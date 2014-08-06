@@ -52,7 +52,7 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-    pluginsupport/supliers/settingsmanagersupliers.cpp
+    pluginsupport/supliers/settingspagesupplier.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -83,7 +83,7 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    pluginsupport/supliers/settingsmanagersupliers.h
+    pluginsupport/supliers/settingspagesupplier.h
 
 INCLUDEPATH += \
     ./ui \
