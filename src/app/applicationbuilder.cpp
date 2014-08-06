@@ -8,6 +8,7 @@
 #include "settings.h"
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
+#include "pluginsupport/supliers/settingsmanagersupliers.h"
 #include "pluginsupport/pluginloader.h"
 #include "pluginsupport/pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
@@ -103,22 +104,22 @@ void ApplicationBuilder::loadPlugins()
 
 void ApplicationBuilder::loadSettings()
 {
-    SettingsManager *lSettingsManager = new SettingsManager(this);
+    SettingsManager *mSettingsManager = new SettingsManager(this);
     AppSettingsDialog *lSettingsDialog = new AppSettingsDialog();
     Settings *lSettings = new Settings(this);
     ViewSettingPage *lVSettingPage = new ViewSettingPage(lSettings);
     lVSettingPage->setMainUi(mMainWindow->ui);
     lSettingsDialog->addSettingsItem(lVSettingPage);
-    lSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
+    mSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
 
     SettingStorage *lStorage = new SettingStorage();
-    lSettingsManager->setStorage(lStorage);
+    mSettingsManager->setStorage(lStorage);
 
     connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            lSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
     connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
                              lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(lSettingsManager->pathBySettings(lVSettingPage->settings()));
+    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(lVSettingPage->settings()));
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), lSettingsDialog, SLOT(show()));
@@ -127,9 +128,15 @@ void ApplicationBuilder::loadSettings()
 
 void ApplicationBuilder::supplyComponents()
 {
-    FakeComponentSupplier *pFakeComponentSupplier = new FakeComponentSupplier();
+    FakeComponentSupplier *lFakeComponentSupplier = new FakeComponentSupplier();
+
+    SettingsManagerSupliers *lSettingsManagerSupliers = new SettingsManagerSupliers();
+    lSettingsManagerSupliers->setSettingsManager(mSettingsManager);
+
     ComponentSorter *pComponentSorter = new ComponentSorter();
-    pComponentSorter->addSupplier("FakeComponent", pFakeComponentSupplier);
+    pComponentSorter->addSupplier("FakeComponent", lFakeComponentSupplier);
+    pComponentSorter->addSupplier(QString(SettingsPage::staticMetaObject.className()), lSettingsManagerSupliers);
+
     ProgressHandler::instance()->finishStage();
 }
 

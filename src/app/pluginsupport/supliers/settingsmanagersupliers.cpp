@@ -21,25 +21,25 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "fakecomponentsupplier.h"
+#include "settingsmanagersupliers.h"
 #include "../plugininfo.h"
+#include "../../settings_dialog/settingsmanager.h"
+#include <settingspage.h>
 
-FakeComponentSupplier::FakeComponentSupplier()
+QString SettingsManagerSupliers::className() const
 {
+    return SettingsPage::staticMetaObject.className();
 }
 
-QString FakeComponentSupplier::className() const
+void SettingsManagerSupliers::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
 {
-    return "Fake Component";
+    if (SettingsPage* lSettingsPage = qobject_cast<SettingsPage*>(pComponent))
+    {
+        mSettingsManager->addSettings(pPluginInfo.pluginId(), lSettingsPage->name(), lSettingsPage->settings());
+    }
 }
 
-void FakeComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
+void SettingsManagerSupliers::setSettingsManager(SettingsManager *pSettingsManager)
 {
-    //sending to object
-    //mDialog->sendCommonent(pComponent);
-}
-
-void FakeComponentSupplier::setDialog(Dialog *pDialog)
-{
-    mDialog = pDialog;
+    mSettingsManager = pSettingsManager;
 }

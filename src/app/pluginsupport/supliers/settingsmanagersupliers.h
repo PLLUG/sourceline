@@ -1,3 +1,5 @@
+#ifndef SETTINGSMANAGERSUPLIERS_H
+#define SETTINGSMANAGERSUPLIERS_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -21,25 +23,17 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "fakecomponentsupplier.h"
-#include "../plugininfo.h"
+#include "componentsupplier.h"
+class SettingsManager;
 
-FakeComponentSupplier::FakeComponentSupplier()
+class SettingsManagerSupliers : public ComponentSupplier
 {
-}
+public:
+    QString className() const;
+    void supply(QObject *pComponent, const PluginInfo &pPluginInfo);
+    void setSettingsManager(SettingsManager *pSettingsManager);
+private:
+    SettingsManager *mSettingsManager;
+};
 
-QString FakeComponentSupplier::className() const
-{
-    return "Fake Component";
-}
-
-void FakeComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
-{
-    //sending to object
-    //mDialog->sendCommonent(pComponent);
-}
-
-void FakeComponentSupplier::setDialog(Dialog *pDialog)
-{
-    mDialog = pDialog;
-}
+#endif // SETTINGSMANAGERSUPLIERS_H
