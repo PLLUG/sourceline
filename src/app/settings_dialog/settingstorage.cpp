@@ -27,7 +27,7 @@ SettingStorage::SettingStorage(QObject *parent) :
     QObject(parent)
 {
     mSettings = new QSettings(QSettings::IniFormat, QSettings::UserScope,
-                              "PLLUG", "SourceLine");
+                              "SourceLine", "settings");
     mPluginGroups = new QMap<QString, QStringList>();
 }
 

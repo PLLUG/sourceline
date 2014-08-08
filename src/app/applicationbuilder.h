@@ -10,6 +10,7 @@ class MainMenuBuilder;
 class SettingsManager;
 class PluginManager;
 class AppSettingsDialog;
+class SettingStorage;
 
 class ApplicationBuilder : public QObject
 {
@@ -35,6 +36,7 @@ private:
     SettingsManager *mSettingsManager;
     PluginManager *mPluginManager;
     AppSettingsDialog *mAppSettingsDialog;
+    SettingStorage *mStorage;
 };
 
 #endif // APPLICATIONBUILDER_H

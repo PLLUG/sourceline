@@ -25,9 +25,10 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     mMainWindow(0),
     mActionManager(new ActionManager(this)),
     mMainMenuBuilder(new MainMenuBuilder(this)),
-    mSettingsManager(0),
     mPluginManager(0),
-    mAppSettingsDialog(0)
+    mAppSettingsDialog(0),
+    mSettingsManager(new SettingsManager(this)),
+    mStorage(new SettingStorage)
 {
     ProgressHandler::instance()->setStageCount(3);
 
@@ -43,6 +44,7 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
 
     //init mActionManager for mMainMenuBuilder
     mMainMenuBuilder->setActionManager(mActionManager);
+    mSettingsManager->setStorage(mStorage);
 }
 
 void ApplicationBuilder::slotBuild()
@@ -97,11 +99,25 @@ void ApplicationBuilder::loadPlugins()
     mPluginManager->slotSetActivePlugins(lPluginLoader->pluginIds());
 
 
+
     DialogPlugins *lDialogPlugins = new DialogPlugins();
 
     PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
     lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
     lPluginSettingsMediator->setPluginManager(mPluginManager);
+
+    Settings *lSettings = new Settings(this);
+    lPluginSettingsMediator->setSettings(lSettings);
+    lSettings->add("plugins", mPluginManager, "activePlugins");
+    lSettings->setSettingsPath("active_plugins");
+    mSettingsManager->addSettings("main_window", "Plugins", lSettings);
+    connect(lSettings, SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+
+    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+                             lSettings, SLOT(slotSetSettings(QMap<QString,QVariant>)));
+
+    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lSettings));
 
     QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
     connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
@@ -127,6 +143,10 @@ void ApplicationBuilder::loadSettings()
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
+    AppSettingsDialog *lSettingsDialog = new AppSettingsDialog();
+    lVSettingPage->setMainUi(mMainWindow->ui);
+    lSettingsDialog->addSettingsItem(lVSettingPage);
+
     mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 }
 

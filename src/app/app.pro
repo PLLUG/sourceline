@@ -33,7 +33,6 @@ SOURCES += \
     ui/console.cpp \
     ui/customtabbar.cpp \
     ui/editorview.cpp \
-    ui/FileView.cpp \
     ui/genericdockwidget.cpp \
     ui/historytree.cpp \
     ui/mainwindow.cpp \
@@ -52,7 +51,8 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-    pluginsupport/supliers/settingspagesupplier.cpp
+    pluginsupport/supliers/settingspagesupplier.cpp \
+    ui/fileview.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -62,7 +62,6 @@ HEADERS += \
     ui/customtabbar.h \
     ui/docktitlebar.h \
     ui/editorview.h \
-    ui/FileView.h \
     ui/genericdockwidget.h \
     ui/guidefs.h \
     ui/historytree.h \
@@ -83,7 +82,8 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    pluginsupport/supliers/settingspagesupplier.h
+    pluginsupport/supliers/settingspagesupplier.h \
+    ui/fileview.h
 
 INCLUDEPATH += \
     ./ui \

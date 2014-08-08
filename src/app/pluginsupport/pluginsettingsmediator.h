@@ -27,6 +27,7 @@
 class PluginManager;
 class DialogPlugins;
 class PropertyInfoDialog;
+class Settings;
 
 class PluginSettingsMediator : public QObject
 {
@@ -52,6 +53,7 @@ public:
      *  (will appear after pressing info (i) button in a row of certain plugin description).
      */
     void setPluginInfoDialog(PropertyInfoDialog *pDialog);
+    void setSettings(Settings *pSettings);
 
 signals:
     /*!
@@ -76,6 +78,7 @@ private slots:
     void slotShowPluginInfo(const QString &pPluginID);
 
 private:
+    Settings *mSettings;
     DialogPlugins *mDialog;
     PluginManager *mManager;
     PropertyInfoDialog *mInfoDialog;

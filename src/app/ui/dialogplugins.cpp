@@ -22,6 +22,7 @@
 *******************************************************************************/
 #include "dialogplugins.h"
 #include "ui_dialogplugins.h"
+#include "settings.h"
 #include <QFile>
 #include <QTreeWidgetItem>
 #include <QTextStream>
@@ -34,7 +35,7 @@ DialogPlugins::DialogPlugins(QWidget *parent) :
     ui(new Ui::DialogPlugins),
     mIsApplyAndRestartPressed(false)
 {
-   ui->setupUi(this);
+    ui->setupUi(this);
 }
 DialogPlugins::~DialogPlugins()
 {
@@ -46,9 +47,6 @@ void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
     ui->pluginsTree->clear();
     createPluginsTree();
     connect(ui->applyAndRestartButton, SIGNAL(clicked()), this, SLOT(slotApplyAndRestartPressed()), Qt::UniqueConnection);
-//    QTreeWidgetItem* lCategoryIndex = ui->pluginsTree->topLevelItem(i);
-//        QTreeWidgetItem *lPluginIndex = lCategoryIndex->child(j);
-//       qDebug() << lPluginIndex->text(0);
 }
 
 void DialogPlugins::createPluginsTree()
@@ -82,6 +80,7 @@ void DialogPlugins::addCategory(const QString& pCategory, const QString& pPlugin
       lCategoryItem->setText(0, pCategory);
       addPluginToCategory(lCategoryItem, pPluginId, pVer, pDescr);
 }
+
 void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString& pPluginId, const QString &pVer, const  QString &pDescr)
 {
     QTreeWidgetItem *lPluginItem =new QTreeWidgetItem(pParent);
@@ -93,6 +92,7 @@ void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString&
     lPluginItem->setCheckState(0, Qt::Unchecked);
     pParent->addChild(lPluginItem);
 }
+
 QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
 {
     QSize lSize( 20,20 );
@@ -107,6 +107,7 @@ QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
     connect(lPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
     return lPushButton;
 }
+
 void DialogPlugins::slotButtonPressed(QString pPluginId)
 {
     qDebug() << requestInfoForPlugin(pPluginId) << " " << pPluginId;
@@ -167,6 +168,4 @@ void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
         }
     }
 }
-
-
 

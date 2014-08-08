@@ -58,9 +58,6 @@ public slots:
     void slotSettingsChanged();
 
 private:
-    Ui::AppSettingsDialog *ui;
-    QStringList settingsNameList;
-    QVector<QWidget*> settingsWidgetList;
     bool settingsChanged;
     void readSettings();
     void writeSettings();
@@ -70,6 +67,12 @@ private slots:
     void slotBtnCancel();
     void slotBtnApply();
     void slotOnListItemClicked(int index);
+
+private:
+    Ui::AppSettingsDialog *ui;
+    QStringList settingsNameList;
+    QVector<QWidget*> settingsWidgetList;
+    QList<SettingsPage*> mSPages;
 
 signals:
     void signalSettingPageChanged(QString pPageName);

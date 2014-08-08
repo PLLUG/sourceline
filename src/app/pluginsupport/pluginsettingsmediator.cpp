@@ -23,6 +23,7 @@
 #include "pluginsettingsmediator.h"
 #include "pluginmanager.h"
 #include "../ui/dialogplugins.h"
+#include "settings.h"
 
 PluginSettingsMediator::PluginSettingsMediator(QObject *parent) :
     QObject(parent),
@@ -47,8 +48,14 @@ void PluginSettingsMediator::setPluginInfoDialog(PropertyInfoDialog *pDialog)
 
 }
 
+void PluginSettingsMediator::setSettings(Settings *pSettings)
+{
+    mSettings = pSettings;
+}
+
 void PluginSettingsMediator::slotExecPluginSettings()
 {
+//    connect(mDialog, SIGNAL(signalStateChanged()), mManager, SLOT(slotActiveChanged()));
     QList<PluginInfo> lPluginsInfo = mManager->pluginsInfo();
     mDialog->setPlugins(lPluginsInfo);
     QList<QString> lActivatedPlugins = mManager->activePlugins();
@@ -58,7 +65,8 @@ void PluginSettingsMediator::slotExecPluginSettings()
     {
         QStringList lActivePluginsList = mDialog->activePlugins();
         // Init plugins ....
-
+        mManager->slotSetActivePlugins(lActivePluginsList);
+        mSettings->commit();
         if (mDialog->restartApplication())
         {
             // Notify application - restart needed
