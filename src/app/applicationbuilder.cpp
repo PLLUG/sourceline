@@ -1,35 +1,73 @@
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2014  by                                                ***
+***            Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)          ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
+
 #include "applicationbuilder.h"
 
 #include <QTimer>
 
-// Loading
-#include "progresshandler.h"
-#include "settings.h"
+// Plugin Support
+#include <plugin.h>
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
 #include "pluginsupport/supliers/settingspagesupplier.h"
 #include "pluginsupport/pluginloader.h"
 #include "pluginsupport/pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
-#include "plugin.h"
 
-// Ui
-#include "ui/splashscreen.h"
-#include "ui/dialogplugins.h"
-#include "ui/mainwindow.h"
+// Settings
+#include "settings.h"
+
+// Main Application Classes
 #include "ui/actionmanager.h"
 #include "ui/mainmenubuilder.h"
 
+// Application UI
+#include "ui/splashscreen.h"
+#include "ui/dialogplugins.h"
+#include "ui/mainwindow.h"
+
+
+#include "progresshandler.h"
+
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
-    QObject(parent),
-    mMainWindow(0),
-    mActionManager(new ActionManager(this)),
-    mMainMenuBuilder(new MainMenuBuilder(this)),
-    mPluginManager(0),
-    mAppSettingsDialog(0),
-    mSettingsManager(new SettingsManager(this)),
-    mStorage(new SettingStorage)
+    QObject(parent)
 {
+    // Plugin Support
+    mPluginManager = 0;
+
+    // Settings
+    mStorage = 0;
+    mSettingsManager = 0;
+
+    // Main Application Classes
+    mActionManager = 0;
+    mMainMenuBuilder = 0;
+
+    // Application UI
+    mSplashScreen = 0;
+    mMainWindow = 0;
+    mAppSettingsDialog = 0;
+
     ProgressHandler::instance()->setStageCount(3);
 
     /// Init splash screen
@@ -42,8 +80,14 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
 
     QTimer::singleShot(0, this, SLOT(slotBuild()));
 
-    //init mActionManager for mMainMenuBuilder
+    mActionManager = new ActionManager(qApp);
+
+    mMainMenuBuilder = new MainMenuBuilder(qApp);
     mMainMenuBuilder->setActionManager(mActionManager);
+
+    mStorage = new SettingStorage;
+
+    mSettingsManager = new SettingsManager(qApp);
     mSettingsManager->setStorage(mStorage);
 }
 
