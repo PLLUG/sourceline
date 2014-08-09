@@ -10,8 +10,8 @@
 #include "settings.h"
 #include "appsettingsdialog.h"
 #include "viewsettingpage.h"
-#include "settingstorage.h"
-#include "settingsmanager.h"
+#include "settings_dialog/settingstorage.h"
+#include "settings_dialog/settingsmanager.h"
 #include "customtabbar.h"
 #include "pagemanager.h"
 

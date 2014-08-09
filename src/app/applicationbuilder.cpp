@@ -4,7 +4,6 @@
 
 // Loading
 #include "progresshandler.h"
-#include "splashscreen.h"
 #include "settings.h"
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
@@ -12,13 +11,14 @@
 #include "pluginsupport/pluginloader.h"
 #include "pluginsupport/pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
-#include "../ui/dialogplugins.h"
 #include "plugin.h"
 
 // Ui
-#include "mainwindow.h"
-#include "actionmanager.h"
-#include "mainmenubuilder.h"
+#include "ui/splashscreen.h"
+#include "ui/dialogplugins.h"
+#include "ui/mainwindow.h"
+#include "ui/actionmanager.h"
+#include "ui/mainmenubuilder.h"
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent),
