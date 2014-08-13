@@ -25,6 +25,9 @@ TEMPLATE = app
 DESTDIR = $$_PRO_FILE_PWD_/../../bin/
 QT += widgets
 
+INCLUDEPATH += \
+    ./settings_dialog \
+    ./fileview
 SOURCES += \
     main.cpp \
     applicationbuilder.cpp \
@@ -32,8 +35,8 @@ SOURCES += \
     ui/splashscreen.cpp \
     ui/console.cpp \
     ui/customtabbar.cpp \
+    ui/fileview.cpp \
     ui/editorview.cpp \
-    ui/FileView.cpp \
     ui/genericdockwidget.cpp \
     ui/historytree.cpp \
     ui/mainwindow.cpp \
@@ -51,17 +54,20 @@ SOURCES += \
     pluginsupport/pluginsettingsmediator.cpp \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
-    ui/mainmenubuilder.cpp
+    ui/mainmenubuilder.cpp \
+    ui/dockfileview.cpp \
+    fileview/exploreritemdelegate.cpp \
+    fileview/iconizedlineedit.cpp
 
 HEADERS += \
     applicationbuilder.h \
     progresshandler.h \
     ui/splashscreen.h \
+    ui/fileview.h \
     ui/console.h \
     ui/customtabbar.h \
     ui/docktitlebar.h \
     ui/editorview.h \
-    ui/FileView.h \
     ui/genericdockwidget.h \
     ui/guidefs.h \
     ui/historytree.h \
@@ -81,11 +87,11 @@ HEADERS += \
     pluginsupport/pluginsettingsmediator.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
-    ui/mainmenubuilder.h
+    ui/mainmenubuilder.h \
+    ui/dockfileview.h \
+    fileview/exploreritemdelegate.h \
+    fileview/iconizedlineedit.h
 
-INCLUDEPATH += \
-    ./ui \
-    ./settings_dialog
 
 INCLUDEPATH += $$PWD/../pluginapi/include/
 DEPENDPATH += $$PWD/../pluginapi/include/
@@ -104,13 +110,14 @@ FORMS += \
     ui/customtabbar.ui \
     ui/editorview.ui \
     ui/files.ui \
-    ui/fileview.ui \
     ui/historytree.ui \
     ui/mainwindow.ui \
     ui/revisiontable.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
-    ui/dialogplugins.ui
+    ui/dialogplugins.ui \
+    ui/dockfileview.ui \
+    ui/fileview.ui
 
 OTHER_FILES +=
 

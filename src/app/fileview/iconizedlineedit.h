@@ -21,52 +21,49 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef FILEVIEW_H
-#define FILEVIEW_H
+#ifndef ICONIZEDLINEEDIT_H
+#define ICONIZEDLINEEDIT_H
 
-#include <QWidget>
-#include <QFileSystemModel>
-#include <QMenu>
-#include <QLabel>
-#include "iconizedlineedit.h"
-#include "exploreritemdelegate.h"
+#include <QLineEdit>
 
-#include <QDebug>
+class QPushButton;
 
-
-class Ui_FileView;
-
-
-class FileView : public QWidget
+class IconizedLineEdit : public QLineEdit
 {
     Q_OBJECT
-
 public:
-    explicit FileView(QWidget *parent = 0);
+    explicit IconizedLineEdit(QWidget *parent = 0);
 
-    void setRootPath(const QString pPath);
-    QString currentRootPath() const;
+    enum IconVisibilityMode {
+           IconAlwaysVisible =0,
+           IconVisibleOnHover,
+           IconVisibleOnTextPresence,
+           IconVisibleOnEmptyText,
+           IconAlwaysHidden
+    };
+    void setIconVisibility(IconVisibilityMode pIconVisibilityMode);
 
-    ~FileView();
+    bool isIconVisible() const;
+    void setIconPixmap(const QPixmap &pPixmap);
+    void setIconTooltip(const QString &pToolTip);
+    void updateIconPositionAndSize();
+
+signals:
+    void signalIconClicked();
+
+public slots:
 
 private:
-    Ui_FileView *ui;
-    QString mRootPath;
-    QFileSystemModel *mFileModel;
+     QPushButton *mIconLabel;
+     IconVisibilityMode mIconVisibilityMode;
 
-    QMenu *mFileMenu;
-    QMenu *mDirMenu;
-    QMenu *mMenu;
+private:
+    void setIconVisible(bool pIsVisible);
 
 private slots:
-    void slotDoubleClick(const QModelIndex &index);
-    void slotGoUp();
-    void slotRightBtnClick(const QPoint &pos);
-
-    // QWidget interface
-protected:
-    void resizeEvent(QResizeEvent *);
+    void slotIconClicked();
+    void slotTextChanged(const QString &pText);
 
 };
 
-#endif // FILEVIEW_H
+#endif // ICONIZEDLINEEDIT_H

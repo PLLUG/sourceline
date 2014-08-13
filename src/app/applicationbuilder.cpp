@@ -4,7 +4,7 @@
 
 // Loading
 #include "progresshandler.h"
-#include "splashscreen.h"
+#include "ui/splashscreen.h"
 #include "settings.h"
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
@@ -14,9 +14,9 @@
 #include "../ui/dialogplugins.h"
 
 // Ui
-#include "mainwindow.h"
-#include "actionmanager.h"
-#include "mainmenubuilder.h"
+#include "ui/mainwindow.h"
+#include "ui/actionmanager.h"
+#include "ui/mainmenubuilder.h"
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent),
@@ -97,18 +97,18 @@ void ApplicationBuilder::loadPlugins()
     lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
     lPluginSettingsMediator->setPluginManager(lPluginManager);
 
-    Settings *lSettings = new Settings(this);
-    lPluginSettingsMediator->setSettings(lSettings);
-    lSettings->add("plugins", lPluginManager, "activePlugins");
-    lSettings->setSettingsPath("active_plugins");
-    mSettingsManager->addSettings("main_window", "Plugins", lSettings);
-    connect(lSettings, SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+//    Settings *lSettings = new Settings(this);
+//    lPluginSettingsMediator->setSettings(lSettings);
+//    lSettings->add("plugins", lPluginManager, "activePlugins");
+//    lSettings->setSettingsPath("active_plugins");
+//    mSettingsManager->addSettings("main_window", "Plugins", lSettings);
+//    connect(lSettings, SIGNAL(settingsChanged(QMap<QString,QVariant>)),
+//            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
 
-    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             lSettings, SLOT(slotSetSettings(QMap<QString,QVariant>)));
+//    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+//                             lSettings, SLOT(slotSetSettings(QMap<QString,QVariant>)));
 
-    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lSettings));
+//    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lSettings));
 
     QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
     connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
@@ -129,10 +129,10 @@ void ApplicationBuilder::loadSettings()
     connect(lVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
             mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
 
-//    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-//                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
+    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
+                             lVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
 
-//    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lVSettingPage->settings()));
+    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lVSettingPage->settings()));
 
     QAction *lActionSettings = new QAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), lSettingsDialog, SLOT(exec()));

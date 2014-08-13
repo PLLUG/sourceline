@@ -6,5 +6,7 @@
         <file>img/addIcon.png</file>
         <file>img/folder_open.png</file>
         <file>img/pluginInformation.gif</file>
+        <file>img/added.png</file>
+        <file>img/up.png</file>
     </qresource>
 </RCC>
