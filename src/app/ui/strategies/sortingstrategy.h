@@ -1,5 +1,5 @@
-#ifndef ACTIONMANAGER_H
-#define ACTIONMANAGER_H
+#ifndef SORTINGSTRATEGY_H
+#define SORTINGSTRATEGY_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,32 +22,20 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include "guidefs.h"
-#include <QMap>
+
 #include <QAction>
-#include <QString>
 #include <QList>
 
-class MenuCreationStrategy;
-class UserAction;
+#include "../useraction.h"
 
-class ActionManager : public QObject
+class MenuCreationStrategy
 {
-    Q_OBJECT
 public:
-    explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction);
-    QMenu *menuByMenuGroup(MenuGroup pMenuGroups) const;
-    void setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy* pStategy);
-signals:
+    virtual QMenu *createMenu(const QList<UserAction *> &pListUserActions) = 0;
 
-public slots:
-private:
-    QMap<MenuGroup, QList<UserAction *> > mActions;
-    QMap<MenuGroup, MenuCreationStrategy *> mStrategyByMenuGroup;
+    static QList<UserAction *> getAllByKind(int pCommandKind, const QList<UserAction *> &pListUserActions);
+    static QList<UserAction *> getAllOrderedByKinds(QList<int> pListKinds, const QList<UserAction *> &pListUserActions);
 };
 
+#endif // SORTINGSTRATEGY_H
 
-
-#endif // ACTIONMANAGER_H

@@ -53,7 +53,9 @@ SOURCES += \
     ui/mainmenubuilder.cpp \
     pluginsupport/supliers/commandcomponentsupplier.cpp \
     pluginsupport/supliers/settingspagesupplier.cpp \
-    ui/useraction.cpp
+    ui/useraction.cpp \
+    ui/strategies/directordersortingstrategy.cpp \
+    ui/strategies/sortingstrategy.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -85,7 +87,9 @@ HEADERS += \
     ui/mainmenubuilder.h \
     pluginsupport/supliers/commandcomponentsupplier.h \
     pluginsupport/supliers/settingspagesupplier.h \
-    ui/useraction.h
+    ui/useraction.h \
+    ui/strategies/sortingstrategy.h \
+    ui/strategies/directordersortingstrategy.h
 
 INCLUDEPATH += \
     ./ui \

@@ -22,20 +22,26 @@
 *******************************************************************************/
 
 #include "actionmanager.h"
+#include "strategies/sortingstrategy.h"
+#include "useraction.h"
 
 ActionManager::ActionManager(QObject *parent) :
     QObject(parent)
 {
 }
 
-void ActionManager::add(MenuGroup pMenuGroups, QString pCategory, QAction *pAction)
+void ActionManager::add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction)
 {
     mActions[pMenuGroups].push_back(pAction);
+}
 
+QMenu *ActionManager::menuByMenuGroup(MenuGroup pMenuGroups) const
+{
+    return mStrategyByMenuGroup[pMenuGroups]->createMenu(mActions[pMenuGroups]);
 }
 
 
-QList<QAction *> ActionManager::actions(MenuGroup pMenuGroups) const
+void ActionManager::setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy *pStategy)
 {
-    return mActions[pMenuGroups];
+     mStrategyByMenuGroup[pMenuGroups] = pStategy;
 }

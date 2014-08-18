@@ -20,6 +20,8 @@
 #include "mainwindow.h"
 #include "actionmanager.h"
 #include "mainmenubuilder.h"
+#include "ui/useraction.h"
+#include "ui/strategies/directordersortingstrategy.h"
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent),
@@ -71,6 +73,12 @@ void ApplicationBuilder::slotBuild()
     supplyComponents();
 
     //initMenu
+    DirectOrderSortingStrategy* lDirectOrderSortingStrategy = new DirectOrderSortingStrategy();
+
+    mActionManager->setMenuCreationStategy(FileMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(ViewMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(EditMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(HelpMenuGroup, lDirectOrderSortingStrategy);
     mMainMenuBuilder->initMenu();
 
     mMainWindow->show();
@@ -120,7 +128,7 @@ void ApplicationBuilder::loadPlugins()
 
     mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lSettings));
 
-    QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
+    UserAction *lActionPlugins = new UserAction(tr("&Plugins"), this);
     connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
     mActionManager->add(ViewMenuGroup, "", lActionPlugins);
 
@@ -142,7 +150,7 @@ void ApplicationBuilder::loadSettings()
     mAppSettingsDialog->addSettingsItem(lVSettingPage);
     mSettingsManager->addSettings("main_window", lVSettingPage->name(), lSettings);
 
-    QAction *lActionSettings = new QAction(tr("&Settings"), this);
+    UserAction *lActionSettings = new UserAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
     AppSettingsDialog *lSettingsDialog = new AppSettingsDialog();
     lVSettingPage->setMainUi(mMainWindow->ui);
@@ -185,27 +193,27 @@ void ApplicationBuilder::supplyComponents()
 
 void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 {
-    QAction *lActionOpen = new QAction(tr("&Open"), this);
+    UserAction *lActionOpen = new UserAction(tr("&Open"), this);
     //connect(lActionOpen, SIGNAL(triggered()), this, SLOT(newFile()));
     mActionManager->add(FileMenuGroup, "", lActionOpen);
 
-    QAction *lActionAddPage = new QAction(tr("&Add Page"), this);
+    UserAction *lActionAddPage = new UserAction(tr("&Add Page"), this);
     connect(lActionAddPage, SIGNAL(triggered()), pMainWindow, SLOT(slotAddPage()));
     mActionManager->add(FileMenuGroup, "", lActionAddPage);
 
-    QAction *lActionQuit = new QAction(tr("&Quit"), this);
+    UserAction *lActionQuit = new UserAction(tr("&Quit"), this);
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
     mActionManager->add(FileMenuGroup, "", lActionQuit);
 
-//    QAction *lActionSettings = new QAction(tr("&Settings"), this);
+//    UserAction *lActionSettings = new UserAction(tr("&Settings"), this);
 //    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
 //    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 
-    QAction *lActionAboutSL = new QAction(tr("&About SourseLine"), this);
+    UserAction *lActionAboutSL = new UserAction(tr("&About SourseLine"), this);
     //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
     mActionManager->add(HelpMenuGroup, "", lActionAboutSL);
 
-    QAction *lActionPluginSettings = new QAction(tr("&Plugins Settings"), this);
+    UserAction *lActionPluginSettings = new UserAction(tr("&Plugins Settings"), this);
     //connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
     mActionManager->add(HelpMenuGroup, "", lActionPluginSettings);
 }

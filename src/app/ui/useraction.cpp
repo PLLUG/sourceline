@@ -23,15 +23,25 @@
 
 #include "useraction.h"
 
-UserAction::UserAction(Commands::CommandKind pCommandKind, QObject *parent) :
-    mCommandKind(pCommandKind),
+UserAction::UserAction( QObject *parent) :
     QAction(parent)
+{
+
+}
+
+UserAction::UserAction(const QString &text, QObject *parent) :
+    QAction(text, parent)
 {
 
 }
 
 Commands::CommandKind UserAction::commandKind() const
 {
-   return mCommandKind;
+    return mCommandKind;
+}
+
+void UserAction::setCommandKind(Commands::CommandKind pCommandKind)
+{
+    mCommandKind = pCommandKind;
 }
 
