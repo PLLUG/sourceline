@@ -24,6 +24,7 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <command.h>
+#include <defs.h>
 
 class FakeCommand : public Command
 {
@@ -32,6 +33,6 @@ public:
      QString name() const;
      QString commandString() const;
      QStringList parametersList() const;
+     Commands::CommandKind commandKind() const;
 };
-
 #endif // FAKECOMMAND_H

@@ -45,3 +45,8 @@ QStringList FakeCommand::parametersList() const
 {
     return QStringList("");
 }
+
+Commands::CommandKind FakeCommand::commandKind() const
+{
+    return Commands::ShareCommand;
+}

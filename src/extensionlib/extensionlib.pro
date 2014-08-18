@@ -45,7 +45,8 @@ HEADERS +=\
     plugin.h\
     settingspage.h \
     pluginsettings.h \
-    command.h
+    command.h \
+    defs.h
 
 
 unix {

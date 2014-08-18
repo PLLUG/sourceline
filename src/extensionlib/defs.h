@@ -1,3 +1,5 @@
+#ifndef DEFS_H
+#define DEFS_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -21,22 +23,23 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
-#include "pluginsettings.h"
-#include "customsettingpage.h"
-#include "fakecommand.h"
 
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+namespace Commands
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent(this);
-    this->addComponent(gitFakeComponent);
-
-    PluginSettings *lPSettings = new PluginSettings(this);
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
-
-    FakeCommand *lFakeCommand = new FakeCommand();
-    this->addComponent(lFakeCommand);
+    enum CommandKind
+    {
+        UknownCommand = 0,
+        ChekoutCommand,
+        ExportCommand,
+        CommitCommand,
+        ImportCommand,
+        MergeCommand,
+        ResolveCommand,
+        IntegrateCommand,
+        PromoteCommand,
+        ShareCommand,
+        UpdateCommand
+    };
 }
+
+#endif // DEFS_H

@@ -27,7 +27,7 @@
 #include <QObject>
 
 #include <QIcon>
-
+#include "defs.h"
 #include "extensions_global.h"
 
 /*!
@@ -38,7 +38,8 @@ class EXTENSIONSSHARED_EXPORT Command : public QObject
 {
     Q_OBJECT
 public:
-    enum CommandFlag {
+    enum CommandFlag
+    {
         NoFlags = 0x0000
     };
     Q_DECLARE_FLAGS(CommandFlags, CommandFlag)
@@ -66,6 +67,11 @@ public:
 
     virtual QString commandString() const = 0;
     virtual QStringList parametersList() const = 0;
+    /*!
+     * \brief commandKind Return flags that describers type of command
+     * \return this flag
+     */
+    virtual Commands::CommandKind commandKind() const  = 0;
 
     /*!
      * \brief Returns string that equivalent to command in command line to execute current Command
