@@ -1,3 +1,5 @@
+#ifndef SETTINGSMANAGERSUPLIERS_H
+#define SETTINGSMANAGERSUPLIERS_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -20,46 +22,23 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include "componentsorter.h"
 
-#include "supliers/componentsupplier.h"
-#include "plugininfo.h"
-#include <string>
+#include "componentsupplier.h"
+class SettingsManager;
+class AppSettingsDialog;
 
-ComponentSorter::ComponentSorter(QObject *parent) :
-    QObject(parent)
+class SettingsPageSuplier : public ComponentSupplier
 {
-}
+public:
+    SettingsPageSuplier();
 
-void ComponentSorter::setComponents(QObjectList pComponents, const PluginInfo &pPluginInfo)
-{
-    foreach (QObject *lComponent, pComponents)
-    {
-        ComponentSupplier *lSupplier = supplierForComponent(lComponent);
-        if (lSupplier)
-        {
-            lSupplier->supply(lComponent, pPluginInfo);
-        }
-    }
-}
+    QString className() const;
+    void supply(QObject *pComponent, const PluginInfo &pPluginInfo);
+    void setSettingsManager(SettingsManager *pSettingsManager);
+    void setAppSettingsDialog(AppSettingsDialog *pAppSettingsDialog);
+private:
+    SettingsManager *mSettingsManager;
+    AppSettingsDialog *mAppSettingsDialog;
+};
 
-void ComponentSorter::addSupplier(ComponentSupplier *pSupplier)
-{
-    mSupplierByClassName.insert(pSupplier->className(), pSupplier);
-}
-
-
-ComponentSupplier *ComponentSorter::supplierForComponent(QObject *pComponent)
-{
-    ComponentSupplier *lSupplier = 0;
-
-    foreach (QString lClassName, mSupplierByClassName.keys())
-    {
-        if (pComponent->inherits(lClassName.toUtf8().data()))
-        {
-            lSupplier = mSupplierByClassName.value(lClassName);
-        }
-    }
-
-    return lSupplier;
-}
+#endif // SETTINGSMANAGERSUPLIERS_H

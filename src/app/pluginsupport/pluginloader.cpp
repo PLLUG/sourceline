@@ -36,7 +36,7 @@ void PluginLoader::setPluginsFolder(QDir pPluginFolder)
 }
 
 
-QStringList PluginLoader::pluginsExtension()
+QStringList PluginLoader::pluginsExtensionFilters()
 {
     #ifdef Q_OS_WIN32
         QStringList lExtensions;
@@ -54,39 +54,68 @@ QStringList PluginLoader::pluginsExtension()
         return lExtensions;
     #endif
 }
+QString PluginLoader::pluginsExtension()
+{
+#ifdef Q_OS_WIN32
+    return ".dll";
+#endif
+#ifdef Q_OS_MAC
+    return ".lib";
+#endif
+#ifdef Q_OS_UNIX
+    return ".so";
+#endif
+}
 
 QStringList PluginLoader::pluginIds()
 {
     QDir path(mPluginsFolder);
-    QPluginLoader pluginLoader;
-    QStringList rPluginsIds;
-    foreach(QFileInfo info, path.entryInfoList(PluginLoader::pluginsExtension(), QDir::Files | QDir::NoDotAndDotDot))
+    QStringList rPluginsIdsList;
+    foreach(QFileInfo info, path.entryInfoList(PluginLoader::pluginsExtensionFilters(), QDir::Files | QDir::NoDotAndDotDot))
     {
-        pluginLoader.setFileName(info.absoluteFilePath());
-        QString lPluginId = pluginLoader.metaData().value("MetaData").toObject().value("pluginId").toString();
-        rPluginsIds.append(lPluginId);
+        rPluginsIdsList.append(info.baseName());
     }
-    return rPluginsIds;
+    return rPluginsIdsList;
 
 }
 QObject* PluginLoader::plugin(QString pPluginId)
 {
-    QDir lPath(mPluginsFolder);
-    QPluginLoader lPluginLoader(lPath.absoluteFilePath(pPluginId));
-    return lPluginLoader.instance();
+    QPluginLoader lPluginLoader(libPath(pPluginId));
+    if (lPluginLoader.load())
+    {
+        return lPluginLoader.instance();
+    }
+    else
+    {
+
+    }
 }
 
-//QList<QObject*> PluginLoader::allPlugins()
-//{
+PluginInfo PluginLoader::pluginInfo(const QString &pPluginId)
+{
+    QPluginLoader lPluginLoader(libPath(pPluginId));
+    QString lVersion = lPluginLoader.metaData().value("MetaData").toObject().value("version").toString();
+    QString lDescription = lPluginLoader.metaData().value("MetaData").toObject().value("description").toString();
+    QString lCategory = lPluginLoader.metaData().value("MetaData").toObject().value("category").toString();
+    QStringList lAdditionalKeys = lPluginLoader.metaData().value("MetaData").toObject().keys();
+    QHash<QString, QString> lAdditionalInfo;
+    foreach (QString key, lAdditionalKeys)
+    {
+        if (key != "version" && key != "description" && key != "category")
+        {
+            lAdditionalInfo[key] = lPluginLoader.metaData().value("MetaData").toObject().value(key).toString();
+        }
+    }
+    return PluginInfo(pPluginId, lVersion, lDescription, lCategory, lAdditionalInfo);
+}
 
-//}
 
 QList<PluginInfo> PluginLoader::pluginsInfo()
 {
     QDir path(mPluginsFolder);
     QPluginLoader pluginLoader;
     QList<PluginInfo> rPluginsDescriptions;
-    foreach(QFileInfo info, path.entryInfoList(PluginLoader::pluginsExtension(), QDir::Files | QDir::NoDotAndDotDot))
+    foreach(QFileInfo info, path.entryInfoList(PluginLoader::pluginsExtensionFilters(), QDir::Files | QDir::NoDotAndDotDot))
     {
         pluginLoader.setFileName(info.absoluteFilePath());
 
@@ -107,3 +136,10 @@ QList<PluginInfo> PluginLoader::pluginsInfo()
     }
     return rPluginsDescriptions;
 }
+
+QString PluginLoader::libPath(const QString &pPluginId)
+{
+   QDir lPath(mPluginsFolder);
+   return lPath.absoluteFilePath(pPluginId) + pluginsExtension();
+}
+

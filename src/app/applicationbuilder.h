@@ -7,6 +7,9 @@ class SplashScreen;
 class ActionManager;
 class MainWindow;
 class MainMenuBuilder;
+class SettingsManager;
+class PluginManager;
+class AppSettingsDialog;
 
 class ApplicationBuilder : public QObject
 {
@@ -29,6 +32,9 @@ private:
     SplashScreen *mSplashScreen;
     ActionManager *mActionManager;
     MainMenuBuilder *mMainMenuBuilder;
+    SettingsManager *mSettingsManager;
+    PluginManager *mPluginManager;
+    AppSettingsDialog *mAppSettingsDialog;
 };
 
 #endif // APPLICATIONBUILDER_H

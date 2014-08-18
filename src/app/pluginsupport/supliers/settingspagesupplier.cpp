@@ -20,46 +20,43 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include "componentsorter.h"
 
-#include "supliers/componentsupplier.h"
-#include "plugininfo.h"
-#include <string>
+#include "settingspagesupplier.h"
+#include "../plugininfo.h"
+#include "../../settings_dialog/settingsmanager.h"
+#include <settingspage.h>
+#include "../../ui/appsettingsdialog.h"
 
-ComponentSorter::ComponentSorter(QObject *parent) :
-    QObject(parent)
+SettingsPageSuplier::SettingsPageSuplier()
+    : mSettingsManager(0),
+      mAppSettingsDialog(0)
 {
+
 }
 
-void ComponentSorter::setComponents(QObjectList pComponents, const PluginInfo &pPluginInfo)
+QString SettingsPageSuplier::className() const
 {
-    foreach (QObject *lComponent, pComponents)
+    return SettingsPage::staticMetaObject.className();
+}
+
+void SettingsPageSuplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
+{
+    if (SettingsPage* lSettingsPage = qobject_cast<SettingsPage*>(pComponent))
     {
-        ComponentSupplier *lSupplier = supplierForComponent(lComponent);
-        if (lSupplier)
+        if (mSettingsManager)
         {
-            lSupplier->supply(lComponent, pPluginInfo);
+            mAppSettingsDialog->addSettingsItem(lSettingsPage);
+            mSettingsManager->addSettings(pPluginInfo.pluginId(), lSettingsPage->name(), lSettingsPage->settings());
         }
     }
 }
 
-void ComponentSorter::addSupplier(ComponentSupplier *pSupplier)
+void SettingsPageSuplier::setSettingsManager(SettingsManager *pSettingsManager)
 {
-    mSupplierByClassName.insert(pSupplier->className(), pSupplier);
+    mSettingsManager = pSettingsManager;
 }
 
-
-ComponentSupplier *ComponentSorter::supplierForComponent(QObject *pComponent)
+void SettingsPageSuplier::setAppSettingsDialog(AppSettingsDialog *pAppSettingsDialog)
 {
-    ComponentSupplier *lSupplier = 0;
-
-    foreach (QString lClassName, mSupplierByClassName.keys())
-    {
-        if (pComponent->inherits(lClassName.toUtf8().data()))
-        {
-            lSupplier = mSupplierByClassName.value(lClassName);
-        }
-    }
-
-    return lSupplier;
+    mAppSettingsDialog = pAppSettingsDialog;
 }
