@@ -53,7 +53,8 @@ SOURCES += \
     pluginsupport/pluginsettingsmediator.cpp \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
-    ui/mainmenubuilder.cpp
+    ui/mainmenubuilder.cpp \
+    pluginsupport/supliers/commandcomponentsupplier.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -85,7 +86,8 @@ HEADERS += \
     pluginsupport/pluginsettingsmediator.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
-    ui/mainmenubuilder.h
+    ui/mainmenubuilder.h \
+    pluginsupport/supliers/commandcomponentsupplier.h
 
 INCLUDEPATH += \
     ./ui \

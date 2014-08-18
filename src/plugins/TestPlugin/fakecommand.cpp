@@ -21,22 +21,27 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
-#include "pluginsettings.h"
-#include "customsettingpage.h"
 #include "fakecommand.h"
 
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+
+
+FakeCommand::FakeCommand(QObject *parent) :
+    Command(parent)
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent(this);
-    this->addComponent(gitFakeComponent);
+    setIcon(QIcon());
+}
 
-    PluginSettings *lPSettings = new PluginSettings(this);
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
+QString FakeCommand::name() const
+{
+    return FakeCommand::staticMetaObject.className();
+}
 
-    FakeCommand *lFakeCommand = new FakeCommand(this);
-    this->addComponent(lFakeCommand);
+QString FakeCommand::commandString() const
+{
+    return "";
+}
+
+QStringList FakeCommand::parametersList() const
+{
+    return QStringList("");
 }

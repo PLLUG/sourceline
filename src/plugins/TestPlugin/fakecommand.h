@@ -1,3 +1,6 @@
+#ifndef FAKECOMMAND_H
+#define FAKECOMMAND_H
+
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -20,23 +23,15 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
+#include <command.h>
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
-#include "pluginsettings.h"
-#include "customsettingpage.h"
-#include "fakecommand.h"
-
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+class FakeCommand : public Command
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent(this);
-    this->addComponent(gitFakeComponent);
+public:
+     explicit FakeCommand(QObject *parent = 0);
+     QString name() const;
+     QString commandString() const;
+     QStringList parametersList() const;
+};
 
-    PluginSettings *lPSettings = new PluginSettings(this);
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
-
-    FakeCommand *lFakeCommand = new FakeCommand(this);
-    this->addComponent(lFakeCommand);
-}
+#endif // FAKECOMMAND_H

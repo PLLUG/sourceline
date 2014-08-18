@@ -1,3 +1,5 @@
+#ifndef COMMANDCOMPONENTSUPPLIER_H
+#define COMMANDCOMPONENTSUPPLIER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -21,22 +23,15 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "testplugin.h"
-#include "gitfakecomponent.h"
-#include "pluginsettings.h"
-#include "customsettingpage.h"
-#include "fakecommand.h"
 
-TestPlugin::TestPlugin(QObject *pParent) :
-    Plugin(pParent)
+#include "componentsupplier.h"
+
+class CommandComponentSupplier : public ComponentSupplier
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent(this);
-    this->addComponent(gitFakeComponent);
+public:
+    CommandComponentSupplier();
+    QString className() const;
+    void supply(QObject *pComponent);
+};
 
-    PluginSettings *lPSettings = new PluginSettings(this);
-    CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
-    this->addComponent(lSettingPage);
-
-    FakeCommand *lFakeCommand = new FakeCommand(this);
-    this->addComponent(lFakeCommand);
-}
+#endif // COMMANDCOMPONENTSUPPLIER_H
