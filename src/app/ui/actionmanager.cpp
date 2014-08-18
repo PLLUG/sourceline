@@ -28,18 +28,14 @@ ActionManager::ActionManager(QObject *parent) :
 {
 }
 
-void ActionManager::addBack(MenuGroups pMenuGroups, QString pCategory, QAction *pAction)
+void ActionManager::add(MenuGroup pMenuGroups, QString pCategory, QAction *pAction)
 {
     mActions[pMenuGroups].push_back(pAction);
 
 }
 
-void ActionManager::addAt(MenuGroups pMenuGroups, unsigned pIndex, QString pCategory, QAction *pAction)
-{
-    mActions[pMenuGroups].insert(pIndex, pAction);
-}
 
-QList<QAction *> ActionManager::actions(MenuGroups pMenuGroups) const
+QList<QAction *> ActionManager::actions(MenuGroup pMenuGroups) const
 {
     return mActions[pMenuGroups];
 }

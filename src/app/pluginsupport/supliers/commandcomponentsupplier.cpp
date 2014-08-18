@@ -22,17 +22,38 @@
 *******************************************************************************/
 
 #include "commandcomponentsupplier.h"
+#include <command.h>
+#include "../../ui/useraction.h"
+#include "../../ui/actionmanager.h"
 
-
-CommandComponentSupplier::CommandComponentSupplier()
+CommandComponentSupplier::CommandComponentSupplier() :
+    mActionManager(0)
 {
+
 }
 
 QString CommandComponentSupplier::className() const
 {
+    return Command::staticMetaObject.className();
 }
 
-void CommandComponentSupplier::supply(QObject *pComponent)
+void CommandComponentSupplier::setActionManager(ActionManager *pActionManager)
 {
+    mActionManager = pActionManager;
+}
 
+UserAction *CommandComponentSupplier::actionFromCommand(Command *pComand)
+{
+    UserAction *lUserAction = new UserAction(pComand->commandKind());
+    lUserAction->setIcon(pComand->icon());
+    lUserAction->setText(pComand->name());
+    return lUserAction;
+}
+
+void CommandComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
+{
+    if (Command* lCommand = qobject_cast<Command*>(pComponent))
+    {
+        mActionManager->add(HelpMenuGroup, "", actionFromCommand(lCommand));
+    }
 }

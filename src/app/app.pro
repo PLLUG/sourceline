@@ -52,7 +52,8 @@ SOURCES += \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
     pluginsupport/supliers/commandcomponentsupplier.cpp \
-    pluginsupport/supliers/settingspagesupplier.cpp
+    pluginsupport/supliers/settingspagesupplier.cpp \
+    ui/useraction.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -83,7 +84,8 @@ HEADERS += \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
     pluginsupport/supliers/commandcomponentsupplier.h \
-    pluginsupport/supliers/settingspagesupplier.h
+    pluginsupport/supliers/settingspagesupplier.h \
+    ui/useraction.h
 
 INCLUDEPATH += \
     ./ui \

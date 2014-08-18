@@ -44,8 +44,8 @@ void MainMenuBuilder::initMenu()
 {
     for (int lMenuGroups = FileMenuGroup; lMenuGroups < MENU_GROUP_COUNT; ++lMenuGroups)
     {
-        QList<QAction *> lActions = mActionManager->actions(MenuGroups(lMenuGroups));
-        QMenu *lOpenMenu = mMenuBar->addMenu(gMenuGroups[MenuGroups(lMenuGroups)]);
+        QList<QAction *> lActions = mActionManager->actions(MenuGroup(lMenuGroups));
+        QMenu *lOpenMenu = mMenuBar->addMenu(gMenuGroups[MenuGroup(lMenuGroups)]);
         lOpenMenu->addActions(lActions);
     }
 }

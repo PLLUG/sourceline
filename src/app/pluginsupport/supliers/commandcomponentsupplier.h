@@ -25,13 +25,20 @@
 
 
 #include "componentsupplier.h"
+class UserAction;
+class ActionManager;
+class Command;
 
 class CommandComponentSupplier : public ComponentSupplier
 {
 public:
     CommandComponentSupplier();
     QString className() const;
-    void supply(QObject *pComponent);
+    UserAction *actionFromCommand(Command *pComand);
+    void setActionManager(ActionManager *pActionManager);
+    void supply(QObject *pComponent, const PluginInfo &pPluginInfo);
+private:
+    ActionManager *mActionManager;
 };
 
 #endif // COMMANDCOMPONENTSUPPLIER_H

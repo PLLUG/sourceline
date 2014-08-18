@@ -9,6 +9,7 @@
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
 #include "pluginsupport/supliers/settingspagesupplier.h"
+#include "pluginsupport/supliers/commandcomponentsupplier.h"
 #include "pluginsupport/pluginloader.h"
 #include "pluginsupport/pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
@@ -121,7 +122,7 @@ void ApplicationBuilder::loadPlugins()
 
     QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
     connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
-    mActionManager->addBack(ViewMenuGroup, "", lActionPlugins);
+    mActionManager->add(ViewMenuGroup, "", lActionPlugins);
 
     ProgressHandler::instance()->finishStage();
 }
@@ -147,21 +148,24 @@ void ApplicationBuilder::loadSettings()
     lVSettingPage->setMainUi(mMainWindow->ui);
     lSettingsDialog->addSettingsItem(lVSettingPage);
 
-    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
+    mActionManager->add(ViewMenuGroup, "", lActionSettings);
 }
 
 void ApplicationBuilder::supplyComponents()
 {
+    ComponentSorter *lComponentSorter = new ComponentSorter();
+
     FakeComponentSupplier *lFakeComponentSupplier = new FakeComponentSupplier();
+    lComponentSorter->addSupplier(lFakeComponentSupplier);
 
     SettingsPageSuplier *lSettingsManagerSupliers = new SettingsPageSuplier();
     lSettingsManagerSupliers->setSettingsManager(mSettingsManager);
     lSettingsManagerSupliers->setAppSettingsDialog(mAppSettingsDialog);
-
-    ComponentSorter *lComponentSorter = new ComponentSorter();
-    lComponentSorter->addSupplier(lFakeComponentSupplier);
     lComponentSorter->addSupplier(lSettingsManagerSupliers);
 
+    CommandComponentSupplier *lCommandComponentSupplier = new CommandComponentSupplier();
+    lCommandComponentSupplier->setActionManager(mActionManager);
+    lComponentSorter->addSupplier(lCommandComponentSupplier);
 
     QStringList lActivePluginsList = mPluginManager->activePlugins();
     int i = 0;
@@ -183,15 +187,15 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 {
     QAction *lActionOpen = new QAction(tr("&Open"), this);
     //connect(lActionOpen, SIGNAL(triggered()), this, SLOT(newFile()));
-    mActionManager->addBack(FileMenuGroup, "", lActionOpen);
+    mActionManager->add(FileMenuGroup, "", lActionOpen);
 
     QAction *lActionAddPage = new QAction(tr("&Add Page"), this);
     connect(lActionAddPage, SIGNAL(triggered()), pMainWindow, SLOT(slotAddPage()));
-    mActionManager->addBack(FileMenuGroup, "", lActionAddPage);
+    mActionManager->add(FileMenuGroup, "", lActionAddPage);
 
     QAction *lActionQuit = new QAction(tr("&Quit"), this);
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->addBack(FileMenuGroup, "", lActionQuit);
+    mActionManager->add(FileMenuGroup, "", lActionQuit);
 
 //    QAction *lActionSettings = new QAction(tr("&Settings"), this);
 //    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
@@ -199,11 +203,11 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 
     QAction *lActionAboutSL = new QAction(tr("&About SourseLine"), this);
     //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->addBack(HelpMenuGroup, "", lActionAboutSL);
+    mActionManager->add(HelpMenuGroup, "", lActionAboutSL);
 
     QAction *lActionPluginSettings = new QAction(tr("&Plugins Settings"), this);
     //connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
-    mActionManager->addBack(HelpMenuGroup, "", lActionPluginSettings);
+    mActionManager->add(HelpMenuGroup, "", lActionPluginSettings);
 }
 
 

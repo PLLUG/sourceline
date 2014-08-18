@@ -1,5 +1,3 @@
-#ifndef ACTIONMANAGER_H
-#define ACTIONMANAGER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,26 +20,18 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include "guidefs.h"
-#include <QMap>
-#include <QAction>
-#include <QString>
-#include <QList>
 
-class ActionManager : public QObject
+#include "useraction.h"
+
+UserAction::UserAction(Commands::CommandKind pCommandKind, QObject *parent) :
+    mCommandKind(pCommandKind),
+    QAction(parent)
 {
-    Q_OBJECT
-public:
-    explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroup pMenuGroups, QString pCategory, QAction *pAction);
-    QList<QAction *> actions(MenuGroup pMenuGroups) const;
-signals:
 
-public slots:
-private:
-    QMap<MenuGroup, QList<QAction *> > mActions;
+}
 
-};
+Commands::CommandKind UserAction::commandKind() const
+{
+   return mCommandKind;
+}
 
-#endif // ACTIONMANAGER_H
