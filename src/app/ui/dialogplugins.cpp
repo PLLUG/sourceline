@@ -22,12 +22,14 @@
 *******************************************************************************/
 #include "dialogplugins.h"
 #include "ui_dialogplugins.h"
+#include "plugininfodialog.h"
 #include <QFile>
 #include <QTreeWidgetItem>
 #include <QTextStream>
 #include <QPushButton>
 #include <QSignalMapper>
 #include <QDebug>
+#include <QMessageBox>
 
 DialogPlugins::DialogPlugins(QWidget *parent) :
     QDialog(parent),
@@ -109,18 +111,29 @@ QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
 }
 void DialogPlugins::slotButtonPressed(QString pPluginId)
 {
-    qDebug() << requestInfoForPlugin(pPluginId) << " " << pPluginId;
+    foreach (const PluginInfo& lPluginInfo, mPlugins)
+    {
+        if (lPluginInfo.pluginId() == pPluginId)
+        {
+            PluginInfoDialog *lPluginInfoDialog = new PluginInfoDialog(this);
+            lPluginInfoDialog->setPluginName(pPluginId);
+            lPluginInfoDialog->setPluginInfo(lPluginInfo.additionalInfo());
+            lPluginInfoDialog->show();
+            return;
+        }
+    }
+    QMessageBox::critical(this, "Error", "No additional info available");
 }
 QString DialogPlugins::requestInfoForPlugin(QString pPluginId)
 {
     int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
     for (int i = 0; i < lCountOfTopLevelItem; ++i)
     {
-        QTreeWidgetItem* lCategoryIntem = ui->pluginsTree->topLevelItem(i);
-        unsigned lCountOfPluginsInCategory = lCategoryIntem->childCount();
+        QTreeWidgetItem* lCategoryItem = ui->pluginsTree->topLevelItem(i);
+        unsigned lCountOfPluginsInCategory = lCategoryItem->childCount();
         for (unsigned i = 0; i < lCountOfPluginsInCategory; ++i)
         {
-            QTreeWidgetItem* lPlugin = lCategoryIntem->child(i);
+            QTreeWidgetItem* lPlugin = lCategoryItem->child(i);
             if(lPlugin->text(0) == pPluginId)
             {
                 return lPlugin->text(2);

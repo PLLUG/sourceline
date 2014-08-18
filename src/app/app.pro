@@ -52,7 +52,8 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-    ui/about.cpp
+    ui/about.cpp \
+    ui/plugininfodialog.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -83,7 +84,8 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    ui/about.h
+    ui/about.h \
+    ui/plugininfodialog.h
 
 INCLUDEPATH += \
     ./ui \
@@ -113,7 +115,8 @@ FORMS += \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui \
-    ui/about.ui
+    ui/about.ui \
+    ui/plugininfodialog.ui
 
 OTHER_FILES +=
 
