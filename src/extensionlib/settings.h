@@ -34,11 +34,11 @@
 #include <QSignalMapper>
 #include "extensions_global.h"
 
-class EXTENSIONSSHARED_EXPORT PluginSettings : public QObject
+class EXTENSIONSSHARED_EXPORT Settings : public QObject
 {
     Q_OBJECT
 public:
-    explicit PluginSettings(QObject *parent = 0);
+    explicit Settings(QObject *parent = 0);
 
     QString settingsPath() const;
     void setSettingsPath(const QString& pSettingsPath);

@@ -35,8 +35,8 @@ SOURCES += \
     fakecomponent.cpp \
     plugin.cpp \
     settingspage.cpp \
-    pluginsettings.cpp \
-    command.cpp
+    command.cpp \
+    settings.cpp
 
 HEADERS +=\
     extensions_global.h\
@@ -44,10 +44,9 @@ HEADERS +=\
     plugin-interface.h\
     plugin.h\
     settingspage.h \
-    pluginsettings.h \
     command.h \
-    defs.h
-
+    defs.h \
+    settings.h
 
 unix {
     target.path = /usr/lib
@@ -65,6 +64,7 @@ win32 {
 
 copytarget.path    = $$_PRO_FILE_PWD_
 copytarget.files  += $$HEADERS
+
 ## wildcard for filename1 filename2 filename3 ...
 
 #message("found files for copytarget: "$$copytarget.files)

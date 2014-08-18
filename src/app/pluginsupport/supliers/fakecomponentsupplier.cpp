@@ -22,6 +22,8 @@
 *******************************************************************************/
 
 #include "fakecomponentsupplier.h"
+#include "../plugininfo.h"
+#include "fakecomponent.h"
 
 FakeComponentSupplier::FakeComponentSupplier()
 {
@@ -29,10 +31,10 @@ FakeComponentSupplier::FakeComponentSupplier()
 
 QString FakeComponentSupplier::className() const
 {
-    return "Fake Component";
+    return FakeComponent::staticMetaObject.className();
 }
 
-void FakeComponentSupplier::supply(QObject *pComponent)
+void FakeComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
 {
     //sending to object
     //mDialog->sendCommonent(pComponent);

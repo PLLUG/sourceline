@@ -31,6 +31,7 @@
 class QSignalMapper;
 
 class QTreeWidgetItem;
+class Settings;
 
 namespace Ui {
     class DialogPlugins;
@@ -54,7 +55,7 @@ public:
      */
     QString requestInfoForPlugin(QString pPluginId);
     /*!
-     * \brief  get information about plugins fron files
+     * \brief  get information about plugins from files
      * \return dictionary where key word is plugin category and value is object which include description about plugin
      */
     void setPlugins(QList<PluginInfo> pPlugins);
@@ -71,6 +72,7 @@ public:
      */
     bool restartApplication();
     void setActivatedPlugins(QList<QString> pActivatedPlugins);
+
 private slots:
     /*!
      * \brief Shows plugins when when user clicks on info button in row with plugin description
@@ -109,6 +111,10 @@ private:
      * \return pointer to button widget which will be in row with plugin description
      */
     QWidget* createButton(QTreeWidgetItem* pPluginItem);
+
+signals:
+    void signalStateChanged();
+
 private:
     Ui::DialogPlugins *ui;
     QSignalMapper *mMapper;

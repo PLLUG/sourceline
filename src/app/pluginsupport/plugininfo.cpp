@@ -32,6 +32,11 @@ PluginInfo::PluginInfo(QString pPluginId, QString pVer, QString pDescr, QString 
     mAdditionalInfo(pAdditionalInfo)
 {
 }
+
+PluginInfo::PluginInfo()
+{
+
+}
 QString PluginInfo::pluginId() const
 {
     return mPluginId;

@@ -22,6 +22,7 @@
 *******************************************************************************/
 #include "dialogplugins.h"
 #include "ui_dialogplugins.h"
+#include "settings.h"
 #include <QFile>
 #include <QTreeWidgetItem>
 #include <QTextStream>
@@ -34,7 +35,7 @@ DialogPlugins::DialogPlugins(QWidget *parent) :
     ui(new Ui::DialogPlugins),
     mIsApplyAndRestartPressed(false)
 {
-   ui->setupUi(this);
+    ui->setupUi(this);
 }
 DialogPlugins::~DialogPlugins()
 {
@@ -43,6 +44,7 @@ DialogPlugins::~DialogPlugins()
 void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
 {
     mPlugins = pPlugins;
+    ui->pluginsTree->clear();
     createPluginsTree();
     connect(ui->applyAndRestartButton, SIGNAL(clicked()), this, SLOT(slotApplyAndRestartPressed()), Qt::UniqueConnection);
 }
@@ -50,7 +52,7 @@ void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
 void DialogPlugins::createPluginsTree()
 {
     ui->pluginsTree->setColumnCount(4);
-    ui->pluginsTree->setHeaderLabels(QStringList()<< tr("Plugin Group/Name^") << tr("Ver") << tr("Short Description") << "");
+    ui->pluginsTree->setHeaderLabels(QStringList()  << tr("Plugin Group/Name^") << tr("Ver") << tr("Short Description") << "");
     mMapper = new QSignalMapper(this);
     foreach (const PluginInfo &lPluginInfo, mPlugins)
     {
@@ -78,6 +80,7 @@ void DialogPlugins::addCategory(const QString& pCategory, const QString& pPlugin
       lCategoryItem->setText(0, pCategory);
       addPluginToCategory(lCategoryItem, pPluginId, pVer, pDescr);
 }
+
 void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString& pPluginId, const QString &pVer, const  QString &pDescr)
 {
     QTreeWidgetItem *lPluginItem =new QTreeWidgetItem(pParent);
@@ -89,6 +92,7 @@ void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString&
     lPluginItem->setCheckState(0, Qt::Unchecked);
     pParent->addChild(lPluginItem);
 }
+
 QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
 {
     QSize lSize( 20,20 );
@@ -103,19 +107,21 @@ QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
     connect(lPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
     return lPushButton;
 }
+
 void DialogPlugins::slotButtonPressed(QString pPluginId)
 {
     qDebug() << requestInfoForPlugin(pPluginId) << " " << pPluginId;
 }
 QString DialogPlugins::requestInfoForPlugin(QString pPluginId)
 {
-    QList<QTreeWidgetItem *> lCategoryList =  ui->pluginsTree->findItems("", Qt::MatchContains, 0);
-    foreach (QTreeWidgetItem* lCategoryItem, lCategoryList)
+    int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
+    for (int i = 0; i < lCountOfTopLevelItem; ++i)
     {
-        unsigned lCountOfPluginsInCategory = lCategoryItem->childCount();
+        QTreeWidgetItem* lCategoryIntem = ui->pluginsTree->topLevelItem(i);
+        unsigned lCountOfPluginsInCategory = lCategoryIntem->childCount();
         for (unsigned i = 0; i < lCountOfPluginsInCategory; ++i)
         {
-            QTreeWidgetItem* lPlugin = lCategoryItem->child(i);
+            QTreeWidgetItem* lPlugin = lCategoryIntem->child(i);
             if(lPlugin->text(0) == pPluginId)
             {
                 return lPlugin->text(2);
@@ -147,8 +153,8 @@ bool DialogPlugins::restartApplication()
 
 void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
 {
-    int countOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
-    for (int i = 0; i < countOfTopLevelItem; ++i)
+    int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
+    for (int i = 0; i < lCountOfTopLevelItem; ++i)
     {
         QTreeWidgetItem* lCategoryIndex = ui->pluginsTree->topLevelItem(i);
         int countOfPluginIndex = lCategoryIndex->childCount();
@@ -162,6 +168,4 @@ void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
         }
     }
 }
-
-
 

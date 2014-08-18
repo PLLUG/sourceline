@@ -25,7 +25,7 @@
 #include "ui_mainwindow.h"
 
 
-ViewSettingPage::ViewSettingPage(PluginSettings *pSettings, QWidget *parent) :
+ViewSettingPage::ViewSettingPage(Settings *pSettings, QWidget *parent) :
     SettingsPage(pSettings, parent)
 {
     mDialogUi = new Ui::Form;
@@ -45,6 +45,12 @@ ViewSettingPage::ViewSettingPage(PluginSettings *pSettings, QWidget *parent) :
     settings()->add("history_tree_visible", mDialogUi->checkBox_5, "checked");
     settings()->subscribe("history_tree_visible", this, "slotTreeChanged");
 
+    connect(mDialogUi->checkBox, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_2, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_3, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_4, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    connect(mDialogUi->checkBox_5, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+
     setName("View");
     setIcon(QIcon(":/splash/img/sourceline.ico"));
     settings()->setSettingsPath("view_settings/docks_visibility");
@@ -62,7 +68,7 @@ void ViewSettingPage::setMainUi(Ui::MainWindow *lMainUi)
 
 void ViewSettingPage::slotFileViewChanged(QVariant pValue)
 {
-    mMainUi->uiFileView->setVisible(pValue.toBool());
+//    mMainUi->uiFileView->setVisible(pValue.toBool());
     qDebug() << "inside ViewSettings : FView changed = " << pValue.toBool();
 }
 

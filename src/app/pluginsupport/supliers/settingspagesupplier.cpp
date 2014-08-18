@@ -1,11 +1,8 @@
-#ifndef SETTINGSPAGE_H
-#define SETTINGSPAGE_H
-
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
-***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -24,34 +21,42 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "pluginsettings.h"
+#include "settingspagesupplier.h"
+#include "../plugininfo.h"
+#include "../../settings_dialog/settingsmanager.h"
+#include <settingspage.h>
+#include "../../ui/appsettingsdialog.h"
 
-#include <QWidget>
-#include <QIcon>
-#include <QDebug>
-
-class SettingsPage : public QWidget
+SettingsPageSuplier::SettingsPageSuplier()
+    : mSettingsManager(0),
+      mAppSettingsDialog(0)
 {
-    Q_OBJECT
-public:
-    explicit SettingsPage(PluginSettings *pSettings, QWidget *parent = 0);
-    QString name() const;
-    QIcon icon() const;
-    PluginSettings *settings() const;
 
-public slots:
-    void slotApply();
-    void slotCancel();
+}
 
-protected:
-    void setName(const QString& pName);
-    void setIcon(const QIcon& pIcon);
+QString SettingsPageSuplier::className() const
+{
+    return SettingsPage::staticMetaObject.className();
+}
 
-private:
-    QString mName;
-    QIcon mIcon;
-    PluginSettings *mSettings;
+void SettingsPageSuplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
+{
+    if (SettingsPage* lSettingsPage = qobject_cast<SettingsPage*>(pComponent))
+    {
+        if (mSettingsManager)
+        {
+            mAppSettingsDialog->addSettingsItem(lSettingsPage);
+            mSettingsManager->addSettings(pPluginInfo.pluginId(), lSettingsPage->name(), lSettingsPage->settings());
+        }
+    }
+}
 
-};
+void SettingsPageSuplier::setSettingsManager(SettingsManager *pSettingsManager)
+{
+    mSettingsManager = pSettingsManager;
+}
 
-#endif // SETTINGSPAGE_H
+void SettingsPageSuplier::setAppSettingsDialog(AppSettingsDialog *pAppSettingsDialog)
+{
+    mAppSettingsDialog = pAppSettingsDialog;
+}

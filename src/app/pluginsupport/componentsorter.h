@@ -26,13 +26,15 @@
 #include <QMap>
 
 class ComponentSupplier;
+class PluginInfo;
+
 class ComponentSorter : public QObject
 {
     Q_OBJECT
 public:
     explicit ComponentSorter(QObject *parent = 0);
-    void setComponents(int pCategory, QObjectList pComponents);
-    void addSupplier(QString pName, ComponentSupplier * pSupplier);
+    void setComponents(QObjectList pComponents, const PluginInfo &pPluginInfo);
+    void addSupplier(ComponentSupplier * pSupplier);
 private:
     ComponentSupplier *supplierForComponent(QObject *pComponent);
 

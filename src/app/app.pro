@@ -33,15 +33,12 @@ SOURCES += \
     ui/console.cpp \
     ui/customtabbar.cpp \
     ui/editorview.cpp \
-    ui/FileView.cpp \
     ui/genericdockwidget.cpp \
     ui/historytree.cpp \
     ui/mainwindow.cpp \
     ui/pagemanager.cpp \
     ui/revisiontable.cpp \
     ui/appsettingsdialog.cpp \
-    settings_dialog/pluginsettings.cpp \
-    settings_dialog/settingspage.cpp \
     settings_dialog/settingstorage.cpp \
     ui/viewsettingpage.cpp \
     pluginsupport/componentsorter.cpp \
@@ -54,7 +51,8 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-    pluginsupport/supliers/commandcomponentsupplier.cpp
+    pluginsupport/supliers/commandcomponentsupplier.cpp \
+    pluginsupport/supliers/settingspagesupplier.cpp
 
 HEADERS += \
     applicationbuilder.h \
@@ -64,7 +62,6 @@ HEADERS += \
     ui/customtabbar.h \
     ui/docktitlebar.h \
     ui/editorview.h \
-    ui/FileView.h \
     ui/genericdockwidget.h \
     ui/guidefs.h \
     ui/historytree.h \
@@ -72,8 +69,6 @@ HEADERS += \
     ui/pagemanager.h \
     ui/revisiontable.h \
     ui/appsettingsdialog.h \
-    settings_dialog/pluginsettings.h \
-    settings_dialog/settingspage.h \
     settings_dialog/settingstorage.h \
     ui/viewsettingpage.h \
     pluginsupport/componentsorter.h \
@@ -87,11 +82,18 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    pluginsupport/supliers/commandcomponentsupplier.h
+    pluginsupport/supliers/commandcomponentsupplier.h \
+    pluginsupport/supliers/settingspagesupplier.h
 
 INCLUDEPATH += \
     ./ui \
     ./settings_dialog
+
+INCLUDEPATH += $$_PRO_FILE_PWD_/../pluginapi/include/
+DEPENDPATH += $$_PRO_FILE_PWD_/../pluginapi/include/
+
+unix|win32: LIBS += -L$$_PRO_FILE_PWD_/../pluginapi/lib/ -lextensions
+
 
 RESOURCES += \
     resources/resources.qrc
@@ -113,3 +115,4 @@ FORMS += \
     ui/dialogplugins.ui
 
 OTHER_FILES +=
+

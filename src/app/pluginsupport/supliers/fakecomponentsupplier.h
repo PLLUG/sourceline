@@ -33,8 +33,8 @@ class FakeComponentSupplier : public ComponentSupplier
 public:
     FakeComponentSupplier();
     QString className() const;
-    void supply(QObject *pComponent);
-    void setDialog(Dialog *pDialog);
+    void supply(QObject * pComponent, const PluginInfo &pPluginInfo);
+    void setDialog(Dialog* pDialog);
 private:
     Dialog* mDialog;
 };

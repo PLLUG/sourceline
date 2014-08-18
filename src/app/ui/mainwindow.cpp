@@ -8,7 +8,7 @@
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow), mSettingsManager(new SettingsManager(this))
+    ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
     trayMenu = new QMenu();
@@ -21,33 +21,23 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->show();
     TrayIcon->setContextMenu(trayMenu);
 
-    mSettingsDialog = new AppSettingsDialog(this);
-    mPluginSettings = new PluginSettings(this);
-    mVSettingPage = new ViewSettingPage(mPluginSettings);
-    mVSettingPage->setMainUi(ui);
-    mSettingsDialog->addSettingsItem(mVSettingPage);
-    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mPluginSettings);
-
     mPageManager = new PageManager(this);
     mTabBar = new CustomTabBar(this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     ui->uiTabToolBar->addWidget(mTabBar);
 
-    readVisibilitySettings();
-
-
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
     connect(mTabBar, SIGNAL(currentChanged(int)), mPageManager, SLOT(slotChangeCurrentPage(int)));
-    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
+//    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiRevisionTable, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiConsole, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiHistoryTree, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiEditorView, SLOT(slotSetPage(int)));
     connect(mTabBar, SIGNAL(tabMoved(int,int)), mPageManager, SLOT(slotTabMoved(int,int)));
 
-    this->tabifyDockWidget(ui->uiFileView, ui->uiHistoryTree);
+    this->tabifyDockWidget(ui->uiRevisionTable, ui->uiHistoryTree);
     this->tabifyDockWidget(ui->uiRevisionTable, ui->uiEditorView);
 }
 
@@ -83,11 +73,6 @@ void MainWindow::slotQuit()
     qApp->quit();
 }
 
-void MainWindow::slotShowSettings()
-{
-    mSettingsDialog->show();
-}
-
 void MainWindow::slotAddPage()
 {
     static int a = 0;
@@ -98,18 +83,4 @@ void MainWindow::slotAddPage()
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     // ui->uiFileView->setMinimumHeight(this->height());
-}
-
-void MainWindow::readVisibilitySettings()
-{
-    SettingStorage *lStorage = new SettingStorage();
-    mVSettingPage->setMainUi(ui);
-    mSettingsManager->setStorage(lStorage);
-    mSettingsManager->addSettings("main_window", mVSettingPage->name(), mPluginSettings);
-
-    connect(mVSettingPage->settings(), SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
-    connect(lStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             mVSettingPage->settings(), SLOT(slotSetSettings(QMap<QString,QVariant>)));
-    lStorage->slotLoadSettings(mSettingsManager->pathBySettings(mPluginSettings));
 }

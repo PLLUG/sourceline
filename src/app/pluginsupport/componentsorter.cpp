@@ -23,6 +23,7 @@
 #include "componentsorter.h"
 
 #include "supliers/componentsupplier.h"
+#include "plugininfo.h"
 #include <string>
 
 ComponentSorter::ComponentSorter(QObject *parent) :
@@ -30,21 +31,21 @@ ComponentSorter::ComponentSorter(QObject *parent) :
 {
 }
 
-void ComponentSorter::setComponents(int pCategory, QObjectList pComponents)
+void ComponentSorter::setComponents(QObjectList pComponents, const PluginInfo &pPluginInfo)
 {
     foreach (QObject *lComponent, pComponents)
     {
         ComponentSupplier *lSupplier = supplierForComponent(lComponent);
         if (lSupplier)
         {
-            lSupplier->supply(lComponent);
+            lSupplier->supply(lComponent, pPluginInfo);
         }
     }
 }
 
-void ComponentSorter::addSupplier(QString pName, ComponentSupplier *pSupplier)
+void ComponentSorter::addSupplier(ComponentSupplier *pSupplier)
 {
-    mSupplierByClassName.insert(pName, pSupplier);
+    mSupplierByClassName.insert(pSupplier->className(), pSupplier);
 }
 
 

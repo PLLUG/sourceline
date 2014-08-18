@@ -1,8 +1,10 @@
+#ifndef SETTINGSMANAGERSUPLIERS_H
+#define SETTINGSMANAGERSUPLIERS_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
-***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -21,51 +23,22 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "settingspage.h"
+#include "componentsupplier.h"
+class SettingsManager;
+class AppSettingsDialog;
 
-SettingsPage::SettingsPage(PluginSettings *pSettings, QWidget *parent) :
-    QWidget(parent),
-    mSettings(pSettings)
+class SettingsPageSuplier : public ComponentSupplier
 {
-}
+public:
+    SettingsPageSuplier();
 
-QString SettingsPage::name() const
-{
-    return mName;
-}
+    QString className() const;
+    void supply(QObject *pComponent, const PluginInfo &pPluginInfo);
+    void setSettingsManager(SettingsManager *pSettingsManager);
+    void setAppSettingsDialog(AppSettingsDialog *pAppSettingsDialog);
+private:
+    SettingsManager *mSettingsManager;
+    AppSettingsDialog *mAppSettingsDialog;
+};
 
-QIcon SettingsPage::icon() const
-{
-    return mIcon;
-}
-
-PluginSettings *SettingsPage::settings() const
-{
-    return mSettings;
-}
-
-void SettingsPage::slotApply()
-{
-    if (mSettings)
-    {
-        mSettings->commit();
-    }
-}
-
-void SettingsPage::slotCancel()
-{
-    if (mSettings)
-    {
-        mSettings->revert();
-    }
-}
-
-void SettingsPage::setName(const QString &pName)
-{
-    mName = pName;
-}
-
-void SettingsPage::setIcon(const QIcon &pIcon)
-{
-    mIcon = pIcon;
-}
+#endif // SETTINGSMANAGERSUPLIERS_H

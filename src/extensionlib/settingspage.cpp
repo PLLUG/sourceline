@@ -23,7 +23,7 @@
 
 #include "settingspage.h"
 
-SettingsPage::SettingsPage(PluginSettings *pSettings, QWidget *parent) :
+SettingsPage::SettingsPage(Settings *pSettings, QWidget *parent) :
     QWidget(parent),
     mSettings(pSettings)
 {
@@ -39,7 +39,7 @@ QIcon SettingsPage::icon() const
     return mIcon;
 }
 
-PluginSettings *SettingsPage::settings() const
+Settings *SettingsPage::settings() const
 {
     return mSettings;
 }

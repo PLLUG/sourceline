@@ -33,11 +33,41 @@ PluginManager::PluginManager(QObject *parent) :
 void PluginManager::setPluginLoader(PluginLoader *pPluginLoader)
 {
     mPluginLoader = pPluginLoader;
+    QList<PluginInfo> lPluginInfoList =  mPluginLoader->pluginsInfo();
+    foreach (PluginInfo lPluginInfo, lPluginInfoList)
+    {
+        mPluginsInfo.insert(lPluginInfo.pluginId(), lPluginInfo);
+    }
 }
 
 QList<PluginInfo> PluginManager::pluginsInfo()
 {
-    return mPluginLoader->pluginsInfo();
+    return mPluginsInfo.values();
+}
+
+PluginInfo PluginManager::pluginInfo(QString pPluginId)
+{
+    if (mPluginsInfo.contains(pPluginId))
+    {
+        return mPluginsInfo[pPluginId];
+    }
+    else
+    {
+        return mPluginLoader->pluginInfo(pPluginId);
+    }
+}
+
+Plugin *PluginManager::plugin(QString pPluginId)
+{
+    Plugin* lPlugin = qobject_cast<Plugin*>(mPluginLoader->plugin(pPluginId));
+    if (lPlugin)
+    {
+        return lPlugin;
+    }
+    else
+    {
+
+    }
 }
 
 QStringList PluginManager::activePlugins()
@@ -48,4 +78,5 @@ QStringList PluginManager::activePlugins()
 void PluginManager::slotSetActivePlugins(const QStringList &pActivePlugins)
 {
     mActivePlugins = pActivePlugins;
+    emit activePluginsChanged(mActivePlugins);
 }
