@@ -52,12 +52,9 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-<<<<<<< HEAD
     ui/about.cpp \
-    ui/plugininfodialog.cpp
-=======
+    ui/plugininfodialog.cpp \
     pluginsupport/supliers/settingspagesupplier.cpp
->>>>>>> 5fc0fb66e5823402fc10bac1a8c8ea7cc56e7da5
 
 HEADERS += \
     applicationbuilder.h \
@@ -88,12 +85,9 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-<<<<<<< HEAD
     ui/about.h \
-    ui/plugininfodialog.h
-=======
+    ui/plugininfodialog.h \
     pluginsupport/supliers/settingspagesupplier.h
->>>>>>> 5fc0fb66e5823402fc10bac1a8c8ea7cc56e7da5
 
 INCLUDEPATH += \
     ./ui \
