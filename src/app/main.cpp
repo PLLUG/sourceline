@@ -32,6 +32,7 @@ int main(int pArgc, char *pArgv[])
     // TASK: use QtSingleApplication for app
     QApplication lApplication(pArgc, pArgv);
 
+    // TODO: colaboration between SourceLineApplication instance and ApplicationBuilder?
     ApplicationBuilder lApplcationBuilder;
 
     int rResult = lApplication.exec();

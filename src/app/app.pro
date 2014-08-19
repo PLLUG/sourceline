@@ -22,41 +22,27 @@
 ################################################################################
 
 TEMPLATE = app
-DESTDIR = $$_PRO_FILE_PWD_/../../bin/
 QT += widgets
+
+DESTDIR = $$_PRO_FILE_PWD_/../../bin
+TARGET = SourceLine
+
+HEADERS +=
+SOURCES +=
+INCLUDEPATH += $$_PRO_FILE_PWD_
+
+# Main
+HEADERS += \
+    applicationbuilder.h \
+    progresshandler.h
 
 SOURCES += \
     main.cpp \
     applicationbuilder.cpp \
-    progresshandler.cpp \
-    ui/splashscreen.cpp \
-    ui/console.cpp \
-    ui/customtabbar.cpp \
-    ui/editorview.cpp \
-    ui/genericdockwidget.cpp \
-    ui/historytree.cpp \
-    ui/mainwindow.cpp \
-    ui/pagemanager.cpp \
-    ui/revisiontable.cpp \
-    ui/appsettingsdialog.cpp \
-    settings_dialog/settingstorage.cpp \
-    ui/viewsettingpage.cpp \
-    pluginsupport/componentsorter.cpp \
-    settings_dialog/settingsmanager.cpp \
-    pluginsupport/supliers/fakecomponentsupplier.cpp \
-    pluginsupport/plugininfo.cpp \
-    pluginsupport/pluginloader.cpp \
-    pluginsupport/pluginmanager.cpp \
-    pluginsupport/pluginsettingsmediator.cpp \
-    ui/dialogplugins.cpp \
-    ui/actionmanager.cpp \
-    ui/mainmenubuilder.cpp \
-    pluginsupport/supliers/settingspagesupplier.cpp \
-    ui/fileview.cpp
+    progresshandler.cpp
 
+# Application UI
 HEADERS += \
-    applicationbuilder.h \
-    progresshandler.h \
     ui/splashscreen.h \
     ui/console.h \
     ui/customtabbar.h \
@@ -69,37 +55,28 @@ HEADERS += \
     ui/pagemanager.h \
     ui/revisiontable.h \
     ui/appsettingsdialog.h \
-    settings_dialog/settingstorage.h \
     ui/viewsettingpage.h \
-    pluginsupport/componentsorter.h \
-    pluginsupport/supliers/componentsupplier.h \
-    settings_dialog/settingsmanager.h \
-    pluginsupport/supliers/fakecomponentsupplier.h \
-    pluginsupport/plugininfo.h \
-    pluginsupport/pluginloader.h \
-    pluginsupport/pluginmanager.h \
-    pluginsupport/pluginsettingsmediator.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    pluginsupport/supliers/settingspagesupplier.h \
     ui/fileview.h
 
-INCLUDEPATH += \
-    ./ui \
-    ./settings_dialog
-
-INCLUDEPATH += $$PWD/../pluginapi/include/
-DEPENDPATH += $$PWD/../pluginapi/include/
-
-unix|win32: LIBS += -L$$PWD/../pluginapi/lib/ -lextensions
-
-
-RESOURCES += \
-    resources/resources.qrc
-
-RC_FILE += \
-    resources/appicon.rc
+SOURCES += \
+    ui/splashscreen.cpp \
+    ui/console.cpp \
+    ui/customtabbar.cpp \
+    ui/editorview.cpp \
+    ui/genericdockwidget.cpp \
+    ui/historytree.cpp \
+    ui/mainwindow.cpp \
+    ui/pagemanager.cpp \
+    ui/revisiontable.cpp \
+    ui/appsettingsdialog.cpp \
+    ui/viewsettingpage.cpp \
+    ui/dialogplugins.cpp \
+    ui/actionmanager.cpp \
+    ui/mainmenubuilder.cpp \
+    ui/fileview.cpp
 
 FORMS += \
     ui/console.ui \
@@ -113,6 +90,52 @@ FORMS += \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui
+
+# Application Settings
+HEADERS += \
+    settings_dialog/settingstorage.h \
+    settings_dialog/settingsmanager.h
+
+SOURCES += \
+    settings_dialog/settingstorage.cpp \
+    settings_dialog/settingsmanager.cpp
+
+# Plugins Support
+HEADERS += \
+    pluginsupport/componentsorter.h \
+    pluginsupport/supliers/componentsupplier.h \
+    pluginsupport/supliers/fakecomponentsupplier.h \
+    pluginsupport/plugininfo.h \
+    pluginsupport/pluginloader.h \
+    pluginsupport/pluginmanager.h \
+    pluginsupport/pluginsettingsmediator.h \
+    pluginsupport/supliers/settingspagesupplier.h
+
+SOURCES += \
+    pluginsupport/componentsorter.cpp \
+    pluginsupport/supliers/fakecomponentsupplier.cpp \
+    pluginsupport/plugininfo.cpp \
+    pluginsupport/pluginloader.cpp \
+    pluginsupport/pluginmanager.cpp \
+    pluginsupport/pluginsettingsmediator.cpp \
+    pluginsupport/supliers/settingspagesupplier.cpp
+
+
+SOURCES +=
+HEADERS +=
+
+
+# Extension support library
+INCLUDEPATH += $$PWD/../pluginapi/include/
+unix|win32: LIBS += -L$$PWD/../pluginapi/lib/ -lextensions
+
+
+# Resources and additional files
+RESOURCES += \
+    resources/resources.qrc
+
+RC_FILE += \
+    resources/appicon.rc
 
 OTHER_FILES +=
 

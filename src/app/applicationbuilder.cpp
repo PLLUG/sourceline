@@ -1,38 +1,76 @@
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2014  by                                                ***
+***            Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)          ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
+
 #include "applicationbuilder.h"
 
 #include <QTimer>
 
-// Loading
-#include "progresshandler.h"
-#include "splashscreen.h"
-#include "settings.h"
+// Plugin Support
+#include <plugin.h>
 #include "pluginsupport/componentsorter.h"
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
 #include "pluginsupport/supliers/settingspagesupplier.h"
 #include "pluginsupport/pluginloader.h"
 #include "pluginsupport/pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
-#include "../ui/dialogplugins.h"
-#include "plugin.h"
 
-// Ui
-#include "mainwindow.h"
-#include "actionmanager.h"
-#include "mainmenubuilder.h"
+// Settings
+#include "settings.h"
+
+// Main Application Classes
+#include "ui/actionmanager.h"
+#include "ui/mainmenubuilder.h"
+
+// Application UI
+#include "ui/splashscreen.h"
+#include "ui/dialogplugins.h"
+#include "ui/mainwindow.h"
+
+
+#include "progresshandler.h"
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
-    QObject(parent),
-    mMainWindow(0),
-    mActionManager(new ActionManager(this)),
-    mMainMenuBuilder(new MainMenuBuilder(this)),
-    mPluginManager(0),
-    mAppSettingsDialog(0),
-    mSettingsManager(new SettingsManager(this)),
-    mStorage(new SettingStorage)
+    QObject(parent)
 {
-    ProgressHandler::instance()->setStageCount(3);
+    // Plugin Support
+    mPluginManager = 0;
 
-    /// Init splash screen
+    // Settings
+    mStorage = 0;
+    mSettingsManager = 0;
+
+    // Main Application Classes
+    mActionManager = 0;
+    mMainMenuBuilder = 0;
+    mPluginSettingsMediator = 0;
+    mGlobalAppSettings = 0;
+
+    // Application UI
+    mSplashScreen = 0;
+    mMainWindow = 0;
+    mAppSettingsDialog = 0;
+
+    // Init splash screen
     mSplashScreen = new SplashScreen;
     mSplashScreen->setSplashScreen(QPixmap(":/splash/img/SL_Splash_load.png"));
     mSplashScreen->setLoadLayer(QPixmap(":/splash/img/barload_only.png"), 80, 410);
@@ -40,34 +78,49 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
             mSplashScreen, SLOT(slotSetPercentage(int)), Qt::UniqueConnection);
     mSplashScreen->show();
 
+    // Schedule application loading
     QTimer::singleShot(0, this, SLOT(slotBuild()));
+}
 
-    //init mActionManager for mMainMenuBuilder
-    mMainMenuBuilder->setActionManager(mActionManager);
-    mSettingsManager->setStorage(mStorage);
+ApplicationBuilder::~ApplicationBuilder()
+{
+    delete mMainWindow;
 }
 
 void ApplicationBuilder::slotBuild()
 {
+    qDebug("SourceLine : Building Application");
+    ProgressHandler::instance()->setStageCount(5);
+
     /*!
      * Stage 1: Initialize UI
      */
-    initUi();
+    qDebug("    Initializing appplicaton ...");
+    initApp();
 
     /*!
-     * Stage 2: Load Plugins
+     * Stage 2: Initialize UI
      */
-    loadPlugins();
+    qDebug("    Creating UX...");
+    createUi();
 
     /*!
-     * Stage 3: Load Settings
+     * Stage 3: Load Plugins
      */
-    loadSettings();
+    qDebug("    Loading plugins...");
+    initPlugins();
 
     /*!
      * Stage 4: Getting components
      */
+    qDebug("    Registering components...");
     supplyComponents();
+
+    /*!
+     * Stage 5: Load Settings
+     */
+    qDebug("    Loading Settings...");
+    loadSettings();
 
     //initMenu
     mMainMenuBuilder->initMenu();
@@ -75,63 +128,111 @@ void ApplicationBuilder::slotBuild()
     mMainWindow->show();
 
     QTimer::singleShot(1500, mSplashScreen, SLOT(deleteLater()));
+
+    qDebug("done");
 }
 
-void ApplicationBuilder::initUi()
+void ApplicationBuilder::initApp()
 {
-    // ....
+    // Manager for all menu and toolbar actions in application
+    mActionManager = new ActionManager(qApp);
 
-    mMainWindow = new MainWindow;
-    mMainWindow->lower();
-    mMainMenuBuilder->setMenuBar(mMainWindow->menuBar());
-    createUiActions(mMainWindow);
+    // Mediator for managing plugins configuration by user
+    mPluginSettingsMediator = new PluginSettingsMediator(qApp);
+
+    // Settings storage
+    mStorage = new SettingStorage(qApp);
+
+    // Settings manager instance
+    mSettingsManager = new SettingsManager(qApp);
+    mSettingsManager->setStorage(mStorage);
+
+    // Global settings not configurable from settings dialog
+    // (loaded plugins, etc...)
+    mGlobalAppSettings = new Settings(qApp);
+
+    // TODO: remove setting of global app setting to mediator (fix for settings autocommit needed)
+    mPluginSettingsMediator->setSettings(mGlobalAppSettings);
 
     ProgressHandler::instance()->finishStage();
 }
 
-void ApplicationBuilder::loadPlugins()
+void ApplicationBuilder::createUi()
 {
-    PluginLoader *lPluginLoader = new PluginLoader();
+    // Application main window
+    mMainWindow = new MainWindow;
+    mMainWindow->lower();
 
-    mPluginManager = new PluginManager();
-    mPluginManager->setPluginLoader(lPluginLoader);
-    //temp filling Active Plugins
-    mPluginManager->slotSetActivePlugins(lPluginLoader->pluginIds());
+    // Helper class for building main menu
+    mMainMenuBuilder = new MainMenuBuilder(qApp);
+    mMainMenuBuilder->setActionManager(mActionManager);
+    mMainMenuBuilder->setMenuBar(mMainWindow->menuBar());
 
+    createUiActions(mMainWindow);
 
+    // Dialogs
+    DialogPlugins *lDialogPlugins = new DialogPlugins(mMainWindow);
+    mPluginSettingsMediator->setPluginDialog(lDialogPlugins);
 
-    DialogPlugins *lDialogPlugins = new DialogPlugins();
+    ProgressHandler::instance()->finishStage();
+}
 
-    PluginSettingsMediator *lPluginSettingsMediator = new PluginSettingsMediator();
-    lPluginSettingsMediator->setPluginDialog(lDialogPlugins);
-    lPluginSettingsMediator->setPluginManager(mPluginManager);
+void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
+{
+    QAction *lActionOpen = new QAction(tr("&Open"), this);
+    //connect(lActionOpen, SIGNAL(triggered()), this, SLOT(newFile()));
+    mActionManager->addBack(FileMenuGroup, "", lActionOpen);
 
-    Settings *lSettings = new Settings(this);
-    lPluginSettingsMediator->setSettings(lSettings);
-    lSettings->add("plugins", mPluginManager, "activePlugins");
-    lSettings->setSettingsPath("active_plugins");
-    mSettingsManager->addSettings("main_window", "Plugins", lSettings);
-    connect(lSettings, SIGNAL(settingsChanged(QMap<QString,QVariant>)),
-            mSettingsManager, SLOT(slotWriteSettings(QMap<QString,QVariant>)), Qt::UniqueConnection);
+    QAction *lActionAddPage = new QAction(tr("&Add Page"), this);
+    connect(lActionAddPage, SIGNAL(triggered()), pMainWindow, SLOT(slotAddPage()));
+    mActionManager->addBack(FileMenuGroup, "", lActionAddPage);
 
-    connect(mStorage, SIGNAL(signalSetSettings(QMap<QString,QVariant>)),
-                             lSettings, SLOT(slotSetSettings(QMap<QString,QVariant>)));
+    QAction *lActionQuit = new QAction(tr("&Quit"), this);
+    connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
+    mActionManager->addBack(FileMenuGroup, "", lActionQuit);
 
-    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(lSettings));
+//    QAction *lActionSettings = new QAction(tr("&Settings"), this);
+//    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
+//    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
+
+    QAction *lActionAboutSL = new QAction(tr("&About SourseLine"), this);
+    //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
+    mActionManager->addBack(HelpMenuGroup, "", lActionAboutSL);
+
+    QAction *lActionPluginSettings = new QAction(tr("&Plugins Settings"), this);
+    //connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
+    mActionManager->addBack(HelpMenuGroup, "", lActionPluginSettings);
 
     QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
-    connect(lActionPlugins, SIGNAL(triggered()), lPluginSettingsMediator, SLOT(slotExecPluginSettings()));
+    connect(lActionPlugins, SIGNAL(triggered()), mPluginSettingsMediator, SLOT(slotExecPluginSettings()));
     mActionManager->addBack(ViewMenuGroup, "", lActionPlugins);
+}
 
+void ApplicationBuilder::initPlugins()
+{
+    // Plugin loading managing classes
+    PluginLoader *lPluginLoader = new PluginLoader(qApp);
+
+    mPluginManager = new PluginManager(qApp);
+    mPluginManager->setPluginLoader(lPluginLoader);
+    mPluginSettingsMediator->setPluginManager(mPluginManager);
+
+
+    ProgressHandler::instance()->finishStage();
+}
+
+void ApplicationBuilder::registerComponents()
+{
     ProgressHandler::instance()->finishStage();
 }
 
 void ApplicationBuilder::loadSettings()
 {
-    SettingStorage *lStorage = new SettingStorage();
+    mGlobalAppSettings->add("plugins", mPluginManager, "activePlugins");
+    mGlobalAppSettings->setSettingsPath("active_plugins");
+    mSettingsManager->addSettings("main_window", "Plugins", mGlobalAppSettings);
+    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(mGlobalAppSettings));
 
-    mSettingsManager = new SettingsManager(this);
-    mSettingsManager->setStorage(lStorage);
 
     mAppSettingsDialog = new AppSettingsDialog();
 
@@ -179,31 +280,6 @@ void ApplicationBuilder::supplyComponents()
     ProgressHandler::instance()->finishStage();
 }
 
-void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
-{
-    QAction *lActionOpen = new QAction(tr("&Open"), this);
-    //connect(lActionOpen, SIGNAL(triggered()), this, SLOT(newFile()));
-    mActionManager->addBack(FileMenuGroup, "", lActionOpen);
 
-    QAction *lActionAddPage = new QAction(tr("&Add Page"), this);
-    connect(lActionAddPage, SIGNAL(triggered()), pMainWindow, SLOT(slotAddPage()));
-    mActionManager->addBack(FileMenuGroup, "", lActionAddPage);
-
-    QAction *lActionQuit = new QAction(tr("&Quit"), this);
-    connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->addBack(FileMenuGroup, "", lActionQuit);
-
-//    QAction *lActionSettings = new QAction(tr("&Settings"), this);
-//    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
-//    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
-
-    QAction *lActionAboutSL = new QAction(tr("&About SourseLine"), this);
-    //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->addBack(HelpMenuGroup, "", lActionAboutSL);
-
-    QAction *lActionPluginSettings = new QAction(tr("&Plugins Settings"), this);
-    //connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
-    mActionManager->addBack(HelpMenuGroup, "", lActionPluginSettings);
-}
 
 

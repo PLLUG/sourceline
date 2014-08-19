@@ -147,7 +147,7 @@
      <x>0</x>
      <y>0</y>
      <width>729</width>
-     <height>21</height>
+     <height>19</height>
     </rect>
    </property>
   </widget>
@@ -197,31 +197,31 @@
   <customwidget>
    <class>FileView</class>
    <extends>QDockWidget</extends>
-   <header>fileview.h</header>
+   <header location="global">ui/fileview.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>Console</class>
    <extends>QDockWidget</extends>
-   <header>console.h</header>
+   <header location="global">ui/console.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>RevisionTable</class>
    <extends>QDockWidget</extends>
-   <header>revisiontable.h</header>
+   <header location="global">ui/revisiontable.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>HistoryTree</class>
    <extends>QDockWidget</extends>
-   <header>historytree.h</header>
+   <header location="global">ui/historytree.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>EditorView</class>
    <extends>QDockWidget</extends>
-   <header>editorview.h</header>
+   <header location="global">ui/editorview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
