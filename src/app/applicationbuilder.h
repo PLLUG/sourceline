@@ -43,6 +43,7 @@ class PluginSettingsMediator;
 class SplashScreen;
 class MainWindow;
 class AppSettingsDialog;
+class About;
 
 /*!
  * \brief The ApplicationBuilder class resporsible for creation of all objects in application
@@ -119,6 +120,7 @@ private:
     SplashScreen *mSplashScreen;
     MainWindow *mMainWindow;
     AppSettingsDialog *mAppSettingsDialog;
+    About *mAboutDialog;
 };
 
 #endif // APPLICATIONBUILDER_H

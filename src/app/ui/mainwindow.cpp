@@ -30,6 +30,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
     connect(mTabBar, SIGNAL(currentChanged(int)), mPageManager, SLOT(slotChangeCurrentPage(int)));
+    // TASK: fixme
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiRevisionTable, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiConsole, SLOT(slotSetPage(int)));
@@ -83,10 +84,4 @@ void MainWindow::slotAddPage()
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
     // ui->uiFileView->setMinimumHeight(this->height());
-}
-
-void MainWindow::showAboutDialog()
-{
-    About *lAbout = new About;
-    lAbout->show();
 }

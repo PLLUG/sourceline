@@ -1,11 +1,12 @@
 #include "about.h"
 #include "ui_about.h"
 
+// TASK: rename class to AboutDialog
 About::About(QWidget *parent) :
-    QDialog(parent,
+    QDialog(parent/*,
               Qt::WindowSystemMenuHint
             | Qt::WindowTitleHint
-            | Qt::WindowCloseButtonHint),
+            | Qt::WindowCloseButtonHint*/),
     ui(new Ui::About)
 {
     ui->setupUi(this);

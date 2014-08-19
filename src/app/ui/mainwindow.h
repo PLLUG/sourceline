@@ -49,9 +49,6 @@ private slots:
     void slotQuit();
 
     void slotAddPage();
-
-    void showAboutDialog();
-
 };
 
 #endif // MAINWINDOW_H

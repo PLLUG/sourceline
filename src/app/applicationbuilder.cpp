@@ -48,6 +48,7 @@
 #include "ui/splashscreen.h"
 #include "ui/dialogplugins.h"
 #include "ui/mainwindow.h"
+#include "ui/about.h"
 #include "progresshandler.h"
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
@@ -70,6 +71,7 @@ ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     mSplashScreen = 0;
     mMainWindow = 0;
     mAppSettingsDialog = 0;
+    mAboutDialog = 0;
 
     // Init splash screen
     mSplashScreen = new SplashScreen;
@@ -175,12 +177,13 @@ void ApplicationBuilder::createUi()
     mMainMenuBuilder->setActionManager(mActionManager);
     mMainMenuBuilder->setMenuBar(mMainWindow->menuBar());
 
-    createUiActions(mMainWindow);
-
     // Dialogs
     DialogPlugins *lDialogPlugins = new DialogPlugins(mMainWindow);
     mPluginSettingsMediator->setPluginDialog(lDialogPlugins);
 
+    mAboutDialog = new About();
+
+    createUiActions(mMainWindow);
     ProgressHandler::instance()->finishStage();
 }
 
@@ -202,8 +205,8 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 //    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
 //    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 
-    UserAction *lActionAboutSL = new UserAction(tr("&About SourseLine"), this);
-    //(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
+    UserAction *lActionAboutSL = new UserAction(tr("&About SourseLine..."), this);
+    connect(lActionAboutSL, SIGNAL(triggered()), mAboutDialog, SLOT(show()), Qt::UniqueConnection);
     mActionManager->add(HelpMenuGroup, "", lActionAboutSL);
 
     UserAction *lActionPluginSettings = new UserAction(tr("&Plugins Settings"), this);
