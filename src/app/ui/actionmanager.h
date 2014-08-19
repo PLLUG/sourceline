@@ -38,6 +38,8 @@ class ActionManager : public QObject
 public:
     explicit ActionManager(QObject *parent = 0);
     void add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction);
+
+    //TASK: Different menus for file exporer
     QMenu *menuByMenuGroup(MenuGroup pMenuGroups) const;
     void setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy* pStategy);
 signals:

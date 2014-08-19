@@ -106,3 +106,6 @@ QMAKE_EXTRA_TARGETS += copyfiles
 PRE_TARGETDEPS     += copyfiles ## copy files after source compilation
 
 INSTALLS += copytarget
+
+OTHER_FILES += \
+    extensionlib.pri

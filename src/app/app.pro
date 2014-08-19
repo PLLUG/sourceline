@@ -140,10 +140,7 @@ SOURCES += \
 SOURCES +=
 HEADERS +=
 
-# Extension support library
-INCLUDEPATH += $$_PRO_FILE_PWD_/../pluginapi/include/
-DEPENDPATH += $$_PRO_FILE_PWD_/../pluginapi/include/
-unix|win32: LIBS += -L$$_PRO_FILE_PWD_/../pluginapi/lib/ -lextensions
+include(./../extensionlib/extensionlib.pri)
 
 # Resources and additional files
 RESOURCES += \
