@@ -1,10 +1,8 @@
-#ifndef ACTIONMANAGER_H
-#define ACTIONMANAGER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
-***            Priyma Yuriy (priymayuriy@gmail.com)                          ***
+***            Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)          ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -22,32 +20,36 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include "guidefs.h"
-#include <QMap>
-#include <QAction>
-#include <QString>
-#include <QList>
 
-class MenuCreationStrategy;
-class UserAction;
+#include "command.h"
 
-class ActionManager : public QObject
+#include <QStringList>
+
+const QChar ARGUMENT_SEPARATOR(' ');
+
+Command::Command(QObject *parent) :
+    QObject(parent)
 {
-    Q_OBJECT
-public:
-    explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction);
-    QMenu *menuByMenuGroup(MenuGroup pMenuGroups) const;
-    void setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy* pStategy);
-signals:
+}
 
-public slots:
-private:
-    QMap<MenuGroup, QList<UserAction *> > mActions;
-    QMap<MenuGroup, MenuCreationStrategy *> mStrategyByMenuGroup;
-};
+QIcon Command::icon() const
+{
+    return mIcon;
+}
 
+Command::CommandFlags Command::flags() const
+{
+    return NoFlags;
+}
 
+QString Command::toString() const
+{
+    return QString("%1 %2")
+        .arg(commandString())
+        .arg(parametersList().join(ARGUMENT_SEPARATOR));
+}
 
-#endif // ACTIONMANAGER_H
+void Command::setIcon(const QIcon &pIcon)
+{
+    mIcon = pIcon;
+}

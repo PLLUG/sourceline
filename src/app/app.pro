@@ -61,7 +61,11 @@ HEADERS += \
     ui/mainmenubuilder.h \
     ui/fileview.h \
     ui/about.h \
-    ui/plugininfodialog.h
+    ui/plugininfodialog.h \
+    ui/useraction.h \
+    ui/strategies/sortingstrategy.h \
+    ui/strategies/directordersortingstrategy.h
+
 
 SOURCES += \
     ui/splashscreen.cpp \
@@ -80,7 +84,11 @@ SOURCES += \
     ui/mainmenubuilder.cpp \
     ui/fileview.cpp \
     ui/about.cpp \
-    ui/plugininfodialog.cpp
+    ui/plugininfodialog.cpp \
+    ui/useraction.cpp \
+    ui/strategies/directordersortingstrategy.cpp \
+    ui/strategies/sortingstrategy.cpp
+
 
 FORMS += \
     ui/console.ui \
@@ -96,7 +104,6 @@ FORMS += \
     ui/dialogplugins.ui \
     ui/about.ui \
     ui/plugininfodialog.ui
-
 
 # Application Settings
 HEADERS += \
@@ -116,6 +123,7 @@ HEADERS += \
     pluginsupport/pluginloader.h \
     pluginsupport/pluginmanager.h \
     pluginsupport/pluginsettingsmediator.h \
+    pluginsupport/supliers/commandcomponentsupplier.h \
     pluginsupport/supliers/settingspagesupplier.h
 
 SOURCES += \
@@ -125,17 +133,17 @@ SOURCES += \
     pluginsupport/pluginloader.cpp \
     pluginsupport/pluginmanager.cpp \
     pluginsupport/pluginsettingsmediator.cpp \
-    pluginsupport/supliers/settingspagesupplier.cpp
-
+    pluginsupport/supliers/settingspagesupplier.cpp \
+    pluginsupport/supliers/commandcomponentsupplier.cpp \
+    pluginsupport/supliers/settingspagesupplier.cpp \
 
 SOURCES +=
 HEADERS +=
 
-
 # Extension support library
-INCLUDEPATH += $$PWD/../pluginapi/include/
-unix|win32: LIBS += -L$$PWD/../pluginapi/lib/ -lextensions
-
+INCLUDEPATH += $$_PRO_FILE_PWD_/../pluginapi/include/
+DEPENDPATH += $$_PRO_FILE_PWD_/../pluginapi/include/
+unix|win32: LIBS += -L$$_PRO_FILE_PWD_/../pluginapi/lib/ -lextensions
 
 # Resources and additional files
 RESOURCES += \

@@ -35,6 +35,7 @@ SOURCES += \
     fakecomponent.cpp \
     plugin.cpp \
     settingspage.cpp \
+    command.cpp \
     settings.cpp
 
 HEADERS +=\
@@ -43,8 +44,9 @@ HEADERS +=\
     plugin-interface.h\
     plugin.h\
     settingspage.h \
+    command.h \
+    defs.h \
     settings.h
-
 
 unix {
     target.path = /usr/lib
@@ -61,13 +63,8 @@ win32 {
 ## === define copy files for installation and build ===
 
 copytarget.path    = $$_PRO_FILE_PWD_
-copytarget.files  += \
-    $$files(fakecomponent.h) \
-    $$files(plugin.h) \
-    $$files(plugin-interface.h) \
-    $$files(extensions_global.h) \
-    $$files(settings.h) \
-    $$files(settingspage.h)
+copytarget.files  += $$HEADERS
+
 ## wildcard for filename1 filename2 filename3 ...
 
 #message("found files for copytarget: "$$copytarget.files)

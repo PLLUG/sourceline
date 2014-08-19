@@ -1,5 +1,5 @@
-#ifndef ACTIONMANAGER_H
-#define ACTIONMANAGER_H
+#ifndef DIRECTORDERSORTINGSTRATEGY_H
+#define DIRECTORDERSORTINGSTRATEGY_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,32 +22,15 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include "guidefs.h"
-#include <QMap>
-#include <QAction>
-#include <QString>
-#include <QList>
 
-class MenuCreationStrategy;
-class UserAction;
+#include "sortingstrategy.h"
 
-class ActionManager : public QObject
+class DirectOrderSortingStrategy : public MenuCreationStrategy
 {
-    Q_OBJECT
 public:
-    explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction);
-    QMenu *menuByMenuGroup(MenuGroup pMenuGroups) const;
-    void setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy* pStategy);
-signals:
+    DirectOrderSortingStrategy();
+    QMenu *createMenu(const QList<UserAction *> &pListUserActions);
 
-public slots:
-private:
-    QMap<MenuGroup, QList<UserAction *> > mActions;
-    QMap<MenuGroup, MenuCreationStrategy *> mStrategyByMenuGroup;
 };
 
-
-
-#endif // ACTIONMANAGER_H
+#endif // DIRECTORDERSORTINGSTRATEGY_H

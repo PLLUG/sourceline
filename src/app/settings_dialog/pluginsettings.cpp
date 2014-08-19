@@ -21,9 +21,9 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "settings.h"
+#include "pluginsettings.h"
 
-Settings::Settings(QObject *parent) :
+PluginSettings::PluginSettings(QObject *parent) :
     QObject(parent),
     mPropertyMapper(new QSignalMapper(this))
 {
@@ -31,12 +31,12 @@ Settings::Settings(QObject *parent) :
             this, SLOT(propertyChanged(QString)), Qt::UniqueConnection);
 }
 
-QString Settings::settingsPath() const
+QString PluginSettings::settingsPath() const
 {
     return mSettingsPath;
 }
 
-bool Settings::add(const QString &pName, QObject *pObject, const QString &pProperty)
+bool PluginSettings::add(const QString &pName, QObject *pObject, const QString &pProperty)
 {
     bool lSuccess = false;
     if (pName.isEmpty() || !pObject || pProperty.isEmpty())
@@ -57,7 +57,7 @@ bool Settings::add(const QString &pName, QObject *pObject, const QString &pPrope
     return lSuccess;
 }
 
-bool Settings::subscribe(const QString &pName, QObject *pObject, const QByteArray &pSignature)
+bool PluginSettings::subscribe(const QString &pName, QObject *pObject, const QByteArray &pSignature)
 {
     bool lResult = false;
     if (!pObject || pSignature.isEmpty())
@@ -72,7 +72,7 @@ bool Settings::subscribe(const QString &pName, QObject *pObject, const QByteArra
     return lResult;
 }
 
-void Settings::commit()
+void PluginSettings::commit()
 {
     QMap<QString, QVariant>::const_iterator it;
     for (it = mModifiedSettingsByName.begin();
@@ -82,12 +82,11 @@ void Settings::commit()
         mSettingValueByName.insert(it.key(), it.value());
         notifySubscribers(it.key(), it.value());
     }
-    qDebug() << mModifiedSettingsByName;
     emit settingsChanged(mModifiedSettingsByName);
     mModifiedSettingsByName.clear();
 }
 
-void Settings::revert()
+void PluginSettings::revert()
 {
     foreach (QString lName, mModifiedSettingsByName.keys())
     {
@@ -97,7 +96,7 @@ void Settings::revert()
     mModifiedSettingsByName.clear();
 }
 
-bool Settings::isPropertyCouldBeAttached(QObject *pObject, const QString &pProperty)
+bool PluginSettings::isPropertyCouldBeAttached(QObject *pObject, const QString &pProperty)
 {
     bool lResult = false;
     QMetaProperty lMetaProperty = metaProperty(pObject, pProperty);
@@ -111,16 +110,15 @@ bool Settings::isPropertyCouldBeAttached(QObject *pObject, const QString &pPrope
     return lResult;
 }
 
-bool Settings::isMethodCouldBeSubscribed(QObject *pObject, const QString &pSignature)
+bool PluginSettings::isMethodCouldBeSubscribed(QObject *pObject, const QString &pSignature)
 {
     Q_UNUSED(pObject);
     Q_UNUSED(pSignature);
-    // TASK : see Issue #43
     //.........
     return true;
 }
 
-void Settings::slotSetSettings(QMap<QString, QVariant> pMap)
+void PluginSettings::slotSetSettings(QMap<QString, QVariant> pMap)
 {
     QMap<QString, QVariant>::const_iterator it;
     for (it = pMap.begin();
@@ -133,12 +131,12 @@ void Settings::slotSetSettings(QMap<QString, QVariant> pMap)
     }
 }
 
-void Settings::setSettingsPath(const QString &pSettingsPath)
+void PluginSettings::setSettingsPath(const QString &pSettingsPath)
 {
     mSettingsPath = pSettingsPath;
 }
 
-QVariant Settings::value(const QString &pSetting) const
+QVariant PluginSettings::value(const QString &pSetting) const
 {
     QVariant lResult;
     QObject *pObject = mObjectBySetting.value(pSetting);
@@ -149,7 +147,7 @@ QVariant Settings::value(const QString &pSetting) const
     return lResult;
 }
 
-void Settings::setValue(const QString &pSetting, const QVariant &pValue)
+void PluginSettings::setValue(const QString &pSetting, const QVariant &pValue)
 {
     QObject *pObject = mObjectBySetting.value(pSetting);
     QByteArray pProperty = mPropertyBySetting.value(pSetting);
@@ -159,14 +157,14 @@ void Settings::setValue(const QString &pSetting, const QVariant &pValue)
     }
 }
 
-void Settings::notifySubscribers(const QString &pName, const QVariant &pValue)
+void PluginSettings::notifySubscribers(const QString &pName, const QVariant &pValue)
 {
     QObject *lObject = mSubscribedObjectsBySetting.value(pName);
     QByteArray lSignature = mSubscribedMethodBySetting.value(pName);
     invoke(lObject, lSignature, pValue);
 }
 
-QMetaProperty Settings::metaProperty(QObject *pObject, const QString &pProperty)
+QMetaProperty PluginSettings::metaProperty(QObject *pObject, const QString &pProperty)
 {
     QMetaProperty rMetaProperty;
     if (const QMetaObject *lMetaObject = pObject->metaObject())
@@ -181,20 +179,20 @@ QMetaProperty Settings::metaProperty(QObject *pObject, const QString &pProperty)
     return rMetaProperty;
 }
 
-QMetaMethod Settings::metaMethod(QObject *pObject, const QByteArray &pSignature)
+QMetaMethod PluginSettings::metaMethod(QObject *pObject, const QByteArray &pSignature)
 {
     QByteArray lSignature = QMetaObject::normalizedSignature(pSignature.constData());
     int lMethodIndex = pObject->metaObject()->indexOfSlot(lSignature);
     return mPropertyMapper->metaObject()->method(lMethodIndex);
 }
 
-void Settings::invoke(QObject *pObject, const QByteArray &pSignature, const QVariant &pValue)
+void PluginSettings::invoke(QObject *pObject, const QByteArray &pSignature, const QVariant &pValue)
 {
     pObject->metaObject()->invokeMethod(pObject, pSignature.constData(),
                                         Qt::QueuedConnection, Q_ARG(QVariant, pValue));
 }
 
-void Settings::propertyChanged(QString pName)
+void PluginSettings::propertyChanged(QString pName)
 {
     QVariant settingValue = value(pName);
     if (mSettingValueByName.value(pName) != settingValue)

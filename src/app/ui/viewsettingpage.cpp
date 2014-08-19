@@ -68,7 +68,7 @@ void ViewSettingPage::setMainUi(Ui::MainWindow *lMainUi)
 
 void ViewSettingPage::slotFileViewChanged(QVariant pValue)
 {
-    mMainUi->uiFileView->setVisible(pValue.toBool());
+//    mMainUi->uiFileView->setVisible(pValue.toBool());
     qDebug() << "inside ViewSettings : FView changed = " << pValue.toBool();
 }
 

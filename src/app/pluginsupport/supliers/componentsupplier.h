@@ -29,6 +29,6 @@ class ComponentSupplier
 {
 public:
     virtual QString className() const = 0;
-    virtual void supply(QObject *pComponent,const PluginInfo &pPluginInfo) = 0;
+    virtual void supply(QObject *pComponent, const PluginInfo &pPluginInfo) = 0;
 };
 #endif // COMPONENTSUPPLIER_H
