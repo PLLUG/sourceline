@@ -14,6 +14,7 @@
 #include "settings_dialog/settingsmanager.h"
 #include "customtabbar.h"
 #include "pagemanager.h"
+#include "about.h"
 
 namespace Ui {
 class MainWindow;
@@ -42,11 +43,15 @@ private:
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason);
+
     void CloseWindow();
 
     void slotQuit();
 
     void slotAddPage();
+
+    void showAboutDialog();
+
 };
 
 #endif // MAINWINDOW_H

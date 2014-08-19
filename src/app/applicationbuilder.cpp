@@ -206,6 +206,10 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
     QAction *lActionPlugins = new QAction(tr("&Plugins"), this);
     connect(lActionPlugins, SIGNAL(triggered()), mPluginSettingsMediator, SLOT(slotExecPluginSettings()));
     mActionManager->addBack(ViewMenuGroup, "", lActionPlugins);
+
+    //    QAction *lActionSettings = new QAction(tr("&Settings"), this);
+    //    connect(lActionSettings, SIGNAL(triggered()), pMainWindow, SLOT(slotShowSettings()));
+    //    mActionManager->addBack(ViewMenuGroup, "", lActionSettings);
 }
 
 void ApplicationBuilder::initPlugins()
@@ -279,7 +283,6 @@ void ApplicationBuilder::supplyComponents()
     }
     ProgressHandler::instance()->finishStage();
 }
-
 
 
 

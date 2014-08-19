@@ -59,7 +59,9 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    ui/fileview.h
+    ui/fileview.h \
+    ui/about.h \
+    ui/plugininfodialog.h
 
 SOURCES += \
     ui/splashscreen.cpp \
@@ -76,7 +78,9 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-    ui/fileview.cpp
+    ui/fileview.cpp \
+    ui/about.cpp \
+    ui/plugininfodialog.cpp
 
 FORMS += \
     ui/console.ui \
@@ -89,7 +93,10 @@ FORMS += \
     ui/revisiontable.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
-    ui/dialogplugins.ui
+    ui/dialogplugins.ui \
+    ui/about.ui \
+    ui/plugininfodialog.ui
+
 
 # Application Settings
 HEADERS += \
