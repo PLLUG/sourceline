@@ -1,3 +1,6 @@
+// TASK: add GPL header
+
+// TASK: refactor includes
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QMessageBox>
@@ -11,6 +14,8 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
+    // TASK: creation of tray menu should be peformed by ApplicationBuilder
     trayMenu = new QMenu();
     trayMenu->addAction("Help");
     trayMenu->addAction("Quit",this,SLOT(CloseWindow()));
@@ -21,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->show();
     TrayIcon->setContextMenu(trayMenu);
 
+    // TASK: creation of PageManager should be performed by ApplicationBuilder
     mPageManager = new PageManager(this);
     mTabBar = new CustomTabBar(this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
@@ -30,7 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
     connect(mTabBar, SIGNAL(currentChanged(int)), mPageManager, SLOT(slotChangeCurrentPage(int)));
-    // TASK: fixme
+    // TASK: fixme - connetion
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiRevisionTable, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiConsole, SLOT(slotSetPage(int)));
@@ -51,6 +57,9 @@ MainWindow::~MainWindow()
 
 void MainWindow::CloseWindow()
 {
+    // TASK: use close action from ActionManager
+    // TASK: ActionManager should create menu for tray icon
+    // TASK: create appropriate menu creation strategy subclass for create menu
     qApp->quit();
 }
 
@@ -71,6 +80,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 
 void MainWindow::slotQuit()
 {
+    // TASK: create Quit action instead and register it in ActionManager
     qApp->quit();
 }
 
@@ -78,6 +88,7 @@ void MainWindow::slotAddPage()
 {
     static int a = 0;
     QString lTabName = "Name" + QString::number(a++);
+    // TASK: page should be added in TabBuilder class
     mPageManager->slotAddPage(lTabName);
 }
 

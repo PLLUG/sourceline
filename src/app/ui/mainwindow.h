@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// TASK: refactor: too many includes
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QIcon>
