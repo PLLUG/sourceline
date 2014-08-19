@@ -8,7 +8,8 @@
 
 RevisionWidget::RevisionWidget(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RevisionWidget)
+    ui(new Ui::RevisionWidget),
+    mView(0)
 {
     ui->setupUi(this);
     mScene = new QGraphicsScene;
@@ -18,6 +19,8 @@ RevisionWidget::RevisionWidget(QWidget *parent) :
     mModel = new RevisionTableModel;
     mView->setModel(mModel);
     mScene->addItem(mView);
+
+    connect(mView, SIGNAL(updateUI()), this, SLOT(updateUI()));
 }
 
 RevisionWidget::~RevisionWidget()
@@ -32,6 +35,12 @@ RevisionTableModel *RevisionWidget::data() const
 
 void RevisionWidget::resizeEvent(QResizeEvent *event)
 {
+    updateUI();
+    QWidget::resizeEvent(event);
+}
+
+void RevisionWidget::updateUI()
+{
     QRect rect = ui->graphicsView->rect();
     if ( rect.height() > mView->rect().height() )
     {
@@ -40,8 +49,7 @@ void RevisionWidget::resizeEvent(QResizeEvent *event)
     }
     else
     {
-        mView->setSize(QSizeF(rect.width() - 18, mView->rect().height()));
+        mView->setSize(QSizeF(rect.width() - 20, mView->boundingRect().height()));
         mScene->setSceneRect(mView->rect());
     }
-    QWidget::resizeEvent(event);
 }

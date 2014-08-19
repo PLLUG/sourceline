@@ -8,13 +8,17 @@ RevisionTableModel::RevisionTableModel()
     mRoot = ct.create();
 
     tree = 0;
-    createTree();
+//    createTree();
+
+    mGraph = new Creator;
 }
 
 int RevisionTableModel::rowCount(const QModelIndex &) const
 {
-    if (tree)
-        return tree->vertexSize();
+//    if (tree)
+//        return tree->vertexSize();
+    if (mGraph)
+        return mGraph->field()->height();
     return 0;
 }
 
@@ -25,7 +29,7 @@ int RevisionTableModel::columnCount(const QModelIndex &) const
 
 QVariant RevisionTableModel::data(const QModelIndex &index, int role) const
 {
-    if (!tree)
+    if (!mGraph)
         return QVariant();
     if ( role == Qt::DisplayRole )
     {
@@ -38,18 +42,46 @@ QVariant RevisionTableModel::data(const QModelIndex &index, int role) const
 //            const RevisionNode *node = mRoot->node(index.row());
 //            return node->data(RevisionNode::IDR_DrawRole);
 //        }
+//        if ( index.column() == 2 )
+//        {
+//            if (index.row() < tree->vertexSize())
+//                return tree->data(tree->getVertex(index.row()), RevisionNode::IDR_DisplayRole);
+//        }
+//        else if ( index.column() == 1 )
+//        {
+//            return tree->node(tree->getVertex(index.row())).revId();
+//        }
+//        else if ( index.column() == 0 )
+//        {
+//            return tree->node(tree->getVertex(index.row())).data(RevisionNode::IDR_DrawRole);
+//        }
         if ( index.column() == 2 )
         {
-            if (index.row() < tree->vertexSize())
-                return tree->data(tree->getVertex(index.row()), RevisionNode::IDR_DisplayRole);
+            if (mGraph->item(index.row()))
+                return mGraph->item(index.row())->message();
         }
         else if ( index.column() == 1 )
         {
-            return tree->node(tree->getVertex(index.row())).revId();
         }
         else if ( index.column() == 0 )
         {
-            return tree->node(tree->getVertex(index.row())).data(RevisionNode::IDR_DrawRole);
+            if (mGraph->item(index.row()))
+            {
+                QMap<QString, QVariant> map;
+                RevisionItem *item = mGraph->item(index.row());
+                Branch *branch = item->parentBranch();
+                if (branch)
+                {
+                    map.insert("pos", item->x());
+                    map.insert("head", bool(branch->head() == item));
+                    map.insert("branches", mGraph->brPos(item));
+                    map.insert("x", item->x());
+                    map.insert("y", item->y());
+                    map.insert("branchesBefore", mGraph->branchesBefore(item));
+                    map.insert("branchesAfter", mGraph->branchesAfter(item));
+                    return map;
+                }
+            }
         }
     }
     if ( role == Qt::TextAlignmentRole )
@@ -76,14 +108,14 @@ QVariant RevisionTableModel::headerData(int section, Qt::Orientation orientation
 
 RevisionTree *RevisionTableModel::createTree()
 {
-    if (!tree)
-    {
-        tree = new RevisionTree(this);
-        tree->addCommit("init");
-        tree->addCommit("seccond test commit");
-        tree->addBranch("Branch");
-        emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1));
-    }
+//    if (!tree)
+//    {
+//        tree = new RevisionTree(this);
+//        tree->addCommit("init");
+//        tree->addCommit("seccond test commit");
+//        tree->addBranch("Branch");
+//        emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1));
+//    }
     return tree;
 }
 

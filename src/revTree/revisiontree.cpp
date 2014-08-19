@@ -1,7 +1,7 @@
 #include "revisiontree.h"
 #include "revisiontablemodel.h"
 #include <QDebug>
-
+/*
 RevisionTree::RevisionTree(RevisionTableModel *parent) :
     current(0),
     mParentModel(parent)
@@ -28,6 +28,7 @@ void RevisionTree::addCommit(const QString &message)
     update();
     if (mParentModel)
         mParentModel->dataChange();
+    qDebug() << g[currentVertex].data(RevisionNode::IDR_DisplayRole) << g[currentVertex].branchCount;
 }
 
 Vertex RevisionTree::addBranch(const QString &message)
@@ -38,9 +39,9 @@ Vertex RevisionTree::addBranch(const QString &message)
     add_edge(currentVertex, u, g);
     g[u].mPos = g[currentVertex].mPos + 1;
     currentVertex = u;
+    update();
     if (mParentModel)
         mParentModel->dataChange();
-    update();
     return u;
 }
 
@@ -50,7 +51,15 @@ bool RevisionTree::switchTo(const Vertex &v)
     {
         if (v == mBranches.at(i))
         {
-            currentVertex = v;
+            //currentVertex = v;
+//            Vertex tmp = mBranches.at(i);
+            graph_traits < Graph >::out_edge_iterator a, aend;
+            tie(a, aend) = out_edges(v, g);
+//            for (;a != aend; ++a)
+//            {
+//                qDebug() << "\t" << g[a].data(RevisionNode::IDR_DisplayRole);
+//            }
+            currentVertex = source(*aend, g);
             return true;
         }
     }
@@ -112,14 +121,16 @@ void RevisionTree::update()
 {
     graph_traits < Graph >::vertex_iterator i, end;
     graph_traits < Graph >::adjacency_iterator a, aend;
+//    graph_traits < Graph >::degree_size_type size;
     for (tie(i, end) = vertices(g); i != end; ++i)
     {
         tie(a, aend) = adjacent_vertices(*i, g);
         int count = 0;
         for (;a != aend; ++a, ++count)
         {}
-        g[*i].branchCount = ((count-1) >= 1) ? count : 0;
+        //size = in_degree(*i, g);
+        g[*i].branchCount = count - 1;
         g[*i].isLast = ((end - i) == 1);
         g[*i].updateData();
     }
-}
+}*/

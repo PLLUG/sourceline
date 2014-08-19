@@ -21,32 +21,20 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "revisionitem.h"
 
-#include <QMainWindow>
-
-namespace Ui {
-class MainWindow;
+RevisionItem::RevisionItem(const QString &message) :
+    mMessage(message),
+    mParent(0)
+{
 }
 
-QT_FORWARD_DECLARE_CLASS(RevisionTree)
-
-class MainWindow : public QMainWindow
+void RevisionItem::addBranch(RevisionItem *b)
 {
-    Q_OBJECT
+    mBranches.append(b);
+}
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-private slots:
-
-private:
-    Ui::MainWindow *ui;
-    RevisionTree *tree;
-
-    void updateBranchList();
-};
-
-#endif // MAINWINDOW_H
+void RevisionItem::setParentBranch(Branch *p)
+{
+    mParent = p;
+}

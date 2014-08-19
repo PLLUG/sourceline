@@ -51,32 +51,11 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::on_listWidget_doubleClicked(const QModelIndex &index)
-{
-    int i = index.row();
-    tree->switchTo(tree->branches().at(i));
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    if (ui->lineEdit->text().isEmpty())
-        return;
-    tree->addCommit(ui->lineEdit->text());
-}
-
-void MainWindow::on_pushButton_2_clicked()
-{
-    if (ui->lineEdit_2->text().isEmpty())
-        return;
-    tree->addBranch(ui->lineEdit_2->text());
-    updateBranchList();
-}
-
 void MainWindow::updateBranchList()
 {
-    ui->listWidget->clear();
-    for (int i = 0; i < tree->branches().size(); ++i)
-    {
-        ui->listWidget->addItem(tree->data(tree->branches().at(i), RevisionNode::IDR_DisplayRole).toString());
-    }
+//    ui->listWidget->clear();
+//    for (int i = 0; i < tree->branches().size(); ++i)
+//    {
+//        ui->listWidget->addItem(tree->data(tree->branches().at(i), RevisionNode::IDR_DisplayRole).toString());
+//    }
 }

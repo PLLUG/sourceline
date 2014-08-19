@@ -45,6 +45,9 @@ public:
     void setItemDelegate(AbstractRevisionDelegate *item);
     virtual void setModel(QAbstractItemModel *model);
 
+signals:
+    void updateUI();
+
 protected:
     virtual ModelIndex createIndex(int row, int column);
     virtual void updateGeometry();
@@ -62,6 +65,9 @@ private:
 private slots:
     void slotRequestForItem(AbstractRevisionDelegate *item);
     void slotModelChanged();
+
+    void branchClicked(AbstractRevisionDelegate *d);
+    void commitClicked(AbstractRevisionDelegate *);
 };
 
 #endif // ABSTRACTGRAPHICSVIEW_H

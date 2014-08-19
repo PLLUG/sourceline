@@ -21,32 +21,23 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#include "graphfield.h"
 
-#include <QMainWindow>
-
-namespace Ui {
-class MainWindow;
+GraphField::GraphField() :
+    mWidth(0),
+    mHeight(0)
+{
 }
 
-QT_FORWARD_DECLARE_CLASS(RevisionTree)
-
-class MainWindow : public QMainWindow
+void GraphField::addCommit(Node *n, Node *parent)
 {
-    Q_OBJECT
+    n->setCoorginate(parent ? parent->x() : mWidth, mHeight);
+    ++mHeight;
+}
 
-public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
-
-private slots:
-
-private:
-    Ui::MainWindow *ui;
-    RevisionTree *tree;
-
-    void updateBranchList();
-};
-
-#endif // MAINWINDOW_H
+void GraphField::addBranch(Node *n)
+{
+    n->setCoorginate(mWidth, mHeight);
+    ++mWidth;
+    ++mHeight;
+}

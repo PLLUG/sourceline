@@ -21,32 +21,36 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef GREATOR_H
+#define GREATOR_H
 
-#include <QMainWindow>
+#include "graphfield.h"
+#include "revisionitem.h"
+#include "branch.h"
+#include <QVariant>
 
-namespace Ui {
-class MainWindow;
-}
-
-QT_FORWARD_DECLARE_CLASS(RevisionTree)
-
-class MainWindow : public QMainWindow
+class Creator
 {
-    Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    Creator();
 
-private slots:
+    GraphField* field() { return &mField; }
+    RevisionItem* item(int position) const;
+
+    void addCommit(RevisionItem *c);
+    void addBranch(RevisionItem *b, const QString &name);
+
+    void switchTo(Branch *b);
+
+    QList<QVariant> branchesBefore(RevisionItem *i) const;
+    QList<QVariant> branchesAfter(RevisionItem *i) const;
+    QList<QVariant> brPos(RevisionItem *i) const;
 
 private:
-    Ui::MainWindow *ui;
-    RevisionTree *tree;
-
-    void updateBranchList();
+    QList<RevisionItem*> mItems;
+    QList<Branch*> mBranches;
+    GraphField mField;
+    Branch *mCurrent;
 };
 
-#endif // MAINWINDOW_H
+#endif // GREATOR_H

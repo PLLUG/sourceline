@@ -75,6 +75,8 @@ void AbstractGraphicsView::initModelData()
             temp->setData(AbstractRevisionDelegate::DR_Id, mModel->data(mModel->index(i, 1), Qt::DisplayRole));
             connect(temp, SIGNAL(needRequestFromView(AbstractRevisionDelegate*)),
                     this, SLOT(slotRequestForItem(AbstractRevisionDelegate *)));
+            connect(temp, SIGNAL(commit(AbstractRevisionDelegate*)), this, SLOT(commitClicked(AbstractRevisionDelegate*)));
+            connect(temp, SIGNAL(branch(AbstractRevisionDelegate*)), this, SLOT(branchClicked(AbstractRevisionDelegate*)));
         }
     }
 }
@@ -100,6 +102,33 @@ void AbstractGraphicsView::slotModelChanged()
 {
     initModelData();
     updateGeometry();
+}
+#include "revisionitem.h"
+#include "revisiontablemodel.h"
+void AbstractGraphicsView::branchClicked(AbstractRevisionDelegate* d)
+{
+    QMap<QString, QVariant> data = d->data(Qt::DisplayRole).toMap();
+    QPair<int, int> pos = qMakePair(data.value("x").toInt(), data.value("y").toInt());
+    Creator *c = dynamic_cast<RevisionTableModel*>(mModel)->graph();
+    RevisionItem *item = c->item(pos.second);
+    c->switchTo(item->parentBranch());
+    c->addBranch(new RevisionItem("hello"), "new branch");
+    initModelData();
+    updateGeometry();
+    emit updateUI();
+}
+
+void AbstractGraphicsView::commitClicked(AbstractRevisionDelegate*d)
+{
+    QMap<QString, QVariant> data = d->data(Qt::DisplayRole).toMap();
+    QPair<int, int> pos = qMakePair(data.value("x").toInt(), data.value("y").toInt());
+    Creator *c = dynamic_cast<RevisionTableModel*>(mModel)->graph();
+    RevisionItem *item = c->item(pos.second);
+    c->switchTo(item->parentBranch());
+    c->addCommit(new RevisionItem("test"));
+    initModelData();
+    updateGeometry();
+    emit updateUI();
 }
 
 ModelIndex AbstractGraphicsView::createIndex(int row, int column)

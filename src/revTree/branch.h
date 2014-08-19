@@ -21,32 +21,31 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef BRANCH_H
+#define BRANCH_H
 
-#include <QMainWindow>
+#include "revisionitem.h"
 
-namespace Ui {
-class MainWindow;
-}
-
-QT_FORWARD_DECLARE_CLASS(RevisionTree)
-
-class MainWindow : public QMainWindow
+class Branch
 {
-    Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    Branch(RevisionItem *item, const QString &name);
 
-private slots:
+    void addCommit(RevisionItem *i);
+    RevisionItem* head() const { return mLast; }
+    RevisionItem* first() const { return mFirst; }
+    QString name() const { return mName; }
+
+    void setStartY(int value);
+    int startY() const { return mStartY; }
 
 private:
-    Ui::MainWindow *ui;
-    RevisionTree *tree;
+    RevisionItem *mLast;
+    RevisionItem *mFirst;
+    QList<RevisionItem *> mItems;
+    QString mName;
 
-    void updateBranchList();
+    int mStartY;
 };
 
-#endif // MAINWINDOW_H
+#endif // BRANCH_H

@@ -53,6 +53,9 @@ private:
     AbstractGraphicsView *mView;
     QGraphicsScene *mScene;
     RevisionTableModel *mModel;
+
+private slots:
+    void updateUI();
 };
 
 #endif // REVISIONWIDGET_H

@@ -24,14 +24,14 @@
 #ifndef CHECKTYPES_H
 #define CHECKTYPES_H
 
-#include "boost/concept_check.hpp"
-#include "boost/graph/graph_concepts.hpp"
+//#include "boost/concept_check.hpp"
+//#include "boost/graph/graph_concepts.hpp"
 
-template<class T>
-struct Checker
-{
-    BOOST_CONCEPT_ASSERT((boost::CopyConstructible<T>));
-    BOOST_CONCEPT_ASSERT((boost::Assignable<T>));
-};
+//template<class T>
+//struct Checker
+//{
+//    BOOST_CONCEPT_ASSERT((boost::CopyConstructible<T>));
+//    BOOST_CONCEPT_ASSERT((boost::Assignable<T>));
+//};
 
 #endif // CHECKTYPES_H

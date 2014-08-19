@@ -46,9 +46,13 @@ public:
 signals:
     void needRequestFromView(AbstractRevisionDelegate *item);
 
+    void commit(AbstractRevisionDelegate*);
+    void branch(AbstractRevisionDelegate*);
+
 protected:
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
+    void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
 
 private:
     QSizeF mSize;
@@ -61,6 +65,8 @@ private:
 
 private slots:
     void updateBubblePosition();
+    void commitActionTriggered();
+    void branchActionTriggered();
 };
 
 #endif // ABSTRACTREVISIONDELEGATE_H

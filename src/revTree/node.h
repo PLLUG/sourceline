@@ -21,32 +21,24 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef NODE_H
+#define NODE_H
 
-#include <QMainWindow>
+#include <QPair>
 
-namespace Ui {
-class MainWindow;
-}
-
-QT_FORWARD_DECLARE_CLASS(RevisionTree)
-
-class MainWindow : public QMainWindow
+class Node
 {
-    Q_OBJECT
-
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    Node();
+    void setCoorginate(int x, int y);
 
-private slots:
+    int x() const { return mX; }
+    int y() const { return mY; }
+
+    bool operator ==(const QPair<int, int> &coordinate) const;
 
 private:
-    Ui::MainWindow *ui;
-    RevisionTree *tree;
-
-    void updateBranchList();
+    int mX, mY;
 };
 
-#endif // MAINWINDOW_H
+#endif // NODE_H

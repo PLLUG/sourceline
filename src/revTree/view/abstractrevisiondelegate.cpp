@@ -3,6 +3,7 @@
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QStyleOptionGraphicsItem>
+#include <QMenu>
 #include <QDebug>
 
 AbstractRevisionDelegate::AbstractRevisionDelegate(QGraphicsItem *parent) :
@@ -67,40 +68,52 @@ void AbstractRevisionDelegate::paint(QPainter *painter, const QStyleOptionGraphi
         int pos = drawingData.value("pos").toInt() + 1;
         mBubblePos = pos;
 
-        if ( drawingData.contains("children") )
+        if ( drawingData.contains("branches") )
         {
-            for (int i =1; i <= drawingData.value("children").toInt(); ++i)
+            QList<QVariant> br = drawingData.value("branches").toList();
+            int linePos;
+            for (int i = 0; i < br.size() ; ++i)
             {
+                linePos = br.at(i).toInt();
                 QPainterPath path;
                 path.moveTo(qreal((pos) * mGridStep), qreal(option->rect.center().y()));
                 QRectF r(qreal((pos) * mGridStep), qreal(option->rect.center().y()),
-                         qreal( i * mGridStep), qreal(option->rect.height() / 2));
+                         qreal( (linePos - pos + 1) * mGridStep), qreal(option->rect.height() / 2));
                 QPointF c1 = QPointF(r.x(), r.center().y());//r.bottomLeft();
                 QPointF c2 = QPointF(r.right(), r.center().y());//r.topRight() + QPointF(0, 2);
                 path.cubicTo(c1, c2, r.bottomRight());
                 painter->drawPath(path);
             }
         }
-        for (int i = 1; i < pos; ++i)
+        if (drawingData.contains("branchesBefore"))
         {
-            painter->drawLine(QPoint(i * mGridStep, option->rect.y()), QPoint(i * mGridStep, option->rect.bottom()));
+            QList<QVariant> d = drawingData.value("branchesBefore").toList();
+            if (!d.isEmpty())
+            {
+                for (int i = 0; i < d.size(); ++i)
+                    painter->drawLine(QPoint((d.at(i).toInt() + 1) * mGridStep, option->rect.y()),
+                                      QPoint((d.at(i).toInt() + 1) * mGridStep, option->rect.bottom()));
+            }
         }
-//        if ( drawingData.contains("last") )
-//        {
-//            bool isHead = drawingData.value("last").toBool();
-//            if ( isHead )
-//                painter->drawLine(QPoint(pos * mGridStep, option->rect.y()), QPoint(pos * mGridStep, option->rect.center().y()));
-//            else
-//                painter->drawLine(QPoint(pos * mGridStep, option->rect.y()), QPoint(pos * mGridStep, option->rect.bottom()));
-//        }
-//        if ( drawingData.contains("branches") )
-//        {
-//            int brPos = drawingData.value("branches").toInt();
-//            for (int i = 0; i < brPos; ++i)
-//            {
-//                painter->drawLine(QPoint((pos +1 + i) * mGridStep, option->rect.y()), QPoint((pos + 1 + i)* mGridStep, option->rect.bottom()));
-//            }
-//        }
+        if ( drawingData.contains("head") )
+        {
+            bool isHead = drawingData.value("head").toBool();
+            if ( isHead )
+                painter->drawLine(QPoint(pos * mGridStep, option->rect.y()), QPoint(pos * mGridStep, option->rect.center().y()));
+            else
+                painter->drawLine(QPoint(pos * mGridStep, option->rect.y()), QPoint(pos * mGridStep, option->rect.bottom()));
+        }
+        if ( drawingData.contains("branchesAfter") )
+        {
+            QList<QVariant> after = drawingData.value("branchesAfter").toList();
+            int value;
+            for (int i = 0; i < after.size(); ++i)
+            {
+                value = after.at(i).toInt();
+                painter->drawLine(QPoint((value + 1) * mGridStep, option->rect.y()),
+                                  QPoint((value + 1)* mGridStep, option->rect.bottom()));
+            }
+        }
     }
 
     QString text = data(DR_Text).toString();
@@ -121,10 +134,34 @@ void AbstractRevisionDelegate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event
     QGraphicsItem::mouseReleaseEvent(event);
 }
 
+void AbstractRevisionDelegate::contextMenuEvent(QGraphicsSceneContextMenuEvent *event)
+{
+    QMenu menu;
+    QMap<QString, QVariant>d = data(DR_Drawing).toMap();
+    if (d.contains("head"))
+        if (d.value("head").toBool()) {
+            QAction *commit = menu.addAction("Commit");
+            connect(commit, SIGNAL(triggered()), this, SLOT(commitActionTriggered()));
+        }
+    QAction *branch = menu.addAction("Branch");
+    connect(branch, SIGNAL(triggered()), this, SLOT(branchActionTriggered()));
+    menu.exec(event->screenPos());
+}
+
 void AbstractRevisionDelegate::updateBubblePosition()
 {
     if (mBubble)
     {
         mBubble->setPos( QPointF( mGridStep * (data(DR_Drawing).toMap().value("pos").toInt() + 1), boundingRect().center().y() ) - mBubble->boundingRect().center() );
     }
+}
+
+void AbstractRevisionDelegate::commitActionTriggered()
+{
+    emit commit(this);
+}
+
+void AbstractRevisionDelegate::branchActionTriggered()
+{
+    emit branch(this);
 }

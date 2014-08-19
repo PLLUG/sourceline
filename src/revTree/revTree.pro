@@ -28,7 +28,12 @@ SOURCES += main.cpp\
     view/abstractrevisiondelegate.cpp \
     view/bubble.cpp \
     revisionwidget.cpp \
-    revisiontree.cpp
+    revisiontree.cpp \
+    graphfield.cpp \
+    node.cpp \
+    revisionitem.cpp \
+    branch.cpp \
+    creator.cpp
 
 HEADERS  += mainwindow.h \
     revisionview.h \
@@ -47,9 +52,14 @@ HEADERS  += mainwindow.h \
     view/bubble.h \
     revisionwidget.h \
     revisiontree.h \
-    checktypes.h
+    checktypes.h \
+    graphfield.h \
+    node.h \
+    revisionitem.h \
+    branch.h \
+    creator.h
 
 FORMS    += mainwindow.ui \
     revisionwidget.ui
 
-INCLUDEPATH += "../../../boost_1_55_0/"
+#INCLUDEPATH += "../../../boost_1_55_0/"

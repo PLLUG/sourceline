@@ -28,12 +28,12 @@
 #include <iostream>
 #include <vector>
 #include <string>
-#include <boost/graph/adjacency_list.hpp>
-#include <boost/tuple/tuple.hpp>
-using namespace boost;
+//#include <boost/graph/adjacency_list.hpp>
+//#include <boost/tuple/tuple.hpp>
+//using namespace boost;
 
 QT_FORWARD_DECLARE_CLASS(RevisionTableModel)
-
+/*
 namespace boost
 {
    template <> struct graph_traits<RevisionNode>
@@ -56,7 +56,21 @@ namespace boost
 }
 
 typedef adjacency_list<boost::listS, boost::vecS, boost::directedS, RevisionNode> Graph;
-typedef graph_traits<RevisionNode>::vertex_descriptor Vertex;
+typedef graph_traits<Graph>::vertex_descriptor Vertex;
+//typedef graph_traits<RevisionNode>::edge_descriptor OutEdgeIterator;
+//typedef graph_traits<RevisionNode>::vertices_size_type VerticlesSize;
+
+//VerticlesSize out_degree(Vertex v, const Graph &g)
+//{
+//    VerticlesSize result = 0;
+
+//    std::pair<OutEdgeIterator, OutEdgeIterator> edges = out_edges(v, g);
+//    for (OutEdgeIterator i = edges.first; i != edges.second; ++i) {
+//        ++result;
+//    }
+
+//    return result;
+//}
 
 class RevisionTree
 {
@@ -83,6 +97,6 @@ private:
     RevisionTableModel *mParentModel;
 
     void update();
-};
+};*/
 
 #endif // REVISIONTREE_H

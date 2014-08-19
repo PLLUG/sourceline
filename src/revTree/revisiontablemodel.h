@@ -27,6 +27,7 @@
 #include <QAbstractTableModel>
 #include "revisionnode.h"
 #include "revisiontree.h"
+#include "creator.h"
 
 class RevisionTableModel : public QAbstractTableModel
 {
@@ -41,10 +42,12 @@ public:
 
     RevisionTree *createTree();
     void dataChange();
+    Creator* graph() const { return mGraph; }
 
 private:
     RevisionNode *mRoot;
     RevisionTree *tree;
+    Creator *mGraph;
 };
 
 #endif // REVISIONTABLEMODEL_H
