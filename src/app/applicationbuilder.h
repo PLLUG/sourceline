@@ -33,6 +33,8 @@ class Settings;
 
 // Plugin Support
 class PluginManager;
+class Plugin;
+class ComponentSorter;
 
 // Main Application Classes
 class ActionManager;
@@ -44,6 +46,8 @@ class SplashScreen;
 class MainWindow;
 class AppSettingsDialog;
 class About;
+
+#include "progresshandler.h"
 
 /*!
  * \brief The ApplicationBuilder class resporsible for creation of all objects in application
@@ -96,12 +100,15 @@ private:
 
 // App creation helper methods
 private:
-    void supplyComponents();
+    void loadPlugins();
+    void supplyComponents(ComponentSorter *pComponentSorter);
     void createUiActions(MainWindow *pMainWindow);
+    void createAppMenus();
 
 // Plugin Support
 private:
     PluginManager *mPluginManager;
+    QList< Plugin* > mLoadedPlugins;
 
 // Settings
 private:

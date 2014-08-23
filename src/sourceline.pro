@@ -23,8 +23,10 @@
 
 TEMPLATE = subdirs
 
+CONFIG += ordered
+
 SUBDIRS += \
     extensionlib \
-    plugins \
     app \
+    plugins \
     tools

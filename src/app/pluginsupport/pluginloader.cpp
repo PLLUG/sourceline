@@ -78,17 +78,17 @@ QStringList PluginLoader::pluginIds()
     return rPluginsIdsList;
 
 }
-QObject* PluginLoader::plugin(QString pPluginId)
+QObject* PluginLoader::load(QString pPluginId)
 {
+    QObject *rInstance = 0;
+
     QPluginLoader lPluginLoader(libPath(pPluginId));
     if (lPluginLoader.load())
     {
-        return lPluginLoader.instance();
+        rInstance = lPluginLoader.instance();
     }
-    else
-    {
 
-    }
+    return rInstance;
 }
 
 PluginInfo PluginLoader::pluginInfo(const QString &pPluginId)

@@ -6,7 +6,9 @@ ProgressHandler *ProgressHandler::mInstance = 0;
 
 ProgressHandler::ProgressHandler(QObject *parent) :
     QObject(parent),
-    mStageCount(0)
+    mStage(0),
+    mStageCount(0),
+    mStageProgress(0)
 {
     resetProgress();
 }

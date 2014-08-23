@@ -24,6 +24,9 @@
 TEMPLATE = app
 QT += widgets
 
+# Pro file is a part of source line project structure
+CONFIG += sl_project
+
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
@@ -134,12 +137,12 @@ SOURCES += \
     pluginsupport/pluginmanager.cpp \
     pluginsupport/pluginsettingsmediator.cpp \
     pluginsupport/supliers/settingspagesupplier.cpp \
-    pluginsupport/supliers/commandcomponentsupplier.cpp \
-    pluginsupport/supliers/settingspagesupplier.cpp \
+    pluginsupport/supliers/commandcomponentsupplier.cpp
 
 SOURCES +=
 HEADERS +=
 
+# Extension support library
 include(./../extensionlib/extensionlib.pri)
 
 # Resources and additional files

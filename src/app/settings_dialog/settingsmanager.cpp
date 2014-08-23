@@ -43,15 +43,15 @@ QString SettingsManager::pathBySettings(Settings *pSettings)
     return mPathBySettings.value(pSettings);
 }
 
-void SettingsManager::addSettings(const QString &pPluginId, const QString &pSettingsPageName, Settings *pSettings)
+void SettingsManager::addSettings(const QString &pSetingsProviderId, const QString &pSettingsGroupName, Settings *pSettings)
 {
-    if (pPluginId.isEmpty())
+    if (pSetingsProviderId.isEmpty())
     {
         qDebug("SettingsManager::addSettings: plugin id is empty!");
         return;
     }
 
-    if (pSettingsPageName.isEmpty())
+    if (pSettingsGroupName.isEmpty())
     {
         qDebug("SettingsManager::addSettings: settings page name is empty!");
         return;
@@ -63,9 +63,9 @@ void SettingsManager::addSettings(const QString &pPluginId, const QString &pSett
         return;
     }
 
-    mPluginIdBySettings.insert(pSettings, pPluginId);
-    mPageNameBySettings.insert(pSettings, pSettingsPageName);
-    QString lFullSettingsPath = QString("%1/%2/%3").arg(pPluginId).arg(pSettingsPageName).arg(pSettings->settingsPath());
+    mPluginIdBySettings.insert(pSettings, pSetingsProviderId);
+    mPageNameBySettings.insert(pSettings, pSettingsGroupName);
+    QString lFullSettingsPath = QString("%1/%2/%3").arg(pSetingsProviderId).arg(pSettingsGroupName).arg(pSettings->settingsPath());
 
     mPathBySettings.insert(pSettings, lFullSettingsPath);
 
