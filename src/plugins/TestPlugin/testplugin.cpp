@@ -33,11 +33,11 @@ TestPlugin::TestPlugin(QObject *pParent) :
     GitFakeComponent *gitFakeComponent = new GitFakeComponent(this);
     this->addComponent(gitFakeComponent);
 
-    Settings *lPSettings = new Settings();
+    Settings *lPSettings = new Settings(this);
 
     CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
     this->addComponent(lSettingPage);
 
-    FakeCommand *lFakeCommand = new FakeCommand();
+    FakeCommand *lFakeCommand = new FakeCommand(this);
     this->addComponent(lFakeCommand);
 }

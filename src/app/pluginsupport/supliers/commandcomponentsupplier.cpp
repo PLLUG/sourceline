@@ -44,7 +44,7 @@ void CommandComponentSupplier::setActionManager(ActionManager *pActionManager)
 
 UserAction *CommandComponentSupplier::actionFromCommand(Command *pComand)
 {
-    UserAction *lUserAction = new UserAction();
+    UserAction *lUserAction = new UserAction(pComand);
     lUserAction->setIcon(pComand->icon());
     lUserAction->setText(pComand->name());
     lUserAction->setCommandKind(Commands::ImportCommand);

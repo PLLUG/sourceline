@@ -222,7 +222,7 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 
 void ApplicationBuilder::createAppMenus()
 {
-    DirectOrderSortingStrategy* lDirectOrderSortingStrategy = new DirectOrderSortingStrategy();
+    DirectOrderSortingStrategy* lDirectOrderSortingStrategy = new DirectOrderSortingStrategy;
 
     mActionManager->setMenuCreationStategy(FileMenuGroup, lDirectOrderSortingStrategy);
     mActionManager->setMenuCreationStategy(ViewMenuGroup, lDirectOrderSortingStrategy);
