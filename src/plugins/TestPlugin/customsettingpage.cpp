@@ -39,9 +39,9 @@ CustomSettingPage::CustomSettingPage(Settings *pSettings, QWidget *parent) :
     lLayout->addWidget(lComboBox);
 
     settings()->add("auto", lCheckBox, "checked");
-    settings()->subscribe("auto", this, "slotSmthChanged");
+    settings()->subscribe("auto", this, SLOT(slotSmthChanged(QVariant)));
     settings()->add("combo", lComboBox, "currentText");
-    settings()->subscribe("combo", this, "slotComboChanged");
+    settings()->subscribe("combo", this, SLOT(slotComboChanged(QVariant)));
 
     setName("GitFake");
     setIcon(QIcon(":/splash/img/sourceline.ico"));

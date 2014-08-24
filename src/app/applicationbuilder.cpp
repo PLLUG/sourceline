@@ -218,6 +218,7 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 
     UserAction *lActionSettings = new UserAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
+    mActionManager->add(ViewMenuGroup, "", lActionSettings);
 }
 
 void ApplicationBuilder::createAppMenus()
