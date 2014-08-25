@@ -94,5 +94,6 @@ void MainWindow::slotAddPage()
 
 void MainWindow::resizeEvent(QResizeEvent *e)
 {
+    Q_UNUSED(e);
     // ui->uiFileView->setMinimumHeight(this->height());
 }

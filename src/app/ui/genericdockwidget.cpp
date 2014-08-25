@@ -9,5 +9,6 @@ GenericDockWidget::GenericDockWidget(QWidget *parent):
 
 void GenericDockWidget::slotSetPage(int pPage)
 {
-
+    Q_UNUSED(pPage);
+    //TASK: add implementation, make method virtual
 }

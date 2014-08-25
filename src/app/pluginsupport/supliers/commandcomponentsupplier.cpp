@@ -53,6 +53,7 @@ UserAction *CommandComponentSupplier::actionFromCommand(Command *pComand)
 
 void CommandComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
 {
+    Q_UNUSED(pPluginInfo);
     if (Command* lCommand = qobject_cast<Command*>(pComponent))
     {
         mActionManager->add(HelpMenuGroup, "", actionFromCommand(lCommand));
