@@ -155,7 +155,7 @@ void ApplicationBuilder::initApp()
                                              // settings should be commited automatically after change
     mSettingsManager->addSettings("global", "settings", mGlobalAppSettings);
 
-    // TODO: remove setting of global app setting to mediator (fix for settings autocommit needed)
+    // TASK: remove setting of global app settings from mediator (fix for settings autocommit needed)
     mPluginSettingsMediator->setSettings(mGlobalAppSettings);
 
     ProgressHandler::instance()->finishStage();

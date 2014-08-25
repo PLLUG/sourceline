@@ -46,7 +46,7 @@ void PluginSettingsMediator::setPluginDialog(DialogPlugins *pDialog)
 void PluginSettingsMediator::setPluginInfoDialog(PropertyInfoDialog *pDialog)
 {
     Q_UNUSED(pDialog)
-    //TASK: plugin info dialog should be set from outside of application
+    //TASK: plugin info dialog should be set from outside of PluginSettingsMediator class
 }
 
 void PluginSettingsMediator::setSettings(Settings *pSettings)

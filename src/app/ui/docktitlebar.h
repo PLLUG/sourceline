@@ -12,7 +12,7 @@ class DockTitleBar : public QWidget
 public:
     explicit DockTitleBar(QWidget *parent = 0);
 
-    // TODO: actual interface for this class
+    // TASK: actual interface for this class
 
 };
 

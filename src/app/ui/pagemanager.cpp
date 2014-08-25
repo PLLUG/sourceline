@@ -63,7 +63,7 @@ int PageManager::getPageID()
 int PageManager::getPageID(int index)
 {
     //TASK: fixme
-    return mPageHash.key(index);
+    return mPageHash.key(index, -1);
 //    for(QMap<int,int>::iterator iter = mPageHash.begin(); iter!=mPageHash.end(); iter++)
 //        if(iter.value() == index)
 //           return iter.key();
