@@ -8,6 +8,8 @@
         <file>img/pluginInformation.gif</file>
         <file>img/pllug.jpg</file>
         <file>img/SL_Splash.png</file>
+        <file>img/added.png</file>
+        <file>img/up.png</file>
     </qresource>
     <qresource prefix="/text">
         <file>txt/about-dialog/About.txt</file>

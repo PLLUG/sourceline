@@ -67,7 +67,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents"/>
   </widget>
-  <widget class="QDockWidget" name="uiFileView">
+  <widget class="DockFileView" name="uiFileView">
    <property name="sizePolicy">
     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
      <horstretch>0</horstretch>
@@ -82,7 +82,7 @@
    </property>
    <property name="baseSize">
     <size>
-     <width>280</width>
+     <width>500</width>
      <height>370</height>
     </size>
    </property>
@@ -92,7 +92,7 @@
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_4"/>
+   <widget class="FileView" name="dockWidgetContents_4"/>
   </widget>
   <widget class="QToolBar" name="uiTabToolBar">
    <property name="minimumSize">
@@ -195,33 +195,39 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>FileView</class>
-   <extends>QDockWidget</extends>
-   <header location="global">ui/fileview.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>Console</class>
    <extends>QDockWidget</extends>
-   <header location="global">ui/console.h</header>
+   <header>ui/console.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>RevisionTable</class>
    <extends>QDockWidget</extends>
-   <header location="global">ui/revisiontable.h</header>
+   <header>ui/revisiontable.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>HistoryTree</class>
    <extends>QDockWidget</extends>
-   <header location="global">ui/historytree.h</header>
+   <header>ui/historytree.h</header>
    <container>1</container>
   </customwidget>
   <customwidget>
    <class>EditorView</class>
    <extends>QDockWidget</extends>
-   <header location="global">ui/editorview.h</header>
+   <header>ui/editorview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DockFileView</class>
+   <extends>QDockWidget</extends>
+   <header>ui/dockfileview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FileView</class>
+   <extends>QWidget</extends>
+   <header>ui/fileview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

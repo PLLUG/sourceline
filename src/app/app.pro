@@ -63,12 +63,14 @@ HEADERS += \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
     ui/fileview.h \
+    ui/dockfileview.h \
+    fileview/exploreritemdelegate.h \
+    fileview/iconizedlineedit.h \
     ui/about.h \
     ui/plugininfodialog.h \
     ui/useraction.h \
     ui/strategies/sortingstrategy.h \
     ui/strategies/directordersortingstrategy.h
-
 
 SOURCES += \
     ui/splashscreen.cpp \
@@ -85,10 +87,13 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-    ui/fileview.cpp \
     ui/about.cpp \
     ui/plugininfodialog.cpp \
     ui/useraction.cpp \
+    ui/fileview.cpp \
+    ui/dockfileview.cpp \
+    fileview/exploreritemdelegate.cpp \
+    fileview/iconizedlineedit.cpp \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
 
@@ -98,13 +103,14 @@ FORMS += \
     ui/customtabbar.ui \
     ui/editorview.ui \
     ui/files.ui \
-    ui/fileview.ui \
     ui/historytree.ui \
     ui/mainwindow.ui \
     ui/revisiontable.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui \
+    ui/dockfileview.ui \
+    ui/fileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui
 
