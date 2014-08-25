@@ -49,18 +49,9 @@ class AppSettingsDialog : public QDialog
 
 public:
     explicit AppSettingsDialog(QWidget *parent = 0);
-    ~AppSettingsDialog();
+    virtual ~AppSettingsDialog();
+
     void addSettingsItem(SettingsPage *pSettingPage);
-    //void removeSettingsItem(QString settingName);
-
-
-public slots:
-    void slotSettingsChanged();
-
-private:
-    bool settingsChanged;
-    void readSettings();
-    void writeSettings();
 
 private slots:
     void slotBtnOk();
@@ -68,17 +59,15 @@ private slots:
     void slotBtnApply();
     void slotOnListItemClicked(int index);
 
+    void slotPageModified();
+
 private:
     Ui::AppSettingsDialog *ui;
-    QStringList settingsNameList;
+    QStringList mSettingsNameList;
     QVector<QWidget*> settingsWidgetList;
-    QList<SettingsPage*> mSPages;
+    QList<SettingsPage*> mSettingPages;
 
-signals:
-    void signalSettingPageChanged(QString pPageName);
-    void signalReadSetting();
-    void signalWriteSetting();
-
+    bool mSettingsChanged;
 };
 
 #endif // APPSETTINGSDIALOG_H

@@ -29,8 +29,8 @@ AppSettingsDialog::AppSettingsDialog(QWidget *parent) :
     ui(new Ui::AppSettingsDialog)
 {
     ui->setupUi(this);
-    settingsChanged = false;
-    ui->btnApply->setEnabled(settingsChanged);;
+
+    // TASK : use QDialogButtonBox
     connect(ui->btnOk, SIGNAL(clicked()), SLOT(slotBtnOk()));
     connect(ui->btnCancel, SIGNAL(clicked()), SLOT(slotBtnCancel()));
     connect(ui->btnApply, SIGNAL(clicked()), SLOT(slotBtnApply()));
@@ -44,72 +44,64 @@ AppSettingsDialog::~AppSettingsDialog()
 
 void AppSettingsDialog::addSettingsItem(SettingsPage *pSettingPage)
 {
-    mSPages.append(pSettingPage);
-    settingsNameList.append(pSettingPage->name());
-    QListWidgetItem* lwi = new QListWidgetItem(pSettingPage->icon(), pSettingPage->name());
-    lwi->setSizeHint(QSize(0, 40));
-    ui->listWidget->addItem(lwi);
+    if (!pSettingPage)
+    {
+        qDebug("AppSettingsDialog::addSettingsItem: settings page is 0");
+        return;
+    }
+
+    mSettingPages.append(pSettingPage);
+    mSettingsNameList.append(pSettingPage->name());
+
+    QListWidgetItem* lListWidgetItem = new QListWidgetItem(pSettingPage->icon(), pSettingPage->name());
+    lListWidgetItem->setSizeHint(QSize(0, 40));
+    ui->listWidget->addItem(lListWidgetItem);
     ui->listWidget->setCurrentRow(0);
+
     ui->stackedWidget->addWidget(pSettingPage);
     ui->stackedWidget->setCurrentIndex(0);
+
     connect(ui->btnOk, SIGNAL(clicked(bool)),
             this, SLOT(slotBtnOk()), Qt::UniqueConnection);
     connect(ui->btnCancel, SIGNAL(clicked(bool)),
             pSettingPage, SLOT(slotCancel()), Qt::UniqueConnection);
-    connect(pSettingPage, SIGNAL(signalSettingsStateChanged()),
-            this, SLOT(slotSettingsChanged()), Qt::UniqueConnection);
+    connect(pSettingPage->settings(), SIGNAL(modified(bool)),
+        this, SLOT(slotPageModified()), Qt::UniqueConnection);
 }
 
 void AppSettingsDialog::slotBtnOk()
 {
-    qDebug() << "btnOk pressed!";
     slotBtnApply();
-    this->close();
+    this->close(); // TASK: connect buttons to accept() / reject()
 }
 
 void AppSettingsDialog::slotBtnCancel()
 {
-    qDebug() << "btnCancel pressed!";
-    mSPages.at(ui->stackedWidget->currentIndex())->settings()->revert();
-    settingsChanged = false;
-    ui->btnApply->setEnabled(settingsChanged);
-    this->close();
+    mSettingPages.at(ui->stackedWidget->currentIndex())->settings()->revert();
+    this->close();// TASK: connect buttons to accept() / reject()
 }
 
 void AppSettingsDialog::slotBtnApply()
 {
-    qDebug() << "btnApply pressed!";
-    mSPages.at(ui->stackedWidget->currentIndex())->settings()->commit();
-    settingsChanged = false;
-    ui->btnApply->setEnabled(settingsChanged);
-}
-
-void AppSettingsDialog::slotSettingsChanged()
-{
-    qDebug() << "Settings changed";
-    settingsChanged = true;
-    ui->btnApply->setEnabled(settingsChanged);
+    mSettingPages.at(ui->stackedWidget->currentIndex())->settings()->commit();
 }
 
 void AppSettingsDialog::slotOnListItemClicked(int index)
 {
-    qDebug() << "On item click" << index;
     ui->stackedWidget->setCurrentIndex(index);
-    emit signalSettingPageChanged(settingsNameList.at(index));
 }
 
-void AppSettingsDialog::readSettings()
+void AppSettingsDialog::slotPageModified()
 {
-    qDebug() << "Read settings";
-    emit signalReadSetting();
-}
+    bool isModified = false;
 
-void AppSettingsDialog::writeSettings()
-{
-    qDebug() << "Write settings";
-    for (int i = 0; i < ui->listWidget->count(); i++)
+    foreach (SettingsPage *lSettingsPage, mSettingPages)
     {
-        emit signalSettingPageChanged(settingsNameList.at(i));
-        emit signalWriteSetting();
+        if (lSettingsPage && lSettingsPage->settings())
+        {
+            isModified |= lSettingsPage->settings()->isModified();
+        }
     }
+
+    ui->btnApply->setEnabled(isModified);
 }

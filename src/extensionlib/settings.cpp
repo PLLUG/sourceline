@@ -96,6 +96,11 @@ void Settings::commit()
     }
     emit settingsChanged(mModifiedSettingsByName);
     mModifiedSettingsByName.clear();
+
+    if (!mAutoCommit)
+    {
+        emit modified(isModified());
+    }
 }
 
 void Settings::revert()
@@ -116,6 +121,11 @@ void Settings::revert()
         }
     }
     mModifiedSettingsByName.clear();
+
+    if (!mAutoCommit)
+    {
+        emit modified(isModified());
+    }
 }
 
 bool Settings::isPropertyCouldBeAttached(QObject *pObject, const QString &pProperty)
@@ -278,10 +288,20 @@ void Settings::propertyChanged(QString pName)
     if (mSettingValueByName.value(pName) != settingValue)
     {
         mModifiedSettingsByName.insert(pName, settingValue);
+
+        if (!mAutoCommit && (mModifiedSettingsByName.size() == 1))
+        {
+            emit modified(isModified());
+        }
     }
     else
     {
         mModifiedSettingsByName.remove(pName);
+
+        if (!mAutoCommit && mModifiedSettingsByName.isEmpty())
+        {
+            emit modified(isModified());
+        }
     }
 
     if (mAutoCommit)

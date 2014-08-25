@@ -151,6 +151,8 @@ void ApplicationBuilder::initApp()
     // Global settings not configurable from settings dialog
     // (loaded plugins, etc...)
     mGlobalAppSettings = new Settings(qApp);
+    mGlobalAppSettings->setAutoCommit(true); // Settings have no settings page representation, so
+                                             // settings should be commited automatically after change
     mSettingsManager->addSettings("global", "settings", mGlobalAppSettings);
 
     // TODO: remove setting of global app setting to mediator (fix for settings autocommit needed)

@@ -74,12 +74,13 @@ bool PluginManager::loadPlugin(const QString &pPluginId)
     }
 
     Plugin* lPlugin = qobject_cast<Plugin*>(lPluginInstance);
-    if(!lPlugin)
+    if(lPlugin)
     {
-        return rResult;
+        mLoadedPluginByPluginId.insert(pPluginId, lPlugin);
+        rResult = true;
     }
 
-    mLoadedPluginByPluginId.insert(pPluginId, lPlugin);
+    return rResult;
 }
 
 Plugin *PluginManager::loadedPluginInstance(QString pPluginId)

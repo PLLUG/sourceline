@@ -59,6 +59,7 @@ public:
 
 signals:
     void settingsChanged(QMap<QString, QVariant>);
+    void modified(bool);
 
 public slots:
     void slotSetSettings(QMap<QString, QVariant> pMap);

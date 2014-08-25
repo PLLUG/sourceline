@@ -35,21 +35,15 @@ ViewSettingPage::ViewSettingPage(Settings *pSettings, QWidget *parent) :
     setLayout(lLayout);
     lLayout->addWidget(lWidget);
     settings()->add("file_view_visible", mDialogUi->checkBox, "checked");
-    settings()->subscribe("file_view_visible", this, "slotFileViewChanged");
+    settings()->subscribe("file_view_visible", this, SLOT(slotFileViewChanged(QVariant)));
     settings()->add("editor_view_visible", mDialogUi->checkBox_2, "checked");
-    settings()->subscribe("editor_view_visible", this, "slotEditorViewChanged");
+    settings()->subscribe("editor_view_visible", this, SLOT(slotEditorViewChanged(QVariant)));
     settings()->add("revision_table_visible", mDialogUi->checkBox_3, "checked");
-    settings()->subscribe("revision_table_visible", this, "slotRevTreeChanged");
+    settings()->subscribe("revision_table_visible", this, SLOT(slotRevTreeChanged(QVariant)));
     settings()->add("console_visible", mDialogUi->checkBox_4, "checked");
-    settings()->subscribe("console_visible", this, "slotConsoleChanged");
+    settings()->subscribe("console_visible", this, SLOT(slotConsoleChanged(QVariant)));
     settings()->add("history_tree_visible", mDialogUi->checkBox_5, "checked");
-    settings()->subscribe("history_tree_visible", this, "slotTreeChanged");
-
-    connect(mDialogUi->checkBox, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
-    connect(mDialogUi->checkBox_2, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
-    connect(mDialogUi->checkBox_3, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
-    connect(mDialogUi->checkBox_4, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
-    connect(mDialogUi->checkBox_5, SIGNAL(stateChanged(int)), SIGNAL(signalSettingsStateChanged()));
+    settings()->subscribe("history_tree_visible", this, SLOT(slotTreeChanged(QVariant)));
 
     setName("View");
     setIcon(QIcon(":/splash/img/sourceline.ico"));
@@ -68,30 +62,25 @@ void ViewSettingPage::setMainUi(Ui::MainWindow *lMainUi)
 
 void ViewSettingPage::slotFileViewChanged(QVariant pValue)
 {
-//    mMainUi->uiFileView->setVisible(pValue.toBool());
-    qDebug() << "inside ViewSettings : FView changed = " << pValue.toBool();
+    mMainUi->uiFileView->setVisible(pValue.toBool());
 }
 
 void ViewSettingPage::slotEditorViewChanged(QVariant pValue)
 {
     mMainUi->uiEditorView->setVisible(pValue.toBool());
-    qDebug() << "inside ViewSettings : EView changed = " << pValue.toBool();
 }
 
 void ViewSettingPage::slotRevTreeChanged(QVariant pValue)
 {
     mMainUi->uiRevisionTable->setVisible(pValue.toBool());
-    qDebug() << "inside ViewSettings : RevTree changed = " << pValue.toBool();
 }
 
 void ViewSettingPage::slotConsoleChanged(QVariant pValue)
 {
     mMainUi->uiConsole->setVisible(pValue.toBool());
-    qDebug() << "inside ViewSettings : Console changed = " << pValue.toBool();
 }
 
 void ViewSettingPage::slotTreeChanged(QVariant pValue)
 {
     mMainUi->uiHistoryTree->setVisible(pValue.toBool());
-    qDebug() << "inside ViewSettings : Tree changed = " << pValue.toBool();
 }
