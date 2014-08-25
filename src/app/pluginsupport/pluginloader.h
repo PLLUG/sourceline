@@ -37,7 +37,7 @@ public:
     explicit PluginLoader(QObject *parent = 0);
     void setPluginsFolder(QDir);
     QStringList pluginIds();
-    QObject* plugin(QString);
+    QObject* load(QString);
     PluginInfo pluginInfo(const QString &pPluginId);
     QList<QObject*> allPlugins();
     QList<PluginInfo> pluginsInfo();

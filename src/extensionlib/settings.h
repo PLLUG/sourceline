@@ -5,6 +5,7 @@
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
+***            Alex Chmykhalo (alex.chmykhalo@users.sourceforge.net)         ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
@@ -30,11 +31,9 @@
 #include <QVariant>
 #include <QMetaProperty>
 #include <QDebug>
-
 #include <QSignalMapper>
-#include "extensions_global.h"
 
-class EXTENSIONSSHARED_EXPORT Settings : public QObject
+class Settings : public QObject
 {
     Q_OBJECT
 public:
@@ -53,18 +52,27 @@ public:
     bool isMethodCouldBeSubscribed(QObject *pObject,
             const QString &pSignature);
 
+    void setAutoCommit(bool pAutoCommit);
+    void setAutoNotify(bool pAutoNotify);
+
+    bool isModified() const;
+
 signals:
     void settingsChanged(QMap<QString, QVariant>);
+    void modified(bool);
 
 public slots:
     void slotSetSettings(QMap<QString, QVariant> pMap);
+
+private slots:
+    void propertyChanged(QString pName);
 
 private:
     QVariant value(const QString &pSetting) const;
     void setValue(const QString &pSetting, const QVariant &pValue);
     void notifySubscribers(const QString &pName, const QVariant &pValue);
     QMetaProperty metaProperty(QObject *pObject, const QString& pProperty);
-    QMetaMethod metaMethod(QObject *pObject, const QByteArray &pSignature);
+    QMetaMethod metaMethod(QObject *pObject, const QString &pSignature);
     void invoke(QObject *pObject, const QByteArray& pSignature, const QVariant &pValue);
 
 private:
@@ -77,9 +85,8 @@ private:
     QMap<QString, QVariant> mModifiedSettingsByName;
     QSignalMapper *mPropertyMapper;
 
-private slots:
-    void propertyChanged(QString pName);
-
+    bool mAutoCommit;
+    bool mAutoNotify;
 };
 
 #endif // PLUGINSETTINGS_H

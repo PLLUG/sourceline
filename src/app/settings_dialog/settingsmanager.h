@@ -41,7 +41,7 @@ public:
     void setStorage(SettingStorage *);
     QString pathBySettings(Settings *pSettings);
 
-    void addSettings(const QString &pPluginId, const QString &pSettingsPageName, Settings *pSettings);
+    void addSettings(const QString &pPluginId, const QString &pSettingsGroupName, Settings *pSettings);
 
 signals:
 

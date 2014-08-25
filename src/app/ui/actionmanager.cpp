@@ -22,24 +22,28 @@
 *******************************************************************************/
 
 #include "actionmanager.h"
+#include "strategies/sortingstrategy.h"
+#include "useraction.h"
 
 ActionManager::ActionManager(QObject *parent) :
     QObject(parent)
 {
 }
 
-void ActionManager::addBack(MenuGroups pMenuGroups, QString pCategory, QAction *pAction)
+void ActionManager::add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction)
 {
+    Q_UNUSED(pCategory);
+    //TASK: pCategory unused - make use of this parameter
     mActions[pMenuGroups].push_back(pAction);
-
 }
 
-void ActionManager::addAt(MenuGroups pMenuGroups, unsigned pIndex, QString pCategory, QAction *pAction)
+QMenu *ActionManager::menuByMenuGroup(MenuGroup pMenuGroups) const
 {
-    mActions[pMenuGroups].insert(pIndex, pAction);
+    return mStrategyByMenuGroup[pMenuGroups]->createMenu(mActions[pMenuGroups]);
 }
 
-QList<QAction *> ActionManager::actions(MenuGroups pMenuGroups) const
+
+void ActionManager::setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy *pStategy)
 {
-    return mActions[pMenuGroups];
+     mStrategyByMenuGroup[pMenuGroups] = pStategy;
 }

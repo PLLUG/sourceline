@@ -36,22 +36,4 @@ private:
     static ProgressHandler *mInstance;
 };
 
-
-#define SL_PROGRESS_STAGE \
-    #ifndef MAX_PROGRESS_STAGES \
-    #define MAX_PROGRESS_STAGES \
-    int gSlMaxStagesCount = 1; \
-    #else \
-    ++gSlMaxStagesCount; \
-    #endif
-
-#define INIT_PROGRESS_MONITORING \
-    #ifndef MAX_PROGRESS_STAGES \
-    #define MAX_PROGRESS_STAGES \
-    ProgressHandler::instance()->setCurrentStageProgress(1); \
-    #else \
-    #undef MAX_PROGRESS_STAGES \
-    ProgressHandler::instance()->setStageCount(gSlMaxStagesCount); \
-    #endif
-
 #endif // PROGRESSHANDLER_H

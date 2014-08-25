@@ -45,7 +45,8 @@ void PluginSettingsMediator::setPluginDialog(DialogPlugins *pDialog)
 
 void PluginSettingsMediator::setPluginInfoDialog(PropertyInfoDialog *pDialog)
 {
-
+    Q_UNUSED(pDialog)
+    //TASK: plugin info dialog should be set from outside of application
 }
 
 void PluginSettingsMediator::setSettings(Settings *pSettings)
@@ -76,5 +77,7 @@ void PluginSettingsMediator::slotExecPluginSettings()
 
 void PluginSettingsMediator::slotShowPluginInfo(const QString &pPluginID)
 {
-
+    Q_UNUSED(pPluginID);
+    //TASK: make use of this slot - this slot should be called when plugin info button clicked,
+    //      then mediator is responsible for showing plugin info dialog with correct data
 }

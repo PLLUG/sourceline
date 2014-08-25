@@ -20,8 +20,7 @@ namespace DockTypes
     };
 }
 
-
-enum MenuGroups {
+enum MenuGroup {
     UknownMenuGroup = 0,
     FileMenuGroup,
     ViewMenuGroup,

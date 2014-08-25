@@ -2,6 +2,7 @@
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
+***            Alex Chmykhalo (alex.chmykhalo@users.sourceforge.net)         ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
@@ -25,7 +26,9 @@
 
 Settings::Settings(QObject *parent) :
     QObject(parent),
-    mPropertyMapper(new QSignalMapper(this))
+    mPropertyMapper(new QSignalMapper(this)),
+    mAutoCommit(false),
+    mAutoNotify(false)
 {
     connect(mPropertyMapper, SIGNAL(mapped(QString)),
             this, SLOT(propertyChanged(QString)), Qt::UniqueConnection);
@@ -60,20 +63,29 @@ bool Settings::add(const QString &pName, QObject *pObject, const QString &pPrope
 bool Settings::subscribe(const QString &pName, QObject *pObject, const QByteArray &pSignature)
 {
     bool lResult = false;
+
     if (!pObject || pSignature.isEmpty())
     {
         qDebug("Settings: could not subscribe - invalid parameter value");
+        return lResult;
     }
+
     if ((lResult = isMethodCouldBeSubscribed(pObject, pSignature)))
     {
+        QMetaMethod lMetaMethod = metaMethod(pObject, pSignature);
         mSubscribedObjectsBySetting.insert(pName, pObject);
-        mSubscribedMethodBySetting.insert(pName, pSignature);
+        mSubscribedMethodBySetting.insert(pName, lMetaMethod.name());
     }
     return lResult;
 }
 
 void Settings::commit()
 {
+    if (!isModified())
+    {
+        return;
+    }
+
     QMap<QString, QVariant>::const_iterator it;
     for (it = mModifiedSettingsByName.begin();
          it != mModifiedSettingsByName.end();
@@ -82,19 +94,38 @@ void Settings::commit()
         mSettingValueByName.insert(it.key(), it.value());
         notifySubscribers(it.key(), it.value());
     }
-    qDebug() << mModifiedSettingsByName;
     emit settingsChanged(mModifiedSettingsByName);
     mModifiedSettingsByName.clear();
+
+    if (!mAutoCommit)
+    {
+        emit modified(isModified());
+    }
 }
 
 void Settings::revert()
 {
+    if (!isModified())
+    {
+        return;
+    }
+
     foreach (QString lName, mModifiedSettingsByName.keys())
     {
-        QVariant oldValue = mSettingValueByName.value(lName);
-        setValue(lName, oldValue);
+        QVariant lOldValue = mSettingValueByName.value(lName);
+        setValue(lName, lOldValue);
+
+        if (mAutoNotify)
+        {
+            notifySubscribers(lName, lOldValue);
+        }
     }
     mModifiedSettingsByName.clear();
+
+    if (!mAutoCommit)
+    {
+        emit modified(isModified());
+    }
 }
 
 bool Settings::isPropertyCouldBeAttached(QObject *pObject, const QString &pProperty)
@@ -113,8 +144,32 @@ bool Settings::isPropertyCouldBeAttached(QObject *pObject, const QString &pPrope
 
 bool Settings::isMethodCouldBeSubscribed(QObject *pObject, const QString &pSignature)
 {
-    //.........
-    return true;
+    bool rResult = false;
+
+    QMetaMethod lMethod = metaMethod(pObject, pSignature);
+
+    if (lMethod.isValid())
+    {
+        rResult = (lMethod.parameterCount() == 1)
+            && (lMethod.parameterType(0) == QMetaType::QVariant);
+    }
+
+    return rResult;
+}
+
+void Settings::setAutoCommit(bool pAutoCommit)
+{
+    mAutoCommit = pAutoCommit;
+}
+
+void Settings::setAutoNotify(bool pAutoNotify)
+{
+    mAutoNotify = pAutoNotify;
+}
+
+bool Settings::isModified() const
+{
+    return !mModifiedSettingsByName.isEmpty();
 }
 
 void Settings::slotSetSettings(QMap<QString, QVariant> pMap)
@@ -166,29 +221,65 @@ void Settings::notifySubscribers(const QString &pName, const QVariant &pValue)
 QMetaProperty Settings::metaProperty(QObject *pObject, const QString &pProperty)
 {
     QMetaProperty rMetaProperty;
-    if (const QMetaObject *lMetaObject = pObject->metaObject())
+    if (pObject)
     {
-        QByteArray data = pProperty.toUtf8();
-        int lPropertyIndex = lMetaObject->indexOfProperty(data.constData());
-        if (lPropertyIndex >= 0)
+        if (const QMetaObject *lMetaObject = pObject->metaObject())
         {
-            rMetaProperty = lMetaObject->property(lPropertyIndex);
+            QByteArray data = pProperty.toUtf8();
+
+            int lPropertyIndex = lMetaObject->indexOfProperty(data.constData());
+            if (lPropertyIndex >= 0)
+            {
+                rMetaProperty = lMetaObject->property(lPropertyIndex);
+            }
         }
+    }
+    else
+    {
+        qDebug("Settings::metaProperty: object is null");
     }
     return rMetaProperty;
 }
 
-QMetaMethod Settings::metaMethod(QObject *pObject, const QByteArray &pSignature)
+QMetaMethod Settings::metaMethod(QObject *pObject, const QString &pSignature)
 {
-    QByteArray lSignature = QMetaObject::normalizedSignature(pSignature.constData());
-    int lMethodIndex = pObject->metaObject()->indexOfSlot(lSignature);
-    return mPropertyMapper->metaObject()->method(lMethodIndex);
+    QByteArray data = pSignature.toUtf8();
+    if (QChar(data[0]).isDigit())
+    {
+        // First symbol of signature could be a number
+        // in a case when SLOT() or METHOD() macro used for
+        // passing signature. That number in Qt 5 user to determine
+        // method type (signal, slot, method). In that case we will remove
+        // first symbol to get a clean signature.
+        data.remove(0, 1);
+    }
+
+    QByteArray lSignature = QMetaObject::normalizedSignature(data);
+
+    if (pObject)
+    {
+        int lMethodIndex = pObject->metaObject()->indexOfMethod(lSignature);
+        return pObject->metaObject()->method(lMethodIndex);
+    }
+    else
+    {
+        qDebug("Settings::metaMethod: object is null");
+    }
+
+    return QMetaMethod();
 }
 
 void Settings::invoke(QObject *pObject, const QByteArray &pSignature, const QVariant &pValue)
 {
-    pObject->metaObject()->invokeMethod(pObject, pSignature.constData(),
-                                        Qt::QueuedConnection, Q_ARG(QVariant, pValue));
+    if (pObject)
+    {
+        pObject->metaObject()->invokeMethod(pObject, pSignature.constData(),
+                                            Qt::QueuedConnection, Q_ARG(QVariant, pValue));
+    }
+    else
+    {
+        qDebug("Settings::invoke: object is null");
+    }
 }
 
 void Settings::propertyChanged(QString pName)
@@ -197,9 +288,31 @@ void Settings::propertyChanged(QString pName)
     if (mSettingValueByName.value(pName) != settingValue)
     {
         mModifiedSettingsByName.insert(pName, settingValue);
+
+        if (!mAutoCommit && (mModifiedSettingsByName.size() == 1))
+        {
+            emit modified(isModified());
+        }
     }
     else
     {
         mModifiedSettingsByName.remove(pName);
+
+        if (!mAutoCommit && mModifiedSettingsByName.isEmpty())
+        {
+            emit modified(isModified());
+        }
+    }
+
+    if (mAutoCommit)
+    {
+        commit();
+    }
+    else
+    {
+        if (mAutoNotify)
+        {
+            notifySubscribers(pName, settingValue);
+        }
     }
 }

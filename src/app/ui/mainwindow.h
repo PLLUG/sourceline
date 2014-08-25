@@ -1,6 +1,7 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+// TASK: refactor: too many includes
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QIcon>
@@ -14,6 +15,7 @@
 #include "settings_dialog/settingsmanager.h"
 #include "customtabbar.h"
 #include "pagemanager.h"
+#include "about.h"
 
 namespace Ui {
 class MainWindow;
@@ -42,6 +44,7 @@ private:
 
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason);
+
     void CloseWindow();
 
     void slotQuit();

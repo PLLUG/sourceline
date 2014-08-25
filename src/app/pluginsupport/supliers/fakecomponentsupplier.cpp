@@ -36,8 +36,9 @@ QString FakeComponentSupplier::className() const
 
 void FakeComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
 {
+    Q_UNUSED(pComponent);
+    Q_UNUSED(pPluginInfo);
     //sending to object
-    //mDialog->sendCommonent(pComponent);
 }
 
 void FakeComponentSupplier::setDialog(Dialog *pDialog)

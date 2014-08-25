@@ -29,18 +29,25 @@
 // Settings
 class SettingsManager;
 class SettingStorage;
+class Settings;
 
 // Plugin Support
 class PluginManager;
+class Plugin;
+class ComponentSorter;
 
 // Main Application Classes
 class ActionManager;
 class MainMenuBuilder;
+class PluginSettingsMediator;
 
 // Application UI
 class SplashScreen;
 class MainWindow;
 class AppSettingsDialog;
+class About;
+
+#include "progresshandler.h"
 
 /*!
  * \brief The ApplicationBuilder class resporsible for creation of all objects in application
@@ -51,6 +58,7 @@ class ApplicationBuilder : public QObject
     Q_OBJECT
 public:
     explicit ApplicationBuilder(QObject *parent = 0);
+    virtual ~ApplicationBuilder();
 
 private slots:
     /*!
@@ -66,14 +74,24 @@ private slots:
  */
 private:
     /*!
+     * \brief Application loading stage. Create instances for main application classes.
+     */
+    void initApp();
+
+    /*!
      * \brief Application loading stage. Initialization of all main UI classes.
      */
-    void initUi();
+    void createUi();
 
     /*!
      * \brief Application loading stage. Loading, registering and initializing plugins.
      */
-    void loadPlugins();
+    void initPlugins();
+
+    /*!
+     * \brief Application loading stage. Registering components supplied from plugins.
+     */
+    void registerComponents();
 
     /*!
      * \brief Application loading stage. Load application and plugin settings. Configuring application.
@@ -82,12 +100,15 @@ private:
 
 // App creation helper methods
 private:
-    void supplyComponents();
+    void loadPlugins();
+    void supplyComponents(ComponentSorter *pComponentSorter);
     void createUiActions(MainWindow *pMainWindow);
+    void createAppMenus();
 
 // Plugin Support
 private:
     PluginManager *mPluginManager;
+    QList< Plugin* > mLoadedPlugins;
 
 // Settings
 private:
@@ -98,12 +119,15 @@ private:
 private:
     ActionManager *mActionManager;
     MainMenuBuilder *mMainMenuBuilder;
+    PluginSettingsMediator *mPluginSettingsMediator;
+    Settings *mGlobalAppSettings;
 
 // Application UI
 private:
     SplashScreen *mSplashScreen;
     MainWindow *mMainWindow;
     AppSettingsDialog *mAppSettingsDialog;
+    About *mAboutDialog;
 };
 
 #endif // APPLICATIONBUILDER_H

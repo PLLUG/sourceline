@@ -35,6 +35,7 @@ SOURCES += \
     fakecomponent.cpp \
     plugin.cpp \
     settingspage.cpp \
+    command.cpp \
     settings.cpp
 
 HEADERS +=\
@@ -43,42 +44,21 @@ HEADERS +=\
     plugin-interface.h\
     plugin.h\
     settingspage.h \
+    command.h \
+    defs.h \
     settings.h
 
-
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
-win32 {
-    COMMAND = copy $$PWD/.qhcp $$DOCUMENTATION_DIR/.qhcp
-    copyCollectionProject.commands = $$replace(COMMAND, /, \\)
-} else {
-    copyCollectionProject.commands = cp $$PWD/.qhcp $$DOCUMENTATION_DIR
-}
+#TODO: add copying of pri file
 
 ## === define copy files for installation and build ===
-
 copytarget.path    = $$_PRO_FILE_PWD_
-copytarget.files  += \
-    $$files(fakecomponent.h) \
-    $$files(plugin.h) \
-    $$files(plugin-interface.h) \
-    $$files(extensions_global.h) \
-    $$files(settings.h) \
-    $$files(settingspage.h)
+copytarget.files  += $$HEADERS
+
 ## wildcard for filename1 filename2 filename3 ...
-
-#message("found files for copytarget: "$$copytarget.files)
-
 ## === os specific dir separator ===
-
 win32: copytarget.files ~= s,/,\\,g
 
-
 ## === copy compiler for makefile ===
-
 DirSep = /
 win32: DirSep = \\
 
@@ -91,9 +71,7 @@ win32 {
     PLUGINAPI_INCLUDE_PATH = $$replace(PLUGINAPI_INCLUDE_PATH, /, \\)
 }
 copycompiler.output       = $$PLUGINAPI_INCLUDE_PATH$$DirSep${QMAKE_FILE_BASE}${QMAKE_FILE_EXT}
-
 copycompiler.commands     = $(COPY_FILE) ${QMAKE_FILE_IN} ${QMAKE_FILE_OUT}
-
 copycompiler.CONFIG       = no_link no_clean
 ## other CONFIG options are: depends explicit_dependencies target_predeps
 
@@ -109,3 +87,6 @@ QMAKE_EXTRA_TARGETS += copyfiles
 PRE_TARGETDEPS     += copyfiles ## copy files after source compilation
 
 INSTALLS += copytarget
+
+OTHER_FILES += \
+    extensionlib.pri

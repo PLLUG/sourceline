@@ -36,20 +36,25 @@ void PluginManager::setPluginLoader(PluginLoader *pPluginLoader)
     QList<PluginInfo> lPluginInfoList =  mPluginLoader->pluginsInfo();
     foreach (PluginInfo lPluginInfo, lPluginInfoList)
     {
-        mPluginsInfo.insert(lPluginInfo.pluginId(), lPluginInfo);
+        mPluginsInfoByPluginId.insert(lPluginInfo.pluginId(), lPluginInfo);
     }
+}
+
+QStringList PluginManager::availablePlugins()
+{
+    return mPluginsInfoByPluginId.keys();
 }
 
 QList<PluginInfo> PluginManager::pluginsInfo()
 {
-    return mPluginsInfo.values();
+    return mPluginsInfoByPluginId.values();
 }
 
 PluginInfo PluginManager::pluginInfo(QString pPluginId)
 {
-    if (mPluginsInfo.contains(pPluginId))
+    if (mPluginsInfoByPluginId.contains(pPluginId))
     {
-        return mPluginsInfo[pPluginId];
+        return mPluginsInfoByPluginId[pPluginId];
     }
     else
     {
@@ -57,22 +62,40 @@ PluginInfo PluginManager::pluginInfo(QString pPluginId)
     }
 }
 
-Plugin *PluginManager::plugin(QString pPluginId)
+bool PluginManager::loadPlugin(const QString &pPluginId)
 {
-    Plugin* lPlugin = qobject_cast<Plugin*>(mPluginLoader->plugin(pPluginId));
-    if (lPlugin)
-    {
-        return lPlugin;
-    }
-    else
-    {
+    bool rResult = false;
 
+    QObject *lPluginInstance = mPluginLoader->load(pPluginId);
+    if (!lPluginInstance)
+    {
+        qDebug("PluginManager::loadPlugin: unable to load plugin %s", qPrintable(pPluginId));
+        return rResult;
     }
+
+    Plugin* lPlugin = qobject_cast<Plugin*>(lPluginInstance);
+    if(lPlugin)
+    {
+        mLoadedPluginByPluginId.insert(pPluginId, lPlugin);
+        rResult = true;
+    }
+
+    return rResult;
+}
+
+Plugin *PluginManager::loadedPluginInstance(QString pPluginId)
+{
+    return mLoadedPluginByPluginId.value(pPluginId);
 }
 
 QStringList PluginManager::activePlugins()
 {
     return mActivePlugins;
+}
+
+QStringList PluginManager::loadedPlugins()
+{
+    return mLoadedPluginByPluginId.keys();
 }
 
 void PluginManager::slotSetActivePlugins(const QStringList &pActivePlugins)

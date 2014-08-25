@@ -62,9 +62,11 @@ int PageManager::getPageID()
 
 int PageManager::getPageID(int index)
 {
-    for(QMap<int,int>::iterator iter = mPageHash.begin(); iter!=mPageHash.end(); iter++)
-        if(iter.value() == index)
-           return iter.key();
+    //TASK: fixme
+    return mPageHash.key(index);
+//    for(QMap<int,int>::iterator iter = mPageHash.begin(); iter!=mPageHash.end(); iter++)
+//        if(iter.value() == index)
+//           return iter.key();
 }
 
 int PageManager::getActiveIndex()
@@ -92,7 +94,7 @@ void PageManager::slotRemovePage(int index)
     {
         if(iter.value() > index)
             iter.value()--;
-    }            
+    }
 
     qDebug()<<"iter key "<<iter.key();
     mPageHash.remove(iter.key());

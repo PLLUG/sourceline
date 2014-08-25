@@ -29,20 +29,27 @@
 #include <QString>
 #include <QList>
 
+class MenuCreationStrategy;
+class UserAction;
+
 class ActionManager : public QObject
 {
     Q_OBJECT
 public:
     explicit ActionManager(QObject *parent = 0);
-    void addBack(MenuGroups pMenuGroups, QString pCategory, QAction *pAction);
-    void addAt(MenuGroups pMenuGroups, unsigned pIndex , QString pCategory, QAction *pAction);
-    QList<QAction *> actions(MenuGroups pMenuGroups) const;
+    void add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction);
+
+    //TASK: Different menus for file exporer
+    QMenu *menuByMenuGroup(MenuGroup pMenuGroups) const;
+    void setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy* pStategy);
 signals:
 
 public slots:
 private:
-    QMap<MenuGroups, QList<QAction *> > mActions;
-
+    QMap<MenuGroup, QList<UserAction *> > mActions;
+    QMap<MenuGroup, MenuCreationStrategy *> mStrategyByMenuGroup;
 };
+
+
 
 #endif // ACTIONMANAGER_H

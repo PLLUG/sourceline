@@ -24,12 +24,16 @@
 TEMPLATE = app
 QT += widgets
 
+# Pro file is a part of source line project structure
+CONFIG += sl_project
+
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
 HEADERS +=
 SOURCES +=
 
+INCLUDEPATH += $$_PRO_FILE_PWD_
 
 # Main
 HEADERS += \
@@ -59,7 +63,15 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    ui/fileview.h
+    ui/fileview.h \
+    ui/dockfileview.h \
+    fileview/exploreritemdelegate.h \
+    fileview/iconizedlineedit.h \
+    ui/about.h \
+    ui/plugininfodialog.h \
+    ui/useraction.h \
+    ui/strategies/sortingstrategy.h \
+    ui/strategies/directordersortingstrategy.h
 
 SOURCES += \
     ui/splashscreen.cpp \
@@ -76,20 +88,32 @@ SOURCES += \
     ui/dialogplugins.cpp \
     ui/actionmanager.cpp \
     ui/mainmenubuilder.cpp \
-    ui/fileview.cpp
+    ui/about.cpp \
+    ui/plugininfodialog.cpp \
+    ui/useraction.cpp \
+    ui/fileview.cpp \
+    ui/dockfileview.cpp \
+    fileview/exploreritemdelegate.cpp \
+    fileview/iconizedlineedit.cpp \
+    ui/strategies/directordersortingstrategy.cpp \
+    ui/strategies/sortingstrategy.cpp
+
 
 FORMS += \
     ui/console.ui \
     ui/customtabbar.ui \
     ui/editorview.ui \
     ui/files.ui \
-    ui/fileview.ui \
     ui/historytree.ui \
     ui/mainwindow.ui \
     ui/revisiontable.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
-    ui/dialogplugins.ui
+    ui/dialogplugins.ui \
+    ui/dockfileview.ui \
+    ui/fileview.ui \
+    ui/about.ui \
+    ui/plugininfodialog.ui
 
 # Application Settings
 HEADERS += \
@@ -109,6 +133,7 @@ HEADERS += \
     pluginsupport/pluginloader.h \
     pluginsupport/pluginmanager.h \
     pluginsupport/pluginsettingsmediator.h \
+    pluginsupport/supliers/commandcomponentsupplier.h \
     pluginsupport/supliers/settingspagesupplier.h
 
 SOURCES += \
@@ -118,17 +143,14 @@ SOURCES += \
     pluginsupport/pluginloader.cpp \
     pluginsupport/pluginmanager.cpp \
     pluginsupport/pluginsettingsmediator.cpp \
-    pluginsupport/supliers/settingspagesupplier.cpp
-
+    pluginsupport/supliers/settingspagesupplier.cpp \
+    pluginsupport/supliers/commandcomponentsupplier.cpp
 
 SOURCES +=
 HEADERS +=
 
-
 # Extension support library
-INCLUDEPATH += $$PWD/../pluginapi/include/
-unix|win32: LIBS += -L$$PWD/../pluginapi/lib/ -lextensions
-
+include(./../extensionlib/extensionlib.pri)
 
 # Resources and additional files
 RESOURCES += \

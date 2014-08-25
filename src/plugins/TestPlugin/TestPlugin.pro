@@ -30,21 +30,28 @@ DESTDIR = $$_PRO_FILE_PWD_/../../../bin/plugins
 
 CONFIG += shared
 
+# Pro file is a part of source line project structure
+CONFIG += sl_project
+
 DEFINES += TESTPLUGIN_LIBRARY
 
 SOURCES += testplugin.cpp \
     gitfakecomponent.cpp \
-    customsettingpage.cpp
+    customsettingpage.cpp \
+    fakecommand.cpp
 
 HEADERS += testplugin.h \
     gitfakecomponent.h \
     testplugin_global.h \
-    customsettingpage.h
+    customsettingpage.h \
+    fakecommand.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+include(../../extensionlib/extensionlib.pri)
 
 unix|win32: LIBS += -L$$PWD/../../pluginapi/lib/ -lextensions
 
