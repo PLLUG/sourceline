@@ -32,8 +32,9 @@
 #include <QMetaProperty>
 #include <QDebug>
 #include <QSignalMapper>
+#include "extensions_global.h"
 
-class Settings : public QObject
+class EXTENSIONSSHARED_EXPORT Settings : public QObject
 {
     Q_OBJECT
 public:
