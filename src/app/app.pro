@@ -65,8 +65,8 @@ HEADERS += \
     ui/mainmenubuilder.h \
     ui/fileview.h \
     ui/dockfileview.h \
-    fileview/exploreritemdelegate.h \
-    fileview/iconizedlineedit.h \
+    ui/fileview/exploreritemdelegate.h \
+    ui/fileview/iconizedlineedit.h \
     ui/about.h \
     ui/plugininfodialog.h \
     ui/useraction.h \
@@ -93,8 +93,8 @@ SOURCES += \
     ui/useraction.cpp \
     ui/fileview.cpp \
     ui/dockfileview.cpp \
-    fileview/exploreritemdelegate.cpp \
-    fileview/iconizedlineedit.cpp \
+    ui/fileview/exploreritemdelegate.cpp \
+    ui/fileview/iconizedlineedit.cpp \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
 

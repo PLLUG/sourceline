@@ -38,6 +38,7 @@
 #include <QHBoxLayout>
 #include <QLabel>
 #include <QCheckBox>
+#include <QPushButton>
 
 namespace Ui {
     class AppSettingsDialog;
@@ -63,6 +64,7 @@ private slots:
 
 private:
     Ui::AppSettingsDialog *ui;
+    QPushButton* mApplyButton;
     QStringList mSettingsNameList;
     QVector<QWidget*> settingsWidgetList;
     QList<SettingsPage*> mSettingPages;
