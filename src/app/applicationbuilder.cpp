@@ -126,6 +126,12 @@ void ApplicationBuilder::slotBuild()
     qDebug("    Loading Settings...");
     loadSettings();
 
+    //TASK: find place for this fuction
+    // I take createAppMenus from createUi ,becouse
+    //at this stage of the program commands from plugins are not loaded
+    // Init application menus
+    createAppMenus(); // At this point actions should be created, and all UI initialized
+
     mMainWindow->show();
 
     QTimer::singleShot(1500, mSplashScreen, SLOT(deleteLater()));
@@ -189,8 +195,6 @@ void ApplicationBuilder::createUi()
     createUiActions(mMainWindow);
     ProgressHandler::instance()->setCurrentStageProgress(66);
 
-    // Init application menus
-    createAppMenus(); // At this point actions should be created, and all UI initialized
 
     ProgressHandler::instance()->finishStage();
 }
