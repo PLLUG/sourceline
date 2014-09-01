@@ -30,10 +30,8 @@ ActionManager::ActionManager(QObject *parent) :
 {
 }
 
-void ActionManager::add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction)
+void ActionManager::add(MenuGroup pMenuGroups, UserAction *pAction)
 {
-    Q_UNUSED(pCategory);
-    //TASK: pCategory unused - make use of this parameter
     mActions[pMenuGroups].push_back(pAction);
 }
 

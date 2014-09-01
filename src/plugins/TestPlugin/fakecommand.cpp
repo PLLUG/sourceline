@@ -33,7 +33,7 @@ FakeCommand::FakeCommand(QObject *parent) :
 
 QString FakeCommand::name() const
 {
-    return FakeCommand::staticMetaObject.className();
+    return "TestCommand";
 }
 
 QString FakeCommand::commandString() const

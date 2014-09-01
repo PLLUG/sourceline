@@ -37,7 +37,7 @@ class ActionManager : public QObject
     Q_OBJECT
 public:
     explicit ActionManager(QObject *parent = 0);
-    void add(MenuGroup pMenuGroups, QString pCategory, UserAction *pAction);
+    void add(MenuGroup pMenuGroups, UserAction *pAction);
 
     //TASK: Different menus for file exporer
     QMenu *menuByMenuGroup(MenuGroup pMenuGroups) const;

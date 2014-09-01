@@ -203,28 +203,28 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 {
     UserAction *lActionOpen = new UserAction(tr("&Open Repository..."), mMainWindow);
     // TASK: add implementation for opening existing repository
-    mActionManager->add(FileMenuGroup, "", lActionOpen);
+    mActionManager->add(FileMenuGroup, lActionOpen);
 
     // COMMENT: temporary action - create new tab (testing)
     UserAction *lActionAddPage = new UserAction(tr("&Add Page"), this);
     connect(lActionAddPage, SIGNAL(triggered()), pMainWindow, SLOT(slotAddPage()));
-    mActionManager->add(FileMenuGroup, "", lActionAddPage);
+    mActionManager->add(FileMenuGroup, lActionAddPage);
 
     UserAction *lActionQuit = new UserAction(tr("&Quit"), this);
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->add(FileMenuGroup, "", lActionQuit);
+    mActionManager->add(FileMenuGroup, lActionQuit);
 
     UserAction *lActionAboutSL = new UserAction(tr("&About SourseLine..."), this);
     connect(lActionAboutSL, SIGNAL(triggered()), mAboutDialog, SLOT(show()), Qt::UniqueConnection);
-    mActionManager->add(HelpMenuGroup, "", lActionAboutSL);
+    mActionManager->add(HelpMenuGroup, lActionAboutSL);
 
     UserAction *lActionPlugins = new UserAction(tr("&Plugins Settings"), this);
     connect(lActionPlugins, SIGNAL(triggered()), mPluginSettingsMediator, SLOT(slotExecPluginSettings()));
-    mActionManager->add(HelpMenuGroup, "", lActionPlugins);
+    mActionManager->add(HelpMenuGroup, lActionPlugins);
 
     UserAction *lActionSettings = new UserAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
-    mActionManager->add(ViewMenuGroup, "", lActionSettings);
+    mActionManager->add(ViewMenuGroup, lActionSettings);
 }
 
 void ApplicationBuilder::createAppMenus()
