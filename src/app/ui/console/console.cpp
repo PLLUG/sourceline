@@ -21,48 +21,80 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef VIEWSETTINGPAGE_H
-#define VIEWSETTINGPAGE_H
+#include "console.h"
 
-#include "settingspage.h"
-#include "settings.h"
-#include <QVariant>
+#include <QScrollBar>
+
 #include <QDebug>
-#include <QLayout>
-#include "ui_viewsettingpage.h"
 
-namespace Ui {
-class MainWindow;
+Console::Console(QWidget *parent)
+    : QPlainTextEdit(parent)
+    , localEchoEnabled(false)
+{
+    document()->setMaximumBlockCount(100);
+    QPalette p = palette();
+    p.setColor(QPalette::Base, Qt::black);
+    p.setColor(QPalette::Text, Qt::green);
+    setPalette(p);
 }
 
-class ViewSettingPage : public SettingsPage
+void Console::putData(const QByteArray &data)
 {
-    Q_OBJECT
-public:
-    explicit ViewSettingPage(Settings *pSettings, QWidget *parent = 0);
-    ~ViewSettingPage();
+    insertPlainText(QString(data.constData()));
 
-    void setMainUi(Ui::MainWindow *lMainUi);
+    QScrollBar *bar = verticalScrollBar();
+    bar->setValue(bar->maximum());
+}
 
-signals:
-    void signalGetSettings(QString pPath);
+void Console::setLocalEchoEnabled(bool set)
+{
+    localEchoEnabled = set;
+}
 
-private slots:
-    void slotBtnOpen();
+void Console::keyPressEvent(QKeyEvent *e)
+{
+    switch (e->key()) {
+    case Qt::Key_Backspace:
+        if(!currentCmd.isEmpty())
+        {
+            currentCmd.remove(currentCmd.length()-1, 1);
+            QPlainTextEdit::keyPressEvent(e);
+        }
+        break;
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        emit signalSendCmd(currentCmd);
+        currentCmd.clear();
+        break;
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+        QPlainTextEdit::keyPressEvent(e);
+        break;
+    default:
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::End);
+        setTextCursor(cursor);
+        if (localEchoEnabled)
+            QPlainTextEdit::keyPressEvent(e);
+        currentCmd.append(e->text());
+        emit getData(e->text().toLocal8Bit());
+    }
+}
 
-public slots:
-    void slotFileViewChanged(QVariant pValue);
-    void slotEditorViewChanged(QVariant pValue);
-    void slotRevTreeChanged(QVariant pValue);
-    void slotConsoleChanged(QVariant pValue);
-    void slotTreeChanged(QVariant pValue);
-    void slotConsolePath(QVariant pValue);
+//void Console::mousePressEvent(QMouseEvent *e)
+//{
+//    Q_UNUSED(e)
+//    setFocus();
+//}
 
-private:
-    Ui::Form *mDialogUi;
-    Ui::MainWindow *mMainUi;
-    QString consolePath;
+void Console::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    Q_UNUSED(e)
+}
 
-};
-
-#endif // VIEWSETTINGPAGE_H
+void Console::contextMenuEvent(QContextMenuEvent *e)
+{
+    Q_UNUSED(e)
+}

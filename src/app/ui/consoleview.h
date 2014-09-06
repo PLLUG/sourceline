@@ -21,48 +21,43 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef VIEWSETTINGPAGE_H
-#define VIEWSETTINGPAGE_H
+#ifndef CONSOLEVIEW_H
+#define CONSOLEVIEW_H
 
-#include "settingspage.h"
-#include "settings.h"
-#include <QVariant>
-#include <QDebug>
-#include <QLayout>
-#include "ui_viewsettingpage.h"
+#include <QWidget>
 
 namespace Ui {
-class MainWindow;
+class ConsoleView;
 }
+class QProcess;
 
-class ViewSettingPage : public SettingsPage
+class ConsoleView : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit ViewSettingPage(Settings *pSettings, QWidget *parent = 0);
-    ~ViewSettingPage();
-
-    void setMainUi(Ui::MainWindow *lMainUi);
-
-signals:
-    void signalGetSettings(QString pPath);
-
-private slots:
-    void slotBtnOpen();
+    explicit ConsoleView(QWidget *parent = 0);
+    ~ConsoleView();
+    void execute(QString pCommand);
+    QString consolePath();
 
 public slots:
-    void slotFileViewChanged(QVariant pValue);
-    void slotEditorViewChanged(QVariant pValue);
-    void slotRevTreeChanged(QVariant pValue);
-    void slotConsoleChanged(QVariant pValue);
-    void slotTreeChanged(QVariant pValue);
-    void slotConsolePath(QVariant pValue);
+    void slotSetConsolePath(QString pPath);
+    void slotReadConsoleOutput();
+    void slotExec(QString cmd);
 
 private:
-    Ui::Form *mDialogUi;
-    Ui::MainWindow *mMainUi;
-    QString consolePath;
+    void startProcess();
 
+private slots:
+    void slotPrintWorkingDir(QString dir = QString());
+
+
+private:
+    Ui::ConsoleView *ui;
+    QProcess *mProcess;
+    QString mPath;
+    bool dirPrinted;
 };
 
-#endif // VIEWSETTINGPAGE_H
+#endif // CONSOLEVIEW_H

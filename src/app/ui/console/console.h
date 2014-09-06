@@ -21,48 +21,33 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef VIEWSETTINGPAGE_H
-#define VIEWSETTINGPAGE_H
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
-#include "settingspage.h"
-#include "settings.h"
-#include <QVariant>
-#include <QDebug>
-#include <QLayout>
-#include "ui_viewsettingpage.h"
+#include <QPlainTextEdit>
 
-namespace Ui {
-class MainWindow;
-}
-
-class ViewSettingPage : public SettingsPage
+class Console : public QPlainTextEdit
 {
     Q_OBJECT
 public:
-    explicit ViewSettingPage(Settings *pSettings, QWidget *parent = 0);
-    ~ViewSettingPage();
+    explicit Console(QWidget *parent = 0);
+    void putData(const QByteArray &data);
+    void setLocalEchoEnabled(bool set);
 
-    void setMainUi(Ui::MainWindow *lMainUi);
+protected:
+    virtual void keyPressEvent(QKeyEvent *e);
+//    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
 signals:
-    void signalGetSettings(QString pPath);
-
-private slots:
-    void slotBtnOpen();
-
-public slots:
-    void slotFileViewChanged(QVariant pValue);
-    void slotEditorViewChanged(QVariant pValue);
-    void slotRevTreeChanged(QVariant pValue);
-    void slotConsoleChanged(QVariant pValue);
-    void slotTreeChanged(QVariant pValue);
-    void slotConsolePath(QVariant pValue);
+    void getData(const QByteArray &data);
+    void signalSendCmd(QString);
 
 private:
-    Ui::Form *mDialogUi;
-    Ui::MainWindow *mMainUi;
-    QString consolePath;
+    bool localEchoEnabled;
+    QString currentCmd;
 
 };
 
-#endif // VIEWSETTINGPAGE_H
+#endif // CONSOLE_H
