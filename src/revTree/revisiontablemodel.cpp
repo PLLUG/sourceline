@@ -1,3 +1,26 @@
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2014  by                                                ***
+***            Volodymyr Kochyn  (vovakochyn@gmail.com)                      ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
+
 #include "revisiontablemodel.h"
 #include "createtree.h"
 #include <QDebug>
@@ -7,16 +30,11 @@ RevisionTableModel::RevisionTableModel()
     CreateTree ct;
     mRoot = ct.create();
 
-    tree = 0;
-//    createTree();
-
     mGraph = new Creator;
 }
 
 int RevisionTableModel::rowCount(const QModelIndex &) const
 {
-//    if (tree)
-//        return tree->vertexSize();
     if (mGraph)
         return mGraph->field()->height();
     return 0;
@@ -33,28 +51,6 @@ QVariant RevisionTableModel::data(const QModelIndex &index, int role) const
         return QVariant();
     if ( role == Qt::DisplayRole )
     {
-//        if ( index.column() == 2 )
-//            return mRoot->node(index.row())->data(RevisionNode::IDR_DisplayRole);
-//        if ( index.column() == 1 )
-//            return QVariant(mRoot->node(index.row())->revId());
-//        if ( index.column() == 0 )
-//        {
-//            const RevisionNode *node = mRoot->node(index.row());
-//            return node->data(RevisionNode::IDR_DrawRole);
-//        }
-//        if ( index.column() == 2 )
-//        {
-//            if (index.row() < tree->vertexSize())
-//                return tree->data(tree->getVertex(index.row()), RevisionNode::IDR_DisplayRole);
-//        }
-//        else if ( index.column() == 1 )
-//        {
-//            return tree->node(tree->getVertex(index.row())).revId();
-//        }
-//        else if ( index.column() == 0 )
-//        {
-//            return tree->node(tree->getVertex(index.row())).data(RevisionNode::IDR_DrawRole);
-//        }
         if ( index.column() == 2 )
         {
             if (mGraph->item(index.row()))
@@ -104,19 +100,6 @@ QVariant RevisionTableModel::headerData(int section, Qt::Orientation orientation
             return "Message";
     }
     return QVariant();
-}
-
-RevisionTree *RevisionTableModel::createTree()
-{
-//    if (!tree)
-//    {
-//        tree = new RevisionTree(this);
-//        tree->addCommit("init");
-//        tree->addCommit("seccond test commit");
-//        tree->addBranch("Branch");
-//        emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1));
-//    }
-    return tree;
 }
 
 void RevisionTableModel::dataChange()

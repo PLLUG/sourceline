@@ -45,8 +45,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     RevisionTree *tree;
-
-    void updateBranchList();
 };
 
 #endif // MAINWINDOW_H

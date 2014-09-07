@@ -1,3 +1,26 @@
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2014  by                                                ***
+***            Volodymyr Kochyn  (vovakochyn@gmail.com)                      ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
+
 #include "abstractrevisiondelegate.h"
 #include "bubble.h"
 #include <QPainter>
@@ -56,10 +79,9 @@ void AbstractRevisionDelegate::paint(QPainter *painter, const QStyleOptionGraphi
     }
     else
     {
-        c = QColor(130, 130, 130, 150);
+        c = QColor(150, 150, 150, 150);
     }
     QColor main = QColor(30, 130, 210, 255);
-//    QColor buble = QColor(15, 65, 106, 255);
     painter->fillRect(option->rect, c);
     QMap<QString, QVariant> drawingData = data(DR_Drawing).toMap();
     if ( drawingData.contains("pos") )
@@ -116,13 +138,13 @@ void AbstractRevisionDelegate::paint(QPainter *painter, const QStyleOptionGraphi
         }
     }
 
-    QString text = data(DR_Text).toString();
+//    QString text = data(DR_Text).toString();
 
-    QRectF rect = boundingRect();
-    rect.setX(rect.x() + 80);
-    rect.setWidth(rect.width() - 80);
-    painter->setPen(Qt::white);
-    painter->drawText(rect, text + QString(" - %1").arg(data(DR_Id).toString()), QTextOption(Qt::AlignLeft | Qt::AlignVCenter));
+//    QRectF rect = boundingRect();
+//    rect.setX(rect.x() + 80);
+//    rect.setWidth(rect.width() - 80);
+//    painter->setPen(Qt::white);
+//    painter->drawText(rect, text + QString(" - %1").arg(data(DR_Id).toString()), QTextOption(Qt::AlignLeft | Qt::AlignVCenter));
 }
 
 void AbstractRevisionDelegate::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

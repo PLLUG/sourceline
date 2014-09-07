@@ -39,6 +39,7 @@ public:
 
     void addCommit(RevisionItem *c);
     void addBranch(RevisionItem *b, const QString &name);
+    void merge(RevisionItem *from, RevisionItem *to);
 
     void switchTo(Branch *b);
 

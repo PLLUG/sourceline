@@ -13,15 +13,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    revisionview.cpp \
-    revisionmodel.cpp \
     revisionnode.cpp \
     createtree.cpp \
     view/revisionnodeitem.cpp \
     view/revisiongrid.cpp \
     view/graphicsview.cpp \
     revisiontablemodel.cpp \
-    revisiondelegate.cpp \
     view/simpleline.cpp \
     view/modelindex.cpp \
     view/abstractgraphicsview.cpp \
@@ -36,15 +33,12 @@ SOURCES += main.cpp\
     creator.cpp
 
 HEADERS  += mainwindow.h \
-    revisionview.h \
-    revisionmodel.h \
     revisionnode.h \
     createtree.h \
     view/revisionnodeitem.h \
     view/revisiongrid.h \
     view/graphicsview.h \
     revisiontablemodel.h \
-    revisiondelegate.h \
     view/simpleline.h \
     view/modelindex.h \
     view/abstractgraphicsview.h \
@@ -52,7 +46,6 @@ HEADERS  += mainwindow.h \
     view/bubble.h \
     revisionwidget.h \
     revisiontree.h \
-    checktypes.h \
     graphfield.h \
     node.h \
     revisionitem.h \

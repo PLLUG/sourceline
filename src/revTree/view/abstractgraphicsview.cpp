@@ -1,3 +1,27 @@
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2014  by                                                ***
+***            Volodymyr Kochyn  (vovakochyn@gmail.com)                      ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
+
+
 #include "abstractgraphicsview.h"
 #include "abstractrevisiondelegate.h"
 #include <QPainter>
@@ -48,35 +72,45 @@ void AbstractGraphicsView::setModel(QAbstractItemModel *model)
 {
     mModel = model;
     connect(mModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotModelChanged()));
-    initModelData();
+    updateModelData();
     updateGeometry();
 }
 
 void AbstractGraphicsView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setPen(Qt::NoPen);
-    painter->setBrush(QColor(150, 150, 150));
+    painter->setBrush(QColor(200, 200, 200));
     painter->drawRect(boundingRect());
 }
 
-void AbstractGraphicsView::initModelData()
+void AbstractGraphicsView::updateModelData()
 {
     if ( mModel )
     {
-        qDeleteAll(mItems);
-        mItems.clear();
-        AbstractRevisionDelegate *temp;
-        for (int i = 0; i < mModel->rowCount(); ++i)
+        while (mItems.size() != mModel->rowCount())
         {
-            temp = new AbstractRevisionDelegate(this);
-            mItems.append(temp);
+            if (mItems.size() > mModel->rowCount())
+            {
+                AbstractRevisionDelegate *temp = mItems.last();
+                mItems.removeLast();
+                delete temp;
+            }
+            else
+            {
+                mItems.append(new AbstractRevisionDelegate(this));
+                connect(mItems.last(), SIGNAL(needRequestFromView(AbstractRevisionDelegate*)),
+                        this, SLOT(slotRequestForItem(AbstractRevisionDelegate *)));
+                connect(mItems.last(), SIGNAL(commit(AbstractRevisionDelegate*)), this, SLOT(commitClicked(AbstractRevisionDelegate*)));
+                connect(mItems.last(), SIGNAL(branch(AbstractRevisionDelegate*)), this, SLOT(branchClicked(AbstractRevisionDelegate*)));
+            }
+        }
+        AbstractRevisionDelegate *temp;
+        for (int i = 0; i < mItems.size(); ++i)
+        {
+            temp = mItems.at(i);
             temp->setData(AbstractRevisionDelegate::DR_Drawing, mModel->data(mModel->index(i, 0), Qt::DisplayRole));
             temp->setData(AbstractRevisionDelegate::DR_Text, mModel->data(mModel->index(i, 2), Qt::DisplayRole));
             temp->setData(AbstractRevisionDelegate::DR_Id, mModel->data(mModel->index(i, 1), Qt::DisplayRole));
-            connect(temp, SIGNAL(needRequestFromView(AbstractRevisionDelegate*)),
-                    this, SLOT(slotRequestForItem(AbstractRevisionDelegate *)));
-            connect(temp, SIGNAL(commit(AbstractRevisionDelegate*)), this, SLOT(commitClicked(AbstractRevisionDelegate*)));
-            connect(temp, SIGNAL(branch(AbstractRevisionDelegate*)), this, SLOT(branchClicked(AbstractRevisionDelegate*)));
         }
     }
 }
@@ -100,7 +134,7 @@ void AbstractGraphicsView::slotRequestForItem(AbstractRevisionDelegate *item)
 
 void AbstractGraphicsView::slotModelChanged()
 {
-    initModelData();
+    updateModelData();
     updateGeometry();
 }
 #include "revisionitem.h"
@@ -113,7 +147,7 @@ void AbstractGraphicsView::branchClicked(AbstractRevisionDelegate* d)
     RevisionItem *item = c->item(pos.second);
     c->switchTo(item->parentBranch());
     c->addBranch(new RevisionItem("hello"), "new branch");
-    initModelData();
+    updateModelData();
     updateGeometry();
     emit updateUI();
 }
@@ -126,7 +160,7 @@ void AbstractGraphicsView::commitClicked(AbstractRevisionDelegate*d)
     RevisionItem *item = c->item(pos.second);
     c->switchTo(item->parentBranch());
     c->addCommit(new RevisionItem("test"));
-    initModelData();
+    updateModelData();
     updateGeometry();
     emit updateUI();
 }
@@ -145,7 +179,7 @@ void AbstractGraphicsView::updateGeometry()
         for (int i = 1; i < mItems.size(); ++i)
         {
             mItems[i]->setSize(mSize.width(), 21);
-            mItems[i]->setPos(mItems[i - 1]->pos() + mItems[i-1]->boundingRect().bottomLeft() + QPointF(0, 2));
+            mItems[i]->setPos(mItems[i - 1]->pos() + mItems[i-1]->boundingRect().bottomLeft() + QPointF(0, 1));
         }
     }
 }

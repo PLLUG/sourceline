@@ -59,7 +59,7 @@ private:
     QAbstractItemModel *mModel;
 
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
-    void initModelData();
+    void updateModelData();
     QRectF resizeRect() const;
 
 private slots:

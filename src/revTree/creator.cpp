@@ -70,6 +70,11 @@ void Creator::addBranch(RevisionItem *b, const QString &name)
     mItems.append(b);
 }
 
+void Creator::merge(RevisionItem *from, RevisionItem *to)
+{
+    //
+}
+
 void Creator::switchTo(Branch *b)
 {
     mCurrent = b;
