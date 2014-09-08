@@ -76,8 +76,16 @@ void ConsoleView::slotSetConsolePath(QString pPath)
         mProcess->terminate();
         qDebug() << mPath << "close";
     }
-    mPath = pPath;
-    startProcess();
+    if(!pPath.isEmpty())
+    {
+        mPath = pPath;
+        startProcess();
+    }
+    else
+    {
+        ui->plainTextEdit->clear();
+        ui->plainTextEdit->appendPlainText("Please select commad-line interpreter in Setting!");
+    }
 }
 
 void ConsoleView::slotReadConsoleOutput()

@@ -45,12 +45,15 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiEditorView, SLOT(slotSetPage(int)));
     connect(mTabBar, SIGNAL(tabMoved(int,int)), mPageManager, SLOT(slotTabMoved(int,int)));
 
-    this->tabifyDockWidget(ui->uiFileView, ui->uiHistoryTree);
-    this->tabifyDockWidget(ui->uiRevisionTable, ui->uiEditorView);
+    this->splitDockWidget( ui->uiRevisionTable, ui->uiEditorView, Qt::Horizontal);
+    this->splitDockWidget(ui->uiEditorView, ui->uiConsole, Qt::Vertical);
+    this->tabifyDockWidget(ui->uiEditorView, ui->uiFileView);
+    this->tabifyDockWidget(ui->uiRevisionTable, ui->uiHistoryTree);
 }
 
 MainWindow::~MainWindow()
 {
+    TrayIcon->hide();
     delete ui;
     delete trayMenu;
     delete TrayIcon;
