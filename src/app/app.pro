@@ -36,11 +36,46 @@ INCLUDEPATH += $$_PRO_FILE_PWD_
 HEADERS += \
     applicationbuilder.h \
     progresshandler.h \
+    ui/revisionview.h \
+    ui/revisionView/branch.h \
+    ui/revisionView/createtree.h \
+    ui/revisionView/creator.h \
+    ui/revisionView/graphfield.h \
+    ui/revisionView/node.h \
+    ui/revisionView/parameters.h \
+    ui/revisionView/revisionitem.h \
+    ui/revisionView/revisionnode.h \
+    ui/revisionView/revisiontablemodel.h \
+    ui/revisionView/view/abstractgraphicsview.h \
+    ui/revisionView/view/abstractrevisiondelegate.h \
+    ui/revisionView/view/bubble.h \
+    ui/revisionView/view/graphicsview.h \
+    ui/revisionView/view/modelindex.h \
+    ui/revisionView/view/revisiongrid.h \
+    ui/revisionView/view/revisionnodeitem.h \
+    ui/revisionView/view/simpleline.h
 
 SOURCES += \
     main.cpp \
     applicationbuilder.cpp \
     progresshandler.cpp \
+    ui/revisionview.cpp \
+    ui/revisionView/branch.cpp \
+    ui/revisionView/createtree.cpp \
+    ui/revisionView/creator.cpp \
+    ui/revisionView/graphfield.cpp \
+    ui/revisionView/node.cpp \
+    ui/revisionView/revisionitem.cpp \
+    ui/revisionView/revisionnode.cpp \
+    ui/revisionView/revisiontablemodel.cpp \
+    ui/revisionView/view/abstractgraphicsview.cpp \
+    ui/revisionView/view/abstractrevisiondelegate.cpp \
+    ui/revisionView/view/bubble.cpp \
+    ui/revisionView/view/graphicsview.cpp \
+    ui/revisionView/view/modelindex.cpp \
+    ui/revisionView/view/revisiongrid.cpp \
+    ui/revisionView/view/revisionnodeitem.cpp \
+    ui/revisionView/view/simpleline.cpp
 
 # Application UI
 HEADERS += \
@@ -116,7 +151,8 @@ FORMS += \
     ui/about.ui \
     ui/plugininfodialog.ui \
     ui/dockconsole.ui \
-    ui/consoleview.ui
+    ui/consoleview.ui \
+    ui/revisionview.ui
 
 # Application Settings
 HEADERS += \
@@ -163,4 +199,7 @@ RC_FILE += \
     resources/appicon.rc
 
 OTHER_FILES +=
+
+SUBDIRS += \
+    ui/revisionView/revTree.pro
 

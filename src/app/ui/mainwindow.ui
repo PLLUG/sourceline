@@ -53,7 +53,7 @@
    <attribute name="dockWidgetArea">
     <number>8</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_5"/>
+   <widget class="RevisionView" name="dockWidgetContents_5"/>
   </widget>
   <widget class="EditorView" name="uiEditorView">
    <property name="minimumSize">
@@ -234,6 +234,12 @@
    <class>ConsoleView</class>
    <extends>QWidget</extends>
    <header>ui/consoleview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>RevisionView</class>
+   <extends>QWidget</extends>
+   <header>ui/revisionview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
