@@ -5,19 +5,19 @@
 #include "genericdockwidget.h"
 #include <string>
 namespace Ui {
-class Console;
+class DockConsole;
 }
 
-class Console : public GenericDockWidget
+class DockConsole : public GenericDockWidget
 {
     Q_OBJECT
 
 public:
-    explicit Console(QWidget *parent = 0);
-    ~Console();
+    explicit DockConsole(QWidget *parent = 0);
+    ~DockConsole();
     DockTypes::DockType type() const;
 private:
-    Ui::Console *ui;
+    Ui::DockConsole *ui;
 public slots:
     void slotSetPage(int pPage);
 };

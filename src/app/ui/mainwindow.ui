@@ -126,7 +126,7 @@
    </attribute>
    <widget class="QWidget" name="dockWidgetContents_8"/>
   </widget>
-  <widget class="Console" name="uiConsole">
+  <widget class="DockConsole" name="uiConsole">
    <property name="minimumSize">
     <size>
      <width>461</width>
@@ -139,7 +139,7 @@
    <attribute name="dockWidgetArea">
     <number>2</number>
    </attribute>
-   <widget class="QWidget" name="dockWidgetContents_3"/>
+   <widget class="ConsoleView" name="dockWidgetContents_3"/>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -147,7 +147,7 @@
      <x>0</x>
      <y>0</y>
      <width>729</width>
-     <height>19</height>
+     <height>21</height>
     </rect>
    </property>
   </widget>
@@ -195,12 +195,6 @@
  <layoutdefault spacing="6" margin="11"/>
  <customwidgets>
   <customwidget>
-   <class>Console</class>
-   <extends>QDockWidget</extends>
-   <header>ui/console.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
    <class>RevisionTable</class>
    <extends>QDockWidget</extends>
    <header>ui/revisiontable.h</header>
@@ -228,6 +222,18 @@
    <class>FileView</class>
    <extends>QWidget</extends>
    <header>ui/fileview.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>DockConsole</class>
+   <extends>QDockWidget</extends>
+   <header>ui/dockconsole.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ConsoleView</class>
+   <extends>QWidget</extends>
+   <header>ui/consoleview.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

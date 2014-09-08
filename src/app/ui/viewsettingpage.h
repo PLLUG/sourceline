@@ -47,16 +47,21 @@ public:
 signals:
     void signalGetSettings(QString pPath);
 
+private slots:
+    void slotBtnOpen();
+
 public slots:
     void slotFileViewChanged(QVariant pValue);
     void slotEditorViewChanged(QVariant pValue);
     void slotRevTreeChanged(QVariant pValue);
     void slotConsoleChanged(QVariant pValue);
     void slotTreeChanged(QVariant pValue);
+    void slotConsolePath(QVariant pValue);
 
 private:
     Ui::Form *mDialogUi;
     Ui::MainWindow *mMainUi;
+    QString consolePath;
 
 };
 

@@ -1,6 +1,3 @@
-#ifndef APPSETTINGSDIALOG_H
-#define APPSETTINGSDIALOG_H
-
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -24,52 +21,80 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "settingspage.h"
+#include "console.h"
 
-#include <QDialog>
-#include <QString>
-#include <QPixmap>
-#include <QModelIndex>
-#include <QSettings>
+#include <QScrollBar>
 
 #include <QDebug>
-#include <QLayout>
-#include <QLayoutItem>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QCheckBox>
-#include <QPushButton>
 
-namespace Ui {
-    class AppSettingsDialog;
+Console::Console(QWidget *parent)
+    : QPlainTextEdit(parent)
+    , localEchoEnabled(false)
+{
+    document()->setMaximumBlockCount(100);
+    QPalette p = palette();
+    p.setColor(QPalette::Base, Qt::black);
+    p.setColor(QPalette::Text, Qt::green);
+    setPalette(p);
 }
 
-class AppSettingsDialog : public QDialog
+void Console::putData(const QByteArray &data)
 {
-    Q_OBJECT
+    insertPlainText(QString(data.constData()));
 
-public:
-    explicit AppSettingsDialog(QWidget *parent = 0);
-    virtual ~AppSettingsDialog();
+    QScrollBar *bar = verticalScrollBar();
+    bar->setValue(bar->maximum());
+}
 
-    void addSettingsItem(SettingsPage *pSettingPage);
+void Console::setLocalEchoEnabled(bool set)
+{
+    localEchoEnabled = set;
+}
 
-private slots:
-    void slotBtnOk();
-    void slotBtnCancel();
-    void slotBtnApply();
-    void slotOnListItemClicked(int index);
+void Console::keyPressEvent(QKeyEvent *e)
+{
+    switch (e->key()) {
+    case Qt::Key_Backspace:
+        if(!currentCmd.isEmpty())
+        {
+            currentCmd.remove(currentCmd.length()-1, 1);
+            QPlainTextEdit::keyPressEvent(e);
+        }
+        break;
+    case Qt::Key_Return:
+    case Qt::Key_Enter:
+        emit signalSendCmd(currentCmd);
+        currentCmd.clear();
+        break;
+    case Qt::Key_Left:
+    case Qt::Key_Right:
+    case Qt::Key_Up:
+    case Qt::Key_Down:
+        QPlainTextEdit::keyPressEvent(e);
+        break;
+    default:
+        QTextCursor cursor = textCursor();
+        cursor.movePosition(QTextCursor::End);
+        setTextCursor(cursor);
+        if (localEchoEnabled)
+            QPlainTextEdit::keyPressEvent(e);
+        currentCmd.append(e->text());
+        emit getData(e->text().toLocal8Bit());
+    }
+}
 
-    void slotPageModified();
+//void Console::mousePressEvent(QMouseEvent *e)
+//{
+//    Q_UNUSED(e)
+//    setFocus();
+//}
 
-private:
-    Ui::AppSettingsDialog *ui;
-    QPushButton* mApplyButton;
-    QStringList mSettingsNameList;
-    QVector<QWidget*> settingsWidgetList;
-    QList<SettingsPage*> mSettingPages;
+void Console::mouseDoubleClickEvent(QMouseEvent *e)
+{
+    Q_UNUSED(e)
+}
 
-    bool mSettingsChanged;
-};
-
-#endif // APPSETTINGSDIALOG_H
+void Console::contextMenuEvent(QContextMenuEvent *e)
+{
+    Q_UNUSED(e)
+}

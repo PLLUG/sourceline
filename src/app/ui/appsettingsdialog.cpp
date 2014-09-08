@@ -30,10 +30,10 @@ AppSettingsDialog::AppSettingsDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // TASK : use QDialogButtonBox
-    connect(ui->btnOk, SIGNAL(clicked()), SLOT(slotBtnOk()));
-    connect(ui->btnCancel, SIGNAL(clicked()), SLOT(slotBtnCancel()));
-    connect(ui->btnApply, SIGNAL(clicked()), SLOT(slotBtnApply()));
+    connect(ui->buttonBox, SIGNAL(accepted()), SLOT(slotBtnOk()));
+    connect(ui->buttonBox, SIGNAL(rejected()), SLOT(slotBtnCancel()));
+    mApplyButton = ui->buttonBox->button(QDialogButtonBox::Apply);
+    connect(mApplyButton, SIGNAL(clicked()), SLOT(slotBtnApply()));
     connect(ui->listWidget, SIGNAL(currentRowChanged(int)), SLOT(slotOnListItemClicked(int)));
 }
 
@@ -61,10 +61,8 @@ void AppSettingsDialog::addSettingsItem(SettingsPage *pSettingPage)
     ui->stackedWidget->addWidget(pSettingPage);
     ui->stackedWidget->setCurrentIndex(0);
 
-    connect(ui->btnOk, SIGNAL(clicked(bool)),
-            this, SLOT(slotBtnOk()), Qt::UniqueConnection);
-    connect(ui->btnCancel, SIGNAL(clicked(bool)),
-            pSettingPage, SLOT(slotCancel()), Qt::UniqueConnection);
+    connect(ui->buttonBox, SIGNAL(accepted()), SLOT(slotBtnOk()));
+    connect(ui->buttonBox, SIGNAL(rejected()), SLOT(slotBtnCancel()));
     connect(pSettingPage->settings(), SIGNAL(modified(bool)),
         this, SLOT(slotPageModified()), Qt::UniqueConnection);
 }
@@ -72,13 +70,13 @@ void AppSettingsDialog::addSettingsItem(SettingsPage *pSettingPage)
 void AppSettingsDialog::slotBtnOk()
 {
     slotBtnApply();
-    this->close(); // TASK: connect buttons to accept() / reject()
+    this->close();
 }
 
 void AppSettingsDialog::slotBtnCancel()
 {
     mSettingPages.at(ui->stackedWidget->currentIndex())->settings()->revert();
-    this->close();// TASK: connect buttons to accept() / reject()
+    this->close();
 }
 
 void AppSettingsDialog::slotBtnApply()
@@ -103,5 +101,5 @@ void AppSettingsDialog::slotPageModified()
         }
     }
 
-    ui->btnApply->setEnabled(isModified);
+    mApplyButton->setEnabled(isModified);
 }

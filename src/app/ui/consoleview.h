@@ -1,6 +1,3 @@
-#ifndef APPSETTINGSDIALOG_H
-#define APPSETTINGSDIALOG_H
-
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -24,52 +21,43 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "settingspage.h"
+#ifndef CONSOLEVIEW_H
+#define CONSOLEVIEW_H
 
-#include <QDialog>
-#include <QString>
-#include <QPixmap>
-#include <QModelIndex>
-#include <QSettings>
-
-#include <QDebug>
-#include <QLayout>
-#include <QLayoutItem>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QCheckBox>
-#include <QPushButton>
+#include <QWidget>
 
 namespace Ui {
-    class AppSettingsDialog;
+class ConsoleView;
 }
+class QProcess;
 
-class AppSettingsDialog : public QDialog
+class ConsoleView : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit AppSettingsDialog(QWidget *parent = 0);
-    virtual ~AppSettingsDialog();
+    explicit ConsoleView(QWidget *parent = 0);
+    ~ConsoleView();
+    void execute(QString pCommand);
+    QString consolePath();
 
-    void addSettingsItem(SettingsPage *pSettingPage);
-
-private slots:
-    void slotBtnOk();
-    void slotBtnCancel();
-    void slotBtnApply();
-    void slotOnListItemClicked(int index);
-
-    void slotPageModified();
+public slots:
+    void slotSetConsolePath(QString pPath);
+    void slotReadConsoleOutput();
+    void slotExec(QString cmd);
 
 private:
-    Ui::AppSettingsDialog *ui;
-    QPushButton* mApplyButton;
-    QStringList mSettingsNameList;
-    QVector<QWidget*> settingsWidgetList;
-    QList<SettingsPage*> mSettingPages;
+    void startProcess();
 
-    bool mSettingsChanged;
+private slots:
+    void slotPrintWorkingDir(QString dir = QString());
+
+
+private:
+    Ui::ConsoleView *ui;
+    QProcess *mProcess;
+    QString mPath;
+    bool dirPrinted;
 };
 
-#endif // APPSETTINGSDIALOG_H
+#endif // CONSOLEVIEW_H

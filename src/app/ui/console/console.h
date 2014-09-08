@@ -1,6 +1,3 @@
-#ifndef APPSETTINGSDIALOG_H
-#define APPSETTINGSDIALOG_H
-
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -24,52 +21,33 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "settingspage.h"
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
-#include <QDialog>
-#include <QString>
-#include <QPixmap>
-#include <QModelIndex>
-#include <QSettings>
+#include <QPlainTextEdit>
 
-#include <QDebug>
-#include <QLayout>
-#include <QLayoutItem>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QCheckBox>
-#include <QPushButton>
-
-namespace Ui {
-    class AppSettingsDialog;
-}
-
-class AppSettingsDialog : public QDialog
+class Console : public QPlainTextEdit
 {
     Q_OBJECT
-
 public:
-    explicit AppSettingsDialog(QWidget *parent = 0);
-    virtual ~AppSettingsDialog();
+    explicit Console(QWidget *parent = 0);
+    void putData(const QByteArray &data);
+    void setLocalEchoEnabled(bool set);
 
-    void addSettingsItem(SettingsPage *pSettingPage);
+protected:
+    virtual void keyPressEvent(QKeyEvent *e);
+//    virtual void mousePressEvent(QMouseEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
-private slots:
-    void slotBtnOk();
-    void slotBtnCancel();
-    void slotBtnApply();
-    void slotOnListItemClicked(int index);
-
-    void slotPageModified();
+signals:
+    void getData(const QByteArray &data);
+    void signalSendCmd(QString);
 
 private:
-    Ui::AppSettingsDialog *ui;
-    QPushButton* mApplyButton;
-    QStringList mSettingsNameList;
-    QVector<QWidget*> settingsWidgetList;
-    QList<SettingsPage*> mSettingPages;
+    bool localEchoEnabled;
+    QString currentCmd;
 
-    bool mSettingsChanged;
 };
 
-#endif // APPSETTINGSDIALOG_H
+#endif // CONSOLE_H

@@ -30,25 +30,21 @@ CONFIG += sl_project
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
-HEADERS +=
-SOURCES +=
-
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
 # Main
 HEADERS += \
     applicationbuilder.h \
-    progresshandler.h
+    progresshandler.h \
 
 SOURCES += \
     main.cpp \
     applicationbuilder.cpp \
-    progresshandler.cpp
+    progresshandler.cpp \
 
 # Application UI
 HEADERS += \
     ui/splashscreen.h \
-    ui/console.h \
     ui/customtabbar.h \
     ui/docktitlebar.h \
     ui/editorview.h \
@@ -65,8 +61,11 @@ HEADERS += \
     ui/mainmenubuilder.h \
     ui/fileview.h \
     ui/dockfileview.h \
-    fileview/exploreritemdelegate.h \
-    fileview/iconizedlineedit.h \
+    ui/dockconsole.h \
+    ui/fileview/exploreritemdelegate.h \
+    ui/fileview/iconizedlineedit.h \
+    ui/console/console.h \
+    ui/consoleview.h \
     ui/about.h \
     ui/plugininfodialog.h \
     ui/useraction.h \
@@ -75,7 +74,6 @@ HEADERS += \
 
 SOURCES += \
     ui/splashscreen.cpp \
-    ui/console.cpp \
     ui/customtabbar.cpp \
     ui/editorview.cpp \
     ui/genericdockwidget.cpp \
@@ -92,15 +90,17 @@ SOURCES += \
     ui/plugininfodialog.cpp \
     ui/useraction.cpp \
     ui/fileview.cpp \
+    ui/dockconsole.cpp \
     ui/dockfileview.cpp \
-    fileview/exploreritemdelegate.cpp \
-    fileview/iconizedlineedit.cpp \
+    ui/fileview/exploreritemdelegate.cpp \
+    ui/fileview/iconizedlineedit.cpp \
+    ui/console/console.cpp \
+    ui/consoleview.cpp \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
 
 
 FORMS += \
-    ui/console.ui \
     ui/customtabbar.ui \
     ui/editorview.ui \
     ui/files.ui \
@@ -110,10 +110,13 @@ FORMS += \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui \
+    ui/dockconsole.ui \
     ui/dockfileview.ui \
     ui/fileview.ui \
     ui/about.ui \
-    ui/plugininfodialog.ui
+    ui/plugininfodialog.ui \
+    ui/dockconsole.ui \
+    ui/consoleview.ui
 
 # Application Settings
 HEADERS += \
