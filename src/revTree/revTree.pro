@@ -25,7 +25,6 @@ SOURCES += main.cpp\
     view/abstractrevisiondelegate.cpp \
     view/bubble.cpp \
     revisionwidget.cpp \
-    revisiontree.cpp \
     graphfield.cpp \
     node.cpp \
     revisionitem.cpp \
@@ -45,12 +44,12 @@ HEADERS  += mainwindow.h \
     view/abstractrevisiondelegate.h \
     view/bubble.h \
     revisionwidget.h \
-    revisiontree.h \
     graphfield.h \
     node.h \
     revisionitem.h \
     branch.h \
-    creator.h
+    creator.h \
+    parameters.h
 
 FORMS    += mainwindow.ui \
     revisionwidget.ui

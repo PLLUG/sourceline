@@ -24,6 +24,8 @@
 
 #include "abstractgraphicsview.h"
 #include "abstractrevisiondelegate.h"
+#include "parameters.h"
+
 #include <QPainter>
 #include <QAbstractItemModel>
 #include <QDebug>
@@ -79,7 +81,7 @@ void AbstractGraphicsView::setModel(QAbstractItemModel *model)
 void AbstractGraphicsView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
     painter->setPen(Qt::NoPen);
-    painter->setBrush(QColor(200, 200, 200));
+    painter->setBrush(Parameters::ViewBackground());
     painter->drawRect(boundingRect());
 }
 

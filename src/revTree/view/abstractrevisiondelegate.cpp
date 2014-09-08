@@ -23,6 +23,8 @@
 
 #include "abstractrevisiondelegate.h"
 #include "bubble.h"
+#include "parameters.h"
+
 #include <QPainter>
 #include <QGraphicsSceneMouseEvent>
 #include <QStyleOptionGraphicsItem>
@@ -42,7 +44,7 @@ AbstractRevisionDelegate::AbstractRevisionDelegate(QGraphicsItem *parent) :
     mBubble->setParentItem(this);
     connect(mBubble, SIGNAL(updateBubble()), this, SLOT(updateBubblePosition()));
     mBubble->setPen(QPen(Qt::darkCyan));
-    mGridStep = 15;
+    mGridStep = Parameters::GridStep;
 
     updateBubblePosition();
 }
@@ -69,24 +71,23 @@ void AbstractRevisionDelegate::setPreviousState(const QPointF &pos)
 void AbstractRevisionDelegate::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *)
 {
     painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(QPen(QColor(30, 30, 30), 1));
+    painter->setPen(Parameters::ItemBoudingRectPen());
     painter->drawRoundedRect(boundingRect(), 4, 4);
 
     QColor c;
     if ( option->state &QStyle::State_Selected )
     {
-        c = QColor(170, 170, 170, 150);
+        c = Parameters::ItemSelectedColor();
     }
     else
     {
-        c = QColor(150, 150, 150, 150);
+        c = Parameters::ItemBackground();
     }
-    QColor main = QColor(30, 130, 210, 255);
     painter->fillRect(option->rect, c);
     QMap<QString, QVariant> drawingData = data(DR_Drawing).toMap();
     if ( drawingData.contains("pos") )
     {
-        painter->setPen(main);
+        painter->setPen(Parameters::LinesColor());
         int pos = drawingData.value("pos").toInt() + 1;
         mBubblePos = pos;
 

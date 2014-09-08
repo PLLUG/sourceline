@@ -21,45 +21,24 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "bubble.h"
-#include "abstractrevisiondelegate.h"
-#include "parameters.h"
-#include <QPainter>
-#include <QDebug>
+#ifndef PARAMETERS_H
+#define PARAMETERS_H
 
-Bubble::Bubble(QGraphicsItem *parent) :
-    QGraphicsItem(parent)
+#include <QBrush>
+#include <QPen>
+
+class Parameters
 {
-    prepareGeometryChange();
-    mArea = Parameters::bubbleRect();
+public:
+    static QBrush ViewBackground() { return QColor(200, 200, 200); }
+    static QPen ItemBoudingRectPen() { return QPen(QColor(30, 30, 30), 1); }
+    static QColor ItemSelectedColor() { return QColor(170, 170, 170, 150); }
+    static QColor ItemBackground() { return QColor(150, 150, 150, 150); }
+    static QColor LinesColor() { return QColor(30, 130, 210, 255); }
 
-    setFlags(ItemIsMovable | ItemIsSelectable);
-}
+    static QRectF bubbleRect() { return QRectF(0, 0, 8, 8); }
 
-QRectF Bubble::boundingRect() const
-{
-    return QRectF(mArea.x() - 1, mArea.y() - 1, mArea.width() + 2, mArea.height() + 2);
-}
+    static const int GridStep = 15;
+};
 
-void Bubble::setPen(const QPen &pen)
-{
-    mPen = pen;
-    update();
-}
-
-void Bubble::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
-{
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(mPen.brush());
-    painter->drawEllipse(boundingRect().center(), 3, 3);
-    painter->setPen(mPen);
-    painter->setBrush(Qt::NoBrush);
-    painter->drawEllipse(boundingRect());
-}
-
-void Bubble::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
-{
-    emit updateBubble();
-    QGraphicsItem::mouseReleaseEvent(event);
-}
+#endif // PARAMETERS_H
