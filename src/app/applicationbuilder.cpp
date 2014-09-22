@@ -47,6 +47,7 @@
 // Application UI
 #include "ui/splashscreen.h"
 #include "ui/dialogplugins.h"
+#include "ui/plugininfodialog.h"
 #include "ui/mainwindow.h"
 #include "ui/about.h"
 #include "progresshandler.h"
@@ -182,6 +183,9 @@ void ApplicationBuilder::createUi()
     // Plugin settings
     DialogPlugins *lDialogPlugins = new DialogPlugins(mMainWindow);
     mPluginSettingsMediator->setPluginDialog(lDialogPlugins);
+
+    PluginInfoDialog *lPluginInfoDialog = new PluginInfoDialog(lDialogPlugins);
+    mPluginSettingsMediator->setPluginInfoDialog(lPluginInfoDialog);
 
     // Application settings dialog
     mAppSettingsDialog = new AppSettingsDialog();

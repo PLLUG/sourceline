@@ -23,10 +23,11 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <QObject>
+#include <QMessageBox>
 
 class PluginManager;
 class DialogPlugins;
-class PropertyInfoDialog;
+class /*PropertyInfoDialog(?)*/PluginInfoDialog;
 class Settings;
 
 class PluginSettingsMediator : public QObject
@@ -52,7 +53,7 @@ public:
      * \brief Sets PropertyInfoDialog instance that will be used for displaying info about plugin
      *  (will appear after pressing info (i) button in a row of certain plugin description).
      */
-    void setPluginInfoDialog(PropertyInfoDialog *pDialog);
+    void setPluginInfoDialog(/*PropertyInfoDialog(?)*/PluginInfoDialog *pDialog);
     void setSettings(Settings *pSettings);
 
 signals:
@@ -81,7 +82,7 @@ private:
     Settings *mSettings;
     DialogPlugins *mDialog;
     PluginManager *mManager;
-    PropertyInfoDialog *mInfoDialog;
+    /*PropertyInfoDialog(?)*/PluginInfoDialog *mInfoDialog;
 };
 
 #endif // PLUGINSETTINGSMEDIATOR_H

@@ -24,6 +24,7 @@
 #include "pluginmanager.h"
 #include "../ui/dialogplugins.h"
 #include "settings.h"
+#include "../ui/plugininfodialog.h"
 
 PluginSettingsMediator::PluginSettingsMediator(QObject *parent) :
     QObject(parent),
@@ -41,12 +42,12 @@ void PluginSettingsMediator::setPluginManager(PluginManager *pManager)
 void PluginSettingsMediator::setPluginDialog(DialogPlugins *pDialog)
 {
     mDialog = pDialog;
+    connect(mDialog, SIGNAL(signalButtonPressed(QString)), this, SLOT(slotShowPluginInfo(QString)));
 }
 
-void PluginSettingsMediator::setPluginInfoDialog(PropertyInfoDialog *pDialog)
+void PluginSettingsMediator::setPluginInfoDialog(/*PropertyInfoDialog(?)*/PluginInfoDialog *pDialog)
 {
-    Q_UNUSED(pDialog)
-    //TASK: plugin info dialog should be set from outside of PluginSettingsMediator class
+    mInfoDialog = pDialog;
 }
 
 void PluginSettingsMediator::setSettings(Settings *pSettings)
@@ -75,9 +76,17 @@ void PluginSettingsMediator::slotExecPluginSettings()
     }
 }
 
-void PluginSettingsMediator::slotShowPluginInfo(const QString &pPluginID)
+void PluginSettingsMediator::slotShowPluginInfo(const QString &pPluginId)
 {
-    Q_UNUSED(pPluginID);
-    //TASK: make use of this slot - this slot should be called when plugin info button clicked,
-    //      then mediator is responsible for showing plugin info dialog with correct data
+    foreach (const PluginInfo& lPluginInfo, mManager->pluginsInfo())
+    {
+        if (lPluginInfo.pluginId() == pPluginId)
+        {
+            mInfoDialog->setPluginName(pPluginId);
+            mInfoDialog->setPluginInfo(lPluginInfo.additionalInfo());
+            mInfoDialog->show();
+            return;
+        }
+    }
+    QMessageBox::critical(mDialog, "Error", "No additional info available");
 }
