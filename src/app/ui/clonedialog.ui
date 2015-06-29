@@ -55,15 +55,27 @@
           <property name="text">
            <string>Git</string>
           </property>
+          <property name="icon">
+           <iconset resource="../resources/resources.qrc">
+            <normaloff>:/splash/Icons/gitIcon.png</normaloff>:/splash/Icons/gitIcon.png</iconset>
+          </property>
          </item>
          <item>
           <property name="text">
            <string>SVN</string>
           </property>
+          <property name="icon">
+           <iconset resource="../resources/resources.qrc">
+            <normaloff>:/splash/Icons/svnIcon.png</normaloff>:/splash/Icons/svnIcon.png</iconset>
+          </property>
          </item>
          <item>
           <property name="text">
            <string>Mercurial</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resources/resources.qrc">
+            <normaloff>:/splash/Icons/mercurialIcon.png</normaloff>:/splash/Icons/mercurialIcon.png</iconset>
           </property>
          </item>
         </widget>
@@ -142,7 +154,9 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resources/resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>buttonBox</sender>
