@@ -72,6 +72,8 @@ void Creator::addBranch(RevisionItem *b, const QString &name)
 
 void Creator::merge(RevisionItem *from, RevisionItem *to)
 {
+    Q_UNUSED(from)
+    Q_UNUSED(to)
     //
 }
 
