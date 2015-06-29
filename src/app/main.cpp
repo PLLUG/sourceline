@@ -34,6 +34,7 @@ int main(int pArgc, char *pArgv[])
 
     // TASK: colaboration between SourceLineApplication instance and ApplicationBuilder?
     ApplicationBuilder lApplcationBuilder;
+    Q_UNUSED(lApplcationBuilder)
 
     int rResult = lApplication.exec();
     return rResult;
