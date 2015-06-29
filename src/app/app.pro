@@ -152,7 +152,8 @@ FORMS += \
     ui/plugininfodialog.ui \
     ui/dockconsole.ui \
     ui/consoleview.ui \
-    ui/revisionview.ui
+    ui/revisionview.ui \
+    ui/clonedialog.ui
 
 # Application Settings
 HEADERS += \
