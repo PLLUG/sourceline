@@ -19,6 +19,12 @@ CloneDialog::~CloneDialog()
 
 void CloneDialog::browse()
 {
-
+    QString directory = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                    QDir::homePath(),
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
+    if (!directory.isEmpty()) {
+        ui->cloneLineEdit->setText(directory);
+    }
 }
 
