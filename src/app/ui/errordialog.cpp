@@ -12,6 +12,10 @@ ErrorDialog::ErrorDialog(QWidget *parent) :
 ErrorDialog::~ErrorDialog()
 {
     delete ui;
+    /*!
+     * \brief connect
+     * Connect performs slot on_pushButtonOk_clicked() after pushing on button Ok
+     */
     connect(pushButtonOk,SIGNAL(clicked(bool)),this,SLOT(on_pushButtonOk_clicked()));
 }
 

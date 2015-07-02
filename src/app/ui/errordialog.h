@@ -16,6 +16,11 @@ public:
     ~ErrorDialog();
 
 private slots:
+    /*!
+     * \brief on_pushButtonOk_clicked
+     * After pushing close opened dialog
+     * Maybe later will record info in log file
+     */
     void on_pushButtonOk_clicked();
 
 private:
