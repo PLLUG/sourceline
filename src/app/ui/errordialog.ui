@@ -1,9 +1,6 @@
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>ErrorDialog</class>
- <widget class="QWidget" name="ErrorDialog">
+ <widget class="QDialog" name="ErrorDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -13,9 +10,9 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Dialog</string>
   </property>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>

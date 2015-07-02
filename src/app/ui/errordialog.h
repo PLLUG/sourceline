@@ -1,13 +1,13 @@
 #ifndef ERRORDIALOG_H
 #define ERRORDIALOG_H
 
-#include <QWidget>
+#include <QDialog>
 
 namespace Ui {
 class ErrorDialog;
 }
 
-class ErrorDialog : public QWidget
+class ErrorDialog : public QDialog
 {
     Q_OBJECT
 
