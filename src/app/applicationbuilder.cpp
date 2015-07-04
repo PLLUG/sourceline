@@ -24,6 +24,7 @@
 #include "applicationbuilder.h"
 
 #include <QTimer>
+#include <QApplication>
 
 // Plugin Support
 #include <plugin.h>
@@ -37,6 +38,8 @@
 
 // Settings
 #include <settings.h>
+#include "settings_dialog/settingstorage.h"
+#include "settings_dialog/settingsmanager.h"
 
 // Main Application Classes
 #include "ui/actionmanager.h"
@@ -50,6 +53,8 @@
 #include "ui/plugininfodialog.h"
 #include "ui/mainwindow.h"
 #include "ui/about.h"
+#include "ui/viewsettingpage.h"
+#include "ui/appsettingsdialog.h"
 #include "progresshandler.h"
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :

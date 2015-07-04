@@ -4,18 +4,17 @@
 // TASK: refactor: too many includes
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#include <QIcon>
-#include <QMenu>
-#include <QCloseEvent>
-#include <QApplication>
-#include "settings.h"
-#include "appsettingsdialog.h"
-#include "viewsettingpage.h"
-#include "settings_dialog/settingstorage.h"
-#include "settings_dialog/settingsmanager.h"
-#include "customtabbar.h"
-#include "pagemanager.h"
-#include "about.h"
+//#include <QIcon>
+//#include <QMenu>
+//#include <QCloseEvent>
+//#include <QApplication>
+//#include "settings.h"
+//#include "appsettingsdialog.h"
+//#include "viewsettingpage.h"
+
+class PageManager;
+class CustomTabBar;
+class QMenu;
 
 namespace Ui {
 class MainWindow;
