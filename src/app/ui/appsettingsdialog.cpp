@@ -24,6 +24,9 @@
 #include "appsettingsdialog.h"
 #include "ui_appsettingsdialog.h"
 
+#include <QPushButton>
+#include <QDebug>
+
 AppSettingsDialog::AppSettingsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AppSettingsDialog)

@@ -1,16 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-// TASK: refactor: too many includes
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-//#include <QIcon>
-//#include <QMenu>
-//#include <QCloseEvent>
-//#include <QApplication>
-//#include "settings.h"
-//#include "appsettingsdialog.h"
-//#include "viewsettingpage.h"
 
 class PageManager;
 class CustomTabBar;

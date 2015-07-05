@@ -23,7 +23,6 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <QObject>
-#include <QHash>
 #include <QDir>
 #include <QList>
 #include <QStringList>

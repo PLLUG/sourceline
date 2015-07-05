@@ -23,6 +23,8 @@
 
 #include "creator.h"
 #include "revisionitem.h"
+#include "branch.h"
+
 #include <QVector>
 #include <QDebug>
 

@@ -2,6 +2,8 @@
 #include "ui_editorview.h"
 #include "guidefs.h"
 
+#include <QWidget>
+
 EditorView::EditorView(QWidget *parent) :
     GenericDockWidget(parent),
     ui(new Ui::EditorView)

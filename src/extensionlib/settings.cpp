@@ -24,6 +24,9 @@
 
 #include "settings.h"
 
+#include <QSignalMapper>
+#include <QDebug>
+
 Settings::Settings(QObject *parent) :
     QObject(parent),
     mPropertyMapper(new QSignalMapper(this)),

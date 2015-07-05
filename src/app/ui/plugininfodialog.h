@@ -2,10 +2,9 @@
 #define PLUGININFODIALOG_H
 
 #include <QDialog>
-#include <QStandardItemModel>
-#include <QStandardItem>
 #include <QString>
-#include <QList>
+
+class QStandardItemModel;
 
 namespace Ui {
 class PluginInfoDialog;

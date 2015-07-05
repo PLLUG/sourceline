@@ -47,7 +47,6 @@ class MainWindow;
 class AppSettingsDialog;
 class About;
 
-#include "progresshandler.h"
 
 /*!
  * \brief The ApplicationBuilder class resporsible for creation of all objects in application

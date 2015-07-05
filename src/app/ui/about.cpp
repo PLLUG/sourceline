@@ -1,6 +1,10 @@
 #include "about.h"
 #include "ui_about.h"
 
+#include <QDebug>
+#include <QTextStream>
+#include <QFile>
+
 // TASK: rename class to AboutDialog
 About::About(QWidget *parent) :
     QDialog(parent,

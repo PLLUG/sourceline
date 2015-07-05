@@ -27,12 +27,11 @@
 
 
 #include <QObject>
-#include <QMultiMap>
 #include <QVariant>
 #include <QMetaProperty>
-#include <QDebug>
-#include <QSignalMapper>
 #include "extensions_global.h"
+
+class QSignalMapper;
 
 class EXTENSIONSSHARED_EXPORT Settings : public QObject
 {

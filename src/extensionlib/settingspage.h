@@ -28,7 +28,6 @@
 
 #include <QWidget>
 #include <QIcon>
-#include <QDebug>
 #include "extensions_global.h"
 
 class EXTENSIONSSHARED_EXPORT SettingsPage : public QWidget

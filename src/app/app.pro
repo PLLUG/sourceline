@@ -150,7 +150,6 @@ FORMS += \
     ui/fileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
-    ui/dockconsole.ui \
     ui/consoleview.ui \
     ui/revisionview.ui
 

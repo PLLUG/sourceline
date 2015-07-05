@@ -22,6 +22,7 @@
 *******************************************************************************/
 
 #include "graphfield.h"
+#include "node.h"
 
 GraphField::GraphField() :
     mWidth(0),

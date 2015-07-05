@@ -22,6 +22,8 @@
 *******************************************************************************/
 
 #include "revisiongrid.h"
+#include "../revisionnode.h"
+#include "revisionnodeitem.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -75,6 +77,8 @@ void RevisionGrid::drawText(const QString &txt, RevisionNodeItem *i)
 
 void RevisionGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(Qt::NoPen);
     painter->setBrush(QBrush(QColor(100, 100, 100)));

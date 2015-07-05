@@ -24,8 +24,9 @@
 #ifndef CREATETREE_H
 #define CREATETREE_H
 
-#include "revisionnode.h"
 #include <QVector>
+
+QT_FORWARD_DECLARE_CLASS(RevisionNode)
 
 class CreateTree
 {

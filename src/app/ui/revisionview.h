@@ -24,11 +24,12 @@
 #ifndef REVISIONWIDGET_H
 #define REVISIONWIDGET_H
 
-#include <QWidget>
 #include "revisionView/revisiontablemodel.h"
 
-QT_FORWARD_DECLARE_CLASS(AbstractGraphicsView)
-QT_FORWARD_DECLARE_CLASS(QGraphicsScene)
+#include <QWidget>
+
+class AbstractGraphicsView;
+class QGraphicsScene;
 
 namespace Ui {
 class RevisionView;

@@ -1,6 +1,8 @@
 #include "dockfileview.h"
 #include "ui_dockfileview.h"
 
+#include <QWidget>
+
 DockFileView::DockFileView(QWidget *parent) :
     GenericDockWidget(parent),
     ui(new Ui::DockFileView)
@@ -20,4 +22,5 @@ DockTypes::DockType DockFileView::type() const
 
 void DockFileView::slotSetPage(int pPage)
 {
+    Q_UNUSED(pPage)
 }

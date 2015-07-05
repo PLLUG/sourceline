@@ -23,6 +23,7 @@
 
 #include "viewsettingpage.h"
 #include "ui_mainwindow.h"
+#include "settings.h"
 
 #include <QFileDialog>
 

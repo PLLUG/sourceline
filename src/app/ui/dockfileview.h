@@ -1,8 +1,9 @@
 #ifndef DOCKFILEVIEW_H
 #define DOCKFILEVIEW_H
 
-#include <QWidget>
 #include "genericdockwidget.h"
+
+class QWidget;
 
 namespace Ui {
 class DockFileView;

@@ -34,6 +34,7 @@ QT_FORWARD_DECLARE_CLASS (QAbstractItemModel)
 class AbstractGraphicsView : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 public:
     AbstractGraphicsView();
     ~AbstractGraphicsView();

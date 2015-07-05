@@ -2,6 +2,8 @@
 #include "ui_revisiontable.h"
 #include "guidefs.h"
 
+#include <QWidget>
+
 RevisionTable::RevisionTable(QWidget *parent) :
     GenericDockWidget(parent),
     ui(new Ui::RevisionTable)

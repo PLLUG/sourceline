@@ -22,6 +22,7 @@
 *******************************************************************************/
 
 #include "applicationbuilder.h"
+#include "progresshandler.h"
 
 #include <QTimer>
 #include <QApplication>

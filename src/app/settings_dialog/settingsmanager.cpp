@@ -27,6 +27,8 @@
 #include "settings.h"
 #include "settingstorage.h"
 
+#include <QDebug>
+
 SettingsManager::SettingsManager(QObject *parent) :
     QObject(parent),
     mStorage(0)
