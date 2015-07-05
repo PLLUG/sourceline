@@ -3,6 +3,10 @@
 // TASK: refactor includes
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "pagemanager.h"
+#include "customtabbar.h"
+#include "settings_dialog/settingstorage.h"
+#include "settings_dialog/settingsmanager.h"
 
 #include <QMessageBox>
 #include <QFile>

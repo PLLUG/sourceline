@@ -24,7 +24,10 @@
 #ifndef BRANCH_H
 #define BRANCH_H
 
-#include "revisionitem.h"
+#include <QString>
+#include <QList>
+
+class RevisionItem;
 
 class Branch
 {

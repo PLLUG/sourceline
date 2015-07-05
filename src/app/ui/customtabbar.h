@@ -1,8 +1,10 @@
 #ifndef CUSTOMTABBAR_H
 #define CUSTOMTABBAR_H
 
-#include <QWidget>
 #include <QTabBar>
+
+class QWidget;
+
 namespace Ui {
 class CustomTabBar;
 }

@@ -28,17 +28,8 @@
 
 #include <QDialog>
 #include <QString>
-#include <QPixmap>
-#include <QModelIndex>
-#include <QSettings>
 
-#include <QDebug>
-#include <QLayout>
-#include <QLayoutItem>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QCheckBox>
-#include <QPushButton>
+class QPushButton;
 
 namespace Ui {
     class AppSettingsDialog;

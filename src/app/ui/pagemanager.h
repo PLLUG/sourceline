@@ -2,8 +2,8 @@
 #define PAGEMANAGER_H
 
 #include <QObject>
-#include <QHash>
 #include <QMap>
+
 /*!
  * \brief The PageManager class handles all pages for repositories.
  */

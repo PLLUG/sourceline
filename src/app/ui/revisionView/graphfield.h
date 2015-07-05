@@ -25,7 +25,8 @@
 #define GRAPHFIELD_H
 
 #include <QList>
-#include "node.h"
+
+QT_FORWARD_DECLARE_CLASS(Node)
 
 class GraphField
 {

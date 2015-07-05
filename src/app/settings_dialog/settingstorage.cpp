@@ -22,6 +22,9 @@
 *******************************************************************************/
 
 #include "settingstorage.h"
+#include <QSettings>
+#include <QVariant>
+#include <QDebug>
 
 SettingStorage::SettingStorage(QObject *parent) :
     QObject(parent)

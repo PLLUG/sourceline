@@ -1,6 +1,9 @@
 #include "customtabbar.h"
 #include "ui_customtabbar.h"
+
 #include <QDebug>
+#include <QWidget>
+
 CustomTabBar::CustomTabBar(QWidget *parent) :
     QTabBar(parent),
     ui(new Ui::CustomTabBar)

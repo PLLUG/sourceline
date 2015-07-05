@@ -1,8 +1,10 @@
 #ifndef HISTORYTREE_H
 #define HISTORYTREE_H
 
-#include <QWidget>
 #include "genericdockwidget.h"
+
+class QWidget;
+
 namespace Ui {
 class HistoryTree;
 }

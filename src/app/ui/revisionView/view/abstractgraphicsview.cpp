@@ -27,6 +27,7 @@
 #include "../parameters.h"
 #include "../revisionitem.h"
 #include "../revisiontablemodel.h"
+#include "../creator.h"
 
 #include <QPainter>
 #include <QAbstractItemModel>
@@ -69,6 +70,7 @@ void AbstractGraphicsView::setSize(const QSizeF &size)
 
 void AbstractGraphicsView::setItemDelegate(AbstractRevisionDelegate *item)
 {
+    Q_UNUSED(item)
     //
 }
 
@@ -82,6 +84,8 @@ void AbstractGraphicsView::setModel(QAbstractItemModel *model)
 
 void AbstractGraphicsView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
     painter->setPen(Qt::NoPen);
     painter->setBrush(Parameters::ViewBackground());
     painter->drawRect(boundingRect());
