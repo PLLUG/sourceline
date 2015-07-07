@@ -51,9 +51,14 @@ FileView::FileView(QWidget *parent) :
 
     //menu for files
     mFileMenu = new QMenu(this);
+
     QAction* actionDeleteFile = new QAction("Delete File",mFileMenu);
     connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
     mFileMenu->addAction(actionDeleteFile);
+
+    QAction* actionRemaneFile = new QAction("Rename File",mFileMenu);
+    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotEditFolder()));
+    mFileMenu->addAction(actionRemaneFile);
 
     //menu for dirs
     mDirMenu = new QMenu(this);
@@ -81,6 +86,8 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setDragEnabled(true);
     ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
     ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
+    ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+    mFileModel->setReadOnly(false);
 
     ui->lineEdit->setText(mRootPath);
 
@@ -167,8 +174,7 @@ void FileView::slotNewFolder()
     ui->listView->setCurrentIndex(mFileModel->index(pathForNewFolder));
 
     //rename folder
-    /*ui->listView->curr
-    ui->listView->edit(ui->listView->currentIndex());*/
+    ui->listView->edit(ui->listView->currentIndex());
 }
 
 void FileView::slotDeleteFolder()
@@ -184,6 +190,19 @@ void FileView::slotDeleteFile()
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
     QFile::remove(path);
 
+}
+
+void FileView::slotEditFolder()
+{
+    QModelIndex index = ui->listView->currentIndex();
+    if (index.isValid() && (index.flags() & Qt::ItemIsEditable ))
+    {
+        ui->listView->edit(index);
+    }
+    else
+    {
+        qDebug()<<"errr";
+    }
 }
 
 void FileView::resizeEvent(QResizeEvent *)

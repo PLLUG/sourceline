@@ -4,6 +4,8 @@
 #include <QApplication>
 #include <QDebug>
 #include <QFileSystemModel>
+#include <QLineEdit>
+#include <QVBoxLayout>
 
 //TASK: move to ui folder (together with fileview folder)
 
@@ -58,4 +60,34 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     return QStyledItemDelegate::sizeHint(option, index);
+}
+
+QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    qDebug()<<"creatrEditor"<<"\n";
+    QLineEdit* line = new QLineEdit(parent);
+    //line->setGeometry(option.rect);
+    return line;
+}
+
+void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    QString pathToFile = mFModel->fileInfo(index).absoluteFilePath();
+    QLineEdit* lineName = qobject_cast<QLineEdit*>(editor);
+    QString newFileName = lineName->text();
+    int indexSlesh = pathToFile.lastIndexOf("/");
+    QString tempPath = pathToFile.left(indexSlesh+1);
+    tempPath+=newFileName;
+    QFile file(pathToFile);
+    file.rename(tempPath);
+    qDebug()<<"setModelData "+ tempPath<<"\n";
+}
+
+void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    qDebug()<<"updateEditorGeometry"<<"\n";
+    QRect natureRext = option.rect;
+    QRect r = option.rect;
+    r.setSize(editor->sizeHint());
+    editor->setGeometry(natureRext.bottomLeft().x(),natureRext.bottomLeft().y()-r.height(),r.width(),r.height());
 }

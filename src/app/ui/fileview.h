@@ -31,6 +31,7 @@ private slots:
     void slotNewFolder();
     void slotDeleteFolder();
     void slotDeleteFile();
+    void slotEditFolder();
 
 private:
     Ui::FileView *ui;
