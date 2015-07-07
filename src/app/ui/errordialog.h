@@ -2,6 +2,7 @@
 #define ERRORDIALOG_H
 
 #include <QDialog>
+#include <QString>
 
 namespace Ui {
 class ErrorDialog;
@@ -15,13 +16,9 @@ public:
     explicit ErrorDialog(QWidget *parent = 0);
     ~ErrorDialog();
 
-private slots:
-    /*!
-     * \brief on_pushButtonOk_clicked
-     * After pushing close opened dialog
-     * Maybe later will record info in log file
-     */
-    void on_pushButtonOk_clicked();
+    void setTitleOfWindow(QString titleText);
+    void setBriefErrorDescription(QString briefErrorText);
+    void setFullErrorDescription(QString fullErrorText);
 
 private:
     Ui::ErrorDialog *ui;

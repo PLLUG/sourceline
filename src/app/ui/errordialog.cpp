@@ -12,14 +12,32 @@ ErrorDialog::ErrorDialog(QWidget *parent) :
 ErrorDialog::~ErrorDialog()
 {
     delete ui;
-    /*!
-     * \brief connect
-     * Connect performs slot on_pushButtonOk_clicked() after pushing on button Ok
-     */
-    connect(pushButtonOk,SIGNAL(clicked(bool)),this,SLOT(on_pushButtonOk_clicked()));
+
+    this->setMinimumSize(400,300);
+    this->setMaximumSize(600,400);
+
+    QPixmap iconExclamation(":Icons/Icons/exclamation.png");
+    ui->labelIconExclamation->setPixmap(iconExclamation);
+
+    ui->labelBriefErrorText->setWordWrap(true);
+
+    ui->labelFullErrorText->setWordWrap(true);
+    ui->labelFullErrorText->setStyleSheet("border: 2px solid black");
+
+    connect(ui->buttonBoxOk, SIGNAL(accepted()),this,SLOT(close()));
 }
 
-void ErrorDialog::on_pushButtonOk_clicked()
+void ErrorDialog::setTitleOfWindow(QString titleText)
 {
-    this->close();
+    this->setWindowTitle(titleText);
+}
+
+void ErrorDialog::setBriefErrorDescription(QString briefErrorText)
+{
+    ui->labelBriefErrorText->setText(briefErrorText);
+}
+
+void ErrorDialog::setFullErrorDescription(QString fullErrorText)
+{
+    ui->labelFullErrorText->setText(fullErrorText);
 }
