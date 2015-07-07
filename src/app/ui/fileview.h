@@ -28,6 +28,9 @@ private slots:
     void slotDoubleClick(const QModelIndex &index);
     void slotGoUp();
     void slotRightBtnClick(const QPoint &pos);
+    void slotNewFolder();
+    void slotDeleteFolder();
+    void slotDeleteFile();
 
 private:
     Ui::FileView *ui;
@@ -36,6 +39,7 @@ private:
     QMenu *mDirMenu;
     QString mRootPath;
     QFileSystemModel *mFileModel;
+
 };
 
 #endif // FILEVIEW_H

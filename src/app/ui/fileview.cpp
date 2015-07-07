@@ -26,6 +26,11 @@
 
 #include <QMenu>
 #include <QFileSystemModel>
+#include <QDir>
+#include <QFile>
+#include <QDebug>
+#include <QMessageBox>
+#include <QListWidgetItem>
 
 #include "fileview/exploreritemdelegate.h"
 
@@ -38,18 +43,23 @@ FileView::FileView(QWidget *parent) :
     ui->lineEdit->setIconPixmap(QPixmap(":splash/img/up.png"));
     ui->lineEdit->setIconVisibility(IconizedLineEdit::IconAlwaysVisible);
 
+    //context menu
     mMenu = new QMenu(this);
-    mMenu->addAction("Empty1");
-    mMenu->addAction("Empty2");
-    mMenu->addAction("Empty3");
+    QAction* actionNewFolder = new QAction("New Folder",mMenu);
+    connect(actionNewFolder, SIGNAL(triggered(bool)), this, SLOT(slotNewFolder()));
+    mMenu->addAction(actionNewFolder);
+
+    //menu for files
     mFileMenu = new QMenu(this);
-    mFileMenu->addAction("File1");
-    mFileMenu->addAction("File2");
-    mFileMenu->addAction("File3");
+    QAction* actionDeleteFile = new QAction("Delete File",mFileMenu);
+    connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
+    mFileMenu->addAction(actionDeleteFile);
+
+    //menu for dirs
     mDirMenu = new QMenu(this);
-    mDirMenu->addAction("Dir1");
-    mDirMenu->addAction("Dir2");
-    mDirMenu->addAction("Dir3");
+    QAction* actionDeleteFolder = new QAction("Delete Folder",mDirMenu);
+    connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
+    mDirMenu->addAction(actionDeleteFolder);
 
     mFileModel = new QFileSystemModel(this);
     mRootPath = "My Computer";
@@ -137,7 +147,47 @@ void FileView::slotRightBtnClick(const QPoint &pos)
     }
 }
 
+void FileView::slotNewFolder()
+{
+    //create folder
+    QModelIndex index = (QModelIndex)ui->listView->rootIndex();
+    QString pathSrart = mFileModel->fileInfo(index).absoluteFilePath()+"/"+"New Folder";
+    QString pathForNewFolder = pathSrart;
+
+    int i = 1;
+    while(QDir(pathForNewFolder).exists())
+    {
+        pathForNewFolder = pathSrart + "(" + QString::number(i)+")";
+        i++;
+    }
+
+    QDir().mkdir(pathForNewFolder);
+
+    //select folder
+    ui->listView->setCurrentIndex(mFileModel->index(pathForNewFolder));
+
+    //rename folder
+    /*ui->listView->curr
+    ui->listView->edit(ui->listView->currentIndex());*/
+}
+
+void FileView::slotDeleteFolder()
+{
+    QModelIndex currentIndex = ui->listView->currentIndex();
+    QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
+    QDir().rmdir(path);
+}
+
+void FileView::slotDeleteFile()
+{
+    QModelIndex currentIndex = ui->listView->currentIndex();
+    QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
+    QFile::remove(path);
+
+}
+
 void FileView::resizeEvent(QResizeEvent *)
 {
     ui->lineEdit->updateIconPositionAndSize();
 }
+
