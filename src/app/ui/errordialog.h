@@ -16,8 +16,22 @@ public:
     explicit ErrorDialog(QWidget *parent = 0);
     ~ErrorDialog();
 
+    /*!
+     * \brief Set title of window for given parameter
+     * \param titleText is text of title which need to set
+     */
     void setTitleOfWindow(QString titleText);
+
+    /*!
+     * \brief Set brief error description with given text
+     * \param briefErrorText is brief error's description
+     */
     void setBriefErrorDescription(QString briefErrorText);
+
+    /*!
+     * \brief Set full error description with given text
+     * \param fullErrorText is full error's description
+     */
     void setFullErrorDescription(QString fullErrorText);
 
 private:
