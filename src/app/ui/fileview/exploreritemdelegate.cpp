@@ -6,6 +6,7 @@
 #include <QFileSystemModel>
 #include <QLineEdit>
 #include <QMessageBox>
+#include <QTextEdit>
 
 //TASK: move to ui folder (together with fileview folder)
 
@@ -65,37 +66,69 @@ QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
 QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     qDebug()<<"creatrEditor"<<"\n";
-    QLineEdit* line = new QLineEdit(parent);
-    //line->setGeometry(option.rect);
-    return line;
+    QTextEdit* lineName = new QTextEdit(parent);
+    lineName->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    lineName->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    lineName->installEventFilter(parent);
+    return lineName;
 }
 
 void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QString pathToFile = mFModel->fileInfo(index).absoluteFilePath();
-    QLineEdit* lineName = qobject_cast<QLineEdit*>(editor);
-    QString newFileName = lineName->text();
+    QTextEdit* lineName = new QTextEdit();
+    if (editor != 0)
+    {
+        lineName = qobject_cast<QTextEdit*>(editor);
+    }
+    lineName->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    lineName->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    QString newFileName = lineName->toPlainText();
     int indexSlesh = pathToFile.lastIndexOf("/");
     QString tempPath = pathToFile.left(indexSlesh+1);
     tempPath+=newFileName;
     QFile file(pathToFile);
-    if (QFile(tempPath).exists())
+    if (pathToFile != tempPath)
     {
-        QMessageBox::information(editor,"Error","File with name \"" + newFileName + "\" is already exist");
+        if (QFile(tempPath).exists())
+        {
+            QMessageBox::information(editor,"Error","File with name \"" + newFileName + "\" is already exist");
+        }
+        else
+        {
+            file.rename(tempPath);
+        }
     }
-    else
-    {
-        file.rename(tempPath);
-    }
-
     qDebug()<<"setModelData "+ tempPath<<"\n";
+
 }
 
 void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qDebug()<<"updateEditorGeometry"<<"\n";
-    QRect natureRext = option.rect;
+    /*QRect natureRext = option.rect;
     QRect r = option.rect;
-    r.setSize(editor->sizeHint());
-    editor->setGeometry(natureRext.bottomLeft().x(),natureRext.bottomLeft().y()-r.height(),r.width(),r.height());
+    r.setSize(editor->sizeHint());*/
+
+    QTextEdit* lineName = new QTextEdit();
+    if (editor != 0)
+    {
+        lineName = qobject_cast<QTextEdit*>(editor);
+    }
+    lineName->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    lineName->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    //QString fileName = lineName->toPlainText();
+    QString fileName = index.data(Qt::DisplayRole).toString();
+    qDebug()<<"updateEditorGeometry " + fileName<<"\n";
+    QRect optionRect = option.rect;
+
+    //lineName->setAutoFormatting(QTextEdit::AutoAll);
+    lineName->move(optionRect.x(), optionRect.y()+35);
+    //lineName->sizeHint();
+    lineName->setFixedWidth(optionRect.width());
+    lineName->setFixedHeight((fileName.length()/5+1)*20);
+
+    //lineName->setFixedHeight(lineName->heightForWidth(optionRect.width()) + lineName->currentFont().pointSize() * 2.5);
+    //lineName->adjustSize();
+    //lineName->setLineWrapMode(QTextEdit::FixedPixelWidth);
+    //editor->setGeometry(optionRect.x(), optionRect.y()+35, optionRect.width(), (fileName.length()/5+1)*20);
 }

@@ -239,10 +239,6 @@ void FileView::slotRenameFolderOrFile()
     {
         ui->listView->edit(index);
     }
-    else
-    {
-        qDebug()<<"errr";
-    }
 }
 
 void FileView::resizeEvent(QResizeEvent *)
