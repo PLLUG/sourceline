@@ -20,19 +20,19 @@ public:
      * \brief Set title of window for given parameter
      * \param titleText is text of title which need to set
      */
-    void setTitleOfWindow(QString titleText);
+    void setTitleOfWindow(const QString &titleText);
 
     /*!
      * \brief Set brief error description with given text
      * \param briefErrorText is brief error's description
      */
-    void setBriefErrorDescription(QString briefErrorText);
+    void setBriefErrorDescription(const QString &titleText);
 
     /*!
      * \brief Set full error description with given text
      * \param fullErrorText is full error's description
      */
-    void setFullErrorDescription(QString fullErrorText);
+    void setFullErrorDescription(const QString &titleText);
 
 private:
     Ui::ErrorDialog *ui;
