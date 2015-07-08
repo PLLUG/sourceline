@@ -52,19 +52,24 @@ FileView::FileView(QWidget *parent) :
     //menu for files
     mFileMenu = new QMenu(this);
 
-    QAction* actionDeleteFile = new QAction("Delete File",mFileMenu);
+    QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
     connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
     mFileMenu->addAction(actionDeleteFile);
 
-    QAction* actionRemaneFile = new QAction("Rename File",mFileMenu);
-    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotEditFolder()));
+    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
+    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
     mFileMenu->addAction(actionRemaneFile);
 
     //menu for dirs
     mDirMenu = new QMenu(this);
-    QAction* actionDeleteFolder = new QAction("Delete Folder",mDirMenu);
+
+    QAction* actionDeleteFolder = new QAction("Delete",mDirMenu);
     connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
     mDirMenu->addAction(actionDeleteFolder);
+
+    QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
+    connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
+    mDirMenu->addAction(actionRemaneDir);
 
     mFileModel = new QFileSystemModel(this);
     mRootPath = "My Computer";
@@ -227,7 +232,7 @@ void FileView::slotDeleteFile()
 
 }
 
-void FileView::slotEditFolder()
+void FileView::slotRenameFolderOrFile()
 {
     QModelIndex index = ui->listView->currentIndex();
     if (index.isValid() && (index.flags() & Qt::ItemIsEditable ))

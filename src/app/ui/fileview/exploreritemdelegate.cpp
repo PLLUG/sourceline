@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QFileSystemModel>
 #include <QLineEdit>
+#include <QMessageBox>
 
 //TASK: move to ui folder (together with fileview folder)
 
@@ -78,7 +79,15 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
     QString tempPath = pathToFile.left(indexSlesh+1);
     tempPath+=newFileName;
     QFile file(pathToFile);
-    file.rename(tempPath);
+    if (QFile(tempPath).exists())
+    {
+        QMessageBox::information(editor,"Error","File with name \"" + newFileName + "\" is already exist");
+    }
+    else
+    {
+        file.rename(tempPath);
+    }
+
     qDebug()<<"setModelData "+ tempPath<<"\n";
 }
 
