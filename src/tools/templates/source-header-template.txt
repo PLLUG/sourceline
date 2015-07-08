@@ -1,7 +1,7 @@
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
-***    Copyright (C) 2014  by                                                ***
+***    Copyright (C) 2014, 2015  by                                          ***
 ***            <Author Name>  (<author_email_address>)                       ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***

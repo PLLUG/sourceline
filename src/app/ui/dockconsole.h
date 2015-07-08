@@ -1,9 +1,10 @@
 #ifndef CONSOLE_H
 #define CONSOLE_H
 
-#include <QWidget>
 #include "genericdockwidget.h"
-#include <string>
+
+class QWidget;
+
 namespace Ui {
 class DockConsole;
 }

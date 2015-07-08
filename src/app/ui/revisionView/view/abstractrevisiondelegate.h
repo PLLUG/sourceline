@@ -28,11 +28,14 @@
 #include <QObject>
 #include <QPropertyAnimation>
 
+
+QT_FORWARD_DECLARE_CLASS(QPropertyAnimation)
 QT_FORWARD_DECLARE_CLASS(Bubble)
 
 class AbstractRevisionDelegate : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
     Q_PROPERTY(QPointF Pos READ pos WRITE setPos)
     friend class Bubble;
 public:

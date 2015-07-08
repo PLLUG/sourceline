@@ -1,6 +1,9 @@
 #include "plugininfodialog.h"
 #include "ui_plugininfodialog.h"
 
+#include <QStandardItemModel>
+#include <QStandardItem>
+
 PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
     QDialog(parent,
             Qt::WindowSystemMenuHint

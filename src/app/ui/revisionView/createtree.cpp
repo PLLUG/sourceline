@@ -22,6 +22,8 @@
 *******************************************************************************/
 
 #include "createtree.h"
+#include "revisionnode.h"
+
 #include <QDebug>
 
 CreateTree::CreateTree()

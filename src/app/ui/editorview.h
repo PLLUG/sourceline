@@ -1,8 +1,9 @@
 #ifndef EDITORVIEW_H
 #define EDITORVIEW_H
 
-#include <QWidget>
 #include "genericdockwidget.h"
+
+class QWidget;
 
 namespace Ui {
 class EditorView;

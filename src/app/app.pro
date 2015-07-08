@@ -54,7 +54,11 @@ HEADERS += \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
+<<<<<<< HEAD
     ui/errordialog.h
+=======
+    ui/clonedialog.h
+>>>>>>> a7f1e6925510d250e4ef6e732f01a9c7327d62a6
 
 SOURCES += \
     main.cpp \
@@ -77,7 +81,11 @@ SOURCES += \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
+<<<<<<< HEAD
     ui/errordialog.cpp
+=======
+    ui/clonedialog.cpp
+>>>>>>> a7f1e6925510d250e4ef6e732f01a9c7327d62a6
 
 # Application UI
 HEADERS += \
@@ -152,10 +160,13 @@ FORMS += \
     ui/fileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
-    ui/dockconsole.ui \
     ui/consoleview.ui \
     ui/revisionview.ui \
+<<<<<<< HEAD
     ui/errordialog.ui
+=======
+    ui/clonedialog.ui
+>>>>>>> a7f1e6925510d250e4ef6e732f01a9c7327d62a6
 
 # Application Settings
 HEADERS += \

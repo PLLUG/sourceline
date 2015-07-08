@@ -31,6 +31,7 @@
 class Bubble : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 public:
     Bubble(QGraphicsItem *parent = 0);
     QRectF boundingRect() const;

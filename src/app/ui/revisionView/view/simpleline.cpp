@@ -37,6 +37,8 @@ QRectF SimpleLine::boundingRect() const
 
 void SimpleLine::paint(QPainter *painter, QStyleOptionGraphicsItem *option, QWidget *widget)
 {
+    Q_UNUSED(option)
+    Q_UNUSED(widget)
     painter->setRenderHint(QPainter::Antialiasing);
     painter->setPen(mPen);
     painter->drawLine(boundingRect().topLeft(), boundingRect().bottomRight());

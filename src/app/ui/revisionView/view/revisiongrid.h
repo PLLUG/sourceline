@@ -25,12 +25,14 @@
 #define REVISIONGRID_H
 
 #include <QGraphicsItem>
-#include "revisionnodeitem.h"
-#include "../revisionnode.h"
+
+QT_FORWARD_DECLARE_CLASS(RevisionNode)
+QT_FORWARD_DECLARE_CLASS(RevisionNodeItem)
 
 class RevisionGrid : public QObject, public QGraphicsItem
 {
     Q_OBJECT
+    Q_INTERFACES(QGraphicsItem)
 public:
     RevisionGrid();
     void setBoundingRect(const QSizeF size);

@@ -2,7 +2,6 @@
 #define FILEVIEW_H
 
 #include <QWidget>
-#include "genericdockwidget.h"
 
 namespace Ui {
     class FileView;

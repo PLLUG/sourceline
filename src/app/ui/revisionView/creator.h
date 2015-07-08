@@ -25,9 +25,11 @@
 #define GREATOR_H
 
 #include "graphfield.h"
-#include "revisionitem.h"
-#include "branch.h"
+
 #include <QVariant>
+
+class Branch;
+class RevisionItem;
 
 class Creator
 {

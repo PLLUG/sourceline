@@ -2,10 +2,7 @@
 #define ABOUT_H
 
 #include <QDialog>
-#include <QFile>
 #include <QString>
-#include <QTextStream>
-#include <QDebug>
 
 namespace Ui {
 class About;

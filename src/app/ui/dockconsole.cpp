@@ -2,6 +2,8 @@
 #include "ui_dockconsole.h"
 #include "guidefs.h"
 
+#include <QWidget>
+
 DockConsole::DockConsole(QWidget *parent) :
     GenericDockWidget(parent),
     ui(new Ui::DockConsole)
@@ -20,4 +22,5 @@ DockTypes::DockType DockConsole::type() const
 
 void DockConsole::slotSetPage(int pPage)
 {
+    Q_UNUSED(pPage)
 }

@@ -2,6 +2,8 @@
 #include "ui_historytree.h"
 #include "guidefs.h"
 
+#include <QWidget>
+
 HistoryTree::HistoryTree(QWidget *parent) :
     GenericDockWidget(parent),
     ui(new Ui::HistoryTree)

@@ -30,6 +30,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QMenu>
 #include <QDebug>
+#include <QPropertyAnimation>
 
 AbstractRevisionDelegate::AbstractRevisionDelegate(QGraphicsItem *parent) :
     QGraphicsItem(parent)

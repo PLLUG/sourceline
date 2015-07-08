@@ -25,11 +25,11 @@
 #define VIEWSETTINGPAGE_H
 
 #include "settingspage.h"
-#include "settings.h"
-#include <QVariant>
-#include <QDebug>
-#include <QLayout>
 #include "ui_viewsettingpage.h"
+
+#include <QVariant>
+
+class Settings;
 
 namespace Ui {
 class MainWindow;

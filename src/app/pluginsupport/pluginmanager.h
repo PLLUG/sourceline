@@ -25,10 +25,10 @@
 #include <QObject>
 #include <QStringList>
 #include <QMap>
-
-#include <plugin.h>
 #include "plugininfo.h"
+
 class PluginLoader;
+class Plugin;
 
 class PluginManager : public QObject
 {

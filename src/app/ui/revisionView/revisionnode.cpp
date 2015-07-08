@@ -207,8 +207,11 @@ int RevisionNode::branchNumber(RevisionNode *node) const
 
 int RevisionNode::nextBranchSize() const
 {
+    //TODO: check coments
     RevisionNode *node = parent;
+    Q_UNUSED(node)
     RevisionNode *currentItem = const_cast<RevisionNode*>(this);
+    Q_UNUSED(currentItem)
     int counter = 0;
 //    while (node)
 //    {

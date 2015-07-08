@@ -23,6 +23,11 @@
 
 #include "revisiontablemodel.h"
 #include "createtree.h"
+#include "creator.h"
+#include "revisionnode.h"
+#include "revisionitem.h"
+#include "branch.h"
+
 #include <QDebug>
 
 RevisionTableModel::RevisionTableModel()
@@ -106,3 +111,5 @@ void RevisionTableModel::dataChange()
 {
     emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1));
 }
+
+Creator *RevisionTableModel::graph() const { return mGraph; }

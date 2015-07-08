@@ -25,6 +25,8 @@
 #include "strategies/sortingstrategy.h"
 #include "useraction.h"
 
+#include <QMenu>
+
 ActionManager::ActionManager(QObject *parent) :
     QObject(parent)
 {

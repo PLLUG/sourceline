@@ -25,8 +25,9 @@
 #define REVISIONTABLEMODEL_H
 
 #include <QAbstractTableModel>
-#include "revisionnode.h"
-#include "creator.h"
+
+class Creator;
+class RevisionNode;
 
 class RevisionTableModel : public QAbstractTableModel
 {
@@ -40,7 +41,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     void dataChange();
-    Creator* graph() const { return mGraph; }
+    Creator* graph() const;
 
 private:
     RevisionNode *mRoot;

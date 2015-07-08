@@ -23,6 +23,7 @@
 
 #include "settingspage.h"
 
+
 SettingsPage::SettingsPage(Settings *pSettings, QWidget *parent) :
     QWidget(parent),
     mSettings(pSettings)

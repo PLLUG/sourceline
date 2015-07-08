@@ -22,6 +22,7 @@
 *******************************************************************************/
 
 #include "branch.h"
+#include "revisionitem.h"
 
 Branch::Branch(RevisionItem *item, const QString &name) :
     mLast(item),

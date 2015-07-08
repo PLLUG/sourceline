@@ -26,8 +26,8 @@
 #include <QList>
 #include <QString>
 #include <QDialog>
-#include <QMap>
 #include <QStringList>
+
 class QSignalMapper;
 
 class QTreeWidgetItem;
