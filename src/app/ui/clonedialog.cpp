@@ -14,7 +14,7 @@ CloneDialog::CloneDialog(QWidget *parent):
 
 CloneDialog::~CloneDialog()
 {
-    delete(ui);
+    delete ui;
 }
 
 void CloneDialog::browse()
