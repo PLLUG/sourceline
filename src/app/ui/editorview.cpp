@@ -16,9 +16,9 @@ EditorView::~EditorView()
     delete ui;
 }
 
-DockTypes::DockType EditorView::type() const
+DockType EditorView::type() const
 {
-    return DockTypes::EditorView;
+    return DockType::EditorView;
 }
 
 void EditorView::slotSetPage(int pPage)

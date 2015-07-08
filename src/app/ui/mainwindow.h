@@ -22,7 +22,7 @@ public:
     Ui::MainWindow *ui;
 
 private:
-    QSystemTrayIcon *TrayIcon;
+    QSystemTrayIcon *trayIcon;
     QMenu *trayMenu;
     CustomTabBar *mTabBar;
     PageManager *mPageManager;

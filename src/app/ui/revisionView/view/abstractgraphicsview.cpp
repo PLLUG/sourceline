@@ -172,11 +172,6 @@ void AbstractGraphicsView::commitClicked(AbstractRevisionDelegate*d)
     emit updateUI();
 }
 
-ModelIndex AbstractGraphicsView::createIndex(int row, int column)
-{
-    return ModelIndex(row, column);
-}
-
 void AbstractGraphicsView::updateGeometry()
 {
     if ( !mItems.isEmpty() )

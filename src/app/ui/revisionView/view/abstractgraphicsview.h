@@ -26,7 +26,6 @@
 
 #include <QGraphicsItem>
 #include <QObject>
-#include "modelindex.h"
 
 QT_FORWARD_DECLARE_CLASS (AbstractRevisionDelegate)
 QT_FORWARD_DECLARE_CLASS (QAbstractItemModel)
@@ -50,7 +49,6 @@ signals:
     void updateUI();
 
 protected:
-    virtual ModelIndex createIndex(int row, int column);
     virtual void updateGeometry();
 
 private:

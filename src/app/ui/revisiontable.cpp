@@ -16,9 +16,9 @@ RevisionTable::~RevisionTable()
     delete ui;
 }
 
-DockTypes::DockType RevisionTable::type() const
+DockType RevisionTable::type() const
 {
-    return DockTypes::RevisionTable;
+    return DockType::RevisionTable;
 }
 
 void RevisionTable::slotSetPage(int pPage)

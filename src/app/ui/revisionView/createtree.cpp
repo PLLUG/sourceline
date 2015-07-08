@@ -55,8 +55,8 @@ RevisionNode *CreateTree::create() const
     //branch->HEAD()->mergeTo(root->HEAD());
 
     addCommit(root->HEAD(), createSimpleNode("master: third commit", QString("%1").arg(revCount++)));
-    //addBranch(n, createSimpleNode("test branch #1_1: first commit", QString("%1").arg(revCount++)));
-    foreach (RevisionNode *node, mAllRevisions)
+    //addBranch(n, createSimpleNode("test branch #1_1: first commit", QString("%1").arg(revCount++)))
+    for(RevisionNode *node : mAllRevisions)
         node->updateData();
     return root;
 }

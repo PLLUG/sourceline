@@ -35,9 +35,9 @@ public:
     Branch(RevisionItem *item, const QString &name);
 
     void addCommit(RevisionItem *i);
-    RevisionItem* head() const { return mLast; }
-    RevisionItem* first() const { return mFirst; }
-    QString name() const { return mName; }
+    RevisionItem* head() const;
+    RevisionItem* first() const;
+    QString name() const;
 
     void setStartY(int value);
     int startY() const { return mStartY; }

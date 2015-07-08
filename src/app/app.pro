@@ -23,6 +23,7 @@
 
 TEMPLATE = app
 QT += widgets
+CONFIG += c++11
 
 # Pro file is a part of source line project structure
 CONFIG += sl_project
@@ -49,8 +50,6 @@ HEADERS += \
     ui/revisionView/view/abstractgraphicsview.h \
     ui/revisionView/view/abstractrevisiondelegate.h \
     ui/revisionView/view/bubble.h \
-    ui/revisionView/view/graphicsview.h \
-    ui/revisionView/view/modelindex.h \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h
@@ -71,8 +70,6 @@ SOURCES += \
     ui/revisionView/view/abstractgraphicsview.cpp \
     ui/revisionView/view/abstractrevisiondelegate.cpp \
     ui/revisionView/view/bubble.cpp \
-    ui/revisionView/view/graphicsview.cpp \
-    ui/revisionView/view/modelindex.cpp \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp
@@ -184,9 +181,6 @@ SOURCES += \
     pluginsupport/supliers/settingspagesupplier.cpp \
     pluginsupport/supliers/commandcomponentsupplier.cpp
 
-SOURCES +=
-HEADERS +=
-
 # Extension support library
 include(./../extensionlib/extensionlib.pri)
 
@@ -199,6 +193,5 @@ RC_FILE += \
 
 OTHER_FILES +=
 
-SUBDIRS += \
-    ui/revisionView/revTree.pro
+
 

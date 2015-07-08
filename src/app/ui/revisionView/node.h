@@ -30,6 +30,7 @@ class Node
 {
 public:
     Node();
+    virtual ~Node() = default;
     void setCoorginate(int x, int y);
 
     int x() const { return mX; }

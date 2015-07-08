@@ -25,9 +25,11 @@
 
 RevisionItem::RevisionItem(const QString &message) :
     mMessage(message),
-    mParent(0)
+    mParent(nullptr)
 {
 }
+
+QString RevisionItem::message() const { return mMessage; }
 
 void RevisionItem::addBranch(RevisionItem *b)
 {
@@ -38,3 +40,7 @@ void RevisionItem::setParentBranch(Branch *p)
 {
     mParent = p;
 }
+
+Branch *RevisionItem::parentBranch() const { return mParent; }
+
+QList<RevisionItem *> RevisionItem::branches() const { return mBranches; }

@@ -43,7 +43,7 @@ public:
     explicit RevisionView(QWidget *parent = 0);
     ~RevisionView();
 
-    RevisionTableModel *data() const;
+    RevisionTableModel *model() const;
 
 protected:
     void resizeEvent(QResizeEvent *event);

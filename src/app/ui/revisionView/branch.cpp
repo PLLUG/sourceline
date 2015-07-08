@@ -29,10 +29,7 @@ Branch::Branch(RevisionItem *item, const QString &name) :
     mFirst(item),
     mName(name)
 {
-    if (item)
-    {
-        addCommit(item);
-    }
+    addCommit(item);
 }
 
 void Branch::addCommit(RevisionItem *i)
@@ -44,6 +41,12 @@ void Branch::addCommit(RevisionItem *i)
         mLast = i;
     }
 }
+
+RevisionItem *Branch::head() const { return mLast; }
+
+RevisionItem *Branch::first() const { return mFirst; }
+
+QString Branch::name() const { return mName; }
 
 void Branch::setStartY(int value)
 {

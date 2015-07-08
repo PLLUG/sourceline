@@ -51,7 +51,7 @@ RevisionView::~RevisionView()
     delete ui;
 }
 
-RevisionTableModel *RevisionView::data() const
+RevisionTableModel *RevisionView::model() const
 {
     return mModel;
 }

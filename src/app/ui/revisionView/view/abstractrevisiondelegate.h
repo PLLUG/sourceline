@@ -57,6 +57,11 @@ protected:
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
 
+private slots:
+    void updateBubblePosition();
+    void commitActionTriggered();
+    void branchActionTriggered();
+
 private:
     QSizeF mSize;
     QPointF mPreviousState;
@@ -65,11 +70,6 @@ private:
     int mGridStep;
     QMap<QString, QVariant> mData;
     int mBubblePos;
-
-private slots:
-    void updateBubblePosition();
-    void commitActionTriggered();
-    void branchActionTriggered();
 };
 
 #endif // ABSTRACTREVISIONDELEGATE_H

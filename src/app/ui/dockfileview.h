@@ -16,7 +16,7 @@ class DockFileView : public GenericDockWidget
 public:
     explicit DockFileView(QWidget *parent = 0);
     ~DockFileView();
-    DockTypes::DockType type() const;
+    DockType type() const;
 private:
     Ui::DockFileView *ui;
 

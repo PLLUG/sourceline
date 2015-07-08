@@ -60,15 +60,16 @@ public:
     void addBranch(RevisionNode *nodes);
     void mergeTo(RevisionNode *rev);
 
+    bool operator ==(const RevisionNode &another);
+
     RevisionNode *HEAD() const;
 
+    //TODO: should be public?
     RevisionNode *parent;
     RevisionNode *child;
     QList<RevisionNode *> branches;
     RevisionNodeItem *graphicsItem;
     RevisionNode *mMergeTo;
-
-    bool operator ==(const RevisionNode &another);
 
 private:
     QString _revId;

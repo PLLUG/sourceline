@@ -16,9 +16,9 @@ HistoryTree::~HistoryTree()
     delete ui;
 }
 
-DockTypes::DockType HistoryTree::type() const
+DockType HistoryTree::type() const
 {
-    return DockTypes::HistoryTree;
+    return DockType::HistoryTree;
 }
 
 void HistoryTree::slotSetPage(int pPage)

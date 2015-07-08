@@ -15,7 +15,7 @@ class RevisionTable : public GenericDockWidget
 
 public:
     explicit RevisionTable(QWidget *parent = 0);
-    DockTypes::DockType type() const;
+    DockType type() const;
     ~RevisionTable();
 
 private:

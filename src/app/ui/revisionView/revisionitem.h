@@ -36,11 +36,11 @@ class RevisionItem : public Node
 public:
     RevisionItem(const QString &message);
 
-    QString message() const { return mMessage; }
+    QString message() const;
     void addBranch(RevisionItem *b);
     void setParentBranch(Branch *p);
-    Branch *parentBranch() const { return mParent; }
-    QList<RevisionItem*> branches() const { return mBranches; }
+    Branch *parentBranch() const;
+    QList<RevisionItem*> branches() const;
 
 private:
     QString mMessage;

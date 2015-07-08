@@ -36,7 +36,7 @@ class Creator
 public:
     Creator();
 
-    GraphField* field() { return &mField; }
+    GraphField* field();
     RevisionItem* item(int position) const;
 
     void addCommit(RevisionItem *c);

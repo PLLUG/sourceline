@@ -15,7 +15,7 @@ class HistoryTree : public GenericDockWidget
 
 public:
     explicit HistoryTree(QWidget *parent = 0);
-    DockTypes::DockType type() const;
+    DockType type() const;
     ~HistoryTree();
 
 private:

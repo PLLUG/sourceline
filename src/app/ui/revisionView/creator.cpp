@@ -39,6 +39,8 @@ Creator::Creator() :
     addCommit(new RevisionItem("master/third commit"));
 }
 
+GraphField *Creator::field() { return &mField; }
+
 RevisionItem *Creator::item(int position) const
 {
     foreach(RevisionItem *i, mItems)
