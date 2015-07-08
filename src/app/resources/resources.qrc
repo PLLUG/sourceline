@@ -10,6 +10,9 @@
         <file>img/SL_Splash.png</file>
         <file>img/added.png</file>
         <file>img/up.png</file>
+        <file>Icons/gitIcon.png</file>
+        <file>Icons/mercurialIcon.png</file>
+        <file>Icons/svnIcon.png</file>
     </qresource>
     <qresource prefix="/text">
         <file>txt/about-dialog/About.txt</file>

@@ -53,7 +53,8 @@ HEADERS += \
     ui/revisionView/view/modelindex.h \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
-    ui/revisionView/view/simpleline.h
+    ui/revisionView/view/simpleline.h \
+    ui/clonedialog.h
 
 SOURCES += \
     main.cpp \
@@ -75,7 +76,8 @@ SOURCES += \
     ui/revisionView/view/modelindex.cpp \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
-    ui/revisionView/view/simpleline.cpp
+    ui/revisionView/view/simpleline.cpp \
+    ui/clonedialog.cpp
 
 # Application UI
 HEADERS += \
@@ -151,7 +153,8 @@ FORMS += \
     ui/about.ui \
     ui/plugininfodialog.ui \
     ui/consoleview.ui \
-    ui/revisionview.ui
+    ui/revisionview.ui \
+    ui/clonedialog.ui
 
 # Application Settings
 HEADERS += \
