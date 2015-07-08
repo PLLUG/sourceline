@@ -177,11 +177,46 @@ void FileView::slotNewFolder()
     ui->listView->edit(ui->listView->currentIndex());
 }
 
+bool removeDir(const QString& dirName)
+{
+    bool result = true;
+    QDir dir(dirName);
+
+    if (dir.exists(dirName))
+    {
+        Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
+        {
+            if (info.isDir())
+            {
+                result = removeDir(info.absoluteFilePath());
+            }
+            else
+            {
+                result = QFile::remove(info.absoluteFilePath());
+            }
+
+            if (!result)
+            {
+                return result;
+            }
+        }
+
+        result = dir.rmdir(dirName);
+    }
+
+    return result;
+}
+
 void FileView::slotDeleteFolder()
 {
     QModelIndex currentIndex = ui->listView->currentIndex();
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
-    QDir().rmdir(path);
+
+    //delete filder
+    if (!removeDir(path))
+    {
+        QMessageBox::information(this,"Error","Can't delete this repository");
+    }
 }
 
 void FileView::slotDeleteFile()

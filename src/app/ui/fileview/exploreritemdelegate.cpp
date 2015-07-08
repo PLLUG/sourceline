@@ -5,7 +5,6 @@
 #include <QDebug>
 #include <QFileSystemModel>
 #include <QLineEdit>
-#include <QVBoxLayout>
 
 //TASK: move to ui folder (together with fileview folder)
 
