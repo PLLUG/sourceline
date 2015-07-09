@@ -7,6 +7,7 @@
 #include <QLineEdit>
 #include <QMessageBox>
 #include <QTextEdit>
+#include "texteditforrename.h"
 
 //TASK: move to ui folder (together with fileview folder)
 
@@ -66,9 +67,7 @@ QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
 QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     qDebug()<<"creatrEditor"<<"\n";
-    QTextEdit* lineName = new QTextEdit(parent);
-    lineName->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    lineName->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    TextEditForRename* lineName = new TextEditForRename(parent);
     lineName->installEventFilter(parent);
     return lineName;
 }
@@ -76,13 +75,11 @@ QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
 void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QString pathToFile = mFModel->fileInfo(index).absoluteFilePath();
-    QTextEdit* lineName = new QTextEdit();
+    TextEditForRename* lineName = new TextEditForRename();
     if (editor != 0)
     {
-        lineName = qobject_cast<QTextEdit*>(editor);
+        lineName = qobject_cast<TextEditForRename*>(editor);
     }
-    lineName->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    lineName->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     QString newFileName = lineName->toPlainText();
     int indexSlesh = pathToFile.lastIndexOf("/");
     QString tempPath = pathToFile.left(indexSlesh+1);
@@ -109,13 +106,11 @@ void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpt
     QRect r = option.rect;
     r.setSize(editor->sizeHint());*/
 
-    QTextEdit* lineName = new QTextEdit();
+    TextEditForRename* lineName = new TextEditForRename();
     if (editor != 0)
     {
-        lineName = qobject_cast<QTextEdit*>(editor);
+        lineName = qobject_cast<TextEditForRename*>(editor);
     }
-    lineName->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    lineName->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     //QString fileName = lineName->toPlainText();
     QString fileName = index.data(Qt::DisplayRole).toString();
     qDebug()<<"updateEditorGeometry " + fileName<<"\n";
