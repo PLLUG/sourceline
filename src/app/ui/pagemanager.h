@@ -24,14 +24,14 @@ signals:
      * \param index Index of page.
      */
     void currentPageChanged(int index);
-    void pageAdded(int index, QString name);
+    void newWorkplaceAdded(int index, QString name);
 public slots:
     /*!
      * \brief Should be called  when current page that corresponds to current selected repository tab should be changed.
      * \param index Index of page.
      */
     void slotChangeCurrentPage(int index);
-    void slotAddPage(QString lName);
+    void slotAddNewWorkplace(QString lName);
     void slotRemovePage(int index);
     void slotTabMoved(int from, int to);
 };

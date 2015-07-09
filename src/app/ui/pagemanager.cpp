@@ -76,9 +76,9 @@ int PageManager::getActiveIndex()
 
 }
 
-void PageManager::slotAddPage(QString lName)
+void PageManager::slotAddNewWorkplace(QString lName)
 {
-    emit pageAdded(getPageID(), lName);
+    emit newWorkplaceAdded(getPageID(), lName);
 }
 
 void PageManager::slotRemovePage(int index)

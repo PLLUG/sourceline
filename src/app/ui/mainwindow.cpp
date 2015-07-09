@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     ui->uiTabToolBar->addWidget(mTabBar);
 
-    connect(mPageManager, SIGNAL(pageAdded(int, QString)), mTabBar, SLOT(slotAddTab(int,QString)), Qt::UniqueConnection);
+    connect(mPageManager, SIGNAL(newWorkplaceAdded(int, QString)), mTabBar, SLOT(slotAddNewWorkplace(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
     connect(mTabBar, SIGNAL(currentChanged(int)), mPageManager, SLOT(slotChangeCurrentPage(int)));
     // TASK: fixme - connetion
@@ -92,12 +92,12 @@ void MainWindow::slotQuit()
     qApp->quit();
 }
 
-void MainWindow::slotAddPage()
+void MainWindow::slotAddNewWorkplace()
 {
     static int a = 0;
     QString lTabName = "Name" + QString::number(a++);
-    // TASK: page should be added in TabBuilder class
-    mPageManager->slotAddPage(lTabName);
+    // TASK: new workplace should be added in TabBuilder class
+    mPageManager->slotAddNewWorkplace(lTabName);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)

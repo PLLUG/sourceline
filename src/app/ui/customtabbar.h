@@ -17,7 +17,7 @@ public:
     explicit CustomTabBar(QWidget *parent = 0);
     ~CustomTabBar();
 public slots:
-    void slotAddTab(int index, QString name);
+    void slotAddNewWorkplace(int index, QString name);
     void slotCloseTab(int);
 private:
     Ui::CustomTabBar *ui;
