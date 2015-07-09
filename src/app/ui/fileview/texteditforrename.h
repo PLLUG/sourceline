@@ -4,6 +4,8 @@
 #include <QWidget>
 #include <QTextEdit>
 #include <QKeyEvent>
+#include <QEvent>
+#include <QObject>
 
 class TextEditForRename : public QTextEdit
 {
@@ -11,10 +13,12 @@ class TextEditForRename : public QTextEdit
 public:
     explicit TextEditForRename(QWidget *parent = 0);
     void keyPressEvent(QKeyEvent *event);
+    bool eventFilter(QObject *object, QEvent *event);
 
 signals:
 
 public slots:
+    void slotpdateHeight();
 };
 
 #endif // TEXTEDITFORRENAME_H

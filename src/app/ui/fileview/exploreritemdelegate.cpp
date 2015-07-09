@@ -102,28 +102,16 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 
 void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    /*QRect natureRext = option.rect;
-    QRect r = option.rect;
-    r.setSize(editor->sizeHint());*/
-
     TextEditForRename* lineName = new TextEditForRename();
     if (editor != 0)
     {
         lineName = qobject_cast<TextEditForRename*>(editor);
     }
-    //QString fileName = lineName->toPlainText();
     QString fileName = index.data(Qt::DisplayRole).toString();
     qDebug()<<"updateEditorGeometry " + fileName<<"\n";
     QRect optionRect = option.rect;
 
-    //lineName->setAutoFormatting(QTextEdit::AutoAll);
     lineName->move(optionRect.x(), optionRect.y()+35);
-    //lineName->sizeHint();
     lineName->setFixedWidth(optionRect.width());
-    lineName->setFixedHeight((fileName.length()/5+1)*20);
 
-    //lineName->setFixedHeight(lineName->heightForWidth(optionRect.width()) + lineName->currentFont().pointSize() * 2.5);
-    //lineName->adjustSize();
-    //lineName->setLineWrapMode(QTextEdit::FixedPixelWidth);
-    //editor->setGeometry(optionRect.x(), optionRect.y()+35, optionRect.width(), (fileName.length()/5+1)*20);
 }
