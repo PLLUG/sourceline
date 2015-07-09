@@ -8,6 +8,7 @@
 #include <QMessageBox>
 #include <QTextEdit>
 #include "texteditforrename.h"
+#include <QTextCursor>
 
 //TASK: move to ui folder (together with fileview folder)
 
@@ -81,6 +82,7 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
         lineName = qobject_cast<TextEditForRename*>(editor);
     }
     QString newFileName = lineName->toPlainText();
+
     int indexSlesh = pathToFile.lastIndexOf("/");
     QString tempPath = pathToFile.left(indexSlesh+1);
     tempPath+=newFileName;
@@ -113,5 +115,6 @@ void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpt
 
     lineName->move(optionRect.x(), optionRect.y()+35);
     lineName->setFixedWidth(optionRect.width());
+
 
 }
