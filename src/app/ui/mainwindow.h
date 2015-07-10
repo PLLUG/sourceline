@@ -40,7 +40,7 @@ private slots:
 
     void slotQuit();
 
-    void slotAddPage();
+    void slotAddNewWorkplace();
 };
 
 #endif // MAINWINDOW_H
