@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include "contentfortabworkplace.h"
 
 class PageManager;
 class CustomTabBar;

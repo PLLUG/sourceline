@@ -13,13 +13,13 @@
 #include <QAction>
 #include <QSettings>
 #include <QDebug>
+#include <QTabWidget>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
-
+    ui->setupUi(this);    
     // TASK: creation of tray menu should be peformed by ApplicationBuilder
     trayMenu = new QMenu();
     trayMenu->addAction("Help");
@@ -43,16 +43,13 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mTabBar, SIGNAL(currentChanged(int)), mPageManager, SLOT(slotChangeCurrentPage(int)));
     // TASK: fixme - connetion
 //    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
-    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiRevisionTable, SLOT(slotSetPage(int)));
+    /*connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiRevisionTable, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiConsole, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiHistoryTree, SLOT(slotSetPage(int)));
-    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiEditorView, SLOT(slotSetPage(int)));
+    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiEditorView, SLOT(slotSetPage(int)));*/
     connect(mTabBar, SIGNAL(tabMoved(int,int)), mPageManager, SLOT(slotTabMoved(int,int)));
 
-    this->splitDockWidget( ui->uiRevisionTable, ui->uiEditorView, Qt::Horizontal);
-    this->splitDockWidget(ui->uiEditorView, ui->uiConsole, Qt::Vertical);
-    this->tabifyDockWidget(ui->uiEditorView, ui->uiFileView);
-    this->tabifyDockWidget(ui->uiRevisionTable, ui->uiHistoryTree);
+    slotAddNewWorkplace();
 }
 
 MainWindow::~MainWindow()
@@ -96,7 +93,9 @@ void MainWindow::slotAddNewWorkplace()
 {
     static int a = 0;
     QString lTabName = "Name" + QString::number(a++);
+
     // TASK: new workplace should be added in TabBuilder class
+
     mPageManager->slotAddNewWorkplace(lTabName);
 }
 

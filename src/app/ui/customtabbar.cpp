@@ -1,11 +1,12 @@
 #include "customtabbar.h"
 #include "ui_customtabbar.h"
+#include "contentfortabworkplace.h"
 
 #include <QDebug>
 #include <QWidget>
 
 CustomTabBar::CustomTabBar(QWidget *parent) :
-    QTabBar(parent),
+    QTabWidget(parent),
     ui(new Ui::CustomTabBar)
 {
     ui->setupUi(this);
@@ -24,7 +25,7 @@ void CustomTabBar::slotAddNewWorkplace(int index, QString name)
 {
     Q_UNUSED(index);
     //TASK: check whether everything is  ok with index - it is not set
-    QTabBar::addTab(name);
+    QTabWidget::addTab(new ContentForTabWorkplace, name);
     setCurrentIndex(this->count()-1);
 }
 

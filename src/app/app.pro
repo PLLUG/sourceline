@@ -54,7 +54,8 @@ HEADERS += \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
-    ui/clonedialog.h
+    ui/clonedialog.h \
+    ui/contentfortabworkplace.h
 
 SOURCES += \
     main.cpp \
@@ -77,7 +78,8 @@ SOURCES += \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
-    ui/clonedialog.cpp
+    ui/clonedialog.cpp \
+    ui/contentfortabworkplace.cpp
 
 # Application UI
 HEADERS += \
@@ -154,7 +156,8 @@ FORMS += \
     ui/plugininfodialog.ui \
     ui/consoleview.ui \
     ui/revisionview.ui \
-    ui/clonedialog.ui
+    ui/clonedialog.ui \
+    ui/contentfortabworkplace.ui
 
 # Application Settings
 HEADERS += \
