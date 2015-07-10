@@ -12,13 +12,3 @@ PasswordDialog::~PasswordDialog()
 {
     delete ui;
 }
-
-void PasswordDialog::on_cancelButton_clicked()
-{
-    close();
-}
-
-void PasswordDialog::on_loginButton_clicked()
-{
-    close();
-}
