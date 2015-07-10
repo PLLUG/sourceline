@@ -1,0 +1,13 @@
+#ifndef GITPLUGIN_GLOBAL
+#define GITPLUGIN_GLOBAL
+
+#include <QtCore/qglobal.h>
+
+#if defined(GITPLUGIN_LIBRARY)
+#  define GITPLUGINSHARED_EXPORT Q_DECL_EXPORT
+#else
+#  define GITPLUGINSHARED_EXPORT Q_DECL_IMPORT
+#endif
+
+#endif // GITPLUGIN_GLOBAL
+
