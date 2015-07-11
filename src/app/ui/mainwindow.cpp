@@ -36,6 +36,7 @@ MainWindow::MainWindow(QWidget *parent) :
     mTabBar = new CustomTabBar(this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+
     ui->uiTabToolBar->addWidget(mTabBar);
 
     connect(mPageManager, SIGNAL(newWorkplaceAdded(int, QString)), mTabBar, SLOT(slotAddNewWorkplace(int,QString)), Qt::UniqueConnection);
@@ -43,7 +44,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mTabBar, SIGNAL(currentChanged(int)), mPageManager, SLOT(slotChangeCurrentPage(int)));
     // TASK: fixme - connetion
 //    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
-    /*connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiRevisionTable, SLOT(slotSetPage(int)));
+    /*connect(mPageManager, SIGNAL(currentPageChanged(int)), mTabBar->widget(mTabBar->currentIndex())->findChildren<RevisionTable *>()[0], SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiConsole, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiHistoryTree, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiEditorView, SLOT(slotSetPage(int)));*/

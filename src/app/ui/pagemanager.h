@@ -23,7 +23,12 @@ signals:
      * \brief Emited when current page that corresponds to current selected repository tab is changed.
      * \param index Index of page.
      */
-    void currentPageChanged(int index);
+    void currentWorkplaceChanged(int index);
+    /*!
+     * \brief Emited when new workplace was added in main menu
+     * \param index Index of page.
+     * \param name Name of tab
+     */
     void newWorkplaceAdded(int index, QString name);
 public slots:
     /*!
@@ -31,8 +36,21 @@ public slots:
      * \param index Index of page.
      */
     void slotChangeCurrentPage(int index);
+    /*!
+     * \brief Add New Workplace in main menu
+     * \param lName Name of tab
+     */
     void slotAddNewWorkplace(QString lName);
-    void slotRemovePage(int index);
+    /*!
+     * \brief Remove workplace with given index
+     * \param index of tab
+     */
+    void slotRemoveWorkplace(int index);
+    /*!
+     * \brief Moved Tab from one position to another
+     * \param from old position(index)
+     * \param to new position(index)
+     */
     void slotTabMoved(int from, int to);
 };
 

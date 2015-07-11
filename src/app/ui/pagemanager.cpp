@@ -9,7 +9,7 @@ PageManager::PageManager(QObject *parent):
 
 void PageManager::slotChangeCurrentPage(int index)
 {
-    emit currentPageChanged(getPageID(index));
+    emit currentWorkplaceChanged(getPageID(index));
 }
 
 
@@ -81,7 +81,7 @@ void PageManager::slotAddNewWorkplace(QString lName)
     emit newWorkplaceAdded(getPageID(), lName);
 }
 
-void PageManager::slotRemovePage(int index)
+void PageManager::slotRemoveWorkplace(int index)
 {
     QMap<int,int>::iterator iter=mPageHash.begin();
     for(; iter!=mPageHash.end(); iter++)
