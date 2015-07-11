@@ -3,7 +3,7 @@
 // TASK: refactor includes
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "pagemanager.h"
+#include "tabsapi.h"
 #include "customtabbar.h"
 #include "settings_dialog/settingstorage.h"
 #include "settings_dialog/settingsmanager.h"
@@ -32,23 +32,23 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->setContextMenu(trayMenu);
 
     // TASK: creation of PageManager should be performed by ApplicationBuilder
-    mPageManager = new PageManager(this);
+    mTabsAPI = new TabsAPI(this);
     mTabBar = new CustomTabBar(this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     ui->uiTabToolBar->addWidget(mTabBar);
 
-    connect(mPageManager, SIGNAL(newWorkplaceAdded(int, QString)), mTabBar, SLOT(slotAddNewWorkplace(int,QString)), Qt::UniqueConnection);
-    connect(mTabBar, SIGNAL(tabCloseRequested(int)), mPageManager, SLOT(slotRemovePage(int)));
-    connect(mTabBar, SIGNAL(currentChanged(int)), mPageManager, SLOT(slotChangeCurrentPage(int)));
+    connect(mTabsAPI, SIGNAL(newWorkplaceAdded(int, QString)), mTabBar, SLOT(slotAddNewWorkplace(int,QString)), Qt::UniqueConnection);
+    connect(mTabBar, SIGNAL(tabCloseRequested(int)), mTabsAPI, SLOT(slotRemovePage(int)));
+    connect(mTabBar, SIGNAL(currentChanged(int)), mTabsAPI, SLOT(slotChangeCurrentPage(int)));
     // TASK: fixme - connetion
 //    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
     /*connect(mPageManager, SIGNAL(currentPageChanged(int)), mTabBar->widget(mTabBar->currentIndex())->findChildren<RevisionTable *>()[0], SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiConsole, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiHistoryTree, SLOT(slotSetPage(int)));
     connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiEditorView, SLOT(slotSetPage(int)));*/
-    connect(mTabBar, SIGNAL(tabMoved(int,int)), mPageManager, SLOT(slotTabMoved(int,int)));
+    connect(mTabBar, SIGNAL(tabMoved(int,int)), mTabsAPI, SLOT(slotTabMoved(int,int)));
 
     slotAddNewWorkplace();
 }
@@ -92,12 +92,12 @@ void MainWindow::slotQuit()
 
 void MainWindow::slotAddNewWorkplace()
 {
-    static int a = 0;
-    QString lTabName = "Name" + QString::number(a++);
+    static int amountOpenedTabs = 0;
+    QString lTabName = "Name" + QString::number(amountOpenedTabs++);
 
     // TASK: new workplace should be added in TabBuilder class
 
-    mPageManager->slotAddNewWorkplace(lTabName);
+    mTabsAPI->slotAddNewWorkplace(lTabName);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)

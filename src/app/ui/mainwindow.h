@@ -5,7 +5,7 @@
 #include <QSystemTrayIcon>
 #include "contentfortabworkplace.h"
 
-class PageManager;
+class TabsAPI;
 class CustomTabBar;
 class QMenu;
 
@@ -26,7 +26,7 @@ private:
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
     CustomTabBar *mTabBar;
-    PageManager *mPageManager;
+    TabsAPI *mTabsAPI;
 
 signals:
     void mysignal();

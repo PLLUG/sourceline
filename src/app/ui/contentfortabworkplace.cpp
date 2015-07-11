@@ -6,9 +6,8 @@ ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
     ui(new Ui::ContentForTabWorkplace)
 {
     ui->setupUi(this);    
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-    sizePolicy.setHeightForWidth(this->sizePolicy().hasHeightForWidth());
-    this->setSizePolicy(sizePolicy);
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);    
+    setSizePolicy(sizePolicy);
     setMouseTracking(false);
     setAutoFillBackground(false);
     setDockNestingEnabled(true);
