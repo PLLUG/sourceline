@@ -9,49 +9,61 @@ Workplace::Workplace(QObject *parent) : QObject(parent)
     initStateMachine();
 }
 
-/*!
- * \brief Workplace::slotLinkRepo
- */
-void Workplace::slotLinkRepo()
+void Workplace::slotInitSelected()
 {
-    // State "Workplace ready" -> state "Repo selected"
+
 }
 
-/*!
- * \brief Workplace::slotUnlinkFromCurrentRepo
- */
-void Workplace::slotUnlinkFromCurrentRepo()
+void Workplace::slotInitCanceled()
 {
-    // State "Workplace ready" <- state "Repo selected"
+
 }
 
-/*!
- * \brief Workplace::slotRequestCommandExecution
- */
-void Workplace::slotRequestCommandExecution()
+void Workplace::slotInitStarted()
 {
-    // State "Repo selected" substate "Ready" -> State "Repo selected" substate "Configuring Command"
+
 }
 
-/*!
- * \brief Workplace::slotConfigureCommand
- */
-void Workplace::slotConfigureCommand()
+void Workplace::slotInitError()
 {
-    // State "Repo selected" substate "Configuring Command" -> State "Repo selected" substate "Command InProgress"
+
 }
 
-/*!
- * \brief Workplace::slotReportCommandExecuted
- */
-void Workplace::slotReportCommandExecuted()
+void Workplace::slotActionSelected()
 {
-    // State "Repo selected" substate "Command InProgress" -> State "Repo selected" substate "Ready"
+
 }
 
-/*!
- * \brief Workplace::initStateMachine
- */
+void Workplace::slotActionCanceled()
+{
+
+}
+
+void Workplace::slotActionConfigured()
+{
+
+}
+
+void Workplace::slotActionConfigError()
+{
+
+}
+
+void Workplace::slotActionFinished()
+{
+
+}
+
+void Workplace::slotFatalError()
+{
+
+}
+
+void Workplace::slotCloseTab()
+{
+
+}
+
 void Workplace::initStateMachine()
 {
     // State machine code goes here...
