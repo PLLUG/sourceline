@@ -7,19 +7,10 @@ ErrorDialog::ErrorDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    setFixedSize(400,300);
-    setMinimumSize(400,300);
-    setMaximumSize(600,400);
+    ui->labelBriefErrorText->setWordWrap(true);        
+    ui->plainTextEditFullErrorText-setStyleSheet("border: 2px solid black");
 
-    QPixmap iconExclamation(":Icons/Icons/exclamation.png");
-    ui->labelIconExclamation->setPixmap(iconExclamation);
-
-    ui->labelBriefErrorText->setWordWrap(true);
-
-    ui->labelFullErrorText->setWordWrap(true);
-    ui->labelFullErrorText->setStyleSheet("border: 2px solid black");
-
-    connect(ui->buttonBoxOk, SIGNAL(accepted()),this,SLOT(close()));
+    connect(ui->buttonBoxOk, SIGNAL(accepted()),this,SLOT(accept()));
 }
 
 ErrorDialog::~ErrorDialog()
@@ -39,5 +30,5 @@ void ErrorDialog::setBriefErrorDescription(const QString &briefErrorText)
 
 void ErrorDialog::setFullErrorDescription(const QString &fullErrorText)
 {
-    ui->labelFullErrorText->setText(fullErrorText);
+    ui->plainTextEditFullErrorText->setPlainText(fullErrorText);
 }

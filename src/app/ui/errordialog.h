@@ -26,13 +26,13 @@ public:
      * \brief Set brief error description with given text
      * \param briefErrorText is brief error's description
      */
-    void setBriefErrorDescription(const QString &titleText);
+    void setBriefErrorDescription(const QString &briefErrorText);
 
     /*!
      * \brief Set full error description with given text
      * \param fullErrorText is full error's description
      */
-    void setFullErrorDescription(const QString &titleText);
+    void setFullErrorDescription(const QString &fullErrorText);
 
 private:
     Ui::ErrorDialog *ui;
