@@ -27,6 +27,7 @@
 #include <QObject>
 
 class QStateMachine;
+class QLabel;
 
 /*!
  * \brief The Workplace class is responsinble for handling state
@@ -36,6 +37,10 @@ class Workplace : public QObject
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief Public constructor.
+     * \param parent Pointer to parent object.
+     */
     explicit Workplace(QObject *parent = 0);
 
 signals:
@@ -55,6 +60,10 @@ signals:
      * \brief Emitted when some errors occured, while initializing.
      */
     void initError();
+    /*!
+     * \brief Emitted when initialization finished
+     */
+    void initFinished();
     /*!
      * \brief Emitted when action was selected.
      */
@@ -106,6 +115,11 @@ public slots:
      */
     void slotInitError();
     /*!
+     * \brief Make transition from state "Initialization in progress"
+     *  to "Ready" of workplace.
+     */
+    void slotInitFinished();
+    /*!
      * \brief Make transition from state "Ready"
      *  to "Configuring Action" of workplace.
      */
@@ -147,7 +161,7 @@ private:
 
 private:
     QStateMachine *mStateMachine;
-    bool workplaceInitialized;
+    bool mWorkplaceInitialized;
 };
 
 #endif // WORKPLACE_H
