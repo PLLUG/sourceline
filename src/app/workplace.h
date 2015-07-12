@@ -28,6 +28,7 @@
 
 class QStateMachine;
 class QLabel;
+class QEvent;
 
 /*!
  * \brief The Workplace class is responsinble for handling state
@@ -160,7 +161,40 @@ private:
     void initStateMachine();
 
 private:
-    QStateMachine *mStateMachine;
+    /*!
+     * \brief The SLEventType enum represents event types.
+     *
+     * They will be sended to state machine, when ones slot will be invoked.
+     */
+    enum SLEventType{
+
+        /// Initialization selected event type
+        EvInitSelected = QEvent::User + 1,          // 1
+        /// Initialization canceled event type
+        EvInitCanceled,                             // 2
+        /// Initialization started event type
+        EvInitStarted,                              // 3
+        /// Initialization error event type
+        EvInitError,                                // 4
+        /// Initialization finished event type
+        EvInitFinished,                             // 5
+        /// Action selected event type
+        EvActionSelected,                           // 6
+        /// Action canceled event type
+        EvActionCanceled,                           // 7
+        /// Action configured event type
+        EvActionConfigured,                         // 8
+        /// Action configuration error event type
+        EvActionConfigError,                        // 9
+        /// Action finished event type
+        EvActionFinished,                           // 10
+        /// Fatal error event type
+        EvFatalError,                               // 11
+        /// Tab closed event type
+        EvTabClosed                                 // 12
+    };
+
+    QStateMachine *mStateMachine; /*!< State machine for single workplace */
     bool mWorkplaceInitialized;
 };
 

@@ -4,6 +4,7 @@
 #include <QFinalState>
 #include <QSignalTransition>
 #include <QLabel>
+#include <QEvent>
 
 Workplace::Workplace(QObject *parent) :
     QObject(parent),
