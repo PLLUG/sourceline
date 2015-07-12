@@ -224,13 +224,17 @@ void FileView::slotDeleteFolder()
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
 
 //    qDebug()<<QMessageBox::question(this,"About delete","really?",QMessageBox::Ok | QMessageBox::Cancel);
-    if (QMessageBox::question(this,"About delete","really?",QMessageBox::Ok | QMessageBox::Cancel) == 1024)
+    if (static_cast<QMessageBox::StandardButton>(QMessageBox::question(this,"About delete","really?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
     {
 
         //delete filder
         if (!removeDir(path))
         {
             QMessageBox::information(this,"Error","Can't delete this repository");
+        }
+        else
+        {
+            QMessageBox::information(this,"Accept","File deleted");
         }
     }
 }
