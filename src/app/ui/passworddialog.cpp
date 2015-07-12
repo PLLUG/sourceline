@@ -16,12 +16,10 @@ PasswordDialog::~PasswordDialog()
 
 void PasswordDialog::accept()
 {
-    qDebug() << "accept";
     PasswordDialog::~PasswordDialog();
 }
 
 void PasswordDialog::reject()
 {
-    qDebug() << "reject";
     PasswordDialog::~PasswordDialog();
 }
