@@ -1,6 +1,5 @@
 #include "passworddialog.h"
 #include "ui_passworddialog.h"
-#include <QDebug>
 
 PasswordDialog::PasswordDialog(QWidget *parent) :
     QDialog(parent),
