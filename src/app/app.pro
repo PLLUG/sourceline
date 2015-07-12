@@ -54,7 +54,8 @@ HEADERS += \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
-    ui/clonedialog.h
+    ui/clonedialog.h \
+    aggregator.h
 
 SOURCES += \
     main.cpp \
@@ -77,7 +78,8 @@ SOURCES += \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
-    ui/clonedialog.cpp
+    ui/clonedialog.cpp \
+    aggregator.cpp
 
 # Application UI
 HEADERS += \
