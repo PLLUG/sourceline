@@ -73,6 +73,20 @@ QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionV
     return lineName;
 }
 
+bool checkValidName(QString nameItem)
+{
+    QString invalidCharacters = "\/:*?\"<>|";
+    for(int i = 0; i < nameItem.length(); i++)
+    {
+        if (invalidCharacters.indexOf(nameItem[i]) != -1)
+        {
+            return false;
+        }
+    }
+
+    return true;
+
+}
 void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     QString pathToFile = mFModel->fileInfo(index).absoluteFilePath();
@@ -87,6 +101,16 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
     QString tempPath = pathToFile.left(indexSlesh+1);
     tempPath+=newFileName;
     QFile file(pathToFile);
+    if (!checkValidName(newFileName))
+    {
+        QMessageBox::information(editor,"Error","A file name can't contain any of the following characters: \/:*?\"<>|");
+        return;
+    }
+    if (newFileName.isEmpty())
+    {
+        QMessageBox::information(editor,"Error","A file name is empty");
+        return;
+    }
     if (pathToFile != tempPath)
     {
         if (QFile(tempPath).exists())
@@ -113,8 +137,8 @@ void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpt
     qDebug()<<"updateEditorGeometry " + fileName<<"\n";
     QRect optionRect = option.rect;
 
-    lineName->move(optionRect.x(), optionRect.y()+35);
-    lineName->setFixedWidth(optionRect.width());
+    lineName->move(optionRect.x()-5, optionRect.y()+35);
+    lineName->setFixedWidth(optionRect.width()+10);
 
 
 }

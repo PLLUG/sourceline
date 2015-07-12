@@ -5,8 +5,9 @@ TextEditForRename::TextEditForRename(QWidget *parent) : QTextEdit(parent)
 {
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    connect(this->document(), SIGNAL(contentsChanged()), this, SLOT(slotUpdateHeight()));
+    //connect(this->document(), SIGNAL(contentsChanged()), this, SLOT(slotUpdateHeight()));
     this->installEventFilter(parent);
+
 }
 
 void TextEditForRename::keyPressEvent(QKeyEvent *event)
@@ -34,6 +35,7 @@ bool TextEditForRename::eventFilter(QObject *object, QEvent *event)
         cursor.setPosition(0);
         cursor.setPosition(this->toPlainText().length(), QTextCursor::KeepAnchor);
         this->setTextCursor(cursor);
+        this->setAlignment(Qt::AlignCenter);
     }
     return false;
 }

@@ -31,6 +31,7 @@
 #include <QDebug>
 #include <QMessageBox>
 #include <QListWidgetItem>
+#include <QDialog>
 
 #include "fileview/exploreritemdelegate.h"
 
@@ -169,7 +170,7 @@ void FileView::slotNewFolder()
     int i = 1;
     while(QDir(pathForNewFolder).exists())
     {
-        pathForNewFolder = pathSrart + "(" + QString::number(i)+")";
+        pathForNewFolder = pathSrart + " (" + QString::number(i)+")";
         i++;
     }
 
@@ -182,6 +183,11 @@ void FileView::slotNewFolder()
     ui->listView->edit(ui->listView->currentIndex());
 }
 
+/*!
+ * \brief Remove folder and input content
+ * \param path to folder which remove
+ * \return result removing(true if remove folder)
+ */
 bool removeDir(const QString& dirName)
 {
     bool result = true;
@@ -217,10 +223,15 @@ void FileView::slotDeleteFolder()
     QModelIndex currentIndex = ui->listView->currentIndex();
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
 
-    //delete filder
-    if (!removeDir(path))
+//    qDebug()<<QMessageBox::question(this,"About delete","really?",QMessageBox::Ok | QMessageBox::Cancel);
+    if (QMessageBox::question(this,"About delete","really?",QMessageBox::Ok | QMessageBox::Cancel) == 1024)
     {
-        QMessageBox::information(this,"Error","Can't delete this repository");
+
+        //delete filder
+        if (!removeDir(path))
+        {
+            QMessageBox::information(this,"Error","Can't delete this repository");
+        }
     }
 }
 

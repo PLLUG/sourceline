@@ -19,12 +19,27 @@ public:
      * \param parent
      */
     explicit TextEditForRename(QWidget *parent = 0);
+
+    /*!
+     * \brief keyPressEvent
+     * \param event
+     */
     void keyPressEvent(QKeyEvent *event);
+
+    /*!
+     * \brief eventFilter
+     * \param object
+     * \param event
+     * \return always false
+     */
     bool eventFilter(QObject *object, QEvent *event);
 
 signals:
 
 public slots:
+    /*!
+     * \brief slotUpdateHeight
+     */
     void slotUpdateHeight();
 };
 
