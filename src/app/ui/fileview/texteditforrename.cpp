@@ -5,7 +5,6 @@ TextEditForRename::TextEditForRename(QWidget *parent) : QTextEdit(parent)
 {
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-    //connect(this->document(), SIGNAL(contentsChanged()), this, SLOT(slotUpdateHeight()));
     this->installEventFilter(parent);
 
 }

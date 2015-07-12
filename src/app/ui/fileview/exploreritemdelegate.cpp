@@ -2,7 +2,6 @@
 
 #include <QPainter>
 #include <QApplication>
-#include <QDebug>
 #include <QFileSystemModel>
 #include <QLineEdit>
 #include <QMessageBox>
@@ -65,14 +64,19 @@ QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
     return QStyledItemDelegate::sizeHint(option, index);
 }
 
+
 QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
-    qDebug()<<"creatrEditor"<<"\n";
     TextEditForRename* lineName = new TextEditForRename(parent);
     lineName->installEventFilter(parent);
     return lineName;
 }
 
+/*!
+ * \brief check valid name for file
+ * \param name file
+ * \return true in name is valid
+ */
 bool checkValidName(QString nameItem)
 {
     QString invalidCharacters = "\/:*?\"<>|";
@@ -97,8 +101,8 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
     }
     QString newFileName = lineName->toPlainText();
 
-    int indexSlesh = pathToFile.lastIndexOf("/");
-    QString tempPath = pathToFile.left(indexSlesh+1);
+    int indexSlash = pathToFile.lastIndexOf("/");
+    QString tempPath = pathToFile.left(indexSlash+1);
     tempPath+=newFileName;
     QFile file(pathToFile);
     if (!checkValidName(newFileName))
@@ -122,7 +126,6 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
             file.rename(tempPath);
         }
     }
-    qDebug()<<"setModelData "+ tempPath<<"\n";
 
 }
 
@@ -133,8 +136,6 @@ void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOpt
     {
         lineName = qobject_cast<TextEditForRename*>(editor);
     }
-    QString fileName = index.data(Qt::DisplayRole).toString();
-    qDebug()<<"updateEditorGeometry " + fileName<<"\n";
     QRect optionRect = option.rect;
 
     lineName->move(optionRect.x()-5, optionRect.y()+35);

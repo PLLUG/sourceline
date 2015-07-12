@@ -15,30 +15,31 @@ class TextEditForRename : public QTextEdit
     Q_OBJECT
 public:
     /*!
-     * \brief constructor
-     * \param parent
+     * \brief constructor with paramenters
+     * \param widget which is parent for text edit
      */
     explicit TextEditForRename(QWidget *parent = 0);
 
     /*!
-     * \brief keyPressEvent
-     * \param event
+     * \brief catch event click Key_Return for finish editing TextEdit
+     * \param action after event
      */
     void keyPressEvent(QKeyEvent *event);
 
     /*!
-     * \brief eventFilter
+     * \brief catch events Resize and PolishRequest
      * \param object
      * \param event
-     * \return always false
+     * \return actions after events Resize and PolishRequest
      */
     bool eventFilter(QObject *object, QEvent *event);
 
 signals:
 
 public slots:
+
     /*!
-     * \brief slotUpdateHeight
+     * \brief update height
      */
     void slotUpdateHeight();
 };

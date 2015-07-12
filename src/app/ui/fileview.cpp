@@ -47,7 +47,7 @@ FileView::FileView(QWidget *parent) :
     //context menu
     mMenu = new QMenu(this);
     QAction* actionNewFolder = new QAction("New Folder",mMenu);
-    connect(actionNewFolder, SIGNAL(triggered(bool)), this, SLOT(slotNewFolder()));
+    connect(actionNewFolder, SIGNAL(triggered(bool)), this, SLOT(slotCreateNewFolder()));
     mMenu->addAction(actionNewFolder);
 
     //menu for files
@@ -160,7 +160,7 @@ void FileView::slotRightBtnClick(const QPoint &pos)
     }
 }
 
-void FileView::slotNewFolder()
+void FileView::slotCreateNewFolder()
 {
     //create folder
     QModelIndex index = (QModelIndex)ui->listView->rootIndex();
