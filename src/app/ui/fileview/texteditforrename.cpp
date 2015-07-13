@@ -22,6 +22,7 @@ void TextEditForRename::keyPressEvent(QKeyEvent *event)
 
 bool TextEditForRename::eventFilter(QObject *object, QEvent *event)
 {
+    Q_UNUSED(object)
     if (event->type() == QEvent::Resize)
     {
         slotUpdateHeight();

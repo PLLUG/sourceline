@@ -10,7 +10,7 @@
 #include <QTextCursor>
 
 //TASK: move to ui folder (together with fileview folder)
-const QString invalidCharacters = "\/:*?\"<>|";
+const QString invalidCharacters = "\\/:*?\"<>|";
 
 ExplorerItemDelegate::ExplorerItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
@@ -68,6 +68,8 @@ QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const Q
 
 QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index)
+    Q_UNUSED(option)
     TextEditForRename* lineName = new TextEditForRename(parent);
     lineName->installEventFilter(parent);
     return lineName;
@@ -92,6 +94,7 @@ bool checkValidName(QString nameItem)
 
 void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
+    Q_UNUSED(model)
     QString pathToFile = mFModel->fileInfo(index).absoluteFilePath();
     TextEditForRename* lineName = new TextEditForRename();
     if (editor != NULL)
@@ -130,6 +133,7 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 
 void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
+    Q_UNUSED(index)
     TextEditForRename* lineName = new TextEditForRename();
     if (editor != NULL)
     {
