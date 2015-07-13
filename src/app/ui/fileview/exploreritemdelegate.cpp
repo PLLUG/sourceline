@@ -2,10 +2,15 @@
 
 #include <QPainter>
 #include <QApplication>
-#include <QDebug>
 #include <QFileSystemModel>
+#include <QLineEdit>
+#include <QMessageBox>
+#include <QTextEdit>
+#include "texteditforrename.h"
+#include <QTextCursor>
 
 //TASK: move to ui folder (together with fileview folder)
+const QString invalidCharacters = "\/:*?\"<>|";
 
 ExplorerItemDelegate::ExplorerItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
@@ -58,4 +63,83 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
 QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     return QStyledItemDelegate::sizeHint(option, index);
+}
+
+
+QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    TextEditForRename* lineName = new TextEditForRename(parent);
+    lineName->installEventFilter(parent);
+    return lineName;
+}
+
+/*!
+ * \brief check valid name for file
+ * \param name file
+ * \return true in name is valid
+ */
+bool checkValidName(QString nameItem)
+{
+    for(int i = 0; i < nameItem.length(); i++)
+    {
+        if (invalidCharacters.indexOf(nameItem[i]) != -1)
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
+void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
+{
+    QString pathToFile = mFModel->fileInfo(index).absoluteFilePath();
+    TextEditForRename* lineName = new TextEditForRename();
+    if (editor != NULL)
+    {
+        lineName = qobject_cast<TextEditForRename*>(editor);
+    }
+    QString newFileName = lineName->toPlainText();
+
+    int indexSlash = pathToFile.lastIndexOf("/");
+    QString newPathToFile = pathToFile.left(indexSlash+1);
+    newPathToFile += newFileName;
+
+    QFile file(pathToFile);
+    if (!checkValidName(newFileName))
+    {
+        QMessageBox::information(editor,"Error","A file name can't contain any of the following characters: " + invalidCharacters);
+        return;
+    }
+    if (newFileName.isEmpty())
+    {
+        QMessageBox::information(editor,"Error","A file name is empty");
+        return;
+    }
+    if (pathToFile != newPathToFile)
+    {
+        if (QFile(newPathToFile).exists())
+        {
+            QMessageBox::information(editor,"Error","File with name \"" + newFileName + "\" is already exist");
+        }
+        else
+        {
+            file.rename(newPathToFile);
+        }
+    }
+}
+
+void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    TextEditForRename* lineName = new TextEditForRename();
+    if (editor != NULL)
+    {
+        lineName = qobject_cast<TextEditForRename*>(editor);
+    }
+    QRect optionRect = option.rect;
+
+    //place text editor on background widget
+    lineName->move(optionRect.x()-5, optionRect.y()+35);
+
+    //fixed width that this is looking native
+    lineName->setFixedWidth(optionRect.width()+10);
 }
