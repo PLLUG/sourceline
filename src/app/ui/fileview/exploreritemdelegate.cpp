@@ -87,7 +87,6 @@ bool checkValidName(QString nameItem)
             return false;
         }
     }
-
     return true;
 }
 
@@ -95,7 +94,7 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 {
     QString pathToFile = mFModel->fileInfo(index).absoluteFilePath();
     TextEditForRename* lineName = new TextEditForRename();
-    if (editor != 0)
+    if (editor != NULL)
     {
         lineName = qobject_cast<TextEditForRename*>(editor);
     }
@@ -103,7 +102,7 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 
     int indexSlash = pathToFile.lastIndexOf("/");
     QString newPathToFile = pathToFile.left(indexSlash+1);
-    newPathToFile+=newFileName;
+    newPathToFile += newFileName;
 
     QFile file(pathToFile);
     if (!checkValidName(newFileName))

@@ -2,6 +2,7 @@
 
 TextEditForRename::TextEditForRename(QWidget *parent) : QTextEdit(parent)
 {
+    connect(this->document(), SIGNAL(contentsChanged()), this, SLOT(slotUpdateHeight()));
     this->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
     this->installEventFilter(parent);
@@ -39,6 +40,7 @@ bool TextEditForRename::eventFilter(QObject *object, QEvent *event)
 
 void TextEditForRename::slotUpdateHeight()
 {
+    //hight+5 for native look in editor
     this->setFixedHeight(this->document()->size().height()+5);
 }
 
