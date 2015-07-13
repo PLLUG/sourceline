@@ -13,6 +13,7 @@ CustomTabBar::CustomTabBar(QWidget *parent) :
     this->setTabsClosable(true);
     this->setMovable(true);    
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slotCloseTab(int)));
 }
 

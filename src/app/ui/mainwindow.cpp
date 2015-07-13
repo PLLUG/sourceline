@@ -14,6 +14,7 @@
 #include <QSettings>
 #include <QDebug>
 #include <QTabWidget>
+#include <QHBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -32,22 +33,16 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->setContextMenu(trayMenu);
 
     // TASK: creation of PageManager should be performed by ApplicationBuilder
-    mTabsAPI = new TabsAPI(this);
+    mTabsAPI = new TabsAPI();
     mTabBar = new CustomTabBar(this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
-    ui->uiTabToolBar->addWidget(mTabBar);
+    this->setCentralWidget(mTabBar);
 
     connect(mTabsAPI, SIGNAL(newWorkplaceAdded(int, QString)), mTabBar, SLOT(slotAddNewWorkplace(int,QString)), Qt::UniqueConnection);
     connect(mTabBar, SIGNAL(tabCloseRequested(int)), mTabsAPI, SLOT(slotRemovePage(int)));
     connect(mTabBar, SIGNAL(currentChanged(int)), mTabsAPI, SLOT(slotChangeCurrentPage(int)));
-    // TASK: fixme - connetion
-//    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiFileView, SLOT(slotSetPage(int)));
-    /*connect(mPageManager, SIGNAL(currentPageChanged(int)), mTabBar->widget(mTabBar->currentIndex())->findChildren<RevisionTable *>()[0], SLOT(slotSetPage(int)));
-    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiConsole, SLOT(slotSetPage(int)));
-    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiHistoryTree, SLOT(slotSetPage(int)));
-    connect(mPageManager, SIGNAL(currentPageChanged(int)), ui->uiEditorView, SLOT(slotSetPage(int)));*/
     connect(mTabBar, SIGNAL(tabMoved(int,int)), mTabsAPI, SLOT(slotTabMoved(int,int)));
 
     slotAddNewWorkplace();

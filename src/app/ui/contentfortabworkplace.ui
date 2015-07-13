@@ -1,7 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>ContentForTabWorkplace</class>
  <widget class="QWidget" name="ContentForTabWorkplace">
   <property name="geometry">
@@ -12,10 +10,16 @@
     <height>300</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>

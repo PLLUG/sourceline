@@ -6,15 +6,16 @@ ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
     ui(new Ui::ContentForTabWorkplace)
 {
     ui->setupUi(this);    
-    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);    
+    QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     setSizePolicy(sizePolicy);
     setMouseTracking(false);
     setAutoFillBackground(false);
     setDockNestingEnabled(true);
-    setDockOptions(QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks|QMainWindow::ForceTabbedDocks);
+    setDockOptions(QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks);
 
     uiHistoryTree = new HistoryTree(this);
     uiHistoryTree->setMinimumSize(QSize(250, 38));
+
     dockWidgetContents_5 = new RevisionView();
     uiHistoryTree->setWidget(dockWidgetContents_5);
     addDockWidget(static_cast<Qt::DockWidgetArea>(8), uiHistoryTree);
