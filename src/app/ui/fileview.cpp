@@ -102,7 +102,7 @@ FileView::FileView(QWidget *parent) :
     connect(ui->lineEdit, SIGNAL(signalIconClicked()), SLOT(slotGoUp()));
 }
 
-void FileView::setRootPath(const QString pPath)
+void FileView::setRootPath(const QString &pPath)
 {
     mRootPath = pPath;
 }
@@ -163,14 +163,15 @@ void FileView::slotRightBtnClick(const QPoint &pos)
 void FileView::slotCreateNewFolder()
 {
     //create folder
-    QModelIndex index = (QModelIndex)ui->listView->rootIndex();
-    QString pathSrart = mFileModel->fileInfo(index).absoluteFilePath()+"/"+"New Folder";
-    QString pathForNewFolder = pathSrart;
+    QModelIndex index = static_cast<QModelIndex>(ui->listView->rootIndex());
+    QString pathStart = mFileModel->fileInfo(index).absoluteFilePath()+"/"+"New Folder";
+    QString pathForNewFolder = pathStart;
 
+    //counter for standart folder name(New Folder (i)) if "New Folder" is already exist
     int i = 1;
     while(QDir(pathForNewFolder).exists())
     {
-        pathForNewFolder = pathSrart + " (" + QString::number(i)+")";
+        pathForNewFolder = pathStart + " (" + QString::number(i)+")";
         i++;
     }
 
@@ -188,7 +189,7 @@ void FileView::slotCreateNewFolder()
  * \param path to folder which remove
  * \return result removing(true if remove folder)
  */
-bool removeDir(const QString& dirName)
+bool removeDir(const QString &dirName)
 {
     bool result = true;
     QDir dir(dirName);
@@ -223,18 +224,13 @@ void FileView::slotDeleteFolder()
     QModelIndex currentIndex = ui->listView->currentIndex();
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
 
-//    qDebug()<<QMessageBox::question(this,"About delete","really?",QMessageBox::Ok | QMessageBox::Cancel);
-    if (static_cast<QMessageBox::StandardButton>(QMessageBox::question(this,"About delete","really?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
+    //create message about delete folder and check what button was clicked
+    if (static_cast<QMessageBox::StandardButton>(QMessageBox::question(this,"About delete","Do you wanna delete this repository?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
     {
-
-        //delete filder
+        //delete folder
         if (!removeDir(path))
         {
             QMessageBox::information(this,"Error","Can't delete this repository");
-        }
-        else
-        {
-            QMessageBox::information(this,"Accept","File deleted");
         }
     }
 }
@@ -243,8 +239,16 @@ void FileView::slotDeleteFile()
 {
     QModelIndex currentIndex = ui->listView->currentIndex();
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
-    QFile::remove(path);
 
+    //create message about delete file and check what button was clicked
+    if (static_cast<QMessageBox::StandardButton>(QMessageBox::question(this,"About delete","Do you wanna delete this file?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
+    {
+        //delete file
+        if (!QFile::remove(path))
+        {
+            QMessageBox::information(this,"Error","Can't delete this file");
+        }
+    }
 }
 
 void FileView::slotRenameFolderOrFile()

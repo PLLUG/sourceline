@@ -67,7 +67,6 @@ private:
      * \brief model for file system
      */
     QFileSystemModel *mFModel;
-
 };
 
 #endif // EXPLORERITEMDELEGATE_H

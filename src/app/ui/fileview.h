@@ -27,7 +27,7 @@ public:
      * \brief set root path for system
      * \param path which must be root
      */
-    void setRootPath(const QString pPath);
+    void setRootPath(const QString &pPath);
 
     /*!
      * \brief current root path
