@@ -2,81 +2,75 @@
 #include <QStateMachine>
 #include <QState>
 #include <QFinalState>
-#include <QEventTransition>
+#include <QSignalTransition>
 #include <QLabel>
 #include <QEvent>
-#include <QCoreApplication>
+#include "transitionsignals.h"
 
 Workplace::Workplace(QObject *parent) : QObject(parent)
 {
-    label = new QLabel("Ok, let's start!");
-    label->show();
+    mTransitionSignals = new TransitionSignals(this);
     initStateMachine();
 }
 
 void Workplace::slotInitSelected()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvInitSelected)));
+    emit mTransitionSignals->initSelected();
 }
 
 void Workplace::slotInitCanceled()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvInitCanceled)));
+    emit mTransitionSignals->initCanceled();
 }
 
 void Workplace::slotInitStarted()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvInitStarted)));
+    emit mTransitionSignals->initStarted();
 }
 
 void Workplace::slotInitError()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvInitError)));
+    emit mTransitionSignals->initError();
 }
 
 void Workplace::slotInitFinished()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvInitFinished)));
+    emit mTransitionSignals->initFinished();
 }
 
 void Workplace::slotActionSelected()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvActionSelected)));
+    emit mTransitionSignals->actionSelected();
 }
 
 void Workplace::slotActionCanceled()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvActionCanceled)));
+    emit mTransitionSignals->actionCanceled();
 }
 
 void Workplace::slotActionConfigured()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvActionConfigured)));
+    emit mTransitionSignals->actionConfigured();
 }
 
 void Workplace::slotActionConfigError()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvActionConfigError)));
+    emit mTransitionSignals->actionConfigError();
 }
 
 void Workplace::slotActionFinished()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvActionFinished)));
+    emit mTransitionSignals->actionFinished();
 }
 
 void Workplace::slotFatalError()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvFatalError)));
+    emit mTransitionSignals->fatalError();
 }
 
 void Workplace::slotTabClosed()
 {
-    QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvTabClosed)));
-}
-
-void Workplace::onFinal()
-{
-    label->setText("Final state.");
+    emit mTransitionSignals->tabClosed();
 }
 
 void Workplace::initStateMachine()
@@ -89,7 +83,8 @@ void Workplace::initStateMachine()
     QFinalState *stFinalState = new QFinalState(mStateMachine);
     // Transition from any state, that stMainState contains,
     // to stFinalState, when closing the tab
-    QEventTransition *trTabClosed = new QEventTransition(this, QEvent::Type(EvTabClosed));
+    QSignalTransition *trTabClosed =
+            new QSignalTransition(mTransitionSignals, SIGNAL(tabClosed()));
     trTabClosed->setTargetState(stFinalState);
     stMainState->addTransition(trTabClosed);
 
@@ -98,7 +93,8 @@ void Workplace::initStateMachine()
     QState *stNotValid = new QState(stMainState);
     // Transition from any state of stValid to stNotValid state
     // when fatal error occured
-    QEventTransition *trFatalError = new QEventTransition(this, QEvent::Type(EvFatalError));
+    QSignalTransition *trFatalError =
+            new QSignalTransition(mTransitionSignals, SIGNAL(fatalError()));
     trFatalError->setTargetState(stNotValid);
     stValid->addTransition(trFatalError);
 
@@ -110,44 +106,44 @@ void Workplace::initStateMachine()
     QState *stActionInProgress = new QState(stValid);
 
     // Transitions between inner stValid states
-    QEventTransition *trInitSelected =
-            new QEventTransition(this, QEvent::Type(EvInitSelected));
+    QSignalTransition *trInitSelected =
+            new QSignalTransition(mTransitionSignals, SIGNAL(initSelected()));
     trInitSelected->setTargetState(stConfiguringInit);
     stReady->addTransition(trInitSelected);
-    QEventTransition *trActionSelected =
-            new QEventTransition(this, QEvent::Type(EvActionSelected));
+    QSignalTransition *trActionSelected =
+            new QSignalTransition(mTransitionSignals,SIGNAL(actionSelected()));
     trActionSelected->setTargetState(stConfiguringAction);
     stReady->addTransition(trActionSelected);
-    QEventTransition *trInitCanceled
-            = new QEventTransition(this, QEvent::Type(EvInitCanceled));
+    QSignalTransition *trInitCanceled
+            = new QSignalTransition(mTransitionSignals,SIGNAL(initCanceled()));
     trInitCanceled->setTargetState(stReady);
     stConfiguringInit->addTransition(trInitCanceled);
-    QEventTransition *trInitStarted
-            = new QEventTransition(this, QEvent::Type(EvInitStarted));
+    QSignalTransition *trInitStarted
+            = new QSignalTransition(mTransitionSignals, SIGNAL(initStarted()));
     trInitStarted->setTargetState(stInitInProgress);
     stConfiguringInit->addTransition(trInitStarted);
-    QEventTransition *trInitError
-            = new QEventTransition(this, QEvent::Type(EvInitError));
+    QSignalTransition *trInitError
+            = new QSignalTransition(mTransitionSignals, SIGNAL(initError()));
     trInitError->setTargetState(stConfiguringInit);
     stInitInProgress->addTransition(trInitError);
-    QEventTransition *trInitFinished
-            = new QEventTransition(this, QEvent::Type(EvInitFinished));
+    QSignalTransition *trInitFinished
+            = new QSignalTransition(mTransitionSignals,SIGNAL(initFinished()));
     trInitFinished->setTargetState(stReady);
     stInitInProgress->addTransition(trInitFinished);
-    QEventTransition *trActionCanceled
-            = new QEventTransition(this, QEvent::Type(EvActionCanceled));
+    QSignalTransition *trActionCanceled
+            = new QSignalTransition(mTransitionSignals,SIGNAL(actionCanceled()));
     trActionCanceled->setTargetState(stReady);
     stConfiguringAction->addTransition(trActionCanceled);
-    QEventTransition *trActionConfigured
-            = new QEventTransition(this, QEvent::Type(EvActionConfigured));
+    QSignalTransition *trActionConfigured
+            = new QSignalTransition(mTransitionSignals,SIGNAL(actionConfigured()));
     trActionConfigured->setTargetState(stActionInProgress);
     stConfiguringAction->addTransition(trActionConfigured);
-    QEventTransition *trActionConfigError
-            = new QEventTransition(this, QEvent::Type(EvActionConfigError));
+    QSignalTransition *trActionConfigError
+            = new QSignalTransition(mTransitionSignals,SIGNAL(actionConfigError()));
     trActionConfigError->setTargetState(stConfiguringAction);
     stActionInProgress->addTransition(trActionConfigError);
-    QEventTransition *trActionFinished
-            = new QEventTransition(this, QEvent::Type(EvActionFinished));
+    QSignalTransition *trActionFinished
+            = new QSignalTransition(mTransitionSignals,SIGNAL(actionFinished()));
     trActionFinished->setTargetState(stReady);
     stActionInProgress->addTransition(trActionFinished);
 
@@ -164,17 +160,6 @@ void Workplace::initStateMachine()
     connect(stFinalState, SIGNAL(entered()), this, SIGNAL(enteredFinalState()));
     connect(stInitInProgress, SIGNAL(entered()), this, SIGNAL(enteredInitInProgress()));
     connect(stNotValid, SIGNAL(entered()), this, SIGNAL(enteredNotValid()));
-
-    // TEST
-    // Delete slot void onFinal()
-    stReady->assignProperty(label, "text", "Ready!");
-    stActionInProgress->assignProperty(label, "text", "Action in progress!");
-    stConfiguringAction->assignProperty(label, "text", "Configuring Action!");
-    stConfiguringInit->assignProperty(label, "text", "Configuring Init!");
-    connect(stFinalState, SIGNAL(entered()), this, SLOT(onFinal()));
-    stInitInProgress->assignProperty(label, "text", "Init In Progress!");
-    stNotValid->assignProperty(label, "text", "Not Valid!");
-    // TEST
 
     mStateMachine->start();
 }

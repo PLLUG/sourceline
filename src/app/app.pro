@@ -55,7 +55,8 @@ HEADERS += \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
     ui/clonedialog.h \
-    workplace.h
+    workplace.h \
+    transitionsignals.h
 
 SOURCES += \
     main.cpp \

@@ -27,8 +27,7 @@
 #include <QObject>
 
 class QStateMachine;
-class QLabel;
-class QEvent;
+class TransitionSignals;
 
 /*!
  * \brief The Workplace class is responsible for handling state
@@ -134,8 +133,6 @@ public slots:
      */
     void slotTabClosed();
 
-    void onFinal();
-
 private:
     /*!
      * \brief Initialization of state machine with all states and transitions.
@@ -143,51 +140,9 @@ private:
     void initStateMachine();
 
 private:
-    /*!
-     * \brief The SLEventType enum represents event types.
-     *
-     * They will be sended to state machine, when ones slot will be invoked.
-     */
-    enum SLEventType
-    {
-        /// Initialization selected event type
-        EvInitSelected = 1001,                      // 1
-        /// Initialization canceled event type
-        EvInitCanceled,                             // 2
-        /// Initialization started event type
-        EvInitStarted,                              // 3
-        /// Initialization error event type
-        EvInitError,                                // 4
-        /// Initialization finished event type
-        EvInitFinished,                             // 5
-        /// Action selected event type
-        EvActionSelected,                           // 6
-        /// Action canceled event type
-        EvActionCanceled,                           // 7
-        /// Action configured event type
-        EvActionConfigured,                         // 8
-        /// Action configuration error event type
-        EvActionConfigError,                        // 9
-        /// Action finished event type
-        EvActionFinished,                           // 10
-        /// Fatal error event type
-        EvFatalError,                               // 11
-        /// Tab closed event type
-        EvTabClosed                                 // 12
-    };
-
-    class TransitionSignals : public QObject
-    {
-        Q_OBJECT
-    public:
-        explicit TransitionSignals(QObject *parent = 0);
-
-    signals:
-
-    };
 
     QStateMachine *mStateMachine; /*!< State machine for single workplace */
-    QLabel *label;
+    TransitionSignals *mTransitionSignals;
 };
 
 #endif // WORKPLACE_H
