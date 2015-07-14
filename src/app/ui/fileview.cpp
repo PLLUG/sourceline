@@ -73,9 +73,7 @@ FileView::FileView(QWidget *parent) :
     mDirMenu->addAction(actionRemaneDir);
 
     mFileModel = new QFileSystemModel(this);
-    mRootPath = "My Computer";
-    mFileModel->setRootPath(mRootPath);
-
+    setRootPath("My Computer");
     ui->listView->setModel(mFileModel);
     ExplorerItemDelegate *lDeltegate = new ExplorerItemDelegate();
     lDeltegate->setFileSystemModel(mFileModel);
@@ -87,7 +85,7 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setWordWrap(true);
     ui->listView->setWrapping(true);
     ui->listView->setGridSize(QSize(70,70));
-    ui->listView->setRootIndex(mFileModel->index(mRootPath));
+
     ui->listView->setAcceptDrops(true);
     ui->listView->setDragEnabled(true);
     ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
@@ -95,21 +93,11 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mFileModel->setReadOnly(false);
 
-    ui->lineEdit->setText(mRootPath);
+
 
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(ui->lineEdit, SIGNAL(signalIconClicked()), SLOT(slotGoUp()));
-}
-
-void FileView::setRootPath(const QString &pPath)
-{
-    mRootPath = pPath;
-}
-
-QString FileView::currentRootPath() const
-{
-    return mRootPath;
 }
 
 FileView::~FileView()
@@ -117,14 +105,19 @@ FileView::~FileView()
     delete ui;
 }
 
+void FileView::setRootPath(const QString &pPath)
+{
+    ui->lineEdit->setText(pPath);
+    ui->listView->setRootIndex(mFileModel->index(pPath));
+    mFileModel->setRootPath(pPath);
+}
+
 void FileView::slotDoubleClick(const QModelIndex &index)
 {
-    bool q = mFileModel->isDir(index);
-    if(q)
+    if(mFileModel->isDir(index))
     {
         ui->listView->setRootIndex(index);
-        mRootPath = mFileModel->fileInfo(index).absoluteFilePath();
-        ui->lineEdit->setText(mRootPath);
+        ui->lineEdit->setText(mFileModel->fileInfo(index).absoluteFilePath());
     }
 }
 
@@ -134,8 +127,7 @@ void FileView::slotGoUp()
     ui->listView->setRootIndex(up_index);
     if(up_index.isValid())
     {
-        mRootPath = mFileModel->fileInfo(up_index).absoluteFilePath();
-        ui->lineEdit->setText(mRootPath);
+        ui->lineEdit->setText(mFileModel->fileInfo(up_index).absoluteFilePath());
     }
     else
     {

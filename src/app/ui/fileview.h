@@ -28,12 +28,6 @@ public:
      */
     void setRootPath(const QString &pPath);
 
-    /*!
-     * \brief current root path
-     * \return root path
-     */
-    QString currentRootPath() const;
-
 protected:
 
     /*!
@@ -101,11 +95,6 @@ private:
      * \brief context menu for folders
      */
     QMenu *mDirMenu;
-
-    /*!
-     * \brief root path in system
-     */
-    QString mRootPath;
 
     /*!
      * \brief file model
