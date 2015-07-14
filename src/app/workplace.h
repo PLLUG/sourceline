@@ -31,7 +31,7 @@ class QLabel;
 class QEvent;
 
 /*!
- * \brief The Workplace class is responsinble for handling state
+ * \brief The Workplace class is responsible for handling state
  *  of certain SL user workplace. It also contains various related information.
  */
 class Workplace : public QObject
@@ -46,111 +46,91 @@ public:
 
 signals:
     /*!
-     * \brief Emitted when initialization was selected.
+     * \brief Emitted when entered in state "Ready"
      */
-    void initSelected();
+    void enteredReady();
     /*!
-     * \brief Emitted when initialization was canceled.
+     * \brief Emitted when entered in state "Configuring Initialization"
      */
-    void initCanceled();
+    void enteredConfiguringInit();
     /*!
-     * \brief Emitted when initialization started.
+     * \brief Emitted when entered in state "Initialization In Progress"
      */
-    void initStarted();
+    void enteredInitInProgress();
     /*!
-     * \brief Emitted when some errors occured, while initializing.
+     * \brief Emitted when entered in state "Configuring Action"
      */
-    void initError();
+    void enteredConfiguringAction();
     /*!
-     * \brief Emitted when initialization finished
+     * \brief Emitted when entered in state "Action In Progress"
      */
-    void initFinished();
+    void enteredActionInProgress();
     /*!
-     * \brief Emitted when action was selected.
+     * \brief Emitted when entered in state "Not Valid"
      */
-    void actionSelected();
+    void enteredNotValid();
     /*!
-     * \brief Emitted when action was canceled.
+     * \brief Emitted when entered in state "Final State"
      */
-    void actionCanceled();
-    /*!
-     * \brief Emitted when action was configured.
-     */
-    void actionConfigured();
-    /*!
-     * \brief Emitted when some errors occured during the action.
-     */
-    void actionConfigError();
-    /*!
-     * \brief Emitted when action was finished.
-     */
-    void actionFinished();
-    /*!
-     * \brief Emitted when fatal error occured in any states of workplace.
-     */
-    void fatalError();
-    /*!
-     * \brief Emitted when tab was closed.
-     */
-    void tabClosed();
+    void enteredFinalState();
 
 public slots:
     /*!
-     * \brief Make transition from state "Ready"
+     * \brief Makes transition from state "Ready"
      *  to "Configuring Initialization" of workplace.
      */
     void slotInitSelected();
     /*!
-     * \brief Make transition from state "Configuring Initialization"
+     * \brief Makes transition from state "Configuring Initialization"
      *  to "Ready" of workplace.
      */
     void slotInitCanceled();
     /*!
-     * \brief Make transition from state "Configuring Initialization"
+     * \brief Makes transition from state "Configuring Initialization"
      *  to "Initialization in progress" of workplace.
      */
     void slotInitStarted();
     /*!
-     * \brief Make transition from state "Initialization in progress"
+     * \brief Makes transition from state "Initialization in progress"
      *  to "Configuring Initialization" of workplace.
      */
     void slotInitError();
     /*!
-     * \brief Make transition from state "Initialization in progress"
+     * \brief Makes transition from state "Initialization in progress"
      *  to "Ready" of workplace.
      */
     void slotInitFinished();
     /*!
-     * \brief Make transition from state "Ready"
+     * \brief Makes transition from state "Ready"
      *  to "Configuring Action" of workplace.
      */
     void slotActionSelected();
     /*!
-     * \brief Make transition from state "Configuring Action"
+     * \brief Makes transition from state "Configuring Action"
      *  to "Ready" of workplace.
      */
     void slotActionCanceled();
     /*!
-     * \brief Make transition from state "Configuring Action"
+     * \brief Makes transition from state "Configuring Action"
      *  to "Action In Progress" of workplace.
      */
     void slotActionConfigured();
     /*!
-     * \brief Make transition from state "Action In Progress"
+     * \brief Makes transition from state "Action In Progress"
      *  to "Configuring Action" of workplace.
      */
     void slotActionConfigError();
     /*!
-     * \brief Make transition from state "Action In Progress"
+     * \brief Makes transition from state "Action In Progress"
      *  to "Ready" of workplace.
      */
     void slotActionFinished();
     /*!
-     * \brief Make transition from any state to state "Not valid" of workplace.
+     * \brief Makes transition from any state to state "Not valid" of workplace.
      */
     void slotFatalError();
     /*!
-     * \brief Make transition from any state to final state of workplace.
+     * \brief Makes transition from any state to final state of workplace.
      */
     void slotTabClosed();
 
@@ -169,7 +149,7 @@ private:
     enum SLEventType{
 
         /// Initialization selected event type
-        EvInitSelected = QEvent::User + 1,          // 1
+        EvInitSelected = 1001,                      // 1
         /// Initialization canceled event type
         EvInitCanceled,                             // 2
         /// Initialization started event type
@@ -195,7 +175,6 @@ private:
     };
 
     QStateMachine *mStateMachine; /*!< State machine for single workplace */
-    bool mWorkplaceInitialized;
 };
 
 #endif // WORKPLACE_H
