@@ -26,7 +26,7 @@ void CustomTabBar::slotAddNewWorkplace(int index, QString name)
 {
     Q_UNUSED(index);
     //TASK: check whether everything is  ok with index - it is not set
-    QTabWidget::addTab(new ContentForTabWorkplace, name);
+    QTabWidget::addTab(new ContentForTabWorkplace(this), name);
     setCurrentIndex(this->count()-1);
 }
 

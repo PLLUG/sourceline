@@ -1,27 +1,25 @@
 #include "tabsapi.h"
 #include <QDebug>
+
 TabsAPI::TabsAPI(QObject *parent):
     QObject(parent)
 {
 
 }
 
-
 void TabsAPI::slotChangeCurrentTab(int index)
 {
     emit currentWorkplaceChanged(getTabID(index));
 }
 
-
 int TabsAPI::getTabID()
 {
     if(mTabHash.isEmpty())
     {
-    mTabHash.insert(mTabHash.count(), mTabHash.count());
+        mTabHash.insert(mTabHash.count(), mTabHash.count());
     }
     else
     {
-
         QList<int> lKeys = mTabHash.keys();
         qSort(lKeys);
         QList<int>::iterator iter = std::max_element(lKeys.begin(),lKeys.end());
@@ -39,41 +37,33 @@ int TabsAPI::getTabID()
 
         if(!idSet)
         {
-        for(int i = 0; i < lKeys.size()-1; i++)
-        {
+            for(int i = 0; i < lKeys.size()-1; i++)
+            {
 
-           if(lKeys[i+1] - lKeys[i] != 1)
-           {
-               idSet = true;
-               id = lKeys[i]+1;
-           }
+               if(lKeys[i+1] - lKeys[i] != 1)
+               {
+                   idSet = true;
+                   id = lKeys[i]+1;
+               }
+            }
         }
-}
         if(!idSet)
         {
-        id = *iter+1;
+            id = *iter+1;
         }
         mTabHash.insert(id, mTabHash.count());
-
     }
     return mTabHash.value(mTabHash.count());
-
 }
 
 int TabsAPI::getTabID(int index)
 {
-    //TASK: fixme
     return mTabHash.key(index, -1);
-//    for(QMap<int,int>::iterator iter = mPageHash.begin(); iter!=mPageHash.end(); iter++)
-//        if(iter.value() == index)
-//           return iter.key();
 }
 
 int TabsAPI::getActiveIndex()
 {
-
     return mTabHash.count();
-
 }
 
 void TabsAPI::slotAddNewWorkplace(QString lName)

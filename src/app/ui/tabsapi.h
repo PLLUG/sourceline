@@ -1,5 +1,5 @@
-#ifndef PAGEMANAGER_H
-#define PAGEMANAGER_H
+#ifndef TABSAPI_H
+#define TABSAPI_H
 
 #include <QObject>
 #include <QMap>
@@ -54,4 +54,4 @@ public slots:
     void slotTabMoved(int from, int to);
 };
 
-#endif // PAGEMANAGER_H
+#endif // TABSAPI_H

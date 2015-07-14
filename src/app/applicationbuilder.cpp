@@ -213,9 +213,8 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 {
     UserAction *lActionOpen = new UserAction(tr("&Open Repository..."), mMainWindow);
     // TASK: add implementation for opening existing repository
-    mActionManager->add(FileMenuGroup, lActionOpen);    
+    mActionManager->add(FileMenuGroup, lActionOpen);
 
-    // COMMENT: temporary action - create new tab (testing)
     UserAction *lActionAddNewWorkplace = new UserAction(tr("&New Workplace"), this);
     connect(lActionAddNewWorkplace, SIGNAL(triggered()), pMainWindow, SLOT(slotAddNewWorkplace()));
     mActionManager->add(FileMenuGroup, lActionAddNewWorkplace);

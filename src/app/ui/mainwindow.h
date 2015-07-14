@@ -27,6 +27,8 @@ private:
     QMenu *trayMenu;
     CustomTabBar *mTabBar;
     TabsAPI *mTabsAPI;
+    int amountOpenedTabs;
+
 
 signals:
     void mysignal();
