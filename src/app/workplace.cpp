@@ -9,6 +9,8 @@
 
 Workplace::Workplace(QObject *parent) : QObject(parent)
 {
+    label = new QLabel("Ok, let's start!");
+    label->show();
     initStateMachine();
 }
 
@@ -70,6 +72,11 @@ void Workplace::slotFatalError()
 void Workplace::slotTabClosed()
 {
     QCoreApplication::sendEvent(this, new QEvent(QEvent::Type(EvTabClosed)));
+}
+
+void Workplace::onFinal()
+{
+    label->setText("Final state.");
 }
 
 void Workplace::initStateMachine()
@@ -157,6 +164,17 @@ void Workplace::initStateMachine()
     connect(stFinalState, SIGNAL(entered()), this, SIGNAL(enteredFinalState()));
     connect(stInitInProgress, SIGNAL(entered()), this, SIGNAL(enteredInitInProgress()));
     connect(stNotValid, SIGNAL(entered()), this, SIGNAL(enteredNotValid()));
+
+    // TEST
+    // Delete slot void onFinal()
+    stReady->assignProperty(label, "text", "Ready!");
+    stActionInProgress->assignProperty(label, "text", "Action in progress!");
+    stConfiguringAction->assignProperty(label, "text", "Configuring Action!");
+    stConfiguringInit->assignProperty(label, "text", "Configuring Init!");
+    connect(stFinalState, SIGNAL(entered()), this, SLOT(onFinal()));
+    stInitInProgress->assignProperty(label, "text", "Init In Progress!");
+    stNotValid->assignProperty(label, "text", "Not Valid!");
+    // TEST
 
     mStateMachine->start();
 }

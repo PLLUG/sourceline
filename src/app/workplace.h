@@ -134,6 +134,8 @@ public slots:
      */
     void slotTabClosed();
 
+    void onFinal();
+
 private:
     /*!
      * \brief Initialization of state machine with all states and transitions.
@@ -146,8 +148,8 @@ private:
      *
      * They will be sended to state machine, when ones slot will be invoked.
      */
-    enum SLEventType{
-
+    enum SLEventType
+    {
         /// Initialization selected event type
         EvInitSelected = 1001,                      // 1
         /// Initialization canceled event type
@@ -174,7 +176,18 @@ private:
         EvTabClosed                                 // 12
     };
 
+    class TransitionSignals : public QObject
+    {
+        Q_OBJECT
+    public:
+        explicit TransitionSignals(QObject *parent = 0);
+
+    signals:
+
+    };
+
     QStateMachine *mStateMachine; /*!< State machine for single workplace */
+    QLabel *label;
 };
 
 #endif // WORKPLACE_H
