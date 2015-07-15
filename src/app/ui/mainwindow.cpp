@@ -40,10 +40,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setCentralWidget(mTabBar);
 
-    connect(mTabsAPI, SIGNAL(newWorkplaceAdded(int, QString)), mTabBar, SLOT(slotAddNewWorkplace(int,QString)));
-    connect(mTabBar, SIGNAL(tabCloseRequested(int)), mTabsAPI, SLOT(slotRemovePage(int)));
-    connect(mTabBar, SIGNAL(currentChanged(int)), mTabsAPI, SLOT(slotChangeCurrentPage(int)));
-
     amountOpenedTabs = 0;
 
     slotAddNewWorkplace();
@@ -89,7 +85,7 @@ void MainWindow::slotQuit()
 void MainWindow::slotAddNewWorkplace()
 {
     QString lTabName = "Name" + QString::number(amountOpenedTabs++);
-    mTabsAPI->slotAddNewWorkplace(lTabName);
+    mTabsAPI->slotAddNewWorkplace(mTabBar, lTabName);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)

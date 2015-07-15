@@ -1,5 +1,13 @@
 #include "contentfortabworkplace.h"
 #include "ui_contentfortabworkplace.h"
+#include "ui/consoleview.h"
+#include "ui/dockconsole.h"
+#include "ui/dockfileview.h"
+#include "ui/editorview.h"
+#include "ui/fileview.h"
+#include "ui/historytree.h"
+#include "ui/revisiontable.h"
+#include "ui/revisionview.h"
 
 ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
     QMainWindow(parent),

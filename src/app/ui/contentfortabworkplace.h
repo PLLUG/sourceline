@@ -2,14 +2,15 @@
 #define CONTENTFORTABWORKPLACE_H
 
 #include <QMainWindow>
-#include "ui/consoleview.h"
-#include "ui/dockconsole.h"
-#include "ui/dockfileview.h"
-#include "ui/editorview.h"
-#include "ui/fileview.h"
-#include "ui/historytree.h"
-#include "ui/revisiontable.h"
-#include "ui/revisionview.h"
+
+class HistoryTree;
+class RevisionView;
+class EditorView;
+class FileView;
+class DockFileView;
+class RevisionTable;
+class DockConsole;
+class ConsoleView;
 
 namespace Ui {
 class ContentForTabWorkplace;

@@ -1,8 +1,10 @@
 #ifndef TABSAPI_H
 #define TABSAPI_H
 
+#include <QWidget>
 #include <QObject>
-#include <QMap>
+
+class CustomTabBar;
 
 /*!
  * \brief The PageManager class handles all pages for repositories.
@@ -12,46 +14,40 @@ class TabsAPI : public QObject
     Q_OBJECT
 public:
     explicit TabsAPI(QObject *parent = 0);
-    int getTabID();
-    int getTabID(int);
-    int getActiveIndex();
-private:
-     QMap<int, int> mTabHash;   //index, id
+    /*!
+     * \brief Get current index of tab
+     * \param pTabBar - tabBar where is this tab
+     * \return index current tab
+     */
+    int getCurrentIndex(CustomTabBar *pTabBar);
+    /*!
+     * \brief get count tabs
+     * \param pTabBar - tab bar
+     * \return amount tabs
+     */
+    int getCountTabs(CustomTabBar *pTabBar);
 
-signals:
     /*!
-     * \brief Emited when current page that corresponds to current selected repository tab is changed.
-     * \param index Index of page.
+     * \brief Get widget of current tab
+     * \param pTabBar
+     * \return Returns a pointer to the page currently being displayed by the tab dialog.
      */
-    void currentWorkplaceChanged(int index);
+    QWidget* getCurrentWidget(CustomTabBar *pTabBar);
+
     /*!
-     * \brief Emited when new workplace was added in main menu
-     * \param index Index of page.
-     * \param name Name of tab
+     * \brief Get widget of tab with index
+     * \param pTabBar
+     * \param index of tab
+     * \return Returns the tab page at index position index
      */
-    void newWorkplaceAdded(int index, QString name);
+    QWidget* getWidget(CustomTabBar *pTabBar, int pIndex);
+
 public slots:
-    /*!
-     * \brief Should be called  when current page that corresponds to current selected repository tab should be changed.
-     * \param index Index of page.
-     */
-    void slotChangeCurrentTab(int index);
     /*!
      * \brief Add New Workplace in main menu
      * \param lName Name of tab
      */
-    void slotAddNewWorkplace(QString lName);
-    /*!
-     * \brief Remove workplace with given index
-     * \param index of tab
-     */
-    void slotRemoveWorkplace(int index);
-    /*!
-     * \brief Moved Tab from one position to another
-     * \param from old position(index)
-     * \param to new position(index)
-     */
-    void slotTabMoved(int from, int to);
+    void slotAddNewWorkplace(CustomTabBar *pTabBar, const QString &pName);
 };
 
 #endif // TABSAPI_H

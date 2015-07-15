@@ -22,16 +22,7 @@ CustomTabBar::~CustomTabBar()
     delete ui;
 }
 
-void CustomTabBar::slotAddNewWorkplace(int index, QString name)
+void CustomTabBar::slotAddNewWorkplace(const QString &pName)
 {
-    Q_UNUSED(index);
-    //TASK: check whether everything is  ok with index - it is not set
-    QTabWidget::addTab(new ContentForTabWorkplace(this), name);
-    setCurrentIndex(this->count()-1);
-}
-
-void CustomTabBar::slotCloseTab(int index)
-{
-    removeTab(index);
-    setCurrentIndex(index);
+    QTabWidget::addTab(new ContentForTabWorkplace(this), pName);
 }

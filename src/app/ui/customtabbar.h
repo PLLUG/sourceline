@@ -17,8 +17,11 @@ public:
     explicit CustomTabBar(QWidget *parent = 0);
     ~CustomTabBar();
 public slots:
-    void slotAddNewWorkplace(int index, QString name);
-    void slotCloseTab(int);
+    /*!
+     * \brief Add New Workplace in mainwindow
+     * \param Name of workplace
+     */
+    void slotAddNewWorkplace(const QString &pName);
 private:
     Ui::CustomTabBar *ui;
 };
