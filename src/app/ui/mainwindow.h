@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
+#include "contentfortabworkplace.h"
 
-class PageManager;
+class TabsAPI;
 class CustomTabBar;
 class QMenu;
 
@@ -25,7 +26,9 @@ private:
     QSystemTrayIcon *TrayIcon;
     QMenu *trayMenu;
     CustomTabBar *mTabBar;
-    PageManager *mPageManager;
+    TabsAPI *mTabsAPI;
+    int amountOpenedTabs;
+
 
 signals:
     void mysignal();
@@ -40,7 +43,7 @@ private slots:
 
     void slotQuit();
 
-    void slotAddPage();
+    void slotAddNewWorkplace();
 };
 
 #endif // MAINWINDOW_H

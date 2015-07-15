@@ -55,7 +55,9 @@ HEADERS += \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
     ui/clonedialog.h \
-    ui/fileview/texteditforrename.h
+    ui/fileview/texteditforrename.h \
+    ui/contentfortabworkplace.h \
+    ui/tabsapi.h
 
 SOURCES += \
     main.cpp \
@@ -79,7 +81,9 @@ SOURCES += \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
     ui/clonedialog.cpp \
-    ui/fileview/texteditforrename.cpp
+    ui/fileview/texteditforrename.cpp \
+    ui/contentfortabworkplace.cpp \
+    ui/tabsapi.cpp
 
 # Application UI
 HEADERS += \
@@ -91,7 +95,6 @@ HEADERS += \
     ui/guidefs.h \
     ui/historytree.h \
     ui/mainwindow.h \
-    ui/pagemanager.h \
     ui/revisiontable.h \
     ui/appsettingsdialog.h \
     ui/viewsettingpage.h \
@@ -118,7 +121,6 @@ SOURCES += \
     ui/genericdockwidget.cpp \
     ui/historytree.cpp \
     ui/mainwindow.cpp \
-    ui/pagemanager.cpp \
     ui/revisiontable.cpp \
     ui/appsettingsdialog.cpp \
     ui/viewsettingpage.cpp \
@@ -156,7 +158,8 @@ FORMS += \
     ui/plugininfodialog.ui \
     ui/consoleview.ui \
     ui/revisionview.ui \
-    ui/clonedialog.ui
+    ui/clonedialog.ui \
+    ui/contentfortabworkplace.ui
 
 # Application Settings
 HEADERS += \
