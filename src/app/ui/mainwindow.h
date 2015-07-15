@@ -27,7 +27,7 @@ private:
     QMenu *trayMenu;
     CustomTabBar *mTabBar;
     TabsAPI *mTabsAPI;
-    int amountOpenedTabs;
+    int mAmountOpenedTabs;
 
 
 signals:
@@ -37,12 +37,25 @@ private:
     void resizeEvent(QResizeEvent *e);
 
 private slots:
+
+    /*!
+     * \brief Activate icon
+     */
     void iconActivated(QSystemTrayIcon::ActivationReason);
 
+    /*!
+     * \brief Close window
+     */
     void CloseWindow();
 
+    /*!
+     * \brief slot Quit also close window
+     */
     void slotQuit();
 
+    /*!
+     * \brief slotAddNewWorkplace add new worplace on window
+     */
     void slotAddNewWorkplace();
 };
 

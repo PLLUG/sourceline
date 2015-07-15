@@ -40,7 +40,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     this->setCentralWidget(mTabBar);
 
-    amountOpenedTabs = 0;
+    connect(mTabBar,SIGNAL(tabCloseRequested(int)),mTabsAPI,SLOT(slotRemoveWorkplace(CustomTabBar*,int)));
+
+    mAmountOpenedTabs = 0;
 
     slotAddNewWorkplace();
 }
@@ -84,7 +86,7 @@ void MainWindow::slotQuit()
 
 void MainWindow::slotAddNewWorkplace()
 {
-    QString lTabName = "Name" + QString::number(amountOpenedTabs++);
+    QString lTabName = "Name" + QString::number(mAmountOpenedTabs++);
     mTabsAPI->slotAddNewWorkplace(mTabBar, lTabName);
 }
 
