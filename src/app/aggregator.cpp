@@ -1,27 +1,15 @@
 #include "aggregator.h"
 
-#include <QDebug>
-
 Aggregator::Aggregator(QObject *obj)
 {
-        QObject *mObj = new QObject;
-        mObj = obj;
+    obj->setParent(this);
 }
 
 Aggregator::~Aggregator()
 {
-    delete mObj;
 }
 
 void Aggregator::setObject(QObject *obj)
 {
-    mObj = obj;
+    obj->setParent(this);
 }
-
-QObject * Aggregator::object()
-{
-    if(mObj == nullptr)
-        qDebug() << "asd!!!!!!!!!!!!";
-    return mObj;
-}
-
