@@ -30,6 +30,9 @@ CONFIG += sl_project
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
+include($$PWD/components/example_component/example_component.pri)
+
+
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
 # Main
@@ -53,7 +56,8 @@ HEADERS += \
     ui/revisionView/view/modelindex.h \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
-    ui/revisionView/view/simpleline.h
+    ui/revisionView/view/simpleline.h \
+    ui/genericcomponent.h
 
 SOURCES += \
     main.cpp \
@@ -75,7 +79,8 @@ SOURCES += \
     ui/revisionView/view/modelindex.cpp \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
-    ui/revisionView/view/simpleline.cpp
+    ui/revisionView/view/simpleline.cpp \
+    ui/genericcomponent.cpp
 
 # Application UI
 HEADERS += \
