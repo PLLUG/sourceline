@@ -35,9 +35,6 @@
 
 #include "fileview/exploreritemdelegate.h"
 
-QString rootPath = QDir::currentPath();
-QString homePath = FileView::setHomePath();
-
 FileView::FileView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileView)
@@ -88,7 +85,7 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mFileModel->setReadOnly(false);
-    setRootPath(rootPath);
+    setRootPath(QDir::currentPath());
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(ui->lineEdit, SIGNAL(signalIconClicked()), SLOT(slotGoUp()));
@@ -125,7 +122,7 @@ void FileView::slotGoUp()
     }
     else
     {
-        ui->lineEdit->setText(homePath);
+        ui->lineEdit->setText(FileView::setHomePath());
     }
 }
 
