@@ -1,3 +1,26 @@
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2014  by                                                ***
+***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
+
 #ifndef FILEVIEW_H
 #define FILEVIEW_H
 
@@ -29,10 +52,23 @@ public:
     void setRootPath(const QString &pPath);
 
     /*!
-     * \brief current root path
-     * \return root path
+     * \brief set root path in different platforms
+     * \return path
      */
-    QString currentRootPath() const;
+    static QString getHomePathForCurrentSystem()
+    {
+        QString rHomePath;
+        #ifdef Q_OS_LINUX
+        rHomePath = "/";
+        #endif
+        #ifdef Q_OS_WIN
+        rHomePath = "My Computer";
+        #endif
+        #ifdef Q_OS_MAC
+        rHomePath = "/";
+        #endif
+        return rHomePath;
+    }
 
 protected:
 
@@ -103,15 +139,9 @@ private:
     QMenu *mDirMenu;
 
     /*!
-     * \brief root path in system
-     */
-    QString mRootPath;
-
-    /*!
      * \brief file model
      */
     QFileSystemModel *mFileModel;
-
 };
 
 #endif // FILEVIEW_H

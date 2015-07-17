@@ -40,7 +40,6 @@ FileView::FileView(QWidget *parent) :
     ui(new Ui::FileView)
 {
     ui->setupUi(this);
-
     ui->lineEdit->setIconPixmap(QPixmap(":splash/img/up.png"));
     ui->lineEdit->setIconVisibility(IconizedLineEdit::IconAlwaysVisible);
 
@@ -52,30 +51,23 @@ FileView::FileView(QWidget *parent) :
 
     //menu for files
     mFileMenu = new QMenu(this);
-
     QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
     connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
     mFileMenu->addAction(actionDeleteFile);
-
     QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
     connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
     mFileMenu->addAction(actionRemaneFile);
 
     //menu for dirs
     mDirMenu = new QMenu(this);
-
     QAction* actionDeleteFolder = new QAction("Delete",mDirMenu);
     connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
     mDirMenu->addAction(actionDeleteFolder);
-
     QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
     connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
     mDirMenu->addAction(actionRemaneDir);
 
     mFileModel = new QFileSystemModel(this);
-    mRootPath = "My Computer";
-    mFileModel->setRootPath(mRootPath);
-
     ui->listView->setModel(mFileModel);
     ExplorerItemDelegate *lDeltegate = new ExplorerItemDelegate();
     lDeltegate->setFileSystemModel(mFileModel);
@@ -87,29 +79,16 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setWordWrap(true);
     ui->listView->setWrapping(true);
     ui->listView->setGridSize(QSize(70,70));
-    ui->listView->setRootIndex(mFileModel->index(mRootPath));
     ui->listView->setAcceptDrops(true);
     ui->listView->setDragEnabled(true);
     ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
     ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mFileModel->setReadOnly(false);
-
-    ui->lineEdit->setText(mRootPath);
-
+    setRootPath(QDir::currentPath());
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(ui->lineEdit, SIGNAL(signalIconClicked()), SLOT(slotGoUp()));
-}
-
-void FileView::setRootPath(const QString &pPath)
-{
-    mRootPath = pPath;
-}
-
-QString FileView::currentRootPath() const
-{
-    return mRootPath;
 }
 
 FileView::~FileView()
@@ -117,14 +96,19 @@ FileView::~FileView()
     delete ui;
 }
 
+void FileView::setRootPath(const QString &pPath)
+{
+    ui->lineEdit->setText(pPath);
+    mFileModel->setRootPath(pPath);
+    ui->listView->setRootIndex(mFileModel->index(pPath));
+}
+
 void FileView::slotDoubleClick(const QModelIndex &index)
 {
-    bool q = mFileModel->isDir(index);
-    if(q)
+    if(mFileModel->isDir(index))
     {
         ui->listView->setRootIndex(index);
-        mRootPath = mFileModel->fileInfo(index).absoluteFilePath();
-        ui->lineEdit->setText(mRootPath);
+        ui->lineEdit->setText(mFileModel->fileInfo(index).absoluteFilePath());
     }
 }
 
@@ -134,12 +118,11 @@ void FileView::slotGoUp()
     ui->listView->setRootIndex(up_index);
     if(up_index.isValid())
     {
-        mRootPath = mFileModel->fileInfo(up_index).absoluteFilePath();
-        ui->lineEdit->setText(mRootPath);
+        ui->lineEdit->setText(mFileModel->fileInfo(up_index).absoluteFilePath());
     }
     else
     {
-        ui->lineEdit->setText("My Computer");
+        ui->lineEdit->setText(FileView::getHomePathForCurrentSystem());
     }
 }
 
@@ -193,7 +176,6 @@ bool removeDir(const QString &dirName)
 {
     bool result = true;
     QDir dir(dirName);
-
     if (dir.exists(dirName))
     {
         Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
@@ -212,10 +194,8 @@ bool removeDir(const QString &dirName)
                 return result;
             }
         }
-
         result = dir.rmdir(dirName);
     }
-
     return result;
 }
 
