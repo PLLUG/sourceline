@@ -122,7 +122,7 @@ void FileView::slotGoUp()
     }
     else
     {
-        ui->lineEdit->setText(FileView::setHomePath());
+        ui->lineEdit->setText(FileView::getHomePathForCurrentSystem());
     }
 }
 

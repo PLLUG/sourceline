@@ -55,7 +55,7 @@ public:
      * \brief set root path in different platforms
      * \return path
      */
-    static QString setHomePath()
+    static QString getHomePathForCurrentSystem()
     {
         QString rHomePath;
         #ifdef Q_OS_LINUX
