@@ -42,6 +42,11 @@ public:
     T* object();
 };
 
+/*!
+ *\brief Template getter.
+ * Allow to get pointer on Aggregator's children.
+ * If Aggregator doesn't have suitable children, getter returns null pointer.
+ */
 template <typename T>
 T* Aggregator::object()
 {
