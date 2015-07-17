@@ -35,6 +35,7 @@
 
 #include "fileview/exploreritemdelegate.h"
 
+QString rootPath = QDir::currentPath();
 QString homePath = FileView::setHomePath();
 
 FileView::FileView(QWidget *parent) :
@@ -68,8 +69,8 @@ FileView::FileView(QWidget *parent) :
     QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
     connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
     mDirMenu->addAction(actionRemaneDir);
+
     mFileModel = new QFileSystemModel(this);
-    setRootPath(homePath);
     ui->listView->setModel(mFileModel);
     ExplorerItemDelegate *lDeltegate = new ExplorerItemDelegate();
     lDeltegate->setFileSystemModel(mFileModel);
@@ -87,9 +88,7 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     mFileModel->setReadOnly(false);
-
-
-
+    setRootPath(rootPath);
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(ui->lineEdit, SIGNAL(signalIconClicked()), SLOT(slotGoUp()));
@@ -103,8 +102,8 @@ FileView::~FileView()
 void FileView::setRootPath(const QString &pPath)
 {
     ui->lineEdit->setText(pPath);
-    ui->listView->setRootIndex(mFileModel->index(pPath));
     mFileModel->setRootPath(pPath);
+    ui->listView->setRootIndex(mFileModel->index(pPath));
 }
 
 void FileView::slotDoubleClick(const QModelIndex &index)
@@ -118,7 +117,7 @@ void FileView::slotDoubleClick(const QModelIndex &index)
 
 void FileView::slotGoUp()
 {
-    QModelIndex up_index = (QModelIndex)ui->listView->rootIndex().parent();  
+    QModelIndex up_index = (QModelIndex)ui->listView->rootIndex().parent();
     ui->listView->setRootIndex(up_index);
     if(up_index.isValid())
     {
