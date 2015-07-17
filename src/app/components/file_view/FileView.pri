@@ -35,4 +35,4 @@ SOURCES += \
     $$PWD/ui/iconizedlineedit.cpp \
 
 FORMS += \
-    $$PWD/fileview.ui \
+    $$PWD/ui/fileview.ui \

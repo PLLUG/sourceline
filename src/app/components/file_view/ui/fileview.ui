@@ -38,7 +38,7 @@
   <customwidget>
    <class>IconizedLineEdit</class>
    <extends>QLineEdit</extends>
-   <header>ui/fileview/iconizedlineedit.h</header>
+   <header>ui/iconizedlineedit.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -33,7 +33,7 @@
 #include <QListWidgetItem>
 #include <QDialog>
 
-#include "fileview/exploreritemdelegate.h"
+#include "ui/exploreritemdelegate.h"
 
 FileView::FileView(QWidget *parent) :
     QWidget(parent),
