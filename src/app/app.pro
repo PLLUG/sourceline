@@ -31,7 +31,7 @@ DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
 include($$PWD/components/example_component/example_component.pri)
-
+include($$PWD/components/file_view/FileView.pri)
 
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
@@ -58,7 +58,6 @@ HEADERS += \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
     ui/clonedialog.h \
-    ui/fileview/texteditforrename.h \
     ui/contentfortabworkplace.h \
     ui/tabsapi.h \
     aggregator.h \
@@ -86,7 +85,6 @@ SOURCES += \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
     ui/clonedialog.cpp \
-    ui/fileview/texteditforrename.cpp \
     ui/contentfortabworkplace.cpp \
     ui/tabsapi.cpp \
     aggregator.cpp \
@@ -108,11 +106,8 @@ HEADERS += \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    ui/fileview.h \
     ui/dockfileview.h \
     ui/dockconsole.h \
-    ui/fileview/exploreritemdelegate.h \
-    ui/fileview/iconizedlineedit.h \
     ui/console/console.h \
     ui/consoleview.h \
     ui/about.h \
@@ -137,11 +132,8 @@ SOURCES += \
     ui/about.cpp \
     ui/plugininfodialog.cpp \
     ui/useraction.cpp \
-    ui/fileview.cpp \
     ui/dockconsole.cpp \
     ui/dockfileview.cpp \
-    ui/fileview/exploreritemdelegate.cpp \
-    ui/fileview/iconizedlineedit.cpp \
     ui/console/console.cpp \
     ui/consoleview.cpp \
     ui/strategies/directordersortingstrategy.cpp \
