@@ -12,7 +12,7 @@ Aggregator::~Aggregator()
 /*!
  * \brief Set obj as children of Aggregator class.
  */
-void Aggregator::setObject(QObject *obj)
+void Aggregator::addObject(QObject *obj)
 {
     obj->setParent(this);
 }

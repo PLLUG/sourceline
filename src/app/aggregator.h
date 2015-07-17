@@ -25,9 +25,6 @@
 *******************************************************************************/
 
 #include <QObject>
-#include <iterator>
-#include <QtAlgorithms>
-#include "pluginsupport/componentsorter.h"
 
 class Aggregator: public QObject
 {
@@ -36,7 +33,7 @@ class Aggregator: public QObject
 public:
     Aggregator(QObject *obj = nullptr);
     ~Aggregator();
-    void setObject(QObject *obj);
+    void addObject(QObject *obj);
 
     template <typename T>
     T* object();
@@ -50,19 +47,17 @@ public:
 template <typename T>
 T* Aggregator::object()
 {
-    QObjectList childrens = this->children();
-    for(int i = 0; i < childrens.count(); i++)
+    T * rObj = nullptr;
+    QObjectList children = this->children();
+    for(int i = 0; i < children.count(); i++)
     {
-        T *ob = qobject_cast<T*>(childrens[i]);
-        if(T *ob = qobject_cast<T*>(childrens[i]))
+        T *rObj = qobject_cast<T*>(children[i]);
+        if(T *rObj = qobject_cast<T*>(children[i]))
         {
-            return ob;
-        }
-        else
-        {
-            return nullptr;
+            break;
         }
     }
+    return rObj;
 }
 
 #endif // AGGREGATOR_H
