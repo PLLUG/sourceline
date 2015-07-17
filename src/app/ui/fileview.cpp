@@ -119,9 +119,9 @@ void FileView::slotDoubleClick(const QModelIndex &index)
 void FileView::slotGoUp()
 {
     QModelIndex up_index = (QModelIndex)ui->listView->rootIndex().parent();  
+    ui->listView->setRootIndex(up_index);
     if(up_index.isValid())
     {
-        ui->listView->setRootIndex(up_index);
         ui->lineEdit->setText(mFileModel->fileInfo(up_index).absoluteFilePath());
     }
     else
