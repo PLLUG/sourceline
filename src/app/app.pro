@@ -30,6 +30,9 @@ CONFIG += sl_project
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
+include($$PWD/components/example_component/example_component.pri)
+
+
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
 # Main
@@ -58,7 +61,8 @@ HEADERS += \
     ui/fileview/texteditforrename.h \
     ui/contentfortabworkplace.h \
     ui/tabsapi.h \
-    aggregator.h
+    aggregator.h \
+    ui/genericcomponent.h
 
 SOURCES += \
     main.cpp \
@@ -85,7 +89,8 @@ SOURCES += \
     ui/fileview/texteditforrename.cpp \
     ui/contentfortabworkplace.cpp \
     ui/tabsapi.cpp \
-    aggregator.cpp
+    aggregator.cpp \
+    ui/genericcomponent.cpp
 
 # Application UI
 HEADERS += \
