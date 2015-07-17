@@ -35,23 +35,13 @@
 
 #include "fileview/exploreritemdelegate.h"
 
-#ifdef Q_OS_LINUX
-QString homePath = "home";
-#endif
-#ifdef Q_OS_WIN
-QString homePath = "My Computer";
-#endif
-#ifdef Q_OS_MAC
-QString homePath = "Home";
-#endif
-
+QString homePath = FileView::setHomePath();
 
 FileView::FileView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileView)
 {
     ui->setupUi(this);
-
     ui->lineEdit->setIconPixmap(QPixmap(":splash/img/up.png"));
     ui->lineEdit->setIconVisibility(IconizedLineEdit::IconAlwaysVisible);
 
@@ -63,28 +53,22 @@ FileView::FileView(QWidget *parent) :
 
     //menu for files
     mFileMenu = new QMenu(this);
-
     QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
     connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
     mFileMenu->addAction(actionDeleteFile);
-
     QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
     connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
     mFileMenu->addAction(actionRemaneFile);
 
     //menu for dirs
     mDirMenu = new QMenu(this);
-
     QAction* actionDeleteFolder = new QAction("Delete",mDirMenu);
     connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
     mDirMenu->addAction(actionDeleteFolder);
-
     QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
     connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
     mDirMenu->addAction(actionRemaneDir);
-
     mFileModel = new QFileSystemModel(this);
-
     setRootPath(homePath);
     ui->listView->setModel(mFileModel);
     ExplorerItemDelegate *lDeltegate = new ExplorerItemDelegate();
@@ -97,7 +81,6 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setWordWrap(true);
     ui->listView->setWrapping(true);
     ui->listView->setGridSize(QSize(70,70));
-
     ui->listView->setAcceptDrops(true);
     ui->listView->setDragEnabled(true);
     ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
@@ -135,10 +118,10 @@ void FileView::slotDoubleClick(const QModelIndex &index)
 
 void FileView::slotGoUp()
 {
-    QModelIndex up_index = (QModelIndex)ui->listView->rootIndex().parent();
-    ui->listView->setRootIndex(up_index);
+    QModelIndex up_index = (QModelIndex)ui->listView->rootIndex().parent();  
     if(up_index.isValid())
     {
+        ui->listView->setRootIndex(up_index);
         ui->lineEdit->setText(mFileModel->fileInfo(up_index).absoluteFilePath());
     }
     else
@@ -197,7 +180,6 @@ bool removeDir(const QString &dirName)
 {
     bool result = true;
     QDir dir(dirName);
-
     if (dir.exists(dirName))
     {
         Q_FOREACH(QFileInfo info, dir.entryInfoList(QDir::NoDotAndDotDot | QDir::System | QDir::Hidden  | QDir::AllDirs | QDir::Files, QDir::DirsFirst))
@@ -216,10 +198,8 @@ bool removeDir(const QString &dirName)
                 return result;
             }
         }
-
         result = dir.rmdir(dirName);
     }
-
     return result;
 }
 

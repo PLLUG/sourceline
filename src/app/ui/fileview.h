@@ -28,6 +28,25 @@ public:
      */
     void setRootPath(const QString &pPath);
 
+    /*!
+     * \brief set root path in different platforms
+     * \return path
+     */
+    static QString setHomePath()
+    {
+        QString rHomePath;
+        #ifdef Q_OS_LINUX
+        rHomePath = "/";
+        #endif
+        #ifdef Q_OS_WIN
+        rHomePath = "My Computer";
+        #endif
+        #ifdef Q_OS_MAC
+        rHomePath = "/";
+        #endif
+        return rHomePath;
+    }
+
 protected:
 
     /*!
@@ -100,7 +119,6 @@ private:
      * \brief file model
      */
     QFileSystemModel *mFileModel;
-
 };
 
 #endif // FILEVIEW_H
