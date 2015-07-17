@@ -57,7 +57,8 @@ HEADERS += \
     ui/clonedialog.h \
     ui/fileview/texteditforrename.h \
     ui/contentfortabworkplace.h \
-    ui/tabsapi.h
+    ui/tabsapi.h \
+    aggregator.h
 
 SOURCES += \
     main.cpp \
@@ -83,7 +84,8 @@ SOURCES += \
     ui/clonedialog.cpp \
     ui/fileview/texteditforrename.cpp \
     ui/contentfortabworkplace.cpp \
-    ui/tabsapi.cpp
+    ui/tabsapi.cpp \
+    aggregator.cpp
 
 # Application UI
 HEADERS += \
