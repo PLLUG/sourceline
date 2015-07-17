@@ -31,7 +31,7 @@ class Aggregator: public QObject
     Q_OBJECT
 
 public:
-    Aggregator(QObject *obj = nullptr);
+    Aggregator(QObject *parent = nullptr);
     ~Aggregator();
     void addObject(QObject *obj);
 
