@@ -35,6 +35,17 @@
 
 #include "fileview/exploreritemdelegate.h"
 
+#ifdef Q_OS_LINUX
+QString homePath = "home";
+#endif
+#ifdef Q_OS_WIN
+QString homePath = "My Computer";
+#endif
+#ifdef Q_OS_MAC
+QString homePath = "Home";
+#endif
+
+
 FileView::FileView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileView)
@@ -73,7 +84,8 @@ FileView::FileView(QWidget *parent) :
     mDirMenu->addAction(actionRemaneDir);
 
     mFileModel = new QFileSystemModel(this);
-    setRootPath("My Computer");
+
+    setRootPath(homePath);
     ui->listView->setModel(mFileModel);
     ExplorerItemDelegate *lDeltegate = new ExplorerItemDelegate();
     lDeltegate->setFileSystemModel(mFileModel);
@@ -131,7 +143,7 @@ void FileView::slotGoUp()
     }
     else
     {
-        ui->lineEdit->setText("My Computer");
+        ui->lineEdit->setText(homePath);
     }
 }
 
