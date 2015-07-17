@@ -152,7 +152,6 @@ FORMS += \
     ui/dialogplugins.ui \
     ui/dockconsole.ui \
     ui/dockfileview.ui \
-    ui/fileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
     ui/consoleview.ui \

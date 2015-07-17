@@ -33,3 +33,6 @@ SOURCES += \
     $$PWD/ui/texteditforrename.cpp \
     $$PWD/ui/exploreritemdelegate.cpp \
     $$PWD/ui/iconizedlineedit.cpp \
+
+FORMS += \
+    $$PWD/fileview.ui \
