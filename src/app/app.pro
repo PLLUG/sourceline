@@ -61,7 +61,9 @@ HEADERS += \
     ui/contentfortabworkplace.h \
     ui/tabsapi.h \
     aggregator.h \
-    ui/genericcomponent.h
+    ui/genericcomponent.h \
+    workplace.h \
+    transitionsignals.h
 
 SOURCES += \
     main.cpp \
@@ -88,7 +90,8 @@ SOURCES += \
     ui/contentfortabworkplace.cpp \
     ui/tabsapi.cpp \
     aggregator.cpp \
-    ui/genericcomponent.cpp
+    ui/genericcomponent.cpp \
+    workplace.cpp
 
 # Application UI
 HEADERS += \
