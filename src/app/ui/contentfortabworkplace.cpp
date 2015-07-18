@@ -4,10 +4,10 @@
 #include "ui/dockconsole.h"
 #include "ui/dockfileview.h"
 #include "ui/editorview.h"
-#include "ui/fileview.h"
 #include "ui/historytree.h"
 #include "ui/revisiontable.h"
 #include "ui/revisionview.h"
+#include "../components/file_view/fileview.h"
 
 ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
     QMainWindow(parent),
