@@ -26,7 +26,7 @@
 #include <QDateTime>
 
 /*!
- * \brief The RevisionNode struct Represents the commit and its properties
+ * \brief The RevisionNode struct Represents properties of the commit.
  */
 struct RevisionNode
 {

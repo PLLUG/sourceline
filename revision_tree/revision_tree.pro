@@ -33,16 +33,17 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = revision_tree
 TEMPLATE = app
 
-
 SOURCES += main.cpp\
         mainwindow.cpp \
     revisiontree.cpp \
-    revisionmodel.cpp
+    revisionmodel.cpp \
+    revisiontreewidget.cpp
 
 HEADERS  += mainwindow.h \
     revisiontree.h \
     revisionmodel.h \
-    revisionnode.h
+    revisionnode.h \
+    revisiontreewidget.h
 
 FORMS    += mainwindow.ui \
     revisiontree.ui

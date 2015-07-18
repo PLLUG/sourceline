@@ -26,9 +26,9 @@
 #include "revisionmodel.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow),
-    mModel{new RevisionModel{this}}
+    QMainWindow(parent)
+  ,ui(new Ui::MainWindow)
+  ,mModel{new RevisionModel{this}}
 {
     ui->setupUi(this);
     ui->treeWidget->setGraph(mModel->graph());

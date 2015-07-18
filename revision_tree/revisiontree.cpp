@@ -24,11 +24,13 @@
 #include "revisiontree.h"
 #include "ui_revisiontree.h"
 #include <QDebug>
+#include <iostream>
+#include <boost/graph/topological_sort.hpp>
 
 RevisionTree::RevisionTree(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::RevisionTree),
-    mScene{new QGraphicsScene{this}}
+    QWidget(parent)
+  ,ui(new Ui::RevisionTree)
+  ,mScene{new QGraphicsScene{this}}
 {
     ui->setupUi(this);
     ui->view->setScene(mScene);
@@ -54,4 +56,14 @@ void RevisionTree::clearScene()
 void RevisionTree::read()
 {
     qDebug() << "reading graph";
+
+    //perform topological sort
+    std::vector< vertex > c;
+    topological_sort(mGraph, std::back_inserter(c));
+    std::cout << "A topological ordering: ";
+    for ( std::vector< vertex >::reverse_iterator ii=c.rbegin(); ii!=c.rend(); ++ii)
+    {
+        std::cout << *ii << " ";
+    }
+    std::cout << std::endl;
 }
