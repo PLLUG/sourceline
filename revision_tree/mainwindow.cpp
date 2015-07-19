@@ -24,14 +24,15 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "revisionmodel.h"
+#include "revisiontreewidget.h"
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent)
-  ,ui(new Ui::MainWindow)
-  ,mModel{new RevisionModel{this}}
+    QMainWindow(parent),
+    ui(new Ui::MainWindow),
+    mModel{new RevisionModel{this}}
 {
     ui->setupUi(this);
-    ui->treeWidget->setGraph(mModel->graph());
+//    ui->treeWidget->setGraph(mModel->graph());
 }
 
 MainWindow::~MainWindow()

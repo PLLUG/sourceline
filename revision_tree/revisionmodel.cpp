@@ -35,8 +35,8 @@
 //TODO: choose the best containers for V and E
 
 RevisionModel::RevisionModel(QObject *parent):
-    QAbstractItemModel(parent)
-  ,mInitialNode{boost::graph_traits<revision_graph>::null_vertex()}
+    QAbstractItemModel(parent),
+    mInitialNode{boost::graph_traits<revision_graph>::null_vertex()}
 {
     RevisionNode initialCommit = {
         "94eaeb7661f3960d8ccb2be1be2405eea111ab0c",

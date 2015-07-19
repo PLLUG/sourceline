@@ -25,8 +25,6 @@
 #include <QWidget>
 #include "revisionmodel.h"
 
-class QGraphicsScene;
-
 namespace Ui {
 class RevisionTree;
 }
@@ -50,7 +48,6 @@ private:
 private:
     Ui::RevisionTree *ui;
 
-    QGraphicsScene *mScene;
     revision_graph mGraph;
 
 };

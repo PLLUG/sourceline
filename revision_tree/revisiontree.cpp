@@ -28,12 +28,10 @@
 #include <boost/graph/topological_sort.hpp>
 
 RevisionTree::RevisionTree(QWidget *parent) :
-    QWidget(parent)
-  ,ui(new Ui::RevisionTree)
-  ,mScene{new QGraphicsScene{this}}
+    QWidget(parent),
+    ui(new Ui::RevisionTree)
 {
     ui->setupUi(this);
-    ui->view->setScene(mScene);
 }
 
 RevisionTree::~RevisionTree()
@@ -41,16 +39,16 @@ RevisionTree::~RevisionTree()
     delete ui;
 }
 
-void RevisionTree::setGraph(const revision_graph &graph)
+void RevisionTree::setGraph(const revision_graph &pGraph)
 {
-    mGraph = graph;
+    ui->revisionTreeWidget->setGraph(pGraph);
+    mGraph = pGraph;
     clearScene();
     read();
 }
 
 void RevisionTree::clearScene()
 {
-    mScene->clear();
 }
 
 void RevisionTree::read()
