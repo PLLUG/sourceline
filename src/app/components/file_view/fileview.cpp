@@ -89,7 +89,8 @@ FileView::FileView(QWidget *parent) :
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(actionGoUp, SIGNAL(triggered(bool)), SLOT(slotGoUp()));
-    connect(ui->lineEdit,SIGNAL(returnPressed()), SLOT(slotGoToPath()));
+    connect(ui->lineEdit, SIGNAL(returnPressed()), SLOT(slotGoToPath()));
+    connect(ui->lineEdit, SIGNAL(editingFinished()), SLOT(slotGoToPath()));
 }
 
 FileView::~FileView()
@@ -120,6 +121,7 @@ void FileView::slotGoUp()
     if(up_index.isValid())
     {
         ui->lineEdit->setText(mFileModel->fileInfo(up_index).absoluteFilePath());
+        ui->listView->setCurrentIndex(mFileModel->index(mFileModel->fileInfo(up_index).absoluteFilePath()));
     }
     else
     {
@@ -129,8 +131,17 @@ void FileView::slotGoUp()
 
 void FileView::slotGoToPath()
 {
-    mFileModel->setRootPath(ui->lineEdit->text());
-    ui->listView->setRootIndex(mFileModel->index(ui->lineEdit->text()));
+    const QString path = ui->lineEdit->text();
+    if (QDir().exists(path) || QFile().exists(path))
+    {
+        mFileModel->setRootPath(ui->lineEdit->text());
+        ui->listView->setRootIndex(mFileModel->index(ui->lineEdit->text()));
+        ui->listView->setCurrentIndex(mFileModel->index(ui->lineEdit->text()));
+    }
+    else
+    {
+        ui->lineEdit->setText(mFileModel->fileInfo(ui->listView->currentIndex()).absoluteFilePath());
+    }
 }
 
 void FileView::slotRightBtnClick(const QPoint &pos)
