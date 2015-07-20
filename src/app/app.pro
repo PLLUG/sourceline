@@ -63,7 +63,8 @@ HEADERS += \
     aggregator.h \
     ui/genericcomponent.h \
     workplace.h \
-    transitionsignals.h
+    transitionsignals.h \
+    ui/errordialog.h \
 
 SOURCES += \
     main.cpp \
@@ -91,7 +92,8 @@ SOURCES += \
     ui/tabsapi.cpp \
     aggregator.cpp \
     ui/genericcomponent.cpp \
-    workplace.cpp
+    workplace.cpp \
+    ui/errordialog.cpp \
 
 # Application UI
 HEADERS += \
@@ -160,7 +162,8 @@ FORMS += \
     ui/consoleview.ui \
     ui/revisionview.ui \
     ui/clonedialog.ui \
-    ui/contentfortabworkplace.ui
+    ui/contentfortabworkplace.ui \
+    ui/errordialog.ui \
 
 # Application Settings
 HEADERS += \
