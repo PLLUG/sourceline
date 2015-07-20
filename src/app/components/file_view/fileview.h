@@ -51,6 +51,7 @@ public:
      */
     void setRootPath(const QString &pPath);
 
+    void setTextToLineEdit(const QString &path);
     /*!
      * \brief set root path in different platforms
      * \return path
@@ -70,13 +71,34 @@ public:
         return rHomePath;
     }
 
-protected:
+    /*!
+     * \brief set slash for different system
+     */
+    void setSlash()
+    {
+        #ifdef Q_OS_LINUX
+        Slash = "/";
+        NoSlash = "\\";
+        #endif
+        #ifdef Q_OS_WIN
+        Slash = "\\";
+        NoSlash = "/";
+        #endif
+        #ifdef Q_OS_MAC
+        Slash = "/";
+        NoSlash = "\\";
+        #endif
+    }
+
+private:
 
     /*!
-     * \brief update icon position and size
-     */
-    void resizeEvent(QResizeEvent *);
-
+      * \brief filter for events for object
+      * \param object name
+      * \param event for this object
+      * \return
+      */
+     bool eventFilter(QObject *obj, QEvent *event);
 private slots:
 
     /*!
@@ -89,6 +111,11 @@ private slots:
      * \brief go up to repository
      */
     void slotGoUp();
+
+    /*!
+     * \brief go to last repository
+     */
+    void slotGoToPath();
 
     /*!
      * \brief action create menu on right button click
@@ -142,6 +169,16 @@ private:
      * \brief file model
      */
     QFileSystemModel *mFileModel;
+
+    /*!
+     * \brief Slash for system
+     */
+    QString Slash;
+
+    /*!
+     * \brief is not slash for system
+     */
+    QString NoSlash;
 };
 
 #endif // FILEVIEW_H

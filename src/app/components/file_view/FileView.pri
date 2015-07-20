@@ -26,13 +26,11 @@ HEADERS += \
     $$PWD/fileview.h \
     $$PWD/ui/texteditforrename.h \
     $$PWD/ui/exploreritemdelegate.h \
-    $$PWD/ui/iconizedlineedit.h \
 
 SOURCES += \
     $$PWD/fileview.cpp \
     $$PWD/ui/texteditforrename.cpp \
     $$PWD/ui/exploreritemdelegate.cpp \
-    $$PWD/ui/iconizedlineedit.cpp \
 
 FORMS += \
     $$PWD/ui/fileview.ui \
