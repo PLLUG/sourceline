@@ -45,7 +45,6 @@ FileView::FileView(QWidget *parent) :
 {
     ui->setupUi(this);
     QAction *actionGoUp = ui->lineEdit->addAction(QPixmap(":splash/img/up.png"), QLineEdit::TrailingPosition);
-    setSlash();
 
     //context menu
     mMenu = new QMenu(this);
@@ -110,8 +109,8 @@ void FileView::setRootPath(const QString &pPath)
 
 void FileView::setTextToLineEdit(const QString &path)
 {
-    QString newPath = path;
-    ui->lineEdit->setText(newPath.replace(NoSlash,Slash));
+    QString newPath = QDir::fromNativeSeparators(path);
+    ui->lineEdit->setText(QDir::toNativeSeparators(newPath));
 }
 
 bool FileView::eventFilter(QObject *obj, QEvent *event)
@@ -163,7 +162,8 @@ void FileView::slotGoUp()
 void FileView::slotGoToPath()
 {
     const QString path = ui->lineEdit->text();
-    if (QDir().exists(path) && !path.contains(NoSlash))
+    setTextToLineEdit(path);
+    if (QDir().exists(path))
     {
         mFileModel->setRootPath(ui->lineEdit->text());
         ui->listView->setRootIndex(mFileModel->index(ui->lineEdit->text()));
@@ -196,7 +196,7 @@ void FileView::slotCreateNewFolder()
 {
     //create folder
     QModelIndex index = static_cast<QModelIndex>(ui->listView->rootIndex());
-    QString pathStart = mFileModel->fileInfo(index).absoluteFilePath()+Slash+"New Folder";
+    QString pathStart = mFileModel->fileInfo(index).absoluteFilePath()+QDir::toNativeSeparators("/")+"New Folder";
     QString pathForNewFolder = pathStart;
 
     //counter for standart folder name(New Folder (i)) if "New Folder" is already exist
