@@ -38,12 +38,14 @@
 
 #include "ui/exploreritemdelegate.h"
 
+
 FileView::FileView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileView)
 {
     ui->setupUi(this);
     QAction *actionGoUp = ui->lineEdit->addAction(QPixmap(":splash/img/up.png"), QLineEdit::TrailingPosition);
+    setSlash();
 
     //context menu
     mMenu = new QMenu(this);
@@ -101,9 +103,15 @@ FileView::~FileView()
 
 void FileView::setRootPath(const QString &pPath)
 {
-    ui->lineEdit->setText(pPath);
+    setTextToLineEdit(pPath);
     mFileModel->setRootPath(pPath);
     ui->listView->setRootIndex(mFileModel->index(pPath));
+}
+
+void FileView::setTextToLineEdit(const QString &path)
+{
+    QString newPath = path;
+    ui->lineEdit->setText(newPath.replace(NoSlash,Slash));
 }
 
 bool FileView::eventFilter(QObject *obj, QEvent *event)
@@ -133,7 +141,7 @@ void FileView::slotDoubleClick(const QModelIndex &index)
     if(mFileModel->isDir(index))
     {
         ui->listView->setRootIndex(index);
-        ui->lineEdit->setText(mFileModel->fileInfo(index).absoluteFilePath());
+        setTextToLineEdit(mFileModel->fileInfo(index).absoluteFilePath());
     }
 }
 
@@ -143,19 +151,19 @@ void FileView::slotGoUp()
     ui->listView->setRootIndex(up_index);
     if(up_index.isValid())
     {
-        ui->lineEdit->setText(mFileModel->fileInfo(up_index).absoluteFilePath());
+        setTextToLineEdit(mFileModel->fileInfo(up_index).absoluteFilePath());
         ui->listView->setCurrentIndex(mFileModel->index(mFileModel->fileInfo(up_index).absoluteFilePath()));
     }
     else
     {
-        ui->lineEdit->setText(FileView::getHomePathForCurrentSystem());
+        setTextToLineEdit(FileView::getHomePathForCurrentSystem());
     }
 }
 
 void FileView::slotGoToPath()
 {
     const QString path = ui->lineEdit->text();
-    if (QDir().exists(path))
+    if (QDir().exists(path) && !path.contains(NoSlash))
     {
         mFileModel->setRootPath(ui->lineEdit->text());
         ui->listView->setRootIndex(mFileModel->index(ui->lineEdit->text()));
@@ -163,7 +171,7 @@ void FileView::slotGoToPath()
     }
     else
     {
-        ui->lineEdit->setText(mFileModel->fileInfo(ui->listView->currentIndex()).absoluteFilePath());
+        setTextToLineEdit(mFileModel->fileInfo(ui->listView->currentIndex()).absoluteFilePath());
     }
 }
 
@@ -188,7 +196,7 @@ void FileView::slotCreateNewFolder()
 {
     //create folder
     QModelIndex index = static_cast<QModelIndex>(ui->listView->rootIndex());
-    QString pathStart = mFileModel->fileInfo(index).absoluteFilePath()+"/"+"New Folder";
+    QString pathStart = mFileModel->fileInfo(index).absoluteFilePath()+Slash+"New Folder";
     QString pathForNewFolder = pathStart;
 
     //counter for standart folder name(New Folder (i)) if "New Folder" is already exist

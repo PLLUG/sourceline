@@ -51,6 +51,7 @@ public:
      */
     void setRootPath(const QString &pPath);
 
+    void setTextToLineEdit(const QString &path);
     /*!
      * \brief set root path in different platforms
      * \return path
@@ -69,7 +70,26 @@ public:
         #endif
         return rHomePath;
     }
-//protected:
+
+    /*!
+     * \brief set slash for different system
+     */
+    void setSlash()
+    {
+        #ifdef Q_OS_LINUX
+        Slash = "/";
+        NoSlash = "\\";
+        #endif
+        #ifdef Q_OS_WIN
+        Slash = "\\";
+        NoSlash = "/";
+        #endif
+        #ifdef Q_OS_MAC
+        Slash = "/";
+        NoSlash = "\\";
+        #endif
+    }
+
 private:
 
     /*!
@@ -149,6 +169,16 @@ private:
      * \brief file model
      */
     QFileSystemModel *mFileModel;
+
+    /*!
+     * \brief Slash for system
+     */
+    QString Slash;
+
+    /*!
+     * \brief is not slash for system
+     */
+    QString NoSlash;
 };
 
 #endif // FILEVIEW_H
