@@ -70,13 +70,6 @@ public:
         return rHomePath;
     }
 
-protected:
-
-    /*!
-     * \brief update icon position and size
-     */
-    void resizeEvent(QResizeEvent *);
-
 private slots:
 
     /*!

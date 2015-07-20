@@ -32,6 +32,7 @@
 #include <QMessageBox>
 #include <QListWidgetItem>
 #include <QDialog>
+#include <QAction>
 
 #include "ui/exploreritemdelegate.h"
 
@@ -40,8 +41,7 @@ FileView::FileView(QWidget *parent) :
     ui(new Ui::FileView)
 {
     ui->setupUi(this);
-    ui->lineEdit->setIconPixmap(QPixmap(":splash/img/up.png"));
-    ui->lineEdit->setIconVisibility(IconizedLineEdit::IconAlwaysVisible);
+    QAction *actionGoUp = ui->lineEdit->addAction(QPixmap(":splash/img/up.png"), QLineEdit::TrailingPosition);
 
     //context menu
     mMenu = new QMenu(this);
@@ -89,6 +89,7 @@ FileView::FileView(QWidget *parent) :
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(ui->lineEdit, SIGNAL(signalIconClicked()), SLOT(slotGoUp()));
+    connect(actionGoUp, SIGNAL(triggered(bool)), SLOT(slotGoUp()));
 }
 
 FileView::~FileView()
@@ -240,8 +241,8 @@ void FileView::slotRenameFolderOrFile()
     }
 }
 
-void FileView::resizeEvent(QResizeEvent *)
+/*void FileView::resizeEvent(QResizeEvent *)
 {
     ui->lineEdit->updateIconPositionAndSize();
-}
+}*/
 
