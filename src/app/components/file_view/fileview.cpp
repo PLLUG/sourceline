@@ -88,8 +88,8 @@ FileView::FileView(QWidget *parent) :
     setRootPath(QDir::currentPath());
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
-    connect(ui->lineEdit, SIGNAL(signalIconClicked()), SLOT(slotGoUp()));
     connect(actionGoUp, SIGNAL(triggered(bool)), SLOT(slotGoUp()));
+    connect(ui->lineEdit,SIGNAL(returnPressed()), SLOT(slotGoToPath()));
 }
 
 FileView::~FileView()
@@ -125,6 +125,12 @@ void FileView::slotGoUp()
     {
         ui->lineEdit->setText(FileView::getHomePathForCurrentSystem());
     }
+}
+
+void FileView::slotGoToPath()
+{
+    mFileModel->setRootPath(ui->lineEdit->text());
+    ui->listView->setRootIndex(mFileModel->index(ui->lineEdit->text()));
 }
 
 void FileView::slotRightBtnClick(const QPoint &pos)
@@ -240,9 +246,3 @@ void FileView::slotRenameFolderOrFile()
         ui->listView->edit(index);
     }
 }
-
-/*void FileView::resizeEvent(QResizeEvent *)
-{
-    ui->lineEdit->updateIconPositionAndSize();
-}*/
-

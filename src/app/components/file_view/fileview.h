@@ -83,6 +83,8 @@ private slots:
      */
     void slotGoUp();
 
+    void slotGoToPath();
+
     /*!
      * \brief action create menu on right button click
      * \param position item on view
