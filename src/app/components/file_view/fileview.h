@@ -69,7 +69,16 @@ public:
         #endif
         return rHomePath;
     }
+//protected:
+private:
 
+    /*!
+      * \brief filter for events for object
+      * \param object name
+      * \param event for this object
+      * \return
+      */
+     bool eventFilter(QObject *obj, QEvent *event);
 private slots:
 
     /*!
@@ -83,6 +92,9 @@ private slots:
      */
     void slotGoUp();
 
+    /*!
+     * \brief go to last repository
+     */
     void slotGoToPath();
 
     /*!

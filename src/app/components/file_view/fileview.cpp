@@ -33,6 +33,8 @@
 #include <QListWidgetItem>
 #include <QDialog>
 #include <QAction>
+#include <QEvent>
+#include <QKeyEvent>
 
 #include "ui/exploreritemdelegate.h"
 
@@ -89,8 +91,7 @@ FileView::FileView(QWidget *parent) :
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
     connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(actionGoUp, SIGNAL(triggered(bool)), SLOT(slotGoUp()));
-    connect(ui->lineEdit, SIGNAL(returnPressed()), SLOT(slotGoToPath()));
-    connect(ui->lineEdit, SIGNAL(editingFinished()), SLOT(slotGoToPath()));
+    ui->lineEdit->installEventFilter(this);
 }
 
 FileView::~FileView()
@@ -103,6 +104,28 @@ void FileView::setRootPath(const QString &pPath)
     ui->lineEdit->setText(pPath);
     mFileModel->setRootPath(pPath);
     ui->listView->setRootIndex(mFileModel->index(pPath));
+}
+
+bool FileView::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == ui->lineEdit)
+    {
+        if (event->type() == QEvent::KeyPress)
+        {
+            QKeyEvent *key = static_cast<QKeyEvent *>(event);
+            if (key->key() == Qt::Key_Escape || key->key() == Qt::Key_Return)
+            {
+                slotGoToPath();
+                return true;
+            }
+        }
+        if (event->type() == QEvent::FocusOut)
+        {
+            slotGoToPath();
+            return true;
+        }
+    }
+    return false;
 }
 
 void FileView::slotDoubleClick(const QModelIndex &index)
@@ -132,7 +155,7 @@ void FileView::slotGoUp()
 void FileView::slotGoToPath()
 {
     const QString path = ui->lineEdit->text();
-    if (QDir().exists(path) || QFile().exists(path))
+    if (QDir().exists(path))
     {
         mFileModel->setRootPath(ui->lineEdit->text());
         ui->listView->setRootIndex(mFileModel->index(ui->lineEdit->text()));
