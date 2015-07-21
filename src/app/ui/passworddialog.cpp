@@ -6,6 +6,8 @@ PasswordDialog::PasswordDialog(QWidget *parent) :
     ui(new Ui::PasswordDialog)
 {
     ui->setupUi(this);
+    connect(this, SIGNAL(accepted()), this, SLOT(username()));
+    connect(this, SIGNAL(accepted()), this, SLOT(password()));
 }
 
 PasswordDialog::~PasswordDialog()
@@ -13,12 +15,12 @@ PasswordDialog::~PasswordDialog()
     delete ui;
 }
 
-void PasswordDialog::accept()
+QString PasswordDialog::username()
 {
-    PasswordDialog::~PasswordDialog();
+    return ui->username->text();
 }
 
-void PasswordDialog::reject()
+QString PasswordDialog::password()
 {
-    PasswordDialog::~PasswordDialog();
+    return ui->password->text();
 }
