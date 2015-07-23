@@ -25,11 +25,14 @@ TEMPLATE = app
 QT += widgets
 
 # Pro file is a part of source line project structure
-CONFIG += sl_project
+CONFIG += \
+    sl_project \
+    C++11 \
 
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
+include($$PWD/components/console/console.pri)
 include($$PWD/components/example_component/example_component.pri)
 include($$PWD/components/file_view/FileView.pri)
 
@@ -113,8 +116,6 @@ HEADERS += \
     ui/mainmenubuilder.h \
     ui/dockfileview.h \
     ui/dockconsole.h \
-    ui/console/console.h \
-    ui/consoleview.h \
     ui/about.h \
     ui/plugininfodialog.h \
     ui/useraction.h \
@@ -139,8 +140,6 @@ SOURCES += \
     ui/useraction.cpp \
     ui/dockconsole.cpp \
     ui/dockfileview.cpp \
-    ui/console/console.cpp \
-    ui/consoleview.cpp \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
 
@@ -159,7 +158,6 @@ FORMS += \
     ui/dockfileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
-    ui/consoleview.ui \
     ui/revisionview.ui \
     ui/clonedialog.ui \
     ui/contentfortabworkplace.ui \

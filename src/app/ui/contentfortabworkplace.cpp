@@ -1,6 +1,6 @@
 #include "contentfortabworkplace.h"
 #include "ui_contentfortabworkplace.h"
-#include "ui/consoleview.h"
+#include "components/console/consoleview.h"
 #include "ui/dockconsole.h"
 #include "ui/dockfileview.h"
 #include "ui/editorview.h"

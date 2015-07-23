@@ -3,7 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
-***                                                                          ***
+***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
 ***    SourceLine is free software: you can redistribute it and/or modify    ***
@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QDebug>
 #include <QDir>
+#include <QSysInfo>
 
 ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
@@ -33,10 +34,12 @@ ConsoleView::ConsoleView(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
+    ui->plainTextEdit->putData(QByteArray().append("~>"));
+    dirPrinted = true;
     mProcess = new QProcess(this);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-//    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Git\\bin\\;");
-//    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Subversion\\bin\\;");
+    //    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Git\\bin\\;");
+    //    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Subversion\\bin\\;");
     mProcess->setProcessEnvironment(env);
     mProcess->setProcessChannelMode(QProcess::MergedChannels);
 
@@ -58,13 +61,98 @@ void ConsoleView::execute(QString pCommand)
     mProcess->write(pCommand.toUtf8());
     if(mProcess->atEnd() && !dirPrinted)
     {
-        qDebug() << "dir print from exec";
+        qDebug() << "dir print from exec : " << pCommand;
         slotPrintWorkingDir();
+    }
+    if(OsInfo()=="windows")
+    {
+        QProcess* cmd = new QProcess(this); // Link : http://stackoverflow.com/questions/5890955/qprocess-problems-output-of-process
+        QByteArray resultConsole;
+        QStringList args;
+        //QString cdPathAndCommand = "cd"+consolePath()+"&call "+pCommand;
+        args << "/c"  << pCommand; // << "\r" //Two commands in CMD Link : http://stackoverflow.com/questions/9888806/run-two-commands-in-one-windows-cmd-line-one-command-is-set-command
+        //need set mPath
+        //cmd->setWorkingDirectory(mPath);
+        cmd->start("C:\\Windows\\System32\\cmd", args);
+        //cmd->startDetached("C:\\Program Files\\Git\\bin"); //???need arguments for Git
+        if (!cmd->waitForStarted())
+        {
+            qDebug() << " cmd crashed.";
+            return;
+        }
+
+        cmd->waitForFinished();
+        cmd->waitForReadyRead();
+        cmd->waitForBytesWritten();
+        resultConsole = cmd->readAll();
+        qDebug() << resultConsole;
+
+        if(!resultConsole.isEmpty())
+            ui->plainTextEdit->putData(" RESULT : " + resultConsole + "~>");
+        //cmd.write("dir\n");
+        //cmd.waitForBytesWritten();
+        //cmd.waitForReadyRead();
+        //qDebug() << cmd.readAll();
+        cmd->waitForFinished();
+        qDebug() << cmd->exitCode();
+
+    }
+    else if(OsInfo()=="ubuntu")
+    {
+
+        QProcess* sh = new QProcess(this);
+        //sh->setWorkingDirectory("//home//lynda//"); set mPath
+        sh->start("sh");
+        qDebug() << QDir::currentPath();
+        if (!sh->waitForStarted())
+        {
+            qDebug() << " sh crashed.";
+            return;
+        }
+        sh->write(QByteArray().append(pCommand));
+        sh->closeWriteChannel();
+
+        sh->waitForFinished();
+        QByteArray resultSH = sh->readAll();
+        sh->close();
+        if(!resultSH.isEmpty())
+            ui->plainTextEdit->putData(" RESULT : " + resultSH + "~>");
+
+    }
+    else
+    {
+        ui->plainTextEdit->clear();
+        ui->plainTextEdit->putData("\nProductType: " + QByteArray().append(QSysInfo::productType())
+                                   + "\nPrettyProductName: " + QByteArray().append(QSysInfo::prettyProductName())
+                                   + "\nProductVersion: " + QByteArray().append(QSysInfo::productVersion())
+                                   + "\nKernelType: " + QByteArray().append(QSysInfo::kernelType())
+                                   + "\nKernelVersion: " + QByteArray().append(QSysInfo::kernelVersion())
+                                   + "\n NOW THIS OS IS NOT SUPPORTED.");
+        ui->plainTextEdit->setDisabled(true);
+    }
+
+    //Command inside СonsoleView
+    if(pCommand == "close\n")
+    {
+        qDebug() << "close - operation app";
+        qApp->quit();
     }
 }
 
+/*
+ * function System Info.
+ * To know what in what OS is running SL.*/
+QString ConsoleView::OsInfo()
+{
+    return QSysInfo::productType();
+}
+
+/*
+ * function what return current PATH for QProcess::setWorkingDirectory
+ */
 QString ConsoleView::consolePath()
 {
+    //to get current path , set in pCommand = echo %cd% or write your comand and add "&call (func)"
     return mPath;
 }
 
@@ -93,14 +181,14 @@ void ConsoleView::slotReadConsoleOutput()
     QByteArray output = mProcess->readAll();
     ui->plainTextEdit->putData(output);
     ui->plainTextEdit->putData("\n");
-//    if(mProcess->waitForReadyRead(100))
-//    {
-//        qDebug() << "enable data to read!";
-//        slotReadConsoleOutput();
-//    }else
-//    {
-//        qDebug() << "dir print from read";
-//    }
+    //    if(mProcess->waitForReadyRead(100))
+    //    {
+    //        qDebug() << "enable data to read!";
+    //        slotReadConsoleOutput();
+    //    }else
+    //    {
+    //        qDebug() << "dir print from read";
+    //    }
 
 
     if (!mProcess->atEnd())
@@ -135,10 +223,10 @@ void ConsoleView::startProcess()
 void ConsoleView::slotPrintWorkingDir(QString dir)
 {
     QString lWorkDir = dir;
-//    if(lWorkDir.isEmpty())
-//    {
-//        lWorkDir = QDir::currentPath();
-//    }
-        ui->plainTextEdit->putData(QByteArray().append(lWorkDir+"~>"));
-        dirPrinted = true;
+    //    if(lWorkDir.isEmpty())
+    //    {
+    //        lWorkDir = QDir::currentPath();
+    //    }
+    ui->plainTextEdit->putData(QByteArray().append(lWorkDir+"~>"));
+    dirPrinted = true;
 }

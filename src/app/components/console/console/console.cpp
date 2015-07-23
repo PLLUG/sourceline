@@ -22,19 +22,17 @@
 *******************************************************************************/
 
 #include "console.h"
-
 #include <QScrollBar>
-
 #include <QDebug>
 
 Console::Console(QWidget *parent)
     : QPlainTextEdit(parent)
     , localEchoEnabled(false)
 {
-    document()->setMaximumBlockCount(100);
+    document()->setMaximumBlockCount(maximumBlockCount);
     QPalette p = palette();
-    p.setColor(QPalette::Base, Qt::black);
-    p.setColor(QPalette::Text, Qt::green);
+    p.setColor(QPalette::Base, mColorBase);
+    p.setColor(QPalette::Text, mColorInputText);
     setPalette(p);
 }
 
@@ -89,9 +87,13 @@ void Console::keyPressEvent(QKeyEvent *e)
 //    setFocus();
 //}
 
+/*
+ * function : Clear console with mouse double click(as example)
+ */
 void Console::mouseDoubleClickEvent(QMouseEvent *e)
 {
-    Q_UNUSED(e)
+    clear();
+    insertPlainText("Console was cleared with double clicking!\n~>");
 }
 
 void Console::contextMenuEvent(QContextMenuEvent *e)

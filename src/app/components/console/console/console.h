@@ -26,6 +26,8 @@
 
 #include <QPlainTextEdit>
 
+class QColor;
+
 class Console : public QPlainTextEdit
 {
     Q_OBJECT
@@ -47,7 +49,9 @@ signals:
 private:
     bool localEchoEnabled;
     QString currentCmd;
-
+    int maximumBlockCount = 1000;
+    QColor mColorBase = Qt::black;
+    QColor mColorInputText = Qt::green;
 };
 
 #endif // CONSOLE_H
