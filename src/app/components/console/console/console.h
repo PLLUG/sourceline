@@ -3,6 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -38,7 +39,7 @@ public:
 
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
-//    virtual void mousePressEvent(QMouseEvent *e);
+    //    virtual void mousePressEvent(QMouseEvent *e);
     virtual void mouseDoubleClickEvent(QMouseEvent *e);
     virtual void contextMenuEvent(QContextMenuEvent *e);
 

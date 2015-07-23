@@ -3,6 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -39,7 +40,7 @@ public:
     explicit ConsoleView(QWidget *parent = 0);
     ~ConsoleView();
     void execute(QString pCommand);
-    QString consolePath(); 
+    QString consolePath();
     QString OsInfo();
 public slots:
     void slotSetConsolePath(QString pPath);

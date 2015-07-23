@@ -36,10 +36,9 @@ ConsoleView::ConsoleView(QWidget *parent) :
     ui->plainTextEdit->setLocalEchoEnabled(true);
     ui->plainTextEdit->putData(QByteArray().append("~>"));
     dirPrinted = true;
+
     mProcess = new QProcess(this);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    //    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Git\\bin\\;");
-    //    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Subversion\\bin\\;");
     mProcess->setProcessEnvironment(env);
     mProcess->setProcessChannelMode(QProcess::MergedChannels);
 
@@ -89,10 +88,6 @@ void ConsoleView::execute(QString pCommand)
 
         if(!resultConsole.isEmpty())
             ui->plainTextEdit->putData(" RESULT : " + resultConsole + "~>");
-        //cmd.write("dir\n");
-        //cmd.waitForBytesWritten();
-        //cmd.waitForReadyRead();
-        //qDebug() << cmd.readAll();
         cmd->waitForFinished();
         qDebug() << cmd->exitCode();
 
@@ -181,15 +176,6 @@ void ConsoleView::slotReadConsoleOutput()
     QByteArray output = mProcess->readAll();
     ui->plainTextEdit->putData(output);
     ui->plainTextEdit->putData("\n");
-    //    if(mProcess->waitForReadyRead(100))
-    //    {
-    //        qDebug() << "enable data to read!";
-    //        slotReadConsoleOutput();
-    //    }else
-    //    {
-    //        qDebug() << "dir print from read";
-    //    }
-
 
     if (!mProcess->atEnd())
     {
