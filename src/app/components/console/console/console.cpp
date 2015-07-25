@@ -82,11 +82,6 @@ void Console::keyPressEvent(QKeyEvent *e)
     }
 }
 
-//void Console::mousePressEvent(QMouseEvent *e)
-//{
-//    Q_UNUSED(e)
-//    setFocus();
-//}
 
 /*
  * function : Clear console with mouse double click(as example)

@@ -54,62 +54,62 @@ ConsoleView::~ConsoleView()
     delete ui;
 }
 
-void ConsoleView::execute(QString pCommand)
+void ConsoleView::execute(QString &pCommand)
 {
     ui->plainTextEdit->putData("\n");
     mProcess->write(pCommand.toUtf8());
     if(mProcess->atEnd() && !dirPrinted)
     {
-        qDebug() << "dir print from exec : " << pCommand;
         slotPrintWorkingDir();
     }
+    QProcess* console;
     if(OsInfo()=="windows")
     {
-        QProcess* cmd = new QProcess(this); // Link : http://stackoverflow.com/questions/5890955/qprocess-problems-output-of-process
+        console = new QProcess(this);
         QByteArray resultConsole;
         QStringList args;
         //QString cdPathAndCommand = "cd"+consolePath()+"&call "+pCommand;
         args << "/c"  << pCommand; // << "\r" //Two commands in CMD Link : http://stackoverflow.com/questions/9888806/run-two-commands-in-one-windows-cmd-line-one-command-is-set-command
         //need set mPath
         //cmd->setWorkingDirectory(mPath);
-        cmd->start("C:\\Windows\\System32\\cmd", args);
+        console->start("C:\\Windows\\System32\\cmd", args);
         //cmd->startDetached("C:\\Program Files\\Git\\bin"); //???need arguments for Git
-        if (!cmd->waitForStarted())
+        if (!console->waitForStarted())
         {
             qDebug() << " cmd crashed.";
             return;
         }
 
-        cmd->waitForFinished();
-        cmd->waitForReadyRead();
-        cmd->waitForBytesWritten();
-        resultConsole = cmd->readAll();
+        console->waitForFinished();
+        console->waitForReadyRead();
+        console->waitForBytesWritten();
+        resultConsole = console->readAll();
         qDebug() << resultConsole;
 
         if(!resultConsole.isEmpty())
             ui->plainTextEdit->putData(" RESULT : " + resultConsole + "~>");
-        cmd->waitForFinished();
-        qDebug() << cmd->exitCode();
+        console->waitForFinished();
+        qDebug() << console->exitCode();
 
     }
     else if(OsInfo()=="ubuntu")
     {
 
-        QProcess* sh = new QProcess(this);
+        console = new QProcess(this);
         //sh->setWorkingDirectory("//home//lynda//"); set mPath
-        sh->start("sh");
+        console->start("sh");
         qDebug() << QDir::currentPath();
-        if (!sh->waitForStarted())
+        if (!console->waitForStarted())
         {
             qDebug() << " sh crashed.";
             return;
         }
-        sh->write(QByteArray().append(pCommand));
-        sh->closeWriteChannel();
+        console->write(QByteArray().append(pCommand));
+        console->closeWriteChannel();
 
-        sh->waitForFinished();
-        QByteArray resultSH = sh->readAll();
-        sh->close();
+        console->waitForFinished();
+        QByteArray resultSH = console->readAll();
+        console->close();
         if(!resultSH.isEmpty())
             ui->plainTextEdit->putData(" RESULT : " + resultSH + "~>");
 
@@ -136,8 +136,9 @@ void ConsoleView::execute(QString pCommand)
 
 /*
  * function System Info.
- * To know what in what OS is running SL.*/
-QString ConsoleView::OsInfo()
+ * To know what in what OS is running SL.
+ */
+const QString ConsoleView::OsInfo()
 {
     return QSysInfo::productType();
 }
@@ -145,13 +146,13 @@ QString ConsoleView::OsInfo()
 /*
  * function what return current PATH for QProcess::setWorkingDirectory
  */
-QString ConsoleView::consolePath()
+const QString ConsoleView::consolePath()
 {
     //to get current path , set in pCommand = echo %cd% or write your comand and add "&call (func)"
     return mPath;
 }
 
-void ConsoleView::slotSetConsolePath(QString pPath)
+void ConsoleView::slotSetConsolePath(QString &pPath)
 {
     if(!mPath.isEmpty() && (mPath != pPath))
     {
@@ -209,10 +210,7 @@ void ConsoleView::startProcess()
 void ConsoleView::slotPrintWorkingDir(QString dir)
 {
     QString lWorkDir = dir;
-    //    if(lWorkDir.isEmpty())
-    //    {
-    //        lWorkDir = QDir::currentPath();
-    //    }
+
     ui->plainTextEdit->putData(QByteArray().append(lWorkDir+"~>"));
     dirPrinted = true;
 }

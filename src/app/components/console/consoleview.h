@@ -39,23 +39,23 @@ class ConsoleView : public QWidget
 public:
     explicit ConsoleView(QWidget *parent = 0);
     ~ConsoleView();
-    void execute(QString pCommand);
-    QString consolePath();
-    QString OsInfo();
+    void execute(QString &pCommand);
+    const QString consolePath();
+    const QString OsInfo();
 public slots:
-    void slotSetConsolePath(QString pPath);
+    void slotSetConsolePath(QString &pPath);
     void slotReadConsoleOutput();
     void slotExec(QString cmd);
 
 private:
     void startProcess();
-    QWidget *mParent;
 
 private slots:
     void slotPrintWorkingDir(QString dir = QString());
 
 
 private:
+
     Ui::ConsoleView *ui;
     QProcess *mProcess;
     QString mPath;
