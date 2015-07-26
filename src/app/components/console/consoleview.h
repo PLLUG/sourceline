@@ -49,6 +49,7 @@ public slots:
 
 private:
     void startProcess();
+    QByteArray clearAppend(const QString &tmp);
 
 private slots:
     void slotPrintWorkingDir(QString dir = QString());
@@ -56,10 +57,11 @@ private slots:
 
 private:
 
-    Ui::ConsoleView *ui;
+    bool dirPrinted;
+    QByteArray mData;
     QProcess *mProcess;
     QString mPath;
-    bool dirPrinted;
+    Ui::ConsoleView *ui;
 };
 
 #endif // CONSOLEVIEW_H

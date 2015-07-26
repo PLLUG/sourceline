@@ -34,7 +34,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
-    ui->plainTextEdit->putData(QByteArray().append("~>"));
+    ui->plainTextEdit->putData(clearAppend("~>"));
     dirPrinted = true;
 
     mProcess = new QProcess(this);
@@ -104,7 +104,7 @@ void ConsoleView::execute(QString &pCommand)
             qDebug() << " sh crashed.";
             return;
         }
-        console->write(QByteArray().append(pCommand));
+        console->write(clearAppend(pCommand));
         console->closeWriteChannel();
 
         console->waitForFinished();
@@ -117,19 +117,19 @@ void ConsoleView::execute(QString &pCommand)
     else
     {
         ui->plainTextEdit->clear();
-        ui->plainTextEdit->putData("\nProductType: " + QByteArray().append(QSysInfo::productType())
-                                   + "\nPrettyProductName: " + QByteArray().append(QSysInfo::prettyProductName())
-                                   + "\nProductVersion: " + QByteArray().append(QSysInfo::productVersion())
-                                   + "\nKernelType: " + QByteArray().append(QSysInfo::kernelType())
-                                   + "\nKernelVersion: " + QByteArray().append(QSysInfo::kernelVersion())
+        ui->plainTextEdit->putData("\nProductType: " + clearAppend(QSysInfo::productType())
+                                   + "\nPrettyProductName: " + clearAppend(QSysInfo::prettyProductName())
+                                   + "\nProductVersion: " + clearAppend(QSysInfo::productVersion())
+                                   + "\nKernelType: " + clearAppend(QSysInfo::kernelType())
+                                   + "\nKernelVersion: " + clearAppend(QSysInfo::kernelVersion())
                                    + "\n NOW THIS OS IS NOT SUPPORTED.");
         ui->plainTextEdit->setDisabled(true);
+        delete console;
     }
 
     //Command inside СonsoleView
     if(pCommand == "close\n")
     {
-        qDebug() << "close - operation app";
         qApp->quit();
     }
 }
@@ -207,10 +207,16 @@ void ConsoleView::startProcess()
     }
 }
 
+QByteArray ConsoleView::clearAppend(const QString &tmp)
+{
+    mData.clear();
+    return mData.append(tmp);
+}
+
 void ConsoleView::slotPrintWorkingDir(QString dir)
 {
     QString lWorkDir = dir;
 
-    ui->plainTextEdit->putData(QByteArray().append(lWorkDir+"~>"));
+    ui->plainTextEdit->putData(clearAppend(lWorkDir+"~>"));
     dirPrinted = true;
 }
