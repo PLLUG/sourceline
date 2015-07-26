@@ -124,7 +124,6 @@ void ConsoleView::execute(QString &pCommand)
                                    + "\nKernelVersion: " + clearAppend(QSysInfo::kernelVersion())
                                    + "\n NOW THIS OS IS NOT SUPPORTED.");
         ui->plainTextEdit->setDisabled(true);
-        delete console;
     }
 
     //Command inside СonsoleView
