@@ -46,7 +46,8 @@ HEADERS +=\
     settingspage.h \
     command.h \
     defs.h \
-    settings.h
+    settings.h \
+    iprocessapi.h
 
 #TODO: add copying of pri file
 

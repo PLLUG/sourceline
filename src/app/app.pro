@@ -25,7 +25,9 @@ TEMPLATE = app
 QT += widgets
 
 # Pro file is a part of source line project structure
-CONFIG += sl_project
+CONFIG += \
+    sl_project\
+    c++11
 
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
