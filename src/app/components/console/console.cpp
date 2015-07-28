@@ -88,6 +88,7 @@ void Console::keyPressEvent(QKeyEvent *e)
  */
 void Console::mouseDoubleClickEvent(QMouseEvent *e)
 {
+    Q_UNUSED(e)
     clear();
     insertPlainText("Console was cleared with double clicking!\n~>");
 }

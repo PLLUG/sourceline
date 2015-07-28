@@ -28,7 +28,7 @@
   <customwidget>
    <class>Console</class>
    <extends>QPlainTextEdit</extends>
-   <header>ui/console/console.h</header>
+   <header>components/console/console.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

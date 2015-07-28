@@ -24,11 +24,11 @@
 
 HEADERS += \
     $$PWD/consoleview.h \
-    $$PWD/console/console.h \
+    $$PWD/console.h \
 
 SOURCES += \
     $$PWD/consoleview.cpp \
-    $$PWD/console/console.cpp \
+    $$PWD/console.cpp \
 
 FORMS += \
-    $$PWD/ui/consoleview.ui \
+    $$PWD/consoleview.ui \
