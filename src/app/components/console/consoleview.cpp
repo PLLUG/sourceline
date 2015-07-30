@@ -54,7 +54,7 @@ ConsoleView::~ConsoleView()
     delete ui;
 }
 
-void ConsoleView::execute(QString &pCommand)
+void ConsoleView::execute(const QString &pCommand)
 {
     ui->plainTextEdit->putData("\n");
     mProcess->write(pCommand.toUtf8());
@@ -68,12 +68,12 @@ void ConsoleView::execute(QString &pCommand)
         console = new QProcess(this);
         QByteArray resultConsole;
         QStringList args;
-        //QString cdPathAndCommand = "cd"+consolePath()+"&call "+pCommand;
+        //TODO: nsolePath()+"&call "+pCommand;
         args << "/c"  << pCommand; // << "\r" //Two commands in CMD Link : http://stackoverflow.com/questions/9888806/run-two-commands-in-one-windows-cmd-line-one-command-is-set-command
         //need set mPath
-        //cmd->setWorkingDirectory(mPath);
+        //TODO: cmd->setWorkingDirectory(mPath);
         console->start("C:\\Windows\\System32\\cmd", args);
-        //cmd->startDetached("C:\\Program Files\\Git\\bin"); //???need arguments for Git
+        //TODO: cmd->startDetached("C:\\Program Files\\Git\\bin"); need arguments for Git
         if (!console->waitForStarted())
         {
             qDebug() << " cmd crashed.";
@@ -90,13 +90,12 @@ void ConsoleView::execute(QString &pCommand)
             ui->plainTextEdit->putData(" RESULT : " + resultConsole + "~>");
         console->waitForFinished();
         qDebug() << console->exitCode();
-
     }
+
     else if(OsInfo()=="ubuntu")
     {
-
         console = new QProcess(this);
-        //sh->setWorkingDirectory("//home//lynda//"); set mPath
+        //TODO: sh->setWorkingDirectory("//home//lynda//"); set mPath (Linux)
         console->start("sh");
         qDebug() << QDir::currentPath();
         if (!console->waitForStarted())
@@ -112,8 +111,8 @@ void ConsoleView::execute(QString &pCommand)
         console->close();
         if(!resultSH.isEmpty())
             ui->plainTextEdit->putData(" RESULT : " + resultSH + "~>");
-
     }
+
     else
     {
         ui->plainTextEdit->clear();
@@ -133,7 +132,7 @@ void ConsoleView::execute(QString &pCommand)
     }
 }
 
-/*
+/*!
  * function System Info.
  * To know what in what OS is running SL.
  */
@@ -142,7 +141,7 @@ const QString ConsoleView::OsInfo()
     return QSysInfo::productType();
 }
 
-/*
+/*!
  * function what return current PATH for QProcess::setWorkingDirectory
  */
 const QString ConsoleView::consolePath()
@@ -151,7 +150,7 @@ const QString ConsoleView::consolePath()
     return mPath;
 }
 
-void ConsoleView::slotSetConsolePath(QString &pPath)
+void ConsoleView::slotSetConsolePath(const QString &pPath)
 {
     if(!mPath.isEmpty() && (mPath != pPath))
     {

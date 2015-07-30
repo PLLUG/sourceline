@@ -39,11 +39,11 @@ class ConsoleView : public QWidget
 public:
     explicit ConsoleView(QWidget *parent = 0);
     ~ConsoleView();
-    void execute(QString &pCommand);
+    void execute(const QString &pCommand);
     const QString consolePath();
     const QString OsInfo();
 public slots:
-    void slotSetConsolePath(QString &pPath);
+    void slotSetConsolePath(const QString &pPath);
     void slotReadConsoleOutput();
     void slotExec(QString cmd);
 

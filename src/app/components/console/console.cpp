@@ -83,7 +83,7 @@ void Console::keyPressEvent(QKeyEvent *e)
 }
 
 
-/*
+/*!
  * function : Clear console with mouse double click(as example)
  */
 void Console::mouseDoubleClickEvent(QMouseEvent *e)
