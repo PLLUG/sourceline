@@ -25,6 +25,7 @@
 #define FILEVIEW_H
 
 #include <QWidget>
+#include "filemodel.h"
 
 namespace Ui {
     class FileView;
@@ -149,7 +150,7 @@ private:
     /*!
      * \brief file model
      */
-    QFileSystemModel *mFileModel;
+    FileModel *mFileModel;
 };
 
 #endif // FILEVIEW_H

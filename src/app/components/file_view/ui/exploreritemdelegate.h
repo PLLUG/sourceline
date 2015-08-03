@@ -2,10 +2,9 @@
 #define EXPLORERITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
+#include "../filemodel.h"
 
 //TASK: move to ui folder (together with fileview folder)
-
-class QFileSystemModel;
 
 class ExplorerItemDelegate : public QStyledItemDelegate
 {
@@ -13,8 +12,8 @@ class ExplorerItemDelegate : public QStyledItemDelegate
 public:
     explicit ExplorerItemDelegate(QObject *parent = 0);
 
-    void setFileSystemModel(QFileSystemModel *model);
-    QFileSystemModel *fileSystemModel();
+    void setFileSystemModel(FileModel *model);
+    FileModel *fileSystemModel();
 
     /*!
      * \brief paint models
@@ -66,7 +65,7 @@ private:
     /*!
      * \brief model for file system
      */
-    QFileSystemModel *mFModel;
+    FileModel *mFModel;
 };
 
 #endif // EXPLORERITEMDELEGATE_H

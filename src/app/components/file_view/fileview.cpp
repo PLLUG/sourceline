@@ -70,7 +70,7 @@ FileView::FileView(QWidget *parent) :
     connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
     mDirMenu->addAction(actionRemaneDir);
 
-    mFileModel = new QFileSystemModel(this);
+    mFileModel = new FileModel(this);
     ui->listView->setModel(mFileModel);
     ExplorerItemDelegate *lDeltegate = new ExplorerItemDelegate();
     lDeltegate->setFileSystemModel(mFileModel);
