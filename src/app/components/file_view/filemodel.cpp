@@ -1,8 +1,10 @@
 #include "filemodel.h"
 
+#include <QString>
+
 FileModel::FileModel(QWidget *parent) : QFileSystemModel(parent)
 {
-    setIconForRole(1,static_cast<QString>(":/splash/img/added.png"));
+    //setIconForRole(1,QStringLiteral(":/splash/img/added.png"));
 }
 
 QVariant FileModel::data(const QModelIndex &index, int role)
@@ -10,7 +12,7 @@ QVariant FileModel::data(const QModelIndex &index, int role)
     QVariant result = "";
     if (role == Roles::FileAttributeIconRole)
     {
-        result = (*hashRoleIcon.begin());
+        result = hashRoleIcon[Roles::FileAttributeRole];
     }
     else
     {
@@ -20,8 +22,8 @@ QVariant FileModel::data(const QModelIndex &index, int role)
     return result;
 }
 
-void FileModel::setIconForRole(int id, QString &path)
+void FileModel::setIconForRole(Roles role, QString &path)
 {
-    hashRoleIcon.insert(id,path);
+    hashRoleIcon.insert(role,path);
 }
 
