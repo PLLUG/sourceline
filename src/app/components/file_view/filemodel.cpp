@@ -2,30 +2,26 @@
 
 FileModel::FileModel(QWidget *parent) : QFileSystemModel(parent)
 {
-    addToHash(FileVisibleRole,static_cast<QString>(":/splash/img/added.png"));
-    addToHash(FileModifiedRole,static_cast<QString>(":/splash/img/up.png"));
+    setIconForRole(1,static_cast<QString>(":/splash/img/added.png"));
 }
 
 QVariant FileModel::data(const QModelIndex &index, int role)
 {
     QVariant result = "";
-    switch (role)
+    if (role == Roles::FileAttributeIconRole)
     {
-        case Roles::FileVisibleRole:
-            result = hash[FileVisibleRole];
-            break;
-        case Roles::FileModifiedRole:
-            result = hash[FileModifiedRole];
-            break;
-        default:
-            result = QFileSystemModel::data(index,role);
-            break;
+        result = (*hashRoleIcon.begin());
     }
+    else
+    {
+        result = QFileSystemModel::data(index,role);
+    }
+
     return result;
 }
 
-void FileModel::addToHash(FileModel::Roles role, QString &path)
+void FileModel::setIconForRole(int id, QString &path)
 {
-    hash.insert(role,path);
+    hashRoleIcon.insert(id,path);
 }
 

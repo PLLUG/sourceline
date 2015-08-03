@@ -2,8 +2,8 @@
 #define EXPLORERITEMDELEGATE_H
 
 #include <QStyledItemDelegate>
-#include "../filemodel.h"
 
+class FileModel;
 //TASK: move to ui folder (together with fileview folder)
 
 class ExplorerItemDelegate : public QStyledItemDelegate

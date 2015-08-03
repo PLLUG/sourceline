@@ -8,6 +8,7 @@
 #include <QTextEdit>
 #include "texteditforrename.h"
 #include <QTextCursor>
+#include "../filemodel.h"
 
 //TASK: move to ui folder (together with fileview folder)
 const QString invalidCharacters = "\\/:*?\"<>|";
@@ -44,7 +45,7 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->setPen(Qt::NoPen);
 
     QPixmap lPixmap;
-    lPixmap = QPixmap(mFModel->data(index,mFModel->FileModifiedRole).toString());
+    lPixmap = QPixmap(mFModel->data(index,FileModel::FileAttributeIconRole).toString());
     int l = 16;
     QRect rect(optv4.rect.center().x() + 2, optv4.rect.topRight().y() + 18, l, l);
     painter->drawPixmap(rect, lPixmap.scaled(l, l, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));

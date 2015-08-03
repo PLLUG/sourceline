@@ -8,12 +8,13 @@
 class FileModel : public QFileSystemModel
 {
 public:
+
     /*!
      * \brief roles for icons for files
      */
     enum Roles {
-        FileVisibleRole = Qt::DecorationRole,
-        FileModifiedRole = Qt::UserRole + 1,
+        FileAttributeRole = Qt::DecorationRole,
+        FileAttributeIconRole = Qt::UserRole + 1,
     };
 
     /*!
@@ -31,17 +32,18 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole);
 
     /*!
-     * \brief hash role->icon
-     */
-    QHash<int,QString> hash;
-
-    /*!
      * \brief add pair role->icon to hash
      * \param role for file
      * \param path to icon
      */
-    void setIconToRole(Roles role, QString &path);
+    void setIconForRole(int id, QString &path);
 
+private:
+
+    /*!
+     * \brief hash role->icon
+     */
+    QHash<int,QString> hashRoleIcon;
 };
 
 #endif // FILEMODEL_H
