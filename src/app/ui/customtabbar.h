@@ -25,8 +25,10 @@
 #define CUSTOMTABBAR_H
 
 #include <QTabWidget>
+#include "settings_dialog/settingsmanager.h"
 
 class QWidget;
+class Settings;
 
 namespace Ui {
 class CustomTabBar;
@@ -37,7 +39,7 @@ class CustomTabBar : public QTabWidget
     Q_OBJECT
 
 public:
-    explicit CustomTabBar(QWidget *parent = 0);
+    explicit CustomTabBar(SettingsManager *pSettingsManager, QWidget *parent = 0);
     ~CustomTabBar();
 public slots:
     /*!
@@ -51,8 +53,16 @@ public slots:
      * \param pIndex - index of tab
      */
     void slotCloseWorkplace(int pIndex);
+private slots:
+    /*!
+     * \brief Set All Tabs Invisible Except Current Tab
+     * \param pIndex - index current tab
+     */
+    void setAllTabsInvisibleExceptCurrentTab(int pIndex);
 private:
     Ui::CustomTabBar *ui;
+
+    Settings *mSettings;
 };
 
 #endif // CUSTOMTABBAR_H

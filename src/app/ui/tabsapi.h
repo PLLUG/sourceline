@@ -26,6 +26,7 @@
 
 #include <QWidget>
 #include <QObject>
+#include "settings_dialog/settingsmanager.h"
 
 class CustomTabBar;
 

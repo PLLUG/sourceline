@@ -24,35 +24,64 @@
 #include "customtabbar.h"
 #include "ui_customtabbar.h"
 #include "contentfortabworkplace.h"
+#include "settings.h"
 
 #include <QDebug>
 #include <QWidget>
 
-CustomTabBar::CustomTabBar(QWidget *parent) :
+CustomTabBar::CustomTabBar(SettingsManager *pSettingsManager, QWidget *parent) :
     QTabWidget(parent),
     ui(new Ui::CustomTabBar)
 {
     ui->setupUi(this);
     this->setTabsClosable(true);
-    this->setMovable(true);    
+    this->setMovable(true);
     this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
     connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slotCloseWorkplace(int)));
+    connect(this, SIGNAL(currentChanged(int)),this,SLOT(setAllTabsInvisibleExceptCurrentTab(int)));    
+    mSettings = new Settings(this);
+    mSettings->setAutoCommit(true);
+    pSettingsManager->addSettings("settingsTabs","tab",mSettings);
 }
 
 CustomTabBar::~CustomTabBar()
 {
-    delete ui;
+    delete ui;    
 }
 
 void CustomTabBar::slotAddNewWorkplace(const QString &pName)
 {
-    QTabWidget::addTab(new ContentForTabWorkplace(this), pName);
+    QTabWidget::addTab(new ContentForTabWorkplace(this, pName), pName);
     setCurrentIndex(this->count()-1);
+    mSettings->add(tabText(currentIndex()),dynamic_cast<ContentForTabWorkplace*>(currentWidget()),"tabState");
+    mSettings->subscribe(tabText(currentIndex()),dynamic_cast<ContentForTabWorkplace*>(widget(currentIndex())),SLOT(setTabState(QByteArray)));
+    //mSettings->setSettingsPath("view_settings/tabs_settings");
 }
 
 void CustomTabBar::slotCloseWorkplace(int pIndex)
-{
-    removeTab(pIndex);
+{    
+    dynamic_cast<ContentForTabWorkplace*>(widget(pIndex))->~ContentForTabWorkplace();
 }
 
+void CustomTabBar::setAllTabsInvisibleExceptCurrentTab(int pIndex)
+{   
+    for(int i = 0; i < count(); i++)
+    {
+
+        if(i == pIndex)
+        {
+            dynamic_cast<ContentForTabWorkplace*>(widget(pIndex))->setVisibleForContent(true);
+            //dynamic_cast<ContentForTabWorkplace*>(widget(pIndex))->restoreSettings();
+        }
+        else
+        {
+            if(dynamic_cast<ContentForTabWorkplace*>(widget(i))->isContentVisible())
+            {
+                //dynamic_cast<ContentForTabWorkplace*>(widget(i))->saveSettings();
+                //mSettings->commit();
+                dynamic_cast<ContentForTabWorkplace*>(widget(i))->setVisibleForContent(false);
+            }
+        }
+    }
+}

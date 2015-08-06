@@ -16,10 +16,11 @@
 #include <QTabWidget>
 #include <QHBoxLayout>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(SettingsManager *pSettingsManager, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    mSettingsManager = pSettingsManager;
     ui->setupUi(this);    
     // TASK: creation of tray menu should be peformed by ApplicationBuilder
     trayMenu = new QMenu(this);
@@ -32,15 +33,17 @@ MainWindow::MainWindow(QWidget *parent) :
     TrayIcon->show();
     TrayIcon->setContextMenu(trayMenu);
 
+    setMinimumSize(800,600);
+
     // TASK: creation of PageManager should be performed by ApplicationBuilder
     mTabsAPI = new TabsAPI(this);
-    mTabBar = new CustomTabBar(this);
+    mTabBar = new CustomTabBar(pSettingsManager, this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     this->setCentralWidget(mTabBar);
 
-    connect(mTabBar,SIGNAL(tabCloseRequested(int)),mTabsAPI,SLOT(slotRemoveWorkplace(CustomTabBar*,int)));
+    connect(mTabBar,SIGNAL(tabCloseRequested(int)),mTabsAPI,SLOT(slotRemoveWorkplace(mTabBar,int)));
 
     mAmountOpenedTabs = 0;
 

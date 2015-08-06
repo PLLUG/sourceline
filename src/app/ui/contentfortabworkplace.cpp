@@ -32,8 +32,8 @@
 #include "ui/revisiontable.h"
 #include "ui/revisionview.h"
 
-ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
-    QMainWindow(parent),
+ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent, QString TabName) :
+    QMainWindow(parent),    
     ui(new Ui::ContentForTabWorkplace)
 {
     ui->setupUi(this);
@@ -76,9 +76,67 @@ ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
     splitDockWidget(uiEditorView, uiConsole, Qt::Vertical);
     tabifyDockWidget(uiEditorView, uiFileView);
     tabifyDockWidget(uiRevisionTable, uiHistoryTree);
+
+    mPathToSettingsFile = "Tabs Settings/" + TabName + ".ini";
+
+    mSettings = new QSettings(mPathToSettingsFile, QSettings::IniFormat);
+
+    saveSettings();
+
+    mIsVisble = true;
 }
 
 ContentForTabWorkplace::~ContentForTabWorkplace()
 {
+    QFile::remove(mPathToSettingsFile);
+    delete uiConsole;
+    delete uiEditorView;
+    delete uiFileView;
+    delete uiHistoryTree;
+    delete uiRevisionTable;
     delete ui;
+}
+
+void ContentForTabWorkplace::saveSettings()
+{
+    mSettings->setValue("state",saveState());
+    mSettings->setValue("geometry",saveGeometry());
+    mSettings->sync();
+}
+
+void ContentForTabWorkplace::restoreSettings()
+{
+    QByteArray lGeometryData = mSettings->value("geometry").toByteArray();
+    restoreGeometry(lGeometryData);
+    QByteArray lStateData = mSettings->value("state").toByteArray();
+    restoreState(lStateData);
+}
+
+void ContentForTabWorkplace::setVisibleForContent(bool pVisible)
+{
+    uiHistoryTree->setVisible(pVisible);
+    uiFileView->setVisible(pVisible);
+    uiConsole->setVisible(pVisible);
+    uiEditorView->setVisible(pVisible);
+    uiRevisionTable->setVisible(pVisible);
+    mIsVisble = pVisible;
+}
+
+bool ContentForTabWorkplace::isContentVisible()
+{
+    return mIsVisble;
+}
+
+QByteArray ContentForTabWorkplace::tabState() const
+{
+    return saveState();
+}
+
+void ContentForTabWorkplace::setTabState(QByteArray pTabState)
+{
+    if (tabState() == pTabState)
+        return;
+
+    restoreState(pTabState);
+    emit tabStateChanged(pTabState);
 }

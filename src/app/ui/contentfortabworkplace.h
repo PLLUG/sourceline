@@ -25,6 +25,8 @@
 #define CONTENTFORTABWORKPLACE_H
 
 #include <QMainWindow>
+#include <QSettings>
+#include <QFile>
 
 class HistoryTree;
 class RevisionView;
@@ -42,12 +44,33 @@ class ContentForTabWorkplace;
 class ContentForTabWorkplace : public QMainWindow
 {
     Q_OBJECT
+    Q_PROPERTY(QByteArray tabState READ tabState WRITE setTabState NOTIFY tabStateChanged)
 
 public:
-    explicit ContentForTabWorkplace(QWidget *parent = 0);
+    explicit ContentForTabWorkplace(QWidget *parent = 0, QString TabName = "");
     ~ContentForTabWorkplace();
+    /*!
+     * \brief Set Visible For All Component
+     * \param pVisible
+     */
+    void setVisibleForContent(bool pVisible);
+    /*!
+     * \brief saveSettings
+     * \param pTabName
+     */
+    void saveSettings();
 
+    void restoreSettings();
 
+    bool isContentVisible();
+
+    QByteArray tabState() const;
+
+public slots:
+    void setTabState(QByteArray pTabState);
+
+signals:
+    void tabStateChanged(QByteArray pTabState);
 
 private:
     Ui::ContentForTabWorkplace *ui;
@@ -55,11 +78,15 @@ private:
     HistoryTree *uiHistoryTree;
     RevisionView *uiHistoryTreeContents;
     EditorView *uiEditorView;
-    FileView *uiFileViewContents;
     DockFileView *uiFileView;
+    FileView *uiFileViewContents;
     RevisionTable *uiRevisionTable;
     DockConsole *uiConsole;
     ConsoleView *uiConsoleContents;
+    bool mIsVisble;
+    QString mPathToSettingsFile;
+    QSettings *mSettings;
+    QByteArray m_tabState;
 };
 
 #endif // CONTENTFORTABWORKPLACE_H

@@ -4,10 +4,12 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include "contentfortabworkplace.h"
+#include "settings_dialog/settingsmanager.h"
 
 class TabsAPI;
 class CustomTabBar;
 class QMenu;
+class SettingManager;
 
 namespace Ui {
 class MainWindow;
@@ -18,7 +20,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
+    explicit MainWindow(SettingsManager *pSettingsManager, QWidget *parent = 0);
     ~MainWindow();
     Ui::MainWindow *ui;
 
@@ -28,7 +30,7 @@ private:
     CustomTabBar *mTabBar;
     TabsAPI *mTabsAPI;
     int mAmountOpenedTabs;
-
+    SettingsManager *mSettingsManager;
 
 signals:
     void mysignal();
