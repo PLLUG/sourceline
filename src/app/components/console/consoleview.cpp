@@ -68,12 +68,8 @@ void ConsoleView::execute(const QString &pCommand)
         console = new QProcess(this);
         QByteArray resultConsole;
         QStringList args;
-        //TODO: nsolePath()+"&call "+pCommand;
-        args << "/c"  << pCommand; // << "\r" //Two commands in CMD Link : http://stackoverflow.com/questions/9888806/run-two-commands-in-one-windows-cmd-line-one-command-is-set-command
-        //need set mPath
-        //TODO: cmd->setWorkingDirectory(mPath);
+        args << "/c"  << pCommand;
         console->start("C:\\Windows\\System32\\cmd", args);
-        //TODO: cmd->startDetached("C:\\Program Files\\Git\\bin"); need arguments for Git
         if (!console->waitForStarted())
         {
             qDebug() << " cmd crashed.";
@@ -95,7 +91,6 @@ void ConsoleView::execute(const QString &pCommand)
     else if(OsInfo()=="ubuntu")
     {
         console = new QProcess(this);
-        //TODO: sh->setWorkingDirectory("//home//lynda//"); set mPath (Linux)
         console->start("sh");
         qDebug() << QDir::currentPath();
         if (!console->waitForStarted())
@@ -146,7 +141,6 @@ const QString ConsoleView::OsInfo()
  */
 const QString ConsoleView::consolePath()
 {
-    //to get current path , set in pCommand = echo %cd% or write your comand and add "&call (func)"
     return mPath;
 }
 
