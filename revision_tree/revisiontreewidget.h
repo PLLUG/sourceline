@@ -1,8 +1,12 @@
 #ifndef REVISIONTREEWIDGET_H
 #define REVISIONTREEWIDGET_H
 #include <QOpenGLWidget>
+#include <QOpenGLBuffer>
 
 #include "revisionmodel.h"
+
+
+using IndexMap = std::map<vertex, int>;
 
 /*!
  * \brief The RevisionTreeWidget class Paints revision graph
@@ -11,6 +15,7 @@ class RevisionTreeWidget : public QOpenGLWidget
 {
 public:
     RevisionTreeWidget(QWidget* parent = nullptr);
+    ~RevisionTreeWidget();
 
     void setGraph(const revision_graph &pGraph);
 
@@ -25,6 +30,11 @@ protected:
 
 private:
     revision_graph mGraph;
+    QOpenGLBuffer mVertexBuffer;
+
+    IndexMap mColumnMap;
+    IndexMap mRowMap;
+
 };
 
 #endif // REVISIONTREEWIDGET_H

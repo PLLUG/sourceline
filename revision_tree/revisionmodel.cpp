@@ -23,6 +23,7 @@
 
 #include "revisionmodel.h"
 #include <boost/graph/graphviz.hpp>
+#include <boost/graph/iteration_macros.hpp>
 
 //maybe use labeled_graph where labeles are commit ids (and remove id from property)? - no
 //#include <boost/graph/labeled_graph.hpp>
@@ -35,35 +36,8 @@
 //TODO: choose the best containers for V and E
 
 RevisionModel::RevisionModel(QObject *parent):
-    QAbstractItemModel(parent),
-    mInitialNode{boost::graph_traits<revision_graph>::null_vertex()}
+    QAbstractItemModel(parent)
 {
-    RevisionNode initialCommit = {
-        "94eaeb7661f3960d8ccb2be1be2405eea111ab0c",
-        "Initial commit",
-        "Alex",
-        QDateTime::currentDateTime()
-    };
-
-    RevisionNode commit1 = {
-        "0fe7872d5dbb295da057a2f7db558edd884f6284",
-        "add project description;",
-        "Volodymyr",
-        QDateTime::currentDateTime()
-    };
-
-    RevisionNode commit2 = {
-        "0fe4872d2295rr2da057a2f789758edd884f6286",
-        "lalala;",
-        "Halyna",
-        QDateTime::currentDateTime()
-    };
-
-    setInitialNode(initialCommit);
-    addNode(initialCommit, commit1);
-    addNode(commit1, commit2);
-
-    debugTree(mGraph);
 }
 
 /*!
@@ -78,65 +52,60 @@ void RevisionModel::debugTree(const revision_graph &graph) const
 }
 
 /*!
- * \brief RevisionModel::addNode Adds node and creates path from parent node to that node.
- * \param pParentInfo parent node
- * \param pNodeInfo node
+ * \brief RevisionModel::addNode Add new node (vertex to graph), call for each parent if node has many parents (e.g. merge)
+ * \param pParentID ID of parent, may be empty if node nas no parent (e.g. initial commit or filtered data)
+ * \param pNodeInfo Info about new node
  */
-void RevisionModel::addNode(const RevisionNode &pParentInfo, const RevisionNode &pNodeInfo)
+void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pNodeInfo)
 {
     vertex v_new = boost::graph_traits<revision_graph>::null_vertex();
     vertex v_parent = boost::graph_traits<revision_graph>::null_vertex();
-    //find vertexes in graph
-    for(auto v : mNodes)
+    //find vertexes in graph if they are present
+    BGL_FORALL_VERTICES(v, mGraph, revision_graph)
     {
-        auto name = mGraph[v].name;
-        if(name == pNodeInfo.name)
+       const auto &name = mGraph[v].name;
+        if(pNodeInfo.name == name)
         {
             v_new = v;
-            if(boost::graph_traits<revision_graph>::null_vertex() != v_parent)
+            if(boost::graph_traits<revision_graph>::null_vertex() != v_parent || pParentID.empty())
                 break;
         }
-        else if(name == pParentInfo.name)
+        else if(pParentID == name)
         {
             v_parent = v;
             if(boost::graph_traits<revision_graph>::null_vertex() != v_new)
                 break;
         }
     }
-    //if parent not found exit (?)
-    if(v_parent == boost::graph_traits<revision_graph>::null_vertex())
-        return;
-    //create if not found
-    if(v_new == boost::graph_traits<revision_graph>::null_vertex())
+    if(boost::graph_traits<revision_graph>::null_vertex() == v_parent)
     {
-        v_new = boost::add_vertex(pNodeInfo, mGraph);
-        mNodes.insert(v_new);
-    }
-    boost::add_edge(v_parent, v_new, mGraph);
-}
-
-/*!
- * \brief RevisionModel::setInitialNode Sets the node that is a parent for all other nodes (the top node).
- * \param pNodeInfo
- */
-void RevisionModel::setInitialNode(const RevisionNode &pNodeInfo)
-{
-    vertex v_initial = boost::graph_traits<revision_graph>::null_vertex();
-    //find vertexes in graph
-    for(auto v : mNodes)
-    {
-        if(mGraph[v].name == pNodeInfo.name)
+        // parent not found
+        // node has no parent if parent is empty
+        if(!pParentID.empty())
         {
-            v_initial = v;
-            break;
+            RevisionNode parentNodeInfo;
+            parentNodeInfo.name = pParentID;
+            v_parent = boost::add_vertex(parentNodeInfo, mGraph);
         }
     }
-    //exit if parent not found (?)
-    if(v_initial == boost::graph_traits<revision_graph>::null_vertex())
+    if(boost::graph_traits<revision_graph>::null_vertex() == v_new)
     {
-        v_initial = boost::add_vertex(pNodeInfo, mGraph);
-        mNodes.insert(v_initial);
-        mInitialNode = v_initial;
+        //create if not found
+        v_new = boost::add_vertex(pNodeInfo, mGraph);
+    }
+    else
+    {
+        // node already in, modify data, because probably it was empty
+        mGraph[v_new].author = pNodeInfo.author;
+        mGraph[v_new].created = pNodeInfo.created;
+        mGraph[v_new].message = pNodeInfo.message;
+    }
+    if(boost::graph_traits<revision_graph>::null_vertex() != v_parent &&
+            boost::graph_traits<revision_graph>::null_vertex() != v_new &&
+            !boost::edge(v_parent,v_new,mGraph).second // edge doesn't exist
+            )
+    {
+        boost::add_edge(v_parent, v_new, mGraph);
     }
 }
 
@@ -166,13 +135,9 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
     return QVariant();
 }
 
-vertex RevisionModel::initialNode() const
-{
-    return mInitialNode;
-}
-
 revision_graph RevisionModel::graph() const
 {
+    debugTree(mGraph);
     return mGraph;
 }
 

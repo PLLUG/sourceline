@@ -23,6 +23,7 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <QMainWindow>
+class QProcess;
 
 class RevisionModel;
 
@@ -41,6 +42,8 @@ public:
 private:
     Ui::MainWindow *ui;
     RevisionModel *mModel;
+
+    QProcess *mProcess;
 };
 
 #endif // MAINWINDOW_H

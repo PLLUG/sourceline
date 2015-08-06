@@ -24,13 +24,12 @@
 *******************************************************************************/
 #include <QAbstractItemModel>
 #include <boost/graph/adjacency_list.hpp>
-#include <set>
 #include "revisionnode.h"
 
 using revision_graph = boost::adjacency_list<
 boost::listS,
 boost::vecS,
-boost::directedS,
+boost::bidirectionalS, // bidirectional because we want to show lists of parents and children of nodes
 RevisionNode>;
 using vertex = boost::graph_traits<revision_graph>::vertex_descriptor;
 
@@ -48,16 +47,13 @@ public:
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
 
-    vertex initialNode() const;
     revision_graph graph() const;
     void debugTree(const revision_graph &graph) const;
-    void addNode(const RevisionNode &pParentInfo, const RevisionNode &pNodeInfo);
+    void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
     void setInitialNode(const RevisionNode &);
 
 private:
     revision_graph mGraph;
-    vertex mInitialNode;
-    std::set<vertex> mNodes;
 };
 
 #endif // REVISIONMODEL_H
