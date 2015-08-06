@@ -69,8 +69,8 @@ void Console::keyPressEvent(QKeyEvent *e)
         currentCmd.clear();
         break;
     case Qt::Key_Up:
-        insertPlainText(mPreviousCmd);
-        emit signalSendCmd(mPreviousCmd);
+        currentCmd = mPreviousCmd;
+        insertPlainText(currentCmd);
         mPreviousCmd.clear();
         break;
     case Qt::Key_Left:
@@ -96,12 +96,9 @@ void Console::keyPressEvent(QKeyEvent *e)
 
 void Console::moveCursorToEnd()
 {
-    qDebug() << "Position: " << mCursor.position();
-    qDebug() << "Position in block: " << mCursor.positionInBlock();
     if(mCursor.positionInBlock()<2)
     {
         mCursor.setPosition(QTextCursor::EndOfLine);
-        //mCursor.movePosition(QTextCursor::End);
     }
 }
 
