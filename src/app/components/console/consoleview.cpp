@@ -85,6 +85,8 @@ void ConsoleView::execute(const QString &pCommand)
         if(!resultConsole.isEmpty())
             ui->plainTextEdit->putData(" RESULT : " + resultConsole + "~>");
         console->waitForFinished();
+        if(console->exitCode() == 1)
+            ui->plainTextEdit->putData(" ERROR \n~>");
         qDebug() << console->exitCode();
     }
 

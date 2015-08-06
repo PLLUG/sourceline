@@ -69,13 +69,16 @@ void Console::keyPressEvent(QKeyEvent *e)
         currentCmd.clear();
         break;
     case Qt::Key_Up:
-        currentCmd = mPreviousCmd;
-        insertPlainText(currentCmd);
-        mPreviousCmd.clear();
+        if(mCursor.positionInBlock()>2)
+        {
+            currentCmd = mPreviousCmd;
+            insertPlainText(currentCmd);
+            mPreviousCmd.clear();
+        }
         break;
     case Qt::Key_Left:
         if(mCursor.positionInBlock()>2)
-        mCursor.movePosition(QTextCursor::Left);
+            mCursor.movePosition(QTextCursor::Left);
         QPlainTextEdit::keyPressEvent(e);
         break;
     case Qt::Key_Down: break;
@@ -91,7 +94,6 @@ void Console::keyPressEvent(QKeyEvent *e)
         currentCmd.append(e->text());
         emit getData(e->text().toLocal8Bit());
     }
-
 }
 
 void Console::moveCursorToEnd()
