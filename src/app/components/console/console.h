@@ -47,11 +47,14 @@ signals:
     void signalSendCmd(QString);
 
 private:
+    void moveCursorToEnd();
     bool localEchoEnabled;
     QString currentCmd;
+    QString mPreviousCmd;
     int maximumBlockCount = 1000;
     QColor mColorBase = Qt::black;
     QColor mColorInputText = Qt::green;
+    QTextCursor mCursor;
 };
 
 #endif // CONSOLE_H

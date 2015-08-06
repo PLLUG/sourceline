@@ -30,6 +30,7 @@ Console::Console(QWidget *parent)
     : QPlainTextEdit(parent)
     , localEchoEnabled(false)
 {
+    mCursor = textCursor();
     document()->setMaximumBlockCount(maximumBlockCount);
     QPalette p = palette();
     p.setColor(QPalette::Base, mColorBase);
@@ -54,8 +55,9 @@ void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
     case Qt::Key_Backspace:
-        if(!currentCmd.isEmpty())
+        if(!currentCmd.isEmpty() && mCursor.positionInBlock() > 2)
         {
+            moveCursorToEnd();
             currentCmd.remove(currentCmd.length()-1, 1);
             QPlainTextEdit::keyPressEvent(e);
         }
@@ -63,25 +65,45 @@ void Console::keyPressEvent(QKeyEvent *e)
     case Qt::Key_Return:
     case Qt::Key_Enter:
         emit signalSendCmd(currentCmd);
+        mPreviousCmd = currentCmd;
         currentCmd.clear();
         break;
-    case Qt::Key_Left:
-    case Qt::Key_Right:
     case Qt::Key_Up:
-    case Qt::Key_Down:
+        insertPlainText(mPreviousCmd);
+        emit signalSendCmd(mPreviousCmd);
+        mPreviousCmd.clear();
+        break;
+    case Qt::Key_Left:
+        if(mCursor.positionInBlock()>2)
+        mCursor.movePosition(QTextCursor::Left);
+        QPlainTextEdit::keyPressEvent(e);
+        break;
+    case Qt::Key_Down: break;
+    case Qt::Key_Right:
+        mCursor.movePosition(QTextCursor::Right);
         QPlainTextEdit::keyPressEvent(e);
         break;
     default:
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::End);
-        setTextCursor(cursor);
+        moveCursorToEnd();
+        setTextCursor(mCursor);
         if (localEchoEnabled)
             QPlainTextEdit::keyPressEvent(e);
         currentCmd.append(e->text());
         emit getData(e->text().toLocal8Bit());
     }
+
 }
 
+void Console::moveCursorToEnd()
+{
+    qDebug() << "Position: " << mCursor.position();
+    qDebug() << "Position in block: " << mCursor.positionInBlock();
+    if(mCursor.positionInBlock()<2)
+    {
+        mCursor.setPosition(QTextCursor::EndOfLine);
+        //mCursor.movePosition(QTextCursor::End);
+    }
+}
 
 /*!
  * function : Clear console with mouse double click(as example)
