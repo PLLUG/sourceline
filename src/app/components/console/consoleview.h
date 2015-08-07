@@ -3,6 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -21,33 +22,46 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef CONSOLE_H
-#define CONSOLE_H
+#ifndef CONSOLEVIEW_H
+#define CONSOLEVIEW_H
 
-#include <QPlainTextEdit>
+#include <QWidget>
 
-class Console : public QPlainTextEdit
+namespace Ui {
+class ConsoleView;
+}
+class QProcess;
+
+class ConsoleView : public QWidget
 {
     Q_OBJECT
+
 public:
-    explicit Console(QWidget *parent = 0);
-    void putData(const QByteArray &data);
-    void setLocalEchoEnabled(bool set);
-
-protected:
-    virtual void keyPressEvent(QKeyEvent *e);
-//    virtual void mousePressEvent(QMouseEvent *e);
-    virtual void mouseDoubleClickEvent(QMouseEvent *e);
-    virtual void contextMenuEvent(QContextMenuEvent *e);
-
-signals:
-    void getData(const QByteArray &data);
-    void signalSendCmd(QString);
+    explicit ConsoleView(QWidget *parent = 0);
+    ~ConsoleView();
+    void execute(const QString &pCommand);
+    const QString consolePath();
+    QString osInfo() const;
+public slots:
+    void slotSetConsolePath(const QString &pPath);
+    void slotReadConsoleOutput();
+    void slotExec(QString cmd);
 
 private:
-    bool localEchoEnabled;
-    QString currentCmd;
+    void startProcess();
+    QByteArray clearAppend(const QString &tmp);
 
+private slots:
+    void slotPrintWorkingDir(const QString &dir = QString());
+
+
+private:
+
+    bool mDirPrinted;
+    QByteArray mData;
+    QProcess *mProcess;
+    QString mPath;
+    Ui::ConsoleView *ui;
 };
 
-#endif // CONSOLE_H
+#endif // CONSOLEVIEW_H

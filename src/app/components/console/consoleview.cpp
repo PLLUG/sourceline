@@ -3,7 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
-***                                                                          ***
+***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
 ***    SourceLine is free software: you can redistribute it and/or modify    ***
@@ -26,6 +26,7 @@
 #include <QProcess>
 #include <QDebug>
 #include <QDir>
+#include <QSysInfo>
 
 ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
@@ -33,10 +34,11 @@ ConsoleView::ConsoleView(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
+    ui->plainTextEdit->putData(clearAppend("~>"));
+    mDirPrinted = true;
+
     mProcess = new QProcess(this);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-//    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Git\\bin\\;");
-//    env.insert("PATH", env.value("Path") + ";C:\\Program Files (x86)\\Subversion\\bin\\;");
     mProcess->setProcessEnvironment(env);
     mProcess->setProcessChannelMode(QProcess::MergedChannels);
 
@@ -52,23 +54,99 @@ ConsoleView::~ConsoleView()
     delete ui;
 }
 
-void ConsoleView::execute(QString pCommand)
+void ConsoleView::execute(const QString &pCommand)
 {
     ui->plainTextEdit->putData("\n");
     mProcess->write(pCommand.toUtf8());
-    if(mProcess->atEnd() && !dirPrinted)
+    if(mProcess->atEnd() && !mDirPrinted)
     {
-        qDebug() << "dir print from exec";
         slotPrintWorkingDir();
+    }
+    QProcess* console = nullptr;
+    if(osInfo()=="windows")
+    {
+        console = new QProcess(this);
+        QByteArray resultConsole;
+        QStringList args;
+        args << "/c"  << pCommand;
+        console->start("C:\\Windows\\System32\\cmd", args);
+        if (!console->waitForStarted())
+        {
+            qDebug() << " cmd crashed.";
+            return;
+        }
+
+        console->waitForFinished();
+        console->waitForReadyRead();
+        console->waitForBytesWritten();
+        resultConsole = console->readAll();
+        qDebug() << resultConsole;
+
+        if(!resultConsole.isEmpty())
+            ui->plainTextEdit->putData(" RESULT : " + resultConsole + "~>");
+        console->waitForFinished();
+        if(console->exitCode() == 1)
+            ui->plainTextEdit->putData(" ERROR \n~>");
+        qDebug() << console->exitCode();
+    }
+
+    else if(QSysInfo::kernelType()=="linux")
+    {
+        console = new QProcess(this);
+        console->start("sh");
+        qDebug() << QDir::currentPath();
+        if (!console->waitForStarted())
+        {
+            qDebug() << " sh crashed.";
+            return;
+        }
+        console->write(clearAppend(pCommand));
+        console->closeWriteChannel();
+
+        console->waitForFinished();
+        QByteArray resultSH = console->readAll();
+        console->close();
+        if(!resultSH.isEmpty())
+            ui->plainTextEdit->putData(" RESULT : " + resultSH + "~>");
+    }
+
+    else
+    {
+        ui->plainTextEdit->clear();
+        ui->plainTextEdit->putData("\nProductType: " + clearAppend(QSysInfo::productType())
+                                   + "\nPrettyProductName: " + clearAppend(QSysInfo::prettyProductName())
+                                   + "\nProductVersion: " + clearAppend(QSysInfo::productVersion())
+                                   + "\nKernelType: " + clearAppend(QSysInfo::kernelType())
+                                   + "\nKernelVersion: " + clearAppend(QSysInfo::kernelVersion())
+                                   + "\n NOW THIS OS IS NOT SUPPORTED.");
+        ui->plainTextEdit->setDisabled(true);
+    }
+
+    //Command inside СonsoleView
+    if(pCommand == "close\n")
+    {
+        qApp->quit();
     }
 }
 
-QString ConsoleView::consolePath()
+/*!
+ * function System Info.
+ * To know what in what OS is running SL.
+ */
+QString ConsoleView::osInfo() const
+{
+    return QSysInfo::productType();
+}
+
+/*!
+ * function what return current PATH for QProcess::setWorkingDirectory
+ */
+const QString ConsoleView::consolePath()
 {
     return mPath;
 }
 
-void ConsoleView::slotSetConsolePath(QString pPath)
+void ConsoleView::slotSetConsolePath(const QString &pPath)
 {
     if(!mPath.isEmpty() && (mPath != pPath))
     {
@@ -93,15 +171,6 @@ void ConsoleView::slotReadConsoleOutput()
     QByteArray output = mProcess->readAll();
     ui->plainTextEdit->putData(output);
     ui->plainTextEdit->putData("\n");
-//    if(mProcess->waitForReadyRead(100))
-//    {
-//        qDebug() << "enable data to read!";
-//        slotReadConsoleOutput();
-//    }else
-//    {
-//        qDebug() << "dir print from read";
-//    }
-
 
     if (!mProcess->atEnd())
     {
@@ -116,8 +185,8 @@ void ConsoleView::slotReadConsoleOutput()
 void ConsoleView::slotExec(QString cmd)
 {
     cmd +='\n';
-    dirPrinted = false;
-    this->execute(cmd);
+    mDirPrinted = false;
+    execute(cmd);
 }
 
 void ConsoleView::startProcess()
@@ -132,13 +201,16 @@ void ConsoleView::startProcess()
     }
 }
 
-void ConsoleView::slotPrintWorkingDir(QString dir)
+QByteArray ConsoleView::clearAppend(const QString &tmp)
+{
+    mData.clear();
+    return mData.append(tmp);
+}
+
+void ConsoleView::slotPrintWorkingDir(const QString &dir)
 {
     QString lWorkDir = dir;
-//    if(lWorkDir.isEmpty())
-//    {
-//        lWorkDir = QDir::currentPath();
-//    }
-        ui->plainTextEdit->putData(QByteArray().append(lWorkDir+"~>"));
-        dirPrinted = true;
+
+    ui->plainTextEdit->putData(clearAppend(lWorkDir+"~>"));
+    mDirPrinted = true;
 }

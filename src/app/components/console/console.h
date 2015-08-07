@@ -3,6 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2014  by                                                ***
 ***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -21,80 +22,37 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include "console.h"
+#ifndef CONSOLE_H
+#define CONSOLE_H
 
-#include <QScrollBar>
+#include <QPlainTextEdit>
 
-#include <QDebug>
-
-Console::Console(QWidget *parent)
-    : QPlainTextEdit(parent)
-    , localEchoEnabled(false)
+class Console : public QPlainTextEdit
 {
-    document()->setMaximumBlockCount(100);
-    QPalette p = palette();
-    p.setColor(QPalette::Base, Qt::black);
-    p.setColor(QPalette::Text, Qt::green);
-    setPalette(p);
-}
+    Q_OBJECT
+public:
+    explicit Console(QWidget *parent = 0);
+    void putData(const QByteArray &data);
+    void setLocalEchoEnabled(bool set);
 
-void Console::putData(const QByteArray &data)
-{
-    insertPlainText(QString(data.constData()));
+protected:
+    virtual void keyPressEvent(QKeyEvent *e);
+    virtual void mouseDoubleClickEvent(QMouseEvent *e);
+    virtual void contextMenuEvent(QContextMenuEvent *e);
 
-    QScrollBar *bar = verticalScrollBar();
-    bar->setValue(bar->maximum());
-}
+signals:
+    void getData(const QByteArray &data);
+    void signalSendCmd(QString);
 
-void Console::setLocalEchoEnabled(bool set)
-{
-    localEchoEnabled = set;
-}
+private:
+    bool mLocalEchoEnabled;
+    int mMaximumBlockCount;
+    QString mCurrentCmd;
+    QString mPreviousCmd;
+    QColor mColorBase;
+    QColor mColorInputText;
+    QTextCursor mCursor;
+    void moveCursorToEnd();
+};
 
-void Console::keyPressEvent(QKeyEvent *e)
-{
-    switch (e->key()) {
-    case Qt::Key_Backspace:
-        if(!currentCmd.isEmpty())
-        {
-            currentCmd.remove(currentCmd.length()-1, 1);
-            QPlainTextEdit::keyPressEvent(e);
-        }
-        break;
-    case Qt::Key_Return:
-    case Qt::Key_Enter:
-        emit signalSendCmd(currentCmd);
-        currentCmd.clear();
-        break;
-    case Qt::Key_Left:
-    case Qt::Key_Right:
-    case Qt::Key_Up:
-    case Qt::Key_Down:
-        QPlainTextEdit::keyPressEvent(e);
-        break;
-    default:
-        QTextCursor cursor = textCursor();
-        cursor.movePosition(QTextCursor::End);
-        setTextCursor(cursor);
-        if (localEchoEnabled)
-            QPlainTextEdit::keyPressEvent(e);
-        currentCmd.append(e->text());
-        emit getData(e->text().toLocal8Bit());
-    }
-}
-
-//void Console::mousePressEvent(QMouseEvent *e)
-//{
-//    Q_UNUSED(e)
-//    setFocus();
-//}
-
-void Console::mouseDoubleClickEvent(QMouseEvent *e)
-{
-    Q_UNUSED(e)
-}
-
-void Console::contextMenuEvent(QContextMenuEvent *e)
-{
-    Q_UNUSED(e)
-}
+#endif // CONSOLE_H
