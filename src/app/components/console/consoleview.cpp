@@ -62,8 +62,8 @@ void ConsoleView::execute(const QString &pCommand)
     {
         slotPrintWorkingDir();
     }
-    QProcess* console;
-    if(OsInfo()=="windows")
+    QProcess* console = nullptr;
+    if(osInfo()=="windows")
     {
         console = new QProcess(this);
         QByteArray resultConsole;
@@ -90,7 +90,7 @@ void ConsoleView::execute(const QString &pCommand)
         qDebug() << console->exitCode();
     }
 
-    else if(OsInfo()=="ubuntu")
+    else if(QSysInfo::kernelType()=="linux")
     {
         console = new QProcess(this);
         console->start("sh");
@@ -133,7 +133,7 @@ void ConsoleView::execute(const QString &pCommand)
  * function System Info.
  * To know what in what OS is running SL.
  */
-const QString ConsoleView::OsInfo()
+QString ConsoleView::osInfo() const
 {
     return QSysInfo::productType();
 }
@@ -186,7 +186,7 @@ void ConsoleView::slotExec(QString cmd)
 {
     cmd +='\n';
     mDirPrinted = false;
-    this->execute(cmd);
+    execute(cmd);
 }
 
 void ConsoleView::startProcess()
@@ -207,7 +207,7 @@ QByteArray ConsoleView::clearAppend(const QString &tmp)
     return mData.append(tmp);
 }
 
-void ConsoleView::slotPrintWorkingDir(QString dir)
+void ConsoleView::slotPrintWorkingDir(const QString &dir)
 {
     QString lWorkDir = dir;
 

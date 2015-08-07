@@ -73,7 +73,7 @@ void Console::keyPressEvent(QKeyEvent *e)
         mCurrentCmd.clear();
         break;
     case Qt::Key_Up:
-        if(mCursor.positionInBlock()>2)
+        if(mCursor.positionInBlock()>=2)
         {
             mCurrentCmd = mPreviousCmd;
             insertPlainText(mCurrentCmd);

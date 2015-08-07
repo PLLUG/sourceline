@@ -41,7 +41,7 @@ public:
     ~ConsoleView();
     void execute(const QString &pCommand);
     const QString consolePath();
-    const QString OsInfo();
+    QString osInfo() const;
 public slots:
     void slotSetConsolePath(const QString &pPath);
     void slotReadConsoleOutput();
@@ -52,7 +52,7 @@ private:
     QByteArray clearAppend(const QString &tmp);
 
 private slots:
-    void slotPrintWorkingDir(QString dir = QString());
+    void slotPrintWorkingDir(const QString &dir = QString());
 
 
 private:
