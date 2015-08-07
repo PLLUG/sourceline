@@ -35,7 +35,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
     ui->plainTextEdit->putData(clearAppend("~>"));
-    dirPrinted = true;
+    mDirPrinted = true;
 
     mProcess = new QProcess(this);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -58,7 +58,7 @@ void ConsoleView::execute(const QString &pCommand)
 {
     ui->plainTextEdit->putData("\n");
     mProcess->write(pCommand.toUtf8());
-    if(mProcess->atEnd() && !dirPrinted)
+    if(mProcess->atEnd() && !mDirPrinted)
     {
         slotPrintWorkingDir();
     }
@@ -185,7 +185,7 @@ void ConsoleView::slotReadConsoleOutput()
 void ConsoleView::slotExec(QString cmd)
 {
     cmd +='\n';
-    dirPrinted = false;
+    mDirPrinted = false;
     this->execute(cmd);
 }
 
@@ -212,5 +212,5 @@ void ConsoleView::slotPrintWorkingDir(QString dir)
     QString lWorkDir = dir;
 
     ui->plainTextEdit->putData(clearAppend(lWorkDir+"~>"));
-    dirPrinted = true;
+    mDirPrinted = true;
 }

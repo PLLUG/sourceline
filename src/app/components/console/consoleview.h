@@ -57,7 +57,7 @@ private slots:
 
 private:
 
-    bool dirPrinted;
+    bool mDirPrinted;
     QByteArray mData;
     QProcess *mProcess;
     QString mPath;

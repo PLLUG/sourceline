@@ -28,10 +28,14 @@
 
 Console::Console(QWidget *parent)
     : QPlainTextEdit(parent)
-    , localEchoEnabled(false)
+    , mLocalEchoEnabled(false)
 {
     mCursor = textCursor();
-    document()->setMaximumBlockCount(maximumBlockCount);
+    mMaximumBlockCount = 1000;
+    mColorBase = Qt::black;
+    mColorInputText = Qt::green;
+
+    document()->setMaximumBlockCount(mMaximumBlockCount);
     QPalette p = palette();
     p.setColor(QPalette::Base, mColorBase);
     p.setColor(QPalette::Text, mColorInputText);
@@ -48,31 +52,31 @@ void Console::putData(const QByteArray &data)
 
 void Console::setLocalEchoEnabled(bool set)
 {
-    localEchoEnabled = set;
+    mLocalEchoEnabled = set;
 }
 
 void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
     case Qt::Key_Backspace:
-        if(!currentCmd.isEmpty() && mCursor.positionInBlock() > 2)
+        if(!mCurrentCmd.isEmpty() && mCursor.positionInBlock() > 2)
         {
             moveCursorToEnd();
-            currentCmd.remove(currentCmd.length()-1, 1);
+            mCurrentCmd.remove(mCurrentCmd.length()-1, 1);
             QPlainTextEdit::keyPressEvent(e);
         }
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter:
-        emit signalSendCmd(currentCmd);
-        mPreviousCmd = currentCmd;
-        currentCmd.clear();
+        emit signalSendCmd(mCurrentCmd);
+        mPreviousCmd = mCurrentCmd;
+        mCurrentCmd.clear();
         break;
     case Qt::Key_Up:
         if(mCursor.positionInBlock()>2)
         {
-            currentCmd = mPreviousCmd;
-            insertPlainText(currentCmd);
+            mCurrentCmd = mPreviousCmd;
+            insertPlainText(mCurrentCmd);
             mPreviousCmd.clear();
         }
         break;
@@ -89,9 +93,9 @@ void Console::keyPressEvent(QKeyEvent *e)
     default:
         moveCursorToEnd();
         setTextCursor(mCursor);
-        if (localEchoEnabled)
+        if (mLocalEchoEnabled)
             QPlainTextEdit::keyPressEvent(e);
-        currentCmd.append(e->text());
+        mCurrentCmd.append(e->text());
         emit getData(e->text().toLocal8Bit());
     }
 }
