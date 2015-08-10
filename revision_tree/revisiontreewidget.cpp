@@ -7,14 +7,14 @@
 #include <QPaintEvent>
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
-    QOpenGLWidget{parent},
-    mVertexBuffer{QOpenGLBuffer::VertexBuffer}
+    QWidget{parent}
+//    mVertexBuffer{QOpenGLBuffer::VertexBuffer}
 {
 }
 
 RevisionTreeWidget::~RevisionTreeWidget()
 {
-    mVertexBuffer.destroy();
+//    mVertexBuffer.destroy();
 }
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
@@ -39,6 +39,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     }
 }
 
+/*
 void RevisionTreeWidget::initializeGL()
 {
     QOpenGLWidget::initializeGL();
@@ -50,7 +51,9 @@ void RevisionTreeWidget::initializeGL()
 //        mVertexBuffer.bind();
 //    }
 }
+*/
 
+/*
 void RevisionTreeWidget::resizeGL(int w, int h)
 {
     QOpenGLWidget::resizeGL(w,h);
@@ -59,12 +62,14 @@ void RevisionTreeWidget::resizeGL(int w, int h)
 void RevisionTreeWidget::paintGL()
 {
     QOpenGLWidget::paintGL();
-    glClearColor(1,1,1,1);
+//    glClearColor(1,1,1,1);
 }
+*/
 
 void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 {
-    QOpenGLWidget::paintEvent(e);
+    QWidget::paintEvent(e);
+//    QOpenGLWidget::paintEvent(e);
 
     QPainter painter(this);
 
@@ -81,7 +86,8 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     {
        int row = get(rowIndex, v);
        int col = get(colIndex, v);
-       painter.drawEllipse(QPoint(width*col, width*row), radius, radius);
+       painter.drawEllipse(QPoint(width*col, width*row),
+                           static_cast<int>(radius), static_cast<int>(radius));
     }
 
     BGL_FORALL_EDGES(e, mGraph, revision_graph)
@@ -96,11 +102,13 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 
 void RevisionTreeWidget::resizeEvent(QResizeEvent *e)
 {
-    QOpenGLWidget::resizeEvent(e);
+    QWidget::resizeEvent(e);
+//    QOpenGLWidget::resizeEvent(e);
 }
 
 bool RevisionTreeWidget::event(QEvent *e)
 {
-    QOpenGLWidget::event(e);
+    return QWidget::event(e);
+//    QOpenGLWidget::event(e);
 }
 
