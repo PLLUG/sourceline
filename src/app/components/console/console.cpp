@@ -92,12 +92,15 @@ void Console::keyPressEvent(QKeyEvent *e)
         QPlainTextEdit::keyPressEvent(e);
         break;
     default:
+        if (!(e->matches(QKeySequence::Copy) || e->key() == Qt::Key_Control))
+        {
         moveCursorToEnd();
         setTextCursor(mCursor);
         if (mLocalEchoEnabled)
-            QPlainTextEdit::keyPressEvent(e);
         mCurrentCmd.append(e->text());
         emit getData(e->text().toLocal8Bit());
+        }
+        QPlainTextEdit::keyPressEvent(e);
     }
 }
 
