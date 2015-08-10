@@ -60,7 +60,8 @@ void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
     case Qt::Key_Backspace:
-        if(!mCurrentCmd.isEmpty() && mCursor.positionInBlock() > mReadOnlyLen)
+        //if(!mCurrentCmd.isEmpty() && mCursor.positionInBlock() > mReadOnlyLen)
+        if(mCursor.positionInBlock() > mReadOnlyLen)
         {
             moveCursorToEnd();
             mCurrentCmd.remove(mCurrentCmd.length()-1, 1);

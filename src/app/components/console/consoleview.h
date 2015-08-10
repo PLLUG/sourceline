@@ -59,6 +59,7 @@ private:
 
     bool mDirPrinted;
     QByteArray mData;
+    QByteArray mReadOnlyIndicator;
     QProcess *mProcess;
     QString mPath;
     Ui::ConsoleView *ui;
