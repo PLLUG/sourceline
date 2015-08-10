@@ -8,13 +8,11 @@
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent}
-//    mVertexBuffer{QOpenGLBuffer::VertexBuffer}
 {
 }
 
 RevisionTreeWidget::~RevisionTreeWidget()
 {
-//    mVertexBuffer.destroy();
 }
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
@@ -39,37 +37,9 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     }
 }
 
-/*
-void RevisionTreeWidget::initializeGL()
-{
-    QOpenGLWidget::initializeGL();
-
-//    if(!mVertexBuffer.isCreated())
-//    {
-//        mVertexBuffer.create();
-//        mVertexBuffer.setUsagePattern(QOpenGLBuffer::StaticDraw);
-//        mVertexBuffer.bind();
-//    }
-}
-*/
-
-/*
-void RevisionTreeWidget::resizeGL(int w, int h)
-{
-    QOpenGLWidget::resizeGL(w,h);
-}
-
-void RevisionTreeWidget::paintGL()
-{
-    QOpenGLWidget::paintGL();
-//    glClearColor(1,1,1,1);
-}
-*/
-
 void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
-//    QOpenGLWidget::paintEvent(e);
 
     QPainter painter(this);
 
@@ -103,12 +73,10 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 void RevisionTreeWidget::resizeEvent(QResizeEvent *e)
 {
     QWidget::resizeEvent(e);
-//    QOpenGLWidget::resizeEvent(e);
 }
 
 bool RevisionTreeWidget::event(QEvent *e)
 {
     return QWidget::event(e);
-//    QOpenGLWidget::event(e);
 }
 
