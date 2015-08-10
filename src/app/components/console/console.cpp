@@ -99,7 +99,7 @@ void Console::keyPressEvent(QKeyEvent *e)
         setTextCursor(mCursor);
         if (mLocalEchoEnabled)
         mCurrentCmd.append(e->text());
-        emit getData(e->text().toLocal8Bit());
+        emit dataChanged(e->text().toLocal8Bit());
         }
         QPlainTextEdit::keyPressEvent(e);
     }
@@ -114,7 +114,9 @@ void Console::moveCursorToEnd()
 }
 
 /*!
- * function : Clear console with mouse double click(as example)
+ * \brief Console::mouseDoubleClickEvent,
+ * Clear console with mouse double click(as example)
+ * \param e
  */
 void Console::mouseDoubleClickEvent(QMouseEvent *e)
 {
@@ -123,6 +125,10 @@ void Console::mouseDoubleClickEvent(QMouseEvent *e)
     insertPlainText("Console was cleared with double clicking!\n~>");
 }
 
+/*!
+ * \brief Console::contextMenuEvent
+ * \param e
+ */
 void Console::contextMenuEvent(QContextMenuEvent *e)
 {
     Q_UNUSED(e)

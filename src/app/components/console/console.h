@@ -41,7 +41,7 @@ protected:
     virtual void contextMenuEvent(QContextMenuEvent *e);
 
 signals:
-    void getData(const QByteArray &data);
+    void dataChanged(const QByteArray &data);
     void signalSendCmd(QString);
 
 private:

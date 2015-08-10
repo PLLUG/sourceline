@@ -47,6 +47,11 @@ public slots:
     void slotReadConsoleOutput();
     void slotExec(QString cmd);
 
+    void debugCursorPositionChanged();
+    void debugTextChanged();
+    void debugdataChanged(QByteArray data);
+    void debugBlockCountChanged(int count);
+
 private:
     void startProcess();
     QByteArray clearAppend(const QString &tmp);

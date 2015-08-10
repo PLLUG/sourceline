@@ -34,8 +34,9 @@ ConsoleView::ConsoleView(QWidget *parent) :
 {
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
-    ui->plainTextEdit->putData(clearAppend("~>"));
+    ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
     mDirPrinted = true;
+    mReadOnlyIndicator = "~>";
 
     mProcess = new QProcess(this);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -45,6 +46,30 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
     connect(mProcess, SIGNAL(readyRead()), this, SLOT(slotReadConsoleOutput()));
     connect(mProcess, SIGNAL(readChannelFinished()), SLOT(slotPrintWorkingDir()));
+    connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
+    connect(ui->plainTextEdit, SIGNAL(textChanged()), SLOT(debugTextChanged()));
+    connect(ui->plainTextEdit, SIGNAL(dataChanged(QByteArray)),SLOT(debugdataChanged(QByteArray)));
+    connect(ui->plainTextEdit, SIGNAL(blockCountChanged(int)),SLOT(debugBlockCountChanged(int)));
+}
+
+void ConsoleView::debugCursorPositionChanged()
+{
+    qDebug() << " ConsoleView::Cursor position changed;" ;
+}
+
+void ConsoleView::debugTextChanged()
+{
+    qDebug() << " ConsoleView::Text changed;";
+}
+
+void ConsoleView::debugdataChanged(QByteArray data)
+{
+    qDebug() << "ConsoleView:: Data :" << data;
+}
+
+void ConsoleView::debugBlockCountChanged(int count)
+{
+    qDebug() << "ConsoleView::BlockCountChanged to:" << count;
 }
 
 ConsoleView::~ConsoleView()
@@ -83,10 +108,12 @@ void ConsoleView::execute(const QString &pCommand)
         qDebug() << resultConsole;
 
         if(!resultConsole.isEmpty())
-            ui->plainTextEdit->putData(" RESULT : " + resultConsole + "~>");
+            ui->plainTextEdit->putData(" RESULT : "
+                                       + resultConsole
+                                       + mReadOnlyIndicator);
         console->waitForFinished();
         if(console->exitCode() == 1)
-            ui->plainTextEdit->putData(" ERROR \n~>");
+            ui->plainTextEdit->putData(" ERROR \n" + mReadOnlyIndicator);
         qDebug() << console->exitCode();
     }
 
@@ -107,7 +134,9 @@ void ConsoleView::execute(const QString &pCommand)
         QByteArray resultSH = console->readAll();
         console->close();
         if(!resultSH.isEmpty())
-            ui->plainTextEdit->putData(" RESULT : " + resultSH + "~>");
+            ui->plainTextEdit->putData(" RESULT : "
+                                       + resultSH
+                                       + mReadOnlyIndicator);
     }
 
     else
@@ -211,6 +240,6 @@ void ConsoleView::slotPrintWorkingDir(const QString &dir)
 {
     QString lWorkDir = dir;
 
-    ui->plainTextEdit->putData(clearAppend(lWorkDir+"~>"));
+    ui->plainTextEdit->putData(clearAppend(lWorkDir + mReadOnlyIndicator));
     mDirPrinted = true;
 }
