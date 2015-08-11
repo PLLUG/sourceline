@@ -105,6 +105,7 @@ void FileView::setRootPath(const QString &pPath)
     setTextToLineEdit(pPath);
     mFileModel->setRootPath(pPath);
     ui->listView->setRootIndex(mFileModel->index(pPath));
+
 }
 
 void FileView::setTextToLineEdit(const QString &path)

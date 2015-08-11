@@ -13,7 +13,7 @@ public:
      * \brief roles for icons for files
      */
     enum Roles {
-        FileAttributeRole = Qt::DecorationRole,
+        FileAttributeRole = Qt::UserRole,
         FileAttributeIconRole = Qt::UserRole + 1,
     };
 
@@ -29,21 +29,18 @@ public:
      * \param role item
      * \return icon
      */
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole);
+    QVariant data(const QModelIndex &index, int role);
 
     /*!
      * \brief add pair role->icon to hash
      * \param role for file
      * \param path to icon
      */
-    void setIconForRole(Roles role, QString &path);
+    void setIconForRole(QString &path);
 
 private:
 
-    /*!
-     * \brief hash role->icon
-     */
-    QHash<int,QString> hashRoleIcon;
+    QString pathToIcon;
 };
 
 #endif // FILEMODEL_H
