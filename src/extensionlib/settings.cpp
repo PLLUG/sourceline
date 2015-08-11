@@ -92,7 +92,7 @@ void Settings::commit()
     QMap<QString, QVariant>::const_iterator it;
     for (it = mModifiedSettingsByName.begin();
          it != mModifiedSettingsByName.end();
-         it++)
+         ++it)
     {
         mSettingValueByName.insert(it.key(), it.value());
         notifySubscribers(it.key(), it.value());
@@ -180,7 +180,7 @@ void Settings::slotSetSettings(QMap<QString, QVariant> pMap)
     QMap<QString, QVariant>::const_iterator it;
     for (it = pMap.begin();
          it != pMap.end();
-         it++)
+         ++it)
     {
         mSettingValueByName.insert(it.key(), it.value());
         setValue(it.key(), it.value());

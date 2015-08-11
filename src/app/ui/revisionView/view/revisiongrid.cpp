@@ -33,6 +33,7 @@ RevisionGrid::RevisionGrid()
 {
     mSize = QSizeF(250, 250);
 //    setFlag(ItemIsMovable);
+    mRoot = new RevisionNode();
 }
 
 void RevisionGrid::setBoundingRect(const QSizeF size)

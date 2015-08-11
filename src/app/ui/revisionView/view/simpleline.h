@@ -32,7 +32,7 @@ class RevisionNodeItem;
 class SimpleLine : public QGraphicsItem
 {
 public:
-    SimpleLine(QGraphicsItem *parent = 0);
+    explicit SimpleLine(QGraphicsItem *parent = 0);
 
     QRectF boundingRect() const;
     void paint( QPainter *painter, QStyleOptionGraphicsItem *option, QWidget *widget );

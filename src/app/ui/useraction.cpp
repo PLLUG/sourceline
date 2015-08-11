@@ -26,13 +26,13 @@
 UserAction::UserAction( QObject *parent) :
     QAction(parent)
 {
-
+    mCommandKind = Commands::UknownCommand;
 }
 
 UserAction::UserAction(const QString &text, QObject *parent) :
     QAction(text, parent)
 {
-
+    mCommandKind = Commands::UknownCommand;
 }
 
 Commands::CommandKind UserAction::commandKind() const

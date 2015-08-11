@@ -39,6 +39,7 @@ AbstractGraphicsView::AbstractGraphicsView()
 {
     mSize = QSizeF(150, 150);
     setFlag(ItemClipsChildrenToShape);
+    mModel = nullptr;
 }
 
 AbstractGraphicsView::~AbstractGraphicsView()
@@ -112,10 +113,10 @@ void AbstractGraphicsView::updateModelData()
                 connect(mItems.last(), SIGNAL(branch(AbstractRevisionDelegate*)), this, SLOT(branchClicked(AbstractRevisionDelegate*)));
             }
         }
-        AbstractRevisionDelegate *temp;
+
         for (int i = 0; i < mItems.size(); ++i)
         {
-            temp = mItems.at(i);
+            AbstractRevisionDelegate *temp = mItems.at(i);
             temp->setData(AbstractRevisionDelegate::DR_Drawing, mModel->data(mModel->index(i, 0), Qt::DisplayRole));
             temp->setData(AbstractRevisionDelegate::DR_Text, mModel->data(mModel->index(i, 2), Qt::DisplayRole));
             temp->setData(AbstractRevisionDelegate::DR_Id, mModel->data(mModel->index(i, 1), Qt::DisplayRole));

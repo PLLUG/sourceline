@@ -95,10 +95,9 @@ void AbstractRevisionDelegate::paint(QPainter *painter, const QStyleOptionGraphi
         if ( drawingData.contains("branches") )
         {
             QList<QVariant> br = drawingData.value("branches").toList();
-            int linePos;
             for (int i = 0; i < br.size() ; ++i)
             {
-                linePos = br.at(i).toInt();
+                int linePos = br.at(i).toInt();
                 QPainterPath path;
                 path.moveTo(qreal((pos) * mGridStep), qreal(option->rect.center().y()));
                 QRectF r(qreal((pos) * mGridStep), qreal(option->rect.center().y()),
@@ -129,11 +128,10 @@ void AbstractRevisionDelegate::paint(QPainter *painter, const QStyleOptionGraphi
         }
         if ( drawingData.contains("branchesAfter") )
         {
-            QList<QVariant> after = drawingData.value("branchesAfter").toList();
-            int value;
+            QList<QVariant> after = drawingData.value("branchesAfter").toList();            
             for (int i = 0; i < after.size(); ++i)
             {
-                value = after.at(i).toInt();
+                int value = after.at(i).toInt();
                 painter->drawLine(QPoint((value + 1) * mGridStep, option->rect.y()),
                                   QPoint((value + 1)* mGridStep, option->rect.bottom()));
             }

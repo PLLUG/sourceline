@@ -40,7 +40,7 @@ class AbstractRevisionDelegate : public QObject, public QGraphicsItem
     friend class Bubble;
 public:
     enum DataRole { DR_Drawing, DR_Text, DR_Id };
-    AbstractRevisionDelegate(QGraphicsItem *parent = 0);
+    explicit AbstractRevisionDelegate(QGraphicsItem *parent = 0);
     QRectF boundingRect() const;
     void setSize(qreal width, qreal height);
 

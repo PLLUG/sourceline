@@ -25,6 +25,8 @@
 
 Node::Node()
 {
+    mX = 0;
+    mY = 0;
 }
 
 void Node::setCoorginate(int x, int y)

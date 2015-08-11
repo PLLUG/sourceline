@@ -34,7 +34,7 @@ class Branch;
 class RevisionItem : public Node
 {
 public:
-    RevisionItem(const QString &message);
+    explicit RevisionItem(const QString &message);
 
     QString message() const { return mMessage; }
     void addBranch(RevisionItem *b);

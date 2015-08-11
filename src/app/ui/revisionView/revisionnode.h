@@ -39,7 +39,7 @@ public:
                         IDR_DrawRole
                       };
     RevisionNode();
-    RevisionNode(const QString &message);
+    explicit RevisionNode(const QString &message);
 
     int count() const;
     const RevisionNode *node(int rev) const;

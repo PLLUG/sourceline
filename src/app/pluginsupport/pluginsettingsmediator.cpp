@@ -32,6 +32,7 @@ PluginSettingsMediator::PluginSettingsMediator(QObject *parent) :
     mManager(NULL),
     mInfoDialog(NULL)
 {
+    mSettings = new Settings(this);
 }
 
 void PluginSettingsMediator::setPluginManager(PluginManager *pManager)

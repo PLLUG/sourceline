@@ -33,7 +33,7 @@ class EXTENSIONSSHARED_EXPORT Plugin :
     Q_OBJECT
     Q_INTERFACES(PluginInterface)
 public:
-    Plugin(QObject *pParent = 0);
+    explicit Plugin(QObject *pParent = 0);
     QObjectList components() const;
 protected:
      void addComponent(QObject *pComponent);

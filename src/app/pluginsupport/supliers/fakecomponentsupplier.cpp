@@ -27,6 +27,7 @@
 
 FakeComponentSupplier::FakeComponentSupplier()
 {
+    //mDialog need init
 }
 
 QString FakeComponentSupplier::className() const

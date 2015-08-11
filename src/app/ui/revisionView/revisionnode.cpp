@@ -31,6 +31,8 @@ RevisionNode::RevisionNode() :
     mMergeTo(0),
     mPos(0)
 {
+    branchCount = 0;
+    isLast = true;
 }
 
 RevisionNode::RevisionNode(const QString &message)
