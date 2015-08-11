@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <iostream>
 #include <boost/graph/topological_sort.hpp>
+#include <algorithm>
 
 RevisionTree::RevisionTree(QWidget *parent) :
     QWidget(parent),
@@ -45,6 +46,28 @@ void RevisionTree::setGraph(const revision_graph &pGraph)
     mGraph = pGraph;
     clearScene();
     read();
+}
+
+std::vector<vertex> *RevisionTree::getSortedGraphByTime(const revision_graph &graph)
+{
+    int verticesNumb = num_vertices(graph);
+    std::vector< vertex > *rVector = new std::vector< vertex >(verticesNumb);
+
+    // Copying vertices from graph to rVector
+    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
+    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
+    {
+        rVector->push_back(*vi);
+    }
+
+    // Sorting vertices in rVector
+    std::sort(rVector->begin(), rVector->end(),
+              [&graph](const vertex &vert1, const vertex &vert2) -> bool
+    {
+        return graph[vert1].created < graph[vert2].created;
+    });
+
+    return rVector;
 }
 
 void RevisionTree::clearScene()
