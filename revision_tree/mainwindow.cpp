@@ -27,6 +27,9 @@
 #include "revisiontreewidget.h"
 #include <QProcess>
 #include <QDebug>
+#include <QString>
+#include "revisiontree.h"
+#include <vector>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -88,6 +91,19 @@ MainWindow::MainWindow(QWidget *parent) :
     arguments << "log" << R"(--pretty=format:"H:[%H] P:[%P] an:[%an] ae:[%ae] at:[%at]%n" )";
 
     mProcess->start(program, arguments);
+
+    /*std::vector<vertex> *lVector = RevisionTree::getSortedGraphByTime(mModel->graph());
+    qDebug() << "........Sorted graph..........";
+    for(vertex vert : *lVector)
+    {
+        qDebug() << "................\n";
+        qDebug() << QString::fromStdString(mModel->graph()[vert].name) << "\n";
+        qDebug() << QString::fromStdString(mModel->graph()[vert].message) << "\n";
+        qDebug() << QString::fromStdString( mModel->graph()[vert].author) << "\n";
+        qDebug() << mModel->graph()[vert].created << "\n";
+        qDebug() << "................\n";
+    }
+    */
 
 }
 
