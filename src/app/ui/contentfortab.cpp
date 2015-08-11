@@ -1,5 +1,5 @@
-#include "contentfortabworkplace.h"
-#include "ui_contentfortabworkplace.h"
+#include "contentfortab.h"
+#include "ui_contentfortab.h"
 #include "components/console/consoleview.h"
 #include "ui/dockconsole.h"
 #include "ui/dockfileview.h"
@@ -9,9 +9,9 @@
 #include "ui/revisionview.h"
 #include "../components/file_view/fileview.h"
 
-ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
+ContentForTab::ContentForTab(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::ContentForTabWorkplace)
+    ui(new Ui::ContentForTab)
 {
     ui->setupUi(this);
 
@@ -55,7 +55,7 @@ ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent) :
     tabifyDockWidget(uiRevisionTable, uiHistoryTree);
 }
 
-ContentForTabWorkplace::~ContentForTabWorkplace()
+ContentForTab::~ContentForTab()
 {
     delete ui;
 }

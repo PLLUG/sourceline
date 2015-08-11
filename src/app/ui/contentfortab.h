@@ -1,5 +1,5 @@
-#ifndef CONTENTFORTABWORKPLACE_H
-#define CONTENTFORTABWORKPLACE_H
+#ifndef CONTENTFORTAB_H
+#define CONTENTFORTAB_H
 
 #include <QMainWindow>
 
@@ -13,21 +13,21 @@ class DockConsole;
 class ConsoleView;
 
 namespace Ui {
-class ContentForTabWorkplace;
+class ContentForTab;
 }
 
-class ContentForTabWorkplace : public QMainWindow
+class ContentForTab : public QMainWindow
 {
     Q_OBJECT
 
 public:
-    explicit ContentForTabWorkplace(QWidget *parent = 0);
-    ~ContentForTabWorkplace();
+    explicit ContentForTab(QWidget *parent = 0);
+    ~ContentForTab();
 
 
 
 private:
-    Ui::ContentForTabWorkplace *ui;
+    Ui::ContentForTab *ui;
 
     HistoryTree *uiHistoryTree;
     RevisionView *uiHistoryTreeContents;
@@ -39,4 +39,4 @@ private:
     ConsoleView *uiConsoleContents;
 };
 
-#endif // CONTENTFORTABWORKPLACE_H
+#endif // CONTENTFORTAB_H

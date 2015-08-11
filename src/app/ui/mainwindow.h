@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#include "contentfortabworkplace.h"
+#include "contentfortab.h"
 
 class TabsAPI;
 class CustomTabBar;
