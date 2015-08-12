@@ -36,7 +36,7 @@ public:
      * \param role for file
      * \param path to icon
      */
-    void setIconForRole(QString &path);
+    void setIconForRole(QString path);
 
 private:
 

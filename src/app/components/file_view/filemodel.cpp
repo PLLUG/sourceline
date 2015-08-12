@@ -23,7 +23,7 @@ QVariant FileModel::data(const QModelIndex &index, int role)
     return result;
 }
 
-void FileModel::setIconForRole(QString &path)
+void FileModel::setIconForRole(QString path)
 {
     pathToIcon = path;
 }

@@ -12,6 +12,12 @@ class ExplorerItemDelegate : public QStyledItemDelegate
 public:
     explicit ExplorerItemDelegate(QObject *parent = 0);
 
+    enum FileStatus {
+        None = Qt::UserRole,
+        Normal = Qt::UserRole + 1,
+        Modified = Qt::UserRole + 2,
+    };
+
     void setFileSystemModel(FileModel *model);
     FileModel *fileSystemModel();
 
@@ -66,6 +72,8 @@ private:
      * \brief model for file system
      */
     FileModel *mFModel;
+
+    QHash<int, QString> icons;
 };
 
 #endif // EXPLORERITEMDELEGATE_H
