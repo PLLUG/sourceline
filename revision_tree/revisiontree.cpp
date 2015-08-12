@@ -51,7 +51,8 @@ void RevisionTree::setGraph(const revision_graph &pGraph)
 std::vector<vertex> *RevisionTree::getSortedGraphByTime(const revision_graph &graph)
 {
     int verticesNumb = num_vertices(graph);
-    std::vector< vertex > *rVector = new std::vector< vertex >(verticesNumb);
+    std::vector< vertex > *rVector = new std::vector< vertex >();
+    rVector->reserve(verticesNumb);
 
     // Copying vertices from graph to rVector
     boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;

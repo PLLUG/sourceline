@@ -41,6 +41,11 @@ public:
     ~RevisionTree();
 
     void setGraph(const revision_graph &graph);
+    /*!
+     * \brief getSortedGraphByTime sorts graph by commit-time
+     * \param graph - graph to be sorted
+     * \return vector with sorted vertices
+     */
     static std::vector< vertex >* getSortedGraphByTime(const revision_graph &graph);
 
 private:
