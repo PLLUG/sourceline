@@ -43,7 +43,7 @@ MainWindow::MainWindow(SettingsManager *pSettingsManager, QWidget *parent) :
 
     this->setCentralWidget(mTabBar);
 
-    connect(mTabBar, &CustomTabBar::tabCloseRequested, mTabsAPI, &TabsAPI::slotCloseWorkplace);
+    connect(mTabBar, &CustomTabBar::tabCloseRequested, mTabBar, &CustomTabBar::removeTab);
 
     mAmountOpenedTabs = 0;
 
