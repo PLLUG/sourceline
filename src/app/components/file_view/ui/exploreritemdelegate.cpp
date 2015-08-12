@@ -9,9 +9,13 @@
 #include "texteditforrename.h"
 #include <QTextCursor>
 #include "../filemodel.h"
+#include <QFileSystemWatcher>
+#include <QHash>
+#include <QDateTime>
 
 //TASK: move to ui folder (together with fileview folder)
 const QString invalidCharacters = "\\/:*?\"<>|";
+QHash<QString,QDateTime> files;
 
 ExplorerItemDelegate::ExplorerItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
@@ -47,7 +51,22 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     static QString rootPath = mFModel->rootPath();
     if (mFModel->fileInfo(index).absoluteFilePath().contains(rootPath))
     {
-        mFModel->setIconForRole(QStringLiteral(":/splash/img/added.png"));
+        mFModel->setIconForRole(QStringLiteral(":/Overlays/overlays/normal.png"));
+
+        QString path = mFModel->fileInfo(index).absoluteFilePath();
+        QDateTime time = QFileInfo(path).lastModified();
+        if (!files.contains(path))
+        {
+            files.insert(path,time);
+        }
+
+        else
+        {
+            if (time > files[path])
+            {
+                mFModel->setIconForRole(QStringLiteral(":/Overlays/overlays/modified.png"));
+            }
+        }
     }
     else
     {
