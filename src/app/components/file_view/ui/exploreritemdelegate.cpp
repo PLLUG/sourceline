@@ -44,9 +44,14 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->setBrush(QColor(Qt::black));
     painter->setPen(Qt::NoPen);
 
-    if (mFModel->fileInfo(index).absoluteFilePath() == QStringLiteral("D:/GitHub"))
+    static QString rootPath = mFModel->rootPath();
+    if (mFModel->fileInfo(index).absoluteFilePath().contains(rootPath))
     {
         mFModel->setIconForRole(QStringLiteral(":/splash/img/added.png"));
+    }
+    else
+    {
+        mFModel->setIconForRole(QStringLiteral(""));
     }
     QPixmap lPixmap;
     lPixmap = QPixmap(mFModel->data(index,FileModel::FileAttributeIconRole).toString());
@@ -54,7 +59,6 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     QRect rect(optv4.rect.center().x() + 2, optv4.rect.topRight().y() + 18, l, l);
     painter->drawPixmap(rect, lPixmap.scaled(l, l, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     painter->restore();
-    mFModel->setIconForRole(QStringLiteral(""));
 }
 
 QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
