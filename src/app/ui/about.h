@@ -22,7 +22,7 @@ public:
 private:
     Ui::About *ui;
 
-    QString textFromFile(QString address);
+    QString textFromFile(QString pAddress);
 };
 
 #endif // ABOUT_H

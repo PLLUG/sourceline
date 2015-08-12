@@ -29,14 +29,14 @@ public:
 private:
     Ui::ContentForTab *ui;
 
-    HistoryTree *uiHistoryTree;
-    RevisionView *uiHistoryTreeContents;
-    EditorView *uiEditorView;
-    FileView *uiFileViewContents;
-    DockFileView *uiFileView;
-    RevisionTable *uiRevisionTable;
-    DockConsole *uiConsole;
-    ConsoleView *uiConsoleContents;
+    HistoryTree *mHistoryTree;
+    RevisionView *mHistoryTreeContents;
+    EditorView *mEditorView;
+    FileView *mFileViewContents;
+    DockFileView *mFileView;
+    RevisionTable *mRevisionTable;
+    DockConsole *mConsole;
+    ConsoleView *mConsoleContents;
 };
 
 #endif // CONTENTFORTAB_H

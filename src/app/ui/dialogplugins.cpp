@@ -98,16 +98,16 @@ void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString&
 QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
 {
     QSize lSize( 20,20 );
-    QPushButton *lPushButton = new QPushButton( QIcon( ":/splash/img/pluginInformation.gif" ), QString::null, this);
-    lPushButton->setAutoFillBackground( true );
-    lPushButton->setIconSize( lSize );
-    lPushButton->setMinimumSize( lSize );
-    lPushButton->setMaximumSize( lSize );
-    lPushButton->setToolTip( QString( tr("info about plugin %1?") ).arg( pPluginItem->text(0) ) );
+    QPushButton *rPushButton = new QPushButton( QIcon( ":/splash/img/pluginInformation.gif" ), QString::null, this);
+    rPushButton->setAutoFillBackground( true );
+    rPushButton->setIconSize( lSize );
+    rPushButton->setMinimumSize( lSize );
+    rPushButton->setMaximumSize( lSize );
+    rPushButton->setToolTip( QString( tr("info about plugin %1?") ).arg( pPluginItem->text(0) ) );
 
-    mMapper->setMapping(lPushButton, pPluginItem->text(0));
-    connect(lPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
-    return lPushButton;
+    mMapper->setMapping(rPushButton, pPluginItem->text(0));
+    connect(rPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+    return rPushButton;
 }
 
 void DialogPlugins::slotButtonPressed(QString pPluginId)
@@ -123,8 +123,9 @@ void DialogPlugins::slotButtonPressed(QString pPluginId)
             return;
         }
     }
-    QMessageBox::critical(this, "Error", "No additional info available");
+    QMessageBox::critical(this, tr("Error"), tr("No additional info available"));
 }
+
 QString DialogPlugins::requestInfoForPlugin(QString pPluginId)
 {
     int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
@@ -141,7 +142,7 @@ QString DialogPlugins::requestInfoForPlugin(QString pPluginId)
             }
         }
     }
-    return "";
+    return tr("");
 }
 QStringList DialogPlugins::activePlugins()
 {

@@ -34,13 +34,13 @@ class Branch;
 class RevisionItem : public Node
 {
 public:
-    explicit RevisionItem(const QString &message);
+    explicit RevisionItem(const QString &pMessage);
 
-    QString message() const { return mMessage; }
-    void addBranch(RevisionItem *b);
-    void setParentBranch(Branch *p);
-    Branch *parentBranch() const { return mParent; }
-    QList<RevisionItem*> branches() const { return mBranches; }
+    QString message() const;
+    void addBranch(RevisionItem *pBranch);
+    void setParentBranch(Branch *pParentBranch);
+    Branch *parentBranch() const;
+    QList<RevisionItem*> branches() const;
 
 private:
     QString mMessage;

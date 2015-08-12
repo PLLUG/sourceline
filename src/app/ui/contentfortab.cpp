@@ -20,39 +20,41 @@ ContentForTab::ContentForTab(QWidget *parent) :
     setMouseTracking(false);
     setAutoFillBackground(false);
     setDockNestingEnabled(true);
-    setDockOptions(QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks);
+    setDockOptions(QMainWindow::AllowNestedDocks
+                   |QMainWindow::AllowTabbedDocks
+                   |QMainWindow::AnimatedDocks);
 
     //COMMENT: Create DockWidget HistoryTree, set content for it and add this HistoryTree to ContentForTabWorkplace
-    uiHistoryTree = new HistoryTree(this);
-    uiHistoryTreeContents = new RevisionView(uiHistoryTree);
-    uiHistoryTree->setWidget(uiHistoryTreeContents);
-    addDockWidget(static_cast<Qt::DockWidgetArea>(8), uiHistoryTree);
+    mHistoryTree = new HistoryTree(this);
+    mHistoryTreeContents = new RevisionView(mHistoryTree);
+    mHistoryTree->setWidget(mHistoryTreeContents);
+    addDockWidget(static_cast<Qt::DockWidgetArea>(8), mHistoryTree);
 
     //COMMENT: Create DockWidget EditorView and add this EditorView to ContentForTabWorkplace
-    uiEditorView = new EditorView(this);
-    addDockWidget(static_cast<Qt::DockWidgetArea>(8), uiEditorView);
+    mEditorView = new EditorView(this);
+    addDockWidget(static_cast<Qt::DockWidgetArea>(8), mEditorView);
 
     //COMMENT: Create DockWidget DockFileView, set content for it and add this DockFileView to ContentForTabWorkplace
-    uiFileView = new DockFileView(this);
-    uiFileViewContents = new FileView(uiFileView);
-    uiFileView->setWidget(uiFileViewContents);
-    addDockWidget(static_cast<Qt::DockWidgetArea>(1), uiFileView);
+    mFileView = new DockFileView(this);
+    mFileViewContents = new FileView(mFileView);
+    mFileView->setWidget(mFileViewContents);
+    addDockWidget(static_cast<Qt::DockWidgetArea>(1), mFileView);
 
     //COMMENT: Create DockWidget RevisionTable and add this RevisionTable to ContentForTabWorkplace
-    uiRevisionTable = new RevisionTable(this);
-    addDockWidget(static_cast<Qt::DockWidgetArea>(2), uiRevisionTable);
+    mRevisionTable = new RevisionTable(this);
+    addDockWidget(static_cast<Qt::DockWidgetArea>(2), mRevisionTable);
 
     //COMMENT: Create DockWidget DockConsole, set content for it and add this DockConsole to ContentForTabWorkplace
-    uiConsole = new DockConsole(this);
-    uiConsole->setLayoutDirection(Qt::LeftToRight);
-    uiConsoleContents = new ConsoleView(uiConsole);
-    uiConsole->setWidget(uiConsoleContents);
-    addDockWidget(static_cast<Qt::DockWidgetArea>(2), uiConsole);
+    mConsole = new DockConsole(this);
+    mConsole->setLayoutDirection(Qt::LeftToRight);
+    mConsoleContents = new ConsoleView(mConsole);
+    mConsole->setWidget(mConsoleContents);
+    addDockWidget(static_cast<Qt::DockWidgetArea>(2), mConsole);
 
-    splitDockWidget(uiRevisionTable, uiEditorView, Qt::Horizontal);
-    splitDockWidget(uiEditorView, uiConsole, Qt::Vertical);
-    tabifyDockWidget(uiEditorView, uiFileView);
-    tabifyDockWidget(uiRevisionTable, uiHistoryTree);
+    splitDockWidget(mRevisionTable, mEditorView, Qt::Horizontal);
+    splitDockWidget(mEditorView, mConsole, Qt::Vertical);
+    tabifyDockWidget(mEditorView, mFileView);
+    tabifyDockWidget(mRevisionTable, mHistoryTree);
 }
 
 ContentForTab::~ContentForTab()

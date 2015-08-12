@@ -30,9 +30,9 @@ ModelIndex::ModelIndex() :
 {
 }
 
-ModelIndex::ModelIndex(int row, int column) :
-    mRow(row),
-    mColumn(column),
+ModelIndex::ModelIndex(int pRow, int pColumn) :
+    mRow(pRow),
+    mColumn(pColumn),
     mValid(true)
 {
 }

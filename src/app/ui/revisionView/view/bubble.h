@@ -35,13 +35,13 @@ class Bubble : public QObject, public QGraphicsItem
 public:
     explicit Bubble(QGraphicsItem *parent = 0);
     QRectF boundingRect() const;
-    void setPen(const QPen &pen);
+    void setPen(const QPen &pPen);
 
 signals:
     void updateBubble();
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget = 0);
+    void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget = 0);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
 
 private:

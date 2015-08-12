@@ -24,28 +24,48 @@
 #include "branch.h"
 #include "revisionitem.h"
 
-Branch::Branch(RevisionItem *item, const QString &name) :
-    mLast(item),
-    mFirst(item),
-    mName(name)
+Branch::Branch(RevisionItem *pItem, const QString &pName) :
+    mLast(pItem),
+    mFirst(pItem),
+    mName(pName)
 {
-    if (item)
+    if (pItem)
     {
-        addCommit(item);
+        addCommit(pItem);
     }
 }
 
-void Branch::addCommit(RevisionItem *i)
+void Branch::addCommit(RevisionItem *pItem)
 {
-    if (i)
+    if (pItem)
     {
-        i->setParentBranch(this);
-        mItems.append(i);
-        mLast = i;
+        pItem->setParentBranch(this);
+        mItems.append(pItem);
+        mLast = pItem;
     }
 }
 
-void Branch::setStartY(int value)
+RevisionItem *Branch::head() const
 {
-    mStartY = value;
+    return mLast;
+}
+
+RevisionItem *Branch::first() const
+{
+    return mFirst;
+}
+
+QString Branch::name() const
+{
+    return mName;
+}
+
+void Branch::setStartY(int pValue)
+{
+    mStartY = pValue;
+}
+
+int Branch::startY() const
+{
+    return mStartY;
 }

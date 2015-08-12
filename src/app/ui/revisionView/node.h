@@ -30,12 +30,12 @@ class Node
 {
 public:
     Node();
-    void setCoorginate(int x, int y);
+    void setCoorginate(int pX, int pY);
 
-    int x() const { return mX; }
-    int y() const { return mY; }
+    int x() const;
+    int y() const;
 
-    bool operator ==(const QPair<int, int> &coordinate) const;
+    bool operator ==(const QPair<int, int> &pCoordinate) const;
 
 private:
     int mX, mY;

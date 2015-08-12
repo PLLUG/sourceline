@@ -33,7 +33,7 @@ class Aggregator: public QObject
 public:
     explicit Aggregator(QObject *parent = nullptr);
     ~Aggregator();
-    void addObject(QObject *obj);
+    void addObject(QObject *pObj);
 
     template <typename T>
     T* object();

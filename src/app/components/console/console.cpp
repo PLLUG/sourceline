@@ -42,17 +42,17 @@ Console::Console(QWidget *parent)
     setPalette(p);
 }
 
-void Console::putData(const QByteArray &data)
+void Console::putData(const QByteArray &pData)
 {
-    insertPlainText(QString(data.constData()));
+    insertPlainText(QString(pData.constData()));
 
     QScrollBar *bar = verticalScrollBar();
     bar->setValue(bar->maximum());
 }
 
-void Console::setLocalEchoEnabled(bool set)
+void Console::setLocalEchoEnabled(bool pSet)
 {
-    mLocalEchoEnabled = set;
+    mLocalEchoEnabled = pSet;
 }
 
 void Console::keyPressEvent(QKeyEvent *e)

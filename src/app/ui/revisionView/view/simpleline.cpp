@@ -35,13 +35,13 @@ QRectF SimpleLine::boundingRect() const
     return QRectF(0, 0, mSize.width(), mSize.height());
 }
 
-void SimpleLine::paint(QPainter *painter, QStyleOptionGraphicsItem *option, QWidget *widget)
+void SimpleLine::paint(QPainter *pPainter, QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
 {
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(mPen);
-    painter->drawLine(boundingRect().topLeft(), boundingRect().bottomRight());
+    Q_UNUSED(pOption)
+    Q_UNUSED(pWidget)
+    pPainter->setRenderHint(QPainter::Antialiasing);
+    pPainter->setPen(mPen);
+    pPainter->drawLine(boundingRect().topLeft(), boundingRect().bottomRight());
 }
 
 void SimpleLine::setPen(const QPen &pPen)
@@ -50,9 +50,9 @@ void SimpleLine::setPen(const QPen &pPen)
     update();
 }
 
-void SimpleLine::setLine(RevisionNodeItem *from, RevisionNodeItem *to)
+void SimpleLine::setLine(RevisionNodeItem *pFrom, RevisionNodeItem *pTo)
 {
-    mSize.setWidth(qAbs(from->pos().x() - to->pos().x()));
-    mSize.setHeight(qAbs(from->pos().y() - to->pos().y()));
-    setPos(from->pos() + from->boundingRect().center());
+    mSize.setWidth(qAbs(pFrom->pos().x() - pTo->pos().x()));
+    mSize.setHeight(qAbs(pFrom->pos().y() - pTo->pos().y()));
+    setPos(pFrom->pos() + pFrom->boundingRect().center());
 }

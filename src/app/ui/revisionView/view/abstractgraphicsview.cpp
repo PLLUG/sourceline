@@ -57,52 +57,52 @@ QRectF AbstractGraphicsView::rect() const
     return childrenBoundingRect();
 }
 
-void AbstractGraphicsView::setSize(qreal width, qreal height)
+void AbstractGraphicsView::setSize(qreal pWidth, qreal pHeight)
 {
-    setSize(QSizeF(width, height));
+    setSize(QSizeF(pWidth, pHeight));
 }
 
-void AbstractGraphicsView::setSize(const QSizeF &size)
+void AbstractGraphicsView::setSize(const QSizeF &pSize)
 {
     prepareGeometryChange();
-    mSize = size;
+    mSize = pSize;
     updateGeometry();
 }
 
-void AbstractGraphicsView::setItemDelegate(AbstractRevisionDelegate *item)
+void AbstractGraphicsView::setItemDelegate(AbstractRevisionDelegate *pItem)
 {
-    Q_UNUSED(item)
+    Q_UNUSED(pItem)
     //
 }
 
-void AbstractGraphicsView::setModel(QAbstractItemModel *model)
+void AbstractGraphicsView::setModel(QAbstractItemModel *pModel)
 {
-    mModel = model;
+    mModel = pModel;
     connect(mModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(slotModelChanged()));
     updateModelData();
     updateGeometry();
 }
 
-void AbstractGraphicsView::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void AbstractGraphicsView::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
 {
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(Parameters::ViewBackground());
-    painter->drawRect(boundingRect());
+    Q_UNUSED(pOption)
+    Q_UNUSED(pWidget)
+    pPainter->setPen(Qt::NoPen);
+    pPainter->setBrush(Parameters::ViewBackground());
+    pPainter->drawRect(boundingRect());
 }
 
 void AbstractGraphicsView::updateModelData()
 {
-    if ( mModel )
+    if (mModel)
     {
         while (mItems.size() != mModel->rowCount())
         {
             if (mItems.size() > mModel->rowCount())
             {
-                AbstractRevisionDelegate *temp = mItems.last();
+                AbstractRevisionDelegate *lTempDelegate = mItems.last();
                 mItems.removeLast();
-                delete temp;
+                delete lTempDelegate;
             }
             else
             {
@@ -116,10 +116,10 @@ void AbstractGraphicsView::updateModelData()
 
         for (int i = 0; i < mItems.size(); ++i)
         {
-            AbstractRevisionDelegate *temp = mItems.at(i);
-            temp->setData(AbstractRevisionDelegate::DR_Drawing, mModel->data(mModel->index(i, 0), Qt::DisplayRole));
-            temp->setData(AbstractRevisionDelegate::DR_Text, mModel->data(mModel->index(i, 2), Qt::DisplayRole));
-            temp->setData(AbstractRevisionDelegate::DR_Id, mModel->data(mModel->index(i, 1), Qt::DisplayRole));
+            AbstractRevisionDelegate *lTempDelegate = mItems.at(i);
+            lTempDelegate->setData(AbstractRevisionDelegate::DR_Drawing, mModel->data(mModel->index(i, 0), Qt::DisplayRole));
+            lTempDelegate->setData(AbstractRevisionDelegate::DR_Text, mModel->data(mModel->index(i, 2), Qt::DisplayRole));
+            lTempDelegate->setData(AbstractRevisionDelegate::DR_Id, mModel->data(mModel->index(i, 1), Qt::DisplayRole));
         }
     }
 }
@@ -129,13 +129,13 @@ QRectF AbstractGraphicsView::resizeRect() const
     return QRectF (boundingRect().bottomRight() + QPointF(-20, -20), boundingRect().bottomRight());
 }
 
-void AbstractGraphicsView::slotRequestForItem(AbstractRevisionDelegate *item)
+void AbstractGraphicsView::slotRequestForItem(AbstractRevisionDelegate *pItem)
 {
     for (int i = 1; i < mItems.size(); ++i)
     {
-        if ( mItems.at(i) == item )
+        if (mItems.at(i) == pItem)
         {
-            item->setPreviousState(QPointF(0, i * mItems.at(i - 1)->boundingRect().height()) + QPointF(0, 2 * i));
+            pItem->setPreviousState(QPointF(0, i * mItems.at(i - 1)->boundingRect().height()) + QPointF(0, 2 * i));
             break;
         }
     }
@@ -147,40 +147,40 @@ void AbstractGraphicsView::slotModelChanged()
     updateGeometry();
 }
 
-void AbstractGraphicsView::branchClicked(AbstractRevisionDelegate* d)
+void AbstractGraphicsView::branchClicked(AbstractRevisionDelegate* pDelegate)
 {
-    QMap<QString, QVariant> data = d->data(Qt::DisplayRole).toMap();
-    QPair<int, int> pos = qMakePair(data.value("x").toInt(), data.value("y").toInt());
-    Creator *c = dynamic_cast<RevisionTableModel*>(mModel)->graph();
-    RevisionItem *item = c->item(pos.second);
-    c->switchTo(item->parentBranch());
-    c->addBranch(new RevisionItem("hello"), "new branch");
+    QMap<QString, QVariant> lData = pDelegate->data(Qt::DisplayRole).toMap();
+    QPair<int, int> lPos = qMakePair(lData.value("x").toInt(), lData.value("y").toInt());
+    Creator *lCreator = dynamic_cast<RevisionTableModel*>(mModel)->graph();
+    RevisionItem *lItem = lCreator->item(lPos.second);
+    lCreator->switchTo(lItem->parentBranch());
+    lCreator->addBranch(new RevisionItem(tr("hello")), tr("new branch"));
     updateModelData();
     updateGeometry();
     emit updateUI();
 }
 
-void AbstractGraphicsView::commitClicked(AbstractRevisionDelegate*d)
+void AbstractGraphicsView::commitClicked(AbstractRevisionDelegate* pDelegate)
 {
-    QMap<QString, QVariant> data = d->data(Qt::DisplayRole).toMap();
-    QPair<int, int> pos = qMakePair(data.value("x").toInt(), data.value("y").toInt());
-    Creator *c = dynamic_cast<RevisionTableModel*>(mModel)->graph();
-    RevisionItem *item = c->item(pos.second);
-    c->switchTo(item->parentBranch());
-    c->addCommit(new RevisionItem("test"));
+    QMap<QString, QVariant> lData = pDelegate->data(Qt::DisplayRole).toMap();
+    QPair<int, int> lPos = qMakePair(lData.value("x").toInt(), lData.value("y").toInt());
+    Creator *lCreator = dynamic_cast<RevisionTableModel*>(mModel)->graph();
+    RevisionItem *lItem = lCreator->item(lPos.second);
+    lCreator->switchTo(lItem->parentBranch());
+    lCreator->addCommit(new RevisionItem(tr("test")));
     updateModelData();
     updateGeometry();
     emit updateUI();
 }
 
-ModelIndex AbstractGraphicsView::createIndex(int row, int column)
+ModelIndex AbstractGraphicsView::createIndex(int pRow, int pColumn)
 {
-    return ModelIndex(row, column);
+    return ModelIndex(pRow, pColumn);
 }
 
 void AbstractGraphicsView::updateGeometry()
 {
-    if ( !mItems.isEmpty() )
+    if (!mItems.isEmpty())
     {
         mItems.first()->setSize(mSize.width(), 21);
         mItems.first()->setPos(0, 0);

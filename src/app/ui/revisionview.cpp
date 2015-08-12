@@ -65,7 +65,7 @@ void RevisionView::resizeEvent(QResizeEvent *event)
 void RevisionView::updateUI()
 {
     QRect rect = ui->graphicsView->rect();
-    if ( rect.height() > mView->rect().height() )
+    if (rect.height() > mView->rect().height())
     {
         mView->setSize(QSizeF(rect.width() - 2, rect.height() - 2));
         mScene->setSceneRect(mView->boundingRect());

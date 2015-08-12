@@ -35,11 +35,11 @@ public:
     explicit SimpleLine(QGraphicsItem *parent = 0);
 
     QRectF boundingRect() const;
-    void paint( QPainter *painter, QStyleOptionGraphicsItem *option, QWidget *widget );
+    void paint( QPainter *pPainter, QStyleOptionGraphicsItem *pOption, QWidget *pWidget = 0);
 
     void setPen(const QPen &pPen);
 
-    void setLine(RevisionNodeItem *from, RevisionNodeItem *to);
+    void setLine(RevisionNodeItem *pFrom, RevisionNodeItem *pTo);
 
 private:
     QSizeF mSize;

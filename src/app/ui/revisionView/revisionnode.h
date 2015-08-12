@@ -39,46 +39,46 @@ public:
                         IDR_DrawRole
                       };
     RevisionNode();
-    explicit RevisionNode(const QString &message);
+    explicit RevisionNode(const QString &pMessage);
 
     int count() const;
-    const RevisionNode *node(int rev) const;
-    QVariant data(ItemDataRole role) const;
+    const RevisionNode *node(int pRev) const;
+    QVariant data(ItemDataRole pRole) const;
     void updateData();
-    void setData(ItemDataRole role, const QVariant &data);
+    void setData(ItemDataRole pRole, const QVariant &pData);
 
     int pos() const;
     bool isHeadInBranch() const;
-    bool hasRevision(RevisionNode *r) const;
+    bool hasRevision(RevisionNode *pRevision) const;
 
-    void setRevId(const QString &id);
+    void setRevId(const QString &pId);
     QString revId() const;
 
     int row() const;
 
-    void addChild(RevisionNode *node);
-    void addBranch(RevisionNode *nodes);
-    void mergeTo(RevisionNode *rev);
+    void addChild(RevisionNode *pNode);
+    void addBranch(RevisionNode *pNodes);
+    void mergeTo(RevisionNode *pRev);
 
     RevisionNode *HEAD() const;
 
-    RevisionNode *parent;
-    RevisionNode *child;
-    QList<RevisionNode *> branches;
-    RevisionNodeItem *graphicsItem;
+    RevisionNode *mParent;
+    RevisionNode *mChild;
+    QList<RevisionNode *> mBranches;
+    RevisionNodeItem *mGraphicsItem;
     RevisionNode *mMergeTo;
 
-    bool operator ==(const RevisionNode &another);
+    bool operator ==(const RevisionNode &pAnother);
 
 private:
-    QString _revId;
+    QString mRevId;
     QMap<ItemDataRole, QVariant> mData;
     QMap<QString, QVariant> mDrawData;
-    int branchCount;
-    bool isLast;
+    int mBranchCount;
+    bool mIsLast;
     int mPos;
 
-    int branchNumber(RevisionNode *node) const;
+    int branchNumber(RevisionNode *pNode) const;
     int nextBranchSize() const;
 };
 
