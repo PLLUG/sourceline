@@ -49,29 +49,6 @@ void RevisionTree::setGraph(const revision_graph &pGraph)
     resize(width(),ui->revisionTreeWidget->height());
 }
 
-std::vector<vertex> *RevisionTree::getSortedGraphByTime(const revision_graph &graph)
-{
-    int verticesNumb = num_vertices(graph);
-    std::vector< vertex > *rVector = new std::vector< vertex >();
-    rVector->reserve(verticesNumb);
-
-    // Copying vertices from graph to rVector
-    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
-    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
-    {
-        rVector->push_back(*vi);
-    }
-
-    // Sorting vertices in rVector
-    std::sort(rVector->begin(), rVector->end(),
-              [&graph](const vertex &vert1, const vertex &vert2) -> bool
-    {
-        return graph[vert1].created < graph[vert2].created;
-    });
-
-    return rVector;
-}
-
 void RevisionTree::clearScene()
 {
 }

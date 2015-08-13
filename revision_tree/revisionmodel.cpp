@@ -122,7 +122,7 @@ QModelIndex RevisionModel::parent(const QModelIndex &child) const
 
 int RevisionModel::rowCount(const QModelIndex &parent) const
 {
-    return 0;
+    return boost::num_vertices(mGraph);
 }
 
 int RevisionModel::columnCount(const QModelIndex &parent) const

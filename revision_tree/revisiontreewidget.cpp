@@ -134,18 +134,17 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     bfs_visitor<VertexIntMap, vertex, revision_graph> vis{mRowMap, mColumnMap};
     breadth_first_search(mGraph, root_vertex, visitor(vis));
 
-    //perform topological sort
-    std::vector< vertex > sorted_vertices;
-    topological_sort(mGraph, std::back_inserter(sorted_vertices));
-    put(rowIndex, root_vertex, 0);
+    int row{0};
+//    //perform topological sort
+//    std::vector< vertex > sorted_vertices;
+//    topological_sort(mGraph, std::back_inserter(sorted_vertices));
+//    put(rowIndex, root_vertex, 0);
+//    for ( std::vector< vertex >::reverse_iterator ii=sorted_vertices.rbegin()+1; ii!=sorted_vertices.rend(); ++ii)
+//    {
+//        put(rowIndex, *ii, ++row);
+//    }
 
     //perform sort by time
-    int row{0};
-    for ( std::vector< vertex >::reverse_iterator ii=sorted_vertices.rbegin()+1; ii!=sorted_vertices.rend(); ++ii)
-    {
-        put(rowIndex, *ii, ++row);
-    }
-
     row = 0;
     std::vector< vertex > sortedVerticesByTime = getSortedGraphByTime(mGraph);
     for ( auto ii=sortedVerticesByTime.begin()+1; ii!=sortedVerticesByTime.end(); ++ii)
@@ -266,6 +265,11 @@ bool RevisionTreeWidget::event(QEvent *e)
     return QWidget::event(e);
 }
 
+/*!
+ * \brief getSortedGraphByTime sorts graph by commit-time
+ * \param graph - graph to be sorted
+ * \return vector with sorted vertices
+ */
 std::vector<vertex> RevisionTreeWidget::getSortedGraphByTime(const revision_graph &graph)
 {
     int verticesNumb = num_vertices(graph);
