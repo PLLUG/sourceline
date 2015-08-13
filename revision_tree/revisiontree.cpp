@@ -45,6 +45,7 @@ void RevisionTree::setGraph(const revision_graph &pGraph)
     mGraph = pGraph;
     clearScene();
     read();
+    resize(width(),ui->revisionTreeWidget->height());
 }
 
 void RevisionTree::clearScene()

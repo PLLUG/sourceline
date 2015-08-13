@@ -1,12 +1,13 @@
 #ifndef REVISIONTREEWIDGET_H
 #define REVISIONTREEWIDGET_H
 #include <QOpenGLWidget>
-#include <QOpenGLBuffer>
-
 #include "revisionmodel.h"
 
+#include <boost/graph/topology.hpp>
 
 using IndexMap = std::map<vertex, int>;
+
+using Point = boost::rectangle_topology<>::point_type;
 
 /*!
  * \brief The RevisionTreeWidget class Paints revision graph
@@ -19,21 +20,23 @@ public:
 
     void setGraph(const revision_graph &pGraph);
 
+    static vertex findRoot(const revision_graph &pGraph);
 protected:
-    virtual void initializeGL();
-    virtual void resizeGL(int w, int h);
-    virtual void paintGL();
+    virtual void initializeGL() override;
+    virtual void resizeGL(int w, int h) override;
+    virtual void paintGL() override;
 
-    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
-    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
-    bool event(QEvent *e) Q_DECL_OVERRIDE;
+    void paintEvent(QPaintEvent *e) override;
+    void resizeEvent(QResizeEvent *e) override;
+    bool event(QEvent *e) override;
 
 private:
     revision_graph mGraph;
-    QOpenGLBuffer mVertexBuffer;
 
     IndexMap mColumnMap;
     IndexMap mRowMap;
+
+    std::map<vertex, Point>mPositionMap;
 
 };
 

@@ -38,7 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mProcess, static_cast<void (QProcess::*)(int exitCode, QProcess::ExitStatus exitStatus)>(&QProcess::finished), this, [=]()
     {
-        ui->centralWidget->setGraph(mModel->graph());
+        ui->revWidget->setGraph(mModel->graph());
     });
 
     connect(mProcess,&QProcess::readyReadStandardOutput, this, [=]()
@@ -49,17 +49,11 @@ MainWindow::MainWindow(QWidget *parent) :
         {
             int pos = rxlen.indexIn(commit);
             if (pos > -1) {
-                qDebug() << "========================================================   ";
                 QString hash = rxlen.cap(1);
                 QString parents = rxlen.cap(2);
                 QString author = rxlen.cap(3);
                 QString email = rxlen.cap(4);
                 QString time= rxlen.cap(5);
-
-                qDebug() << "hash : " << hash;
-                qDebug() << "author : " << author;
-                qDebug() << "email : " << email;
-                qDebug() << "time : " << QDateTime::fromTime_t(time.toInt());
 
                 RevisionNode newCommit = {
                     hash.toStdString(),
@@ -76,7 +70,6 @@ MainWindow::MainWindow(QWidget *parent) :
                 }
                 for(const auto &parent : parentList)
                 {
-                    qDebug() << "parent : " << parent;
                     mModel->addNode(parent.toStdString(), newCommit);
                 }
             }
