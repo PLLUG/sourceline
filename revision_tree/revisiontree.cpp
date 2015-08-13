@@ -46,6 +46,7 @@ void RevisionTree::setGraph(const revision_graph &pGraph)
     mGraph = pGraph;
     clearScene();
     read();
+    resize(width(),ui->revisionTreeWidget->height());
 }
 
 std::vector<vertex> *RevisionTree::getSortedGraphByTime(const revision_graph &graph)

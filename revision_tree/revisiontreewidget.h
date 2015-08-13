@@ -1,11 +1,12 @@
 #ifndef REVISIONTREEWIDGET_H
 #define REVISIONTREEWIDGET_H
-
 #include "revisionmodel.h"
 #include <QWidget>
 
+#include <boost/graph/topology.hpp>
 
-using IndexMap = std::map<vertex, int>;
+using VertexIntMap = std::map<vertex, int>;
+using Point = boost::rectangle_topology<>::point_type;
 
 /*!
  * \brief The RevisionTreeWidget class Paints revision graph
@@ -24,9 +25,16 @@ protected:
     bool event(QEvent *e) Q_DECL_OVERRIDE;
 
 private:
+    std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
+    static vertex findRoot(const revision_graph &pGraph);
+
+private:
     revision_graph mGraph;
-    IndexMap mColumnMap;
-    IndexMap mRowMap;
+
+    VertexIntMap mColumnMap;
+    VertexIntMap mRowMap;
+
+    std::map<vertex, Point>mPositionMap;
 };
 
 #endif // REVISIONTREEWIDGET_H
