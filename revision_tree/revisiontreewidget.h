@@ -5,8 +5,7 @@
 
 #include <boost/graph/topology.hpp>
 
-using IndexMap = std::map<vertex, int>;
-
+using VertexIntMap = std::map<vertex, int>;
 using Point = boost::rectangle_topology<>::point_type;
 
 /*!
@@ -33,8 +32,8 @@ protected:
 private:
     revision_graph mGraph;
 
-    IndexMap mColumnMap;
-    IndexMap mRowMap;
+    VertexIntMap mColumnMap;
+    VertexIntMap mRowMap;
 
     std::map<vertex, Point>mPositionMap;
 
