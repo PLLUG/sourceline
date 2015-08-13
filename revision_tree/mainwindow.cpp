@@ -47,7 +47,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mProcess,&QProcess::readyReadStandardOutput, this, [=]()
     {
         QStringList commits = QString(mProcess->readAllStandardOutput()).split("\n");
-        QRegExp rxlen(R"(H:\[([^,]*)\] P:\[([^,]*)\] an:\[([^,]*)\] ae:\[([^,]*)\] at:\[([^,]*)\])");
+        QRegExp rxlen("\a([^,]*)\a \a([^,]*)\a \a([^,]*)\a \a([^,]*)\a \a([^,]*)\a \a([^,]*)\a");
         for(auto commit : commits)
         {
             int pos = rxlen.indexIn(commit);
@@ -58,15 +58,17 @@ MainWindow::MainWindow(QWidget *parent) :
                 QString author = rxlen.cap(3);
                 QString email = rxlen.cap(4);
                 QString time= rxlen.cap(5);
+                QString message = rxlen.cap(6);
 
                 qDebug() << "hash : " << hash;
                 qDebug() << "author : " << author;
                 qDebug() << "email : " << email;
                 qDebug() << "time : " << QDateTime::fromTime_t(time.toInt());
+                qDebug() << "message : " << message;
 
                 RevisionNode newCommit = {
                     hash.toStdString(),
-                    "Initial commit",
+                    message.toStdString(),
                     author.toStdString(),
                     QDateTime::fromTime_t(time.toInt())
                 };
@@ -88,23 +90,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     QString program = "git";
     QStringList arguments;
-    arguments << "log" << R"(--pretty=format:"H:[%H] P:[%P] an:[%an] ae:[%ae] at:[%at]%n" )";
+    arguments << "log" << "--pretty=format:\"\a%H\a \a%P\a \a%an\a \a%ae\a \a%at\a \a%s\a%n\" ";
 
     mProcess->start(program, arguments);
-
-    /*std::vector<vertex> *lVector = RevisionTree::getSortedGraphByTime(mModel->graph());
-    qDebug() << "........Sorted graph..........";
-    for(vertex vert : *lVector)
-    {
-        qDebug() << "................\n";
-        qDebug() << QString::fromStdString(mModel->graph()[vert].name) << "\n";
-        qDebug() << QString::fromStdString(mModel->graph()[vert].message) << "\n";
-        qDebug() << QString::fromStdString( mModel->graph()[vert].author) << "\n";
-        qDebug() << mModel->graph()[vert].created << "\n";
-        qDebug() << "................\n";
-    }
-    */
-
 }
 
 MainWindow::~MainWindow()
