@@ -27,6 +27,9 @@
 #include "revisiontreewidget.h"
 #include <QProcess>
 #include <QDebug>
+#include <QString>
+#include "revisiontree.h"
+#include <vector>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -44,44 +47,51 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(mProcess,&QProcess::readyReadStandardOutput, this, [=]()
     {
         QStringList commits = QString(mProcess->readAllStandardOutput()).split("\n");
-        QRegExp rxlen(R"(H:\[([^,]*)\] P:\[([^,]*)\] an:\[([^,]*)\] ae:\[([^,]*)\] at:\[([^,]*)\])");
+        QRegExp rxlen("([^,]*)\a([^,]*)\a([^,]*)\a([^,]*)\a([^,]*)\a([^,]*)\a");
         for(auto commit : commits)
         {
-            int pos = rxlen.indexIn(commit);
-            if (pos > -1) {
-                QString hash = rxlen.cap(1);
-                QString parents = rxlen.cap(2);
-                QString author = rxlen.cap(3);
-                QString email = rxlen.cap(4);
-                QString time= rxlen.cap(5);
+            QString hash = rxlen.cap(1);
+            QString parents = rxlen.cap(2);
+            QString author = rxlen.cap(3);
+            QString email = rxlen.cap(4);
+            QString time= rxlen.cap(5);
+            QString message = rxlen.cap(6);
+            QStringList dataList = commit.split("\a");
+            if(!dataList.empty() && dataList.count() >= 5)
+            {
+                hash = dataList.at(0);
+                parents = dataList.at(1);
+                author = dataList.at(2);
+                email = dataList.at(3);
+                time= dataList.at(4);
+                message = dataList.at(5);
+            }
 
-                RevisionNode newCommit = {
-                    hash.toStdString(),
-                    "Initial commit",
-                    author.toStdString(),
-                    QDateTime::fromTime_t(time.toInt())
-                };
+            RevisionNode newCommit = {
+                hash.toStdString(),
+                message.toStdString(),
+                author.toStdString(),
+                QDateTime::fromTime_t(time.toInt())
+            };
 
-                QStringList parentList = parents.split(" ");
-                if(parentList.empty())
-                {
-                    // if no parents node has no parent, add empty string as parent
-                    parentList << QString();
-                }
-                for(const auto &parent : parentList)
-                {
-                    mModel->addNode(parent.toStdString(), newCommit);
-                }
+            QStringList parentList = parents.split(" ");
+            if(parentList.empty())
+            {
+                // if no parents node has no parent, add empty string as parent
+                parentList << QString();
+            }
+            for(const auto &parent : parentList)
+            {
+                mModel->addNode(parent.toStdString(), newCommit);
             }
         }
     });
 
     QString program = "git";
     QStringList arguments;
-    arguments << "log" << R"(--pretty=format:"H:[%H] P:[%P] an:[%an] ae:[%ae] at:[%at]%n" )";
+    arguments << "log" << "--pretty=format:%H\a%P\a%an\a%ae\a%at\a%s\a%n\ ";
 
     mProcess->start(program, arguments);
-
 }
 
 MainWindow::~MainWindow()

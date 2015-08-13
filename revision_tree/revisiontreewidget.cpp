@@ -95,7 +95,7 @@ private:
 };
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
-    QOpenGLWidget{parent}
+    QWidget{parent}
 {
 }
 
@@ -128,20 +128,31 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
     vertex root_vertex = findRoot(mGraph);
+    std::cout << "root vertex is: " << root_vertex << std::endl;
 
     //perform breadth first search
     bfs_visitor<VertexIntMap, vertex, revision_graph> vis{mRowMap, mColumnMap};
     breadth_first_search(mGraph, root_vertex, visitor(vis));
 
-    //perform topological sort
-    std::vector< vertex > sorted_vertices;
-    topological_sort(mGraph, std::back_inserter(sorted_vertices));
-    put(rowIndex, root_vertex, 0);
     int row{0};
-    for ( std::vector< vertex >::reverse_iterator ii=sorted_vertices.rbegin()+1; ii!=sorted_vertices.rend(); ++ii)
+//    //perform topological sort
+//    std::vector< vertex > sorted_vertices;
+//    topological_sort(mGraph, std::back_inserter(sorted_vertices));
+//    put(rowIndex, root_vertex, 0);
+//    for ( std::vector< vertex >::reverse_iterator ii=sorted_vertices.rbegin()+1; ii!=sorted_vertices.rend(); ++ii)
+//    {
+//        put(rowIndex, *ii, ++row);
+//    }
+
+    //perform sort by time
+    row = 0;
+    std::vector< vertex > sortedVerticesByTime = getSortedGraphByTime(mGraph);
+    for ( auto ii=sortedVerticesByTime.begin()+1; ii!=sortedVerticesByTime.end(); ++ii)
     {
         put(rowIndex, *ii, ++row);
     }
+
+
 // sample of using dominator tree algorithm
 //    using IndexMapD = boost::property_map<revision_graph, boost::vertex_index_t>::const_type;
 //    using TimeMap = boost::iterator_property_map<typename std::vector<VerticesSizeType>::iterator,IndexMapD>;
@@ -180,26 +191,10 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     setMinimumHeight(25*num_vertices(mGraph));
 }
 
-void RevisionTreeWidget::initializeGL()
-{
-    QOpenGLWidget::initializeGL();
-}
 
-void RevisionTreeWidget::resizeGL(int w, int h)
+void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 {
-    QOpenGLWidget::resizeGL(w,h);
-}
-
-void RevisionTreeWidget::paintGL()
-{
-    QOpenGLWidget::paintGL();
-    glClearColor(1,1,1,1);
-}
-
-void RevisionTreeWidget::paintEvent(QPaintEvent *event)
-{
-    QOpenGLWidget::paintEvent(event);
-
+    QWidget::paintEvent(e);
     QPainter painter(this);
 
     painter.setBrush(Qt::red);
@@ -262,11 +257,39 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *event)
 
 void RevisionTreeWidget::resizeEvent(QResizeEvent *e)
 {
-    QOpenGLWidget::resizeEvent(e);
+    QWidget::resizeEvent(e);
 }
 
 bool RevisionTreeWidget::event(QEvent *e)
 {
-    return QOpenGLWidget::event(e);
+    return QWidget::event(e);
+}
+
+/*!
+ * \brief getSortedGraphByTime sorts graph by commit-time
+ * \param graph - graph to be sorted
+ * \return vector with sorted vertices
+ */
+std::vector<vertex> RevisionTreeWidget::getSortedGraphByTime(const revision_graph &graph)
+{
+    int verticesNumb = num_vertices(graph);
+    std::vector< vertex > rVector;
+    rVector.reserve(verticesNumb);
+
+    // Copying vertices from graph to rVector
+    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
+    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
+    {
+        rVector.push_back(*vi);
+    }
+
+    // Sorting vertices in rVector
+    std::sort(rVector.begin(), rVector.end(),
+              [&graph](const vertex &vert1, const vertex &vert2) -> bool
+    {
+        return graph[vert1].created < graph[vert2].created;
+    });
+
+    return rVector;
 }
 

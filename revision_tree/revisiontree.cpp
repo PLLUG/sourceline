@@ -26,6 +26,7 @@
 #include <QDebug>
 #include <iostream>
 #include <boost/graph/topological_sort.hpp>
+#include <algorithm>
 
 RevisionTree::RevisionTree(QWidget *parent) :
     QWidget(parent),

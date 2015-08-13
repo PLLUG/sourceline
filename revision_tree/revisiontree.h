@@ -24,6 +24,7 @@
 *******************************************************************************/
 #include <QWidget>
 #include "revisionmodel.h"
+#include <vector>
 
 namespace Ui {
 class RevisionTree;
@@ -40,7 +41,6 @@ public:
     ~RevisionTree();
 
     void setGraph(const revision_graph &graph);
-
 private:
     void clearScene();
     void read();

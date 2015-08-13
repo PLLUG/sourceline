@@ -1,7 +1,7 @@
 #ifndef REVISIONTREEWIDGET_H
 #define REVISIONTREEWIDGET_H
-#include <QOpenGLWidget>
 #include "revisionmodel.h"
+#include <QWidget>
 
 #include <boost/graph/topology.hpp>
 
@@ -11,7 +11,7 @@ using Point = boost::rectangle_topology<>::point_type;
 /*!
  * \brief The RevisionTreeWidget class Paints revision graph
  */
-class RevisionTreeWidget : public QOpenGLWidget
+class RevisionTreeWidget : public QWidget
 {
 public:
     RevisionTreeWidget(QWidget* parent = nullptr);
@@ -19,15 +19,14 @@ public:
 
     void setGraph(const revision_graph &pGraph);
 
-    static vertex findRoot(const revision_graph &pGraph);
 protected:
-    virtual void initializeGL() override;
-    virtual void resizeGL(int w, int h) override;
-    virtual void paintGL() override;
+    void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
+    void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
+    bool event(QEvent *e) Q_DECL_OVERRIDE;
 
-    void paintEvent(QPaintEvent *e) override;
-    void resizeEvent(QResizeEvent *e) override;
-    bool event(QEvent *e) override;
+private:
+    std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
+    static vertex findRoot(const revision_graph &pGraph);
 
 private:
     revision_graph mGraph;
@@ -36,7 +35,6 @@ private:
     VertexIntMap mRowMap;
 
     std::map<vertex, Point>mPositionMap;
-
 };
 
 #endif // REVISIONTREEWIDGET_H

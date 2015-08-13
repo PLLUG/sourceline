@@ -47,3 +47,5 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     revisiontree.ui
+
+INCLUDEPATH += D:/boost/boost_1_58_0
