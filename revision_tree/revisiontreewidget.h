@@ -29,6 +29,28 @@ private:
     static vertex findRoot(const revision_graph &pGraph);
 
 private:
+    /*!
+     * \brief The VertexType enum repressents types of vertex.
+     *
+     * Vertex type is defined according to how many edges enter in vertex and
+     * how many exit from.
+     */
+    enum VertexType
+    {
+        /// Number of input edges = 0
+        vtNoIn,
+        /// Number of output edges = 0
+        vtNoOut,
+        /// Number of input edges = 1, Number of output edges = 1
+        vtOneInOneOut,
+        /// Number of input edges > 1, Number of output edges > 1
+        vtManyInManyOut,
+        /// Number of input edges = 1, Number of output edges > 1
+        vtOneInManyOut,
+        /// Number of input edges > 1, Number of output edges = 1
+        vtManyInOneOut
+    };
+
     revision_graph mGraph;
 
     VertexIntMap mColumnMap;
