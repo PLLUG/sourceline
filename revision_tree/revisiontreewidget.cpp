@@ -95,8 +95,7 @@ private:
 };
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
-    QWidget{parent},
-    mVertexTypeVector{nullptr}
+    QWidget{parent}
 {
 }
 
@@ -119,12 +118,18 @@ vertex RevisionTreeWidget::findRoot(const revision_graph &pGraph)
     return root_vertex;
 }
 
-std::vector<VertexType> RevisionTreeWidget::getVertexTypeVector(std::vector<vertex> &pGraph)
+/*!
+ * \brief RevisionTreeWidget::getVertexTypeVector according to pGraph, build vertex type vector.
+ * \param pGraph
+ * \return vector with VertexType values.
+ */
+std::vector<VertexType> RevisionTreeWidget::getVertexTypeVector(const revision_graph &pGraph)
 {
-    int i = 0;
     std::vector<VertexType> rVertexTypeVector(num_vertices(pGraph));
     BGL_FORALL_VERTICES(v, pGraph, revision_graph)
     {
+        int i = v;
+
         if(!boost::in_degree(v,pGraph))
         {
             rVertexTypeVector[i] = vtNoIn;
@@ -149,9 +154,9 @@ std::vector<VertexType> RevisionTreeWidget::getVertexTypeVector(std::vector<vert
         {
             rVertexTypeVector[i] = vtOneInOneOut;
         }
-
-        i++;
     }
+
+    return rVertexTypeVector;
 }
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
@@ -243,40 +248,45 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
+    std::vector<VertexType> vertexTypeVector = getVertexTypeVector(mGraph);
+
     BGL_FORALL_VERTICES(v, mGraph, revision_graph)
     {
         int row = get(rowIndex, v);
         int col = get(colIndex, v);
-        if(!boost::in_degree(v,mGraph))
+
+        switch(vertexTypeVector[v])
         {
+        case vtNoIn:
             painter.setBrush(Qt::black);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else if(!boost::out_degree(v,mGraph))
-        {
+            painter.drawRect(width*col + offset - radius, width*row - radius,
+                             radius*2, radius*2);
+            break;
+        case vtNoOut:
             painter.setBrush(Qt::yellow);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else if(boost::in_degree(v,mGraph) > 1 && boost::out_degree(v,mGraph) > 1)
-        {
+            painter.drawRect(width*col + offset - radius, width*row - radius,
+                             radius*2, radius*2);
+            break;
+        case vtManyInManyOut:
             painter.setBrush(Qt::magenta);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else if(boost::in_degree(v,mGraph) > 1)
-        {
+            painter.drawRect(width*col + offset - radius, width*row - radius,
+                             radius*2, radius*2);
+            break;
+        case vtManyInOneOut:
             painter.setBrush(Qt::red);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else if(boost::out_degree(v,mGraph) > 1)
-        {
+            painter.drawRect(width*col + offset - radius, width*row - radius,
+                             radius*2, radius*2);
+            break;
+        case vtOneInManyOut:
             painter.setBrush(Qt::blue);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else
-        {
+            painter.drawRect(width*col + offset - radius, width*row - radius,
+                             radius*2, radius*2);
+            break;
+        case vtOneInOneOut:
             painter.setBrush(Qt::green);
             painter.drawEllipse(QPointF{width*col + offset, width*row},
                                 radius, radius);
+            break;
         }
         painter.drawText(QPointF{width*col + offset, width*row + radius}, QString::number(v));
     }
