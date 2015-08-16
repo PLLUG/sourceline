@@ -27,6 +27,7 @@ protected:
 private:
     std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
     static vertex findRoot(const revision_graph &pGraph);
+    std::vector<VertexType> getVertexTypeVector(std::vector<vertex> &pGraph);
 
 private:
     /*!
@@ -57,6 +58,7 @@ private:
     VertexIntMap mRowMap;
 
     std::map<vertex, Point>mPositionMap;
+    std::vector<VertexType> *mVertexTypeVector;
 };
 
 #endif // REVISIONTREEWIDGET_H

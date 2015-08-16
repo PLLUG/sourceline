@@ -95,7 +95,8 @@ private:
 };
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
-    QWidget{parent}
+    QWidget{parent},
+    mVertexTypeVector{nullptr}
 {
 }
 
@@ -116,6 +117,41 @@ vertex RevisionTreeWidget::findRoot(const revision_graph &pGraph)
         }
     }
     return root_vertex;
+}
+
+std::vector<VertexType> RevisionTreeWidget::getVertexTypeVector(std::vector<vertex> &pGraph)
+{
+    int i = 0;
+    std::vector<VertexType> rVertexTypeVector(num_vertices(pGraph));
+    BGL_FORALL_VERTICES(v, pGraph, revision_graph)
+    {
+        if(!boost::in_degree(v,pGraph))
+        {
+            rVertexTypeVector[i] = vtNoIn;
+        }
+        else if(!boost::out_degree(v,pGraph))
+        {
+            rVertexTypeVector[i] = vtNoOut;
+        }
+        else if(boost::in_degree(v,pGraph) > 1 && boost::out_degree(v,pGraph) > 1)
+        {
+            rVertexTypeVector[i] = vtManyInManyOut;
+        }
+        else if(boost::in_degree(v,pGraph) > 1)
+        {
+            rVertexTypeVector[i] = vtManyInOneOut;
+        }
+        else if(boost::out_degree(v,pGraph) > 1)
+        {
+            rVertexTypeVector[i] = vtOneInManyOut;
+        }
+        else
+        {
+            rVertexTypeVector[i] = vtOneInOneOut;
+        }
+
+        i++;
+    }
 }
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
