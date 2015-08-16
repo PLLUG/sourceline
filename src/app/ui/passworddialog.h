@@ -15,10 +15,8 @@ class PasswordDialog : public QDialog
 public:
     explicit PasswordDialog(QWidget *parent = 0);
     ~PasswordDialog();
-
-public slots:
-    QString username();
-    QString password();
+    QString username() const;
+    QString password() const;
 
 private:
     Ui::PasswordDialog *ui;
