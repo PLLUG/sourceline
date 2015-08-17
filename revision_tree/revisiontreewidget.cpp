@@ -119,44 +119,68 @@ vertex RevisionTreeWidget::findRoot(const revision_graph &pGraph)
 }
 
 /*!
- * \brief RevisionTreeWidget::getVertexTypeVector according to pGraph, build vertex type vector.
- * \param pGraph
- * \return vector with VertexType values.
+ * \brief RevisionTreeWidget::revisionVertexVector according to pGraph,
+ *  build RevisionVertex vector.
+ * \param pGraph - revision graph
+ * \return vector with RevisionVertex values.
  */
-std::vector<VertexType> RevisionTreeWidget::getVertexTypeVector(const revision_graph &pGraph)
+std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revision_graph &pGraph)
 {
-    std::vector<VertexType> rVertexTypeVector(num_vertices(pGraph));
+    boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
+    boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
+
+    std::vector<RevisionVertex> rRevisionVertexes(num_vertices(pGraph));
+
+    // Setting values of vertexes from rRevisionVertexes
     BGL_FORALL_VERTICES(v, pGraph, revision_graph)
     {
-        int i = v;
+        rRevisionVertexes[v].row = get(rowIndex, v);
+        rRevisionVertexes[v].column = get(colIndex, v);
 
+        // Initial commit
         if(!boost::in_degree(v,pGraph))
         {
-            rVertexTypeVector[i] = vtNoIn;
+            rRevisionVertexes[v].type = vtNoIn;
+            rRevisionVertexes[v].color = vcBlack;
+            rRevisionVertexes[v].shape = vsCircle;
         }
+        // Last commit
         else if(!boost::out_degree(v,pGraph))
         {
-            rVertexTypeVector[i] = vtNoOut;
+            rRevisionVertexes[v].type = vtNoOut;
+            rRevisionVertexes[v].color = vcYellow;
+            rRevisionVertexes[v].shape = vsCircle;
         }
         else if(boost::in_degree(v,pGraph) > 1 && boost::out_degree(v,pGraph) > 1)
         {
-            rVertexTypeVector[i] = vtManyInManyOut;
+            rRevisionVertexes[v].type = vtManyInManyOut;
+            rRevisionVertexes[v].color = vcMagenta;
+            rRevisionVertexes[v].shape = vsSquare;
         }
+        // Merge
         else if(boost::in_degree(v,pGraph) > 1)
         {
-            rVertexTypeVector[i] = vtManyInOneOut;
+            rRevisionVertexes[v].type = vtManyInOneOut;
+            rRevisionVertexes[v].color = vcRed;
+            rRevisionVertexes[v].shape = vsSquare;
         }
+        // Branching
         else if(boost::out_degree(v,pGraph) > 1)
         {
-            rVertexTypeVector[i] = vtOneInManyOut;
+            rRevisionVertexes[v].type = vtOneInManyOut;
+            rRevisionVertexes[v].color = vcBlue;
+            rRevisionVertexes[v].shape = vsSquare;
         }
+        // Usual commit
         else
         {
-            rVertexTypeVector[i] = vtOneInOneOut;
+            rRevisionVertexes[v].type = vtOneInOneOut;
+            rRevisionVertexes[v].color = vcGreen;
+            rRevisionVertexes[v].shape = vsCircle;
         }
     }
 
-    return rVertexTypeVector;
+    return rRevisionVertexes;
 }
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
@@ -238,9 +262,6 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
     QPainter painter(this);
 
-    painter.setBrush(Qt::red);
-    painter.setPen(Qt::black);
-
     const int offset{20};
     const float width = 25;
     const float radius = 8;
@@ -248,46 +269,49 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
-    std::vector<VertexType> vertexTypeVector = getVertexTypeVector(mGraph);
+    std::vector<RevisionVertex> revisionVertexes = revisionVertexVector(mGraph);
 
     BGL_FORALL_VERTICES(v, mGraph, revision_graph)
     {
-        int row = get(rowIndex, v);
-        int col = get(colIndex, v);
+        int row = revisionVertexes[v].row;
+        int col = revisionVertexes[v].column;
 
-        switch(vertexTypeVector[v])
+        // Picking color for brush
+        switch(revisionVertexes[v].color)
         {
-        case vtNoIn:
+        case vcBlack:
             painter.setBrush(Qt::black);
-            painter.drawRect(width*col + offset - radius, width*row - radius,
-                             radius*2, radius*2);
             break;
-        case vtNoOut:
+        case vcYellow:
             painter.setBrush(Qt::yellow);
-            painter.drawRect(width*col + offset - radius, width*row - radius,
-                             radius*2, radius*2);
             break;
-        case vtManyInManyOut:
+        case vcMagenta:
             painter.setBrush(Qt::magenta);
-            painter.drawRect(width*col + offset - radius, width*row - radius,
-                             radius*2, radius*2);
             break;
-        case vtManyInOneOut:
+        case vcRed:
             painter.setBrush(Qt::red);
-            painter.drawRect(width*col + offset - radius, width*row - radius,
-                             radius*2, radius*2);
             break;
-        case vtOneInManyOut:
+        case vcBlue:
             painter.setBrush(Qt::blue);
+            break;
+        case vcGreen:
+            painter.setBrush(Qt::green);
+            break;
+        }
+
+        // Drawing vertex
+        switch(revisionVertexes[v].shape)
+        {
+        case vsSquare:
             painter.drawRect(width*col + offset - radius, width*row - radius,
                              radius*2, radius*2);
             break;
-        case vtOneInOneOut:
-            painter.setBrush(Qt::green);
+        case vsCircle:
             painter.drawEllipse(QPointF{width*col + offset, width*row},
                                 radius, radius);
             break;
         }
+
         painter.drawText(QPointF{width*col + offset, width*row + radius}, QString::number(v));
     }
 

@@ -81,7 +81,7 @@ struct RevisionVertex
     VertexShape shape;
     VertexColor color;
     int row;
-    int colomn;
+    int column;
 };
 
 #endif // REVISIONVERTEX
