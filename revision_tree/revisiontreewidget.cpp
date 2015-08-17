@@ -142,41 +142,41 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
         if(!boost::in_degree(v,pGraph))
         {
             rRevisionVertexes[v].type = vtNoIn;
-            rRevisionVertexes[v].color = vcBlack;
+            rRevisionVertexes[v].color = Qt::black;
             rRevisionVertexes[v].shape = vsCircle;
         }
         // Last commit
         else if(!boost::out_degree(v,pGraph))
         {
             rRevisionVertexes[v].type = vtNoOut;
-            rRevisionVertexes[v].color = vcYellow;
+            rRevisionVertexes[v].color = Qt::yellow;
             rRevisionVertexes[v].shape = vsCircle;
         }
         else if(boost::in_degree(v,pGraph) > 1 && boost::out_degree(v,pGraph) > 1)
         {
             rRevisionVertexes[v].type = vtManyInManyOut;
-            rRevisionVertexes[v].color = vcMagenta;
+            rRevisionVertexes[v].color = Qt::magenta;
             rRevisionVertexes[v].shape = vsSquare;
         }
         // Merge
         else if(boost::in_degree(v,pGraph) > 1)
         {
             rRevisionVertexes[v].type = vtManyInOneOut;
-            rRevisionVertexes[v].color = vcRed;
+            rRevisionVertexes[v].color = Qt::red;
             rRevisionVertexes[v].shape = vsSquare;
         }
         // Branching
         else if(boost::out_degree(v,pGraph) > 1)
         {
             rRevisionVertexes[v].type = vtOneInManyOut;
-            rRevisionVertexes[v].color = vcBlue;
+            rRevisionVertexes[v].color = Qt::blue;
             rRevisionVertexes[v].shape = vsSquare;
         }
         // Usual commit
         else
         {
             rRevisionVertexes[v].type = vtOneInOneOut;
-            rRevisionVertexes[v].color = vcGreen;
+            rRevisionVertexes[v].color = Qt::green;
             rRevisionVertexes[v].shape = vsCircle;
         }
     }
@@ -276,29 +276,7 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     {
         int row = revisionVertexes[v].row;
         int col = revisionVertexes[v].column;
-
-        // Picking color for brush
-        switch(revisionVertexes[v].color)
-        {
-        case vcBlack:
-            painter.setBrush(Qt::black);
-            break;
-        case vcYellow:
-            painter.setBrush(Qt::yellow);
-            break;
-        case vcMagenta:
-            painter.setBrush(Qt::magenta);
-            break;
-        case vcRed:
-            painter.setBrush(Qt::red);
-            break;
-        case vcBlue:
-            painter.setBrush(Qt::blue);
-            break;
-        case vcGreen:
-            painter.setBrush(Qt::green);
-            break;
-        }
+        painter.setBrush(revisionVertexes[v].color);
 
         // Drawing vertex
         switch(revisionVertexes[v].shape)
@@ -323,7 +301,8 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         int sourceCol = get(colIndex, boost::source(e, mGraph));
         int targetRow = get(rowIndex, boost::target(e, mGraph));
         int targetCol = get(colIndex, boost::target(e, mGraph));
-        painter.drawLine(QPoint(width*sourceCol + offset, width*sourceRow), QPoint(width*targetCol + offset, width*targetRow));
+        painter.drawLine(QPoint(width*sourceCol + offset, width*sourceRow), QPoint(width*targetCol + offset, width*sourceRow));
+        painter.drawLine(QPoint(width*targetCol + offset, width*targetRow), QPoint(width*targetCol + offset, width*sourceRow));
     }
 }
 

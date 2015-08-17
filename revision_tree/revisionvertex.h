@@ -23,6 +23,7 @@
 ***                                                                          ***
 *******************************************************************************/
 
+#include <Qt>
 /*!
  * \brief The VertexType enum represents types of vertexes.
  *
@@ -56,30 +57,11 @@ enum VertexShape
     vsCircle
 };
 
-/*!
- * \brief The VertexColor enum represents colors of vertexes.
- */
-enum VertexColor
-{
-    /// Red color of vertex
-    vcRed,
-    /// Magenta color of vertex
-    vcMagenta,
-    /// Black color of vertex
-    vcBlack,
-    /// Yellow color of vertex
-    vcYellow,
-    /// Blue color of vertex
-    vcBlue,
-    /// Green color of vertex
-    vcGreen
-};
-
 struct RevisionVertex
 {
     VertexType type;
     VertexShape shape;
-    VertexColor color;
+    Qt::GlobalColor color;
     int row;
     int column;
 };
