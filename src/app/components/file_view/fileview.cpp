@@ -114,6 +114,11 @@ void FileView::setTextToLineEdit(const QString &path)
     ui->lineEdit->setText(QDir::toNativeSeparators(newPath));
 }
 
+void FileView::registerAction(QAction *pAction, SelectionFlags pSelecitonFlags)
+{
+    // More code here...
+}
+
 bool FileView::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->lineEdit)

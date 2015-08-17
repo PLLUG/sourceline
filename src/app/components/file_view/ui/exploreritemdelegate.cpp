@@ -20,9 +20,9 @@ QHash<QString,QDateTime> files;
 ExplorerItemDelegate::ExplorerItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
 {
-    icons.insert(FileStatus::None, QStringLiteral(""));
-    icons.insert(FileStatus::Normal, QStringLiteral(":/Overlays/overlays/normal.png"));
-    icons.insert(FileStatus::Modified, QStringLiteral(":/Overlays/overlays/modified.png"));
+//    icons.insert(FileStatus::None, QStringLiteral(""));
+//    icons.insert(FileStatus::Normal, QStringLiteral(":/Overlays/overlays/normal.png"));
+//    icons.insert(FileStatus::Modified, QStringLiteral(":/Overlays/overlays/modified.png"));
 }
 
 void ExplorerItemDelegate::setFileSystemModel(FileModel *model)
@@ -51,33 +51,8 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->setBrush(QColor(Qt::black));
     painter->setPen(Qt::NoPen);
 
-    //icons for modified
-    static QString rootPath = mFModel->rootPath();
-    if (mFModel->fileInfo(index).absoluteFilePath().contains(rootPath))
-    {
-        mFModel->setIconForRole(icons[FileStatus::Normal]);
-
-        QString path = mFModel->fileInfo(index).absoluteFilePath();
-        QDateTime time = QFileInfo(path).lastModified();
-        if (!files.contains(path))
-        {
-            files.insert(path,time);
-        }
-
-        else
-        {
-            if (time > files[path])
-            {
-                mFModel->setIconForRole(icons[FileStatus::Modified]);
-            }
-        }
-    }
-    else
-    {
-        mFModel->setIconForRole(icons[FileStatus::None]);
-    }
     QPixmap lPixmap;
-    lPixmap = QPixmap(mFModel->data(index,FileModel::FileAttributeIconRole).toString());
+    lPixmap = QPixmap(mFModel->data(index, FileModel::FileAttributeIconRole).toString());
     int l = 16;
     QRect rect(optv4.rect.center().x() + 2, optv4.rect.topRight().y() + 18, l, l);
     painter->drawPixmap(rect, lPixmap.scaled(l, l, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));

@@ -33,6 +33,7 @@ namespace Ui {
 
 class QMenu;
 class QFileSystemModel;
+class QAction;
 
 /*!
  * \brief The class for representation file view
@@ -42,6 +43,15 @@ class FileView : public QWidget
     Q_OBJECT
 
 public:
+
+    enum SelectionFlag {
+        NoneSelection = 0x00,
+        FileSelection = 0x01,
+        FolderSelection = 0x02,
+        MultiSeleciton = 0x04
+    };
+    Q_DECLARE_FLAGS(SelectionFlags, SelectionFlag)
+    Q_FLAG(SelectionFlags)
 
     explicit FileView(QWidget *parent = 0);
     ~FileView();
@@ -71,6 +81,8 @@ public:
         #endif
         return rHomePath;
     }
+
+    void registerAction(QAction *pAction, SelectionFlags pSelecitonFlags);
 
 private:
 
@@ -151,6 +163,8 @@ private:
      * \brief file model
      */
     FileModel *mFileModel;
+
+    QHash<SelectionFlags, QMenu *> mMenuBySelectionFlags;
 };
 
 #endif // FILEVIEW_H

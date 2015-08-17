@@ -72,8 +72,6 @@ private:
      * \brief model for file system
      */
     FileModel *mFModel;
-
-    QHash<int, QString> icons;
 };
 
 #endif // EXPLORERITEMDELEGATE_H

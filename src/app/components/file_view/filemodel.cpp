@@ -5,26 +5,43 @@
 FileModel::FileModel(QWidget *parent) : QFileSystemModel(parent)
 {
     //setIconForRole(1,QStringLiteral(":/splash/img/added.png"));
-    pathToIcon = "";
 }
 
 QVariant FileModel::data(const QModelIndex &index, int role)
 {
-    QVariant result = "";
-    if (role == Roles::FileAttributeIconRole)
+    QVariant result;
+
+    switch (role)
     {
-        result = pathToIcon;
-    }
-    else
-    {
+    case Roles::FileAttributeIconRole:
+        result = iconPathForIndex(index);
+        break;
+    default:
         result = QFileSystemModel::data(index,role);
+        break;
     }
 
     return result;
 }
 
-void FileModel::setIconForRole(QString path)
+void FileModel::setIconForAttributes(quint32 attributes, QString path)
 {
-    pathToIcon = path;
+    mIcons.insert(attributes, path);
+}
+
+/*!
+ * \brief Returns icon for given index if any.
+ * \return Path to icon. If there is no icon - return empty string.
+ */
+QString FileModel::iconPathForIndex(const QModelIndex &index)
+{
+    QString iconPath;
+
+    if (fileInfo(index).absoluteFilePath().contains(rootPath()))
+    {
+        quint32 attribute = QFileSystemModel::data(index, FileAttributeRole).toUInt();
+        iconPath = mIcons.value(attribute);
+    }
+    return iconPath;
 }
 

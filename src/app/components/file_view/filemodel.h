@@ -36,11 +36,13 @@ public:
      * \param role for file
      * \param path to icon
      */
-    void setIconForRole(QString path);
+    void setIconForAttributes(quint32 attributes, QString path);
 
 private:
+    QString iconPathForIndex(const QModelIndex &);
 
-    QString pathToIcon;
+private:
+    QHash<quint32, QString> mIcons;
 };
 
 #endif // FILEMODEL_H
