@@ -290,6 +290,7 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         }
         painter.drawText(QPointF{width*col + offset, width*row + radius}, QString::number(v));
     }
+
     painter.setPen(Qt::darkGray);
     BGL_FORALL_EDGES(e, mGraph, revision_graph)
     {

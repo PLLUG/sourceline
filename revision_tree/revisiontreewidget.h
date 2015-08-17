@@ -1,34 +1,13 @@
 #ifndef REVISIONTREEWIDGET_H
 #define REVISIONTREEWIDGET_H
 #include "revisionmodel.h"
+#include "revisionvertex.h"
 #include <QWidget>
 
 #include <boost/graph/topology.hpp>
 
 using VertexIntMap = std::map<vertex, int>;
 using Point = boost::rectangle_topology<>::point_type;
-
-/*!
- * \brief The VertexType enum repressents types of vertex.
- *
- * Vertex type is defined according to how many edges enter in vertex and
- * how many exit from.
- */
-enum VertexType
-{
-    /// Number of input edges = 0
-    vtNoIn,
-    /// Number of output edges = 0
-    vtNoOut,
-    /// Number of input edges = 1, Number of output edges = 1
-    vtOneInOneOut,
-    /// Number of input edges > 1, Number of output edges > 1
-    vtManyInManyOut,
-    /// Number of input edges = 1, Number of output edges > 1
-    vtOneInManyOut,
-    /// Number of input edges > 1, Number of output edges = 1
-    vtManyInOneOut
-};
 
 /*!
  * \brief The RevisionTreeWidget class Paints revision graph
