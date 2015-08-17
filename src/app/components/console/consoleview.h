@@ -26,6 +26,7 @@
 #define CONSOLEVIEW_H
 
 #include <QWidget>
+#include "commandprocess.h"
 
 namespace Ui {
 class ConsoleView;
@@ -46,11 +47,17 @@ public slots:
     void slotSetConsolePath(const QString &pPath);
     void slotReadConsoleOutput();
     void slotExec(QString cmd);
+    void slotOut(QString out);
+    void slotLock();
+    void slotUnlock();
 
     void debugCursorPositionChanged();
     void debugTextChanged();
     void debugdataChanged(QByteArray data);
     void debugBlockCountChanged(int count);
+
+signals:
+    void commandEntered(QString cmd);
 
 private:
     void startProcess();
@@ -63,6 +70,7 @@ private slots:
 private:
 
     bool mDirPrinted;
+    CommandProcess *mCmdProcess;
     QByteArray mData;
     QByteArray mReadOnlyIndicator;
     QProcess *mProcess;

@@ -32,11 +32,11 @@ ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConsoleView)
 {
+    mReadOnlyIndicator = "~>";
+    mDirPrinted = true;
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
     ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
-    mDirPrinted = true;
-    mReadOnlyIndicator = "~>";
 
     mProcess = new QProcess(this);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
@@ -46,6 +46,13 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
     connect(mProcess, SIGNAL(readyRead()), this, SLOT(slotReadConsoleOutput()));
     connect(mProcess, SIGNAL(readChannelFinished()), SLOT(slotPrintWorkingDir()));
+
+    /*connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
+    connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
+    connect(mCmdProcess, SIGNAL(errorOutput(QString)), this, SLOT(slotOut(QString)));
+    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));*/
+
+    //Debug connections
     connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
     connect(ui->plainTextEdit, SIGNAL(textChanged()), SLOT(debugTextChanged()));
     connect(ui->plainTextEdit, SIGNAL(dataChanged(QByteArray)),SLOT(debugdataChanged(QByteArray)));
@@ -54,40 +61,39 @@ ConsoleView::ConsoleView(QWidget *parent) :
 
 void ConsoleView::debugCursorPositionChanged()
 {
+    //Debug func
     qDebug() << " ConsoleView::Cursor position changed;" ;
 }
 
 void ConsoleView::debugTextChanged()
 {
+    //Debug func
     qDebug() << " ConsoleView::Text changed;";
 }
 
 void ConsoleView::debugdataChanged(QByteArray data)
 {
+    //Debug func
     qDebug() << "ConsoleView:: Data :" << data;
 }
 
 void ConsoleView::debugBlockCountChanged(int count)
 {
+    //Debug func
     qDebug() << "ConsoleView::BlockCountChanged to:" << count;
-}
-
-ConsoleView::~ConsoleView()
-{
-    mProcess->close();
-    mProcess->terminate();
-    delete ui;
 }
 
 void ConsoleView::execute(const QString &pCommand)
 {
     ui->plainTextEdit->putData("\n");
+
     mProcess->write(pCommand.toUtf8());
     if(mProcess->atEnd() && !mDirPrinted)
     {
         slotPrintWorkingDir();
     }
     QProcess* console = nullptr;
+    slotPrintWorkingDir(console->workingDirectory());
     if(osInfo()=="windows")
     {
         console = new QProcess(this);
@@ -106,6 +112,8 @@ void ConsoleView::execute(const QString &pCommand)
         console->waitForBytesWritten();
         resultConsole = console->readAll();
         qDebug() << resultConsole;
+
+        //TODO : очікування на ввід.
 
         if(!resultConsole.isEmpty())
             ui->plainTextEdit->putData(" RESULT : "
@@ -218,6 +226,21 @@ void ConsoleView::slotExec(QString cmd)
     execute(cmd);
 }
 
+void ConsoleView::slotOut(QString out)
+{
+    Q_UNUSED(out)
+}
+
+void ConsoleView::slotLock()
+{
+
+}
+
+void ConsoleView::slotUnlock()
+{
+
+}
+
 void ConsoleView::startProcess()
 {
     if(mProcess->state() != QProcess::Running)
@@ -242,4 +265,11 @@ void ConsoleView::slotPrintWorkingDir(const QString &dir)
 
     ui->plainTextEdit->putData(clearAppend(lWorkDir + mReadOnlyIndicator));
     mDirPrinted = true;
+}
+
+ConsoleView::~ConsoleView()
+{
+    mProcess->close();
+    mProcess->terminate();
+    delete ui;
 }
