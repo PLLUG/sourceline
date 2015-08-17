@@ -25,10 +25,12 @@
 HEADERS += \
     $$PWD/consoleview.h \
     $$PWD/console.h \
+    $$PWD/commandprocess.h \
 
 SOURCES += \
     $$PWD/consoleview.cpp \
     $$PWD/console.cpp \
+    $$PWD/commandprocess.cpp \
 
 FORMS += \
     $$PWD/consoleview.ui \
