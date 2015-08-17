@@ -11,6 +11,7 @@
 #include <boost/graph/topology.hpp>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QDateTime>
 
 using IndexPropertyMap = boost::property_map<revision_graph, boost::vertex_index_t>::type;
 using PredMap = boost::iterator_property_map<typename std::vector<vertex>::iterator, IndexPropertyMap>;
@@ -358,7 +359,7 @@ std::vector<vertex> RevisionTreeWidget::getSortedGraphByTime(const revision_grap
     std::sort(rVector.begin(), rVector.end(),
               [&graph](const vertex &vert1, const vertex &vert2) -> bool
     {
-        return graph[vert1].created < graph[vert2].created;
+        return graph[vert1].created > graph[vert2].created;
     });
 
     return rVector;
