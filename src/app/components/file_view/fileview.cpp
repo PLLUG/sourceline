@@ -109,13 +109,13 @@ FileView::~FileView()
  */
 void FileView::setRootPath(const QString &pPath)
 {
-    setTextToLineEdit(pPath);
+    cd(pPath);
     mFileModel->setRootPath(pPath);
     ui->listView->setRootIndex(mFileModel->index(pPath));
 
 }
 
-void FileView::setTextToLineEdit(const QString &path)
+void FileView::cd(const QString &path)
 {
     QString newPath = QDir::fromNativeSeparators(path);
     ui->lineEdit->setText(QDir::toNativeSeparators(newPath));
@@ -163,7 +163,7 @@ void FileView::slotDoubleClick(const QModelIndex &index)
     if(mFileModel->isDir(index))
     {
         ui->listView->setRootIndex(index);
-        setTextToLineEdit(mFileModel->fileInfo(index).absoluteFilePath());
+        cd(mFileModel->fileInfo(index).absoluteFilePath());
     }
 }
 
@@ -176,12 +176,12 @@ void FileView::slotGoUp()
     ui->listView->setRootIndex(up_index);
     if(up_index.isValid())
     {
-        setTextToLineEdit(mFileModel->fileInfo(up_index).absoluteFilePath());
+        cd(mFileModel->fileInfo(up_index).absoluteFilePath());
         ui->listView->setCurrentIndex(mFileModel->index(mFileModel->fileInfo(up_index).absoluteFilePath()));
     }
     else
     {
-        setTextToLineEdit(FileView::getHomePathForCurrentSystem());
+        cd(FileView::getHomePathForCurrentSystem());
     }
 }
 
@@ -191,7 +191,7 @@ void FileView::slotGoUp()
 void FileView::slotGoToPath()
 {
     const QString path = ui->lineEdit->text();
-    setTextToLineEdit(path);
+    cd(path);
     if (QDir().exists(path))
     {
         mFileModel->setRootPath(ui->lineEdit->text());
@@ -200,7 +200,7 @@ void FileView::slotGoToPath()
     }
     else
     {
-        setTextToLineEdit(mFileModel->fileInfo(ui->listView->currentIndex()).absoluteFilePath());
+        cd(mFileModel->fileInfo(ui->listView->currentIndex()).absoluteFilePath());
     }
 }
 

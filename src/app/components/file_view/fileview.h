@@ -56,7 +56,7 @@ public:
 
     void setRootPath(const QString &pPath);
 
-    void setTextToLineEdit(const QString &path);
+    void cd(const QString &path);
 
     /*!
      * \brief set root path in different platforms
