@@ -2,11 +2,21 @@
 
 #include <QString>
 
+/*!
+ * \brief constructor FileModel
+ * \param parent
+ */
 FileModel::FileModel(QWidget *parent) : QFileSystemModel(parent)
 {
     //setIconForRole(1,QStringLiteral(":/splash/img/added.png"));
 }
 
+/*!
+ * \brief set icon for role
+ * \param index item on model
+ * \param role item
+ * \return icon
+ */
 QVariant FileModel::data(const QModelIndex &index, int role)
 {
     QVariant result;
@@ -24,6 +34,11 @@ QVariant FileModel::data(const QModelIndex &index, int role)
     return result;
 }
 
+/*!
+ * \brief add pair role->icon to hash
+ * \param role for file
+ * \param path to icon
+ */
 void FileModel::setIconForAttributes(quint32 attributes, QString path)
 {
     mIcons.insert(attributes, path);

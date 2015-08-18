@@ -35,6 +35,12 @@ FileModel* ExplorerItemDelegate::fileSystemModel()
     return mFModel;
 }
 
+/*!
+ * \brief paint models
+ * \param painter
+ * \param option style
+ * \param index item on model
+ */
 void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 optv4 = opt;
@@ -59,12 +65,24 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->restore();
 }
 
+/*!
+ * \brief define hint size
+ * \param option style
+ * \param index item on model
+ * \return hint size
+ */
 QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     return QStyledItemDelegate::sizeHint(option, index);
 }
 
-
+/*!
+ * \brief explorer item delegate for createEditor
+ * \param widget which is parent
+ * \param option style
+ * \param index item on model
+ * \return editor
+ */
 QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index)
@@ -91,6 +109,12 @@ bool checkValidName(QString nameItem)
     return true;
 }
 
+/*!
+ * \brief set data in editor
+ * \param editor
+ * \param model item
+ * \param index item on model
+ */
 void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     Q_UNUSED(model)
@@ -130,6 +154,12 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
     }
 }
 
+/*!
+ * \brief update geometry for editor
+ * \param editor
+ * \param option style
+ * \param index item on model
+ */
 void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index)

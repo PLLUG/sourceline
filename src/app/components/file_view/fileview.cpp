@@ -23,7 +23,7 @@
 
 #include "fileview.h"
 #include "ui_fileview.h"
-
+#include "filemodel.h"
 #include <QMenu>
 #include <QFileSystemModel>
 #include <QDir>
@@ -38,7 +38,10 @@
 
 #include "ui/exploreritemdelegate.h"
 
-
+/*!
+ * \brief FileView::FileView
+ * \param parent
+ */
 FileView::FileView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileView)
@@ -100,6 +103,10 @@ FileView::~FileView()
     delete ui;
 }
 
+/*!
+ * \brief set root path for system
+ * \param path which must be root
+ */
 void FileView::setRootPath(const QString &pPath)
 {
     setTextToLineEdit(pPath);
@@ -119,6 +126,12 @@ void FileView::registerAction(QAction *pAction, SelectionFlags pSelecitonFlags)
     // More code here...
 }
 
+/*!
+  * \brief filter for events for object
+  * \param object name
+  * \param event for this object
+  * \return
+  */
 bool FileView::eventFilter(QObject *obj, QEvent *event)
 {
     if (obj == ui->lineEdit)
@@ -141,6 +154,10 @@ bool FileView::eventFilter(QObject *obj, QEvent *event)
     return false;
 }
 
+/*!
+ * \brief open folder on double click
+ * \param index item in model
+ */
 void FileView::slotDoubleClick(const QModelIndex &index)
 {
     if(mFileModel->isDir(index))
@@ -150,6 +167,9 @@ void FileView::slotDoubleClick(const QModelIndex &index)
     }
 }
 
+/*!
+ * \brief go up to repository
+ */
 void FileView::slotGoUp()
 {
     QModelIndex up_index = (QModelIndex)ui->listView->rootIndex().parent();
@@ -165,6 +185,9 @@ void FileView::slotGoUp()
     }
 }
 
+/*!
+ * \brief go to last repository
+ */
 void FileView::slotGoToPath()
 {
     const QString path = ui->lineEdit->text();
@@ -181,6 +204,10 @@ void FileView::slotGoToPath()
     }
 }
 
+/*!
+ * \brief action create menu on right button click
+ * \param position item on view
+ */
 void FileView::slotRightBtnClick(const QPoint &pos)
 {
     QModelIndex lIndex = ui->listView->indexAt(pos);
@@ -198,6 +225,9 @@ void FileView::slotRightBtnClick(const QPoint &pos)
     }
 }
 
+/*!
+ * \brief create new folder
+ */
 void FileView::slotCreateNewFolder()
 {
     //create folder
@@ -254,6 +284,9 @@ bool removeDir(const QString &dirName)
     return result;
 }
 
+/*!
+ * \brief delete folder
+ */
 void FileView::slotDeleteFolder()
 {
     QModelIndex currentIndex = ui->listView->currentIndex();
@@ -270,6 +303,9 @@ void FileView::slotDeleteFolder()
     }
 }
 
+/*!
+ * \brief delete file
+ */
 void FileView::slotDeleteFile()
 {
     QModelIndex currentIndex = ui->listView->currentIndex();
@@ -286,6 +322,9 @@ void FileView::slotDeleteFile()
     }
 }
 
+/*!
+ * \brief rename rolder or file
+ */
 void FileView::slotRenameFolderOrFile()
 {
     QModelIndex index = ui->listView->currentIndex();
