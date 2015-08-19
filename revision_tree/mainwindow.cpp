@@ -41,7 +41,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mProcess, static_cast<void (QProcess::*)(int exitCode, QProcess::ExitStatus exitStatus)>(&QProcess::finished), this, [=]()
     {
-        ui->revWidget->setGraph(mModel->graph());
+        ui->revWidget->setModel(mModel);
     });
 
     connect(mProcess,&QProcess::readyReadStandardOutput, this, [=]()
@@ -84,12 +84,17 @@ MainWindow::MainWindow(QWidget *parent) :
             {
                 mModel->addNode(parent.toStdString(), newCommit);
             }
+            mModel->putProperty(hash.toStdString(),"hash",hash);
+            mModel->putProperty(hash.toStdString(),"author",author);
+            mModel->putProperty(hash.toStdString(),"email",email);
+            mModel->putProperty(hash.toStdString(),"time",QDateTime::fromTime_t(time.toInt()));
+            mModel->putProperty(hash.toStdString(),"message",message);
         }
     });
 
     QString program = "git";
     QStringList arguments;
-    arguments << "log" << "--pretty=format:%H\a%P\a%an\a%ae\a%at\a%s\a%n\ ";
+    arguments << "log" << "--pretty=format:%H\a%P\a%an\a%ae\a%at\a%s\a%n";
 
     mProcess->start(program, arguments);
 }

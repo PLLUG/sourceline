@@ -21,9 +21,11 @@
 ***                                                                          ***
 *******************************************************************************/
 
+#include <boost/property_map/dynamic_property_map.hpp>
 #include "revisionmodel.h"
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/iteration_macros.hpp>
+#include <boost/graph/topological_sort.hpp>
 
 //maybe use labeled_graph where labeles are commit ids (and remove id from property)? - no
 //#include <boost/graph/labeled_graph.hpp>
@@ -35,8 +37,18 @@
 //modified adjacency_list.hpp because of compile error
 //TODO: choose the best containers for V and E
 
+std::ostream& operator<<(std::ostream& os, const QVariant& pVariant)
+{
+    return os << pVariant.toString().toStdString();
+}
+
+std::istream& operator>>(std::istream& is, const QVariant& pVariant) //(not supported)
+{
+    return is;
+}
+
 RevisionModel::RevisionModel(QObject *parent):
-    QAbstractItemModel(parent)
+    QAbstractTableModel(parent)
 {
 }
 
@@ -63,7 +75,7 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
     //find vertexes in graph if they are present
     BGL_FORALL_VERTICES(v, mGraph, revision_graph)
     {
-       const auto &name = mGraph[v].name;
+        const auto &name = mGraph[v].name;
         if(pNodeInfo.name == name)
         {
             v_new = v;
@@ -107,32 +119,101 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
     {
         boost::add_edge(v_parent, v_new, mGraph);
     }
+
+    //TODO: take to account that vertices were already sorted
+    //perform topological sort (or some other sort later)
+    sorted_vertices.clear();
+    topological_sort(mGraph, std::back_inserter(sorted_vertices));
 }
 
-QModelIndex RevisionModel::index(int row, int column, const QModelIndex &parent) const
+void RevisionModel::putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value)
 {
-    return QModelIndex();
+    if(pRecepientId.empty() || property.empty())
+        return;
+    if(!mPropertyMaps.count(property))
+    {
+        //if conteiner for property doesn't exist, create one
+        std::map<std::string, QVariant> propertyMap;
+        mPropertyMaps.insert(std::make_pair(property,std::move(propertyMap)));
+        boost::associative_property_map<std::map<std::string, QVariant>>
+                associativePropertyMap(mPropertyMaps.at(property));
+        mProperties.property(property,associativePropertyMap);
+    }
+    put(property,mProperties,pRecepientId,value);
 }
 
-QModelIndex RevisionModel::parent(const QModelIndex &child) const
+vertex RevisionModel::vertexAt(int row) const
 {
-    //return a node from which the edge to child starts
-    return QModelIndex();
+    return sorted_vertices.at(row);
 }
 
-int RevisionModel::rowCount(const QModelIndex &parent) const
+int RevisionModel::rowCount(const QModelIndex &) const
 {
     return boost::num_vertices(mGraph);
 }
 
-int RevisionModel::columnCount(const QModelIndex &parent) const
+int RevisionModel::columnCount(const QModelIndex &) const
 {
-    return 0;
+    return mPropertyMaps.size();
+}
+
+template<typename Value, typename Key>
+Value
+get_copied(const std::string& name, const boost::dynamic_properties& dp, const Key& key)
+{
+    for (boost::dynamic_properties::const_iterator i = dp.lower_bound(name);
+         i != dp.end() && i->first == name; ++i) {
+        if (i->second->key() == typeid(key))
+            return boost::any_cast<Value>(i->second->get(key));
+    }
+
+    BOOST_THROW_EXCEPTION(boost::dynamic_get_failure(name));
 }
 
 QVariant RevisionModel::data(const QModelIndex &index, int role) const
 {
-    return QVariant();
+    if(Qt::DisplayRole == role || Qt::AccessibleTextRole == role)
+    {
+        vertex v = vertexAt(index.row());
+        const std::string property = headerData(index.column(),Qt::Horizontal,role).toString().toStdString();
+        const std::string &name = mGraph[v].name;
+
+        //NOTE: add mutable to use this
+        //        boost::associative_property_map<std::map<std::string, QVariant>>
+        //                associativePropertyMap(mPropertyMaps.at(property));
+        //        return get(associativePropertyMap,name);
+
+        //        QVariant (*get_test)(const std::string& name, const boost::dynamic_properties& dp,const QVariant& key)
+        //                = &boost::get<QVariant,std::string>;
+        //ERROR: compiler doesn't see this function overload in dynamic_property_map.hpp but it works when I renamed, why?
+        //        return boost::get<QVariant>(property, mProperties, name);
+
+        return get_copied<QVariant>(property, mProperties, name);
+    }
+    else
+        return QVariant();
+}
+
+QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int role) const
+{
+    QVariant headerName;
+    if(Qt::DisplayRole == role || Qt::AccessibleTextRole == role)
+    {
+        if(Qt::Horizontal == orientation)
+        {
+            //TODO:choose container for property names or smth
+            int i = 0;
+            for(const auto &name: mPropertyMaps)
+            {
+                if(i++ == section)
+                {
+                    headerName.setValue(QString::fromStdString(name.first));
+                    break;
+                }
+            }
+        }
+    }
+    return headerName;
 }
 
 revision_graph RevisionModel::graph() const

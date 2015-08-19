@@ -40,10 +40,11 @@ RevisionTree::~RevisionTree()
     delete ui;
 }
 
-void RevisionTree::setGraph(const revision_graph &pGraph)
+void RevisionTree::setModel(RevisionModel *model)
 {
-    ui->revisionTreeWidget->setGraph(pGraph);
-    mGraph = pGraph;
+    ui->revisionTableView->setModel(model);
+    ui->revisionTreeWidget->setGraph(model->graph());
+    mGraph = model->graph();
     clearScene();
     read();
     resize(width(),ui->revisionTreeWidget->height());

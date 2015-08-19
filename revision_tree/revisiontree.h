@@ -40,7 +40,7 @@ public:
     explicit RevisionTree(QWidget *parent = 0);
     ~RevisionTree();
 
-    void setGraph(const revision_graph &graph);
+    void setModel(RevisionModel *model);
 private:
     void clearScene();
     void read();

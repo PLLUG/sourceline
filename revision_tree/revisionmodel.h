@@ -22,8 +22,11 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QAbstractItemModel>
+#include <QAbstractTableModel>
+#include <boost/property_map/dynamic_property_map.hpp>
 #include <boost/graph/adjacency_list.hpp>
+#include <set>
+#include <map>
 #include "revisionnode.h"
 
 using revision_graph = boost::adjacency_list<
@@ -33,27 +36,33 @@ boost::bidirectionalS, // bidirectional because we want to show lists of parents
 RevisionNode>;
 using vertex = boost::graph_traits<revision_graph>::vertex_descriptor;
 
-//TODO: separate QAbstractItemModel interface from graph
-class RevisionModel : public QAbstractItemModel
+class RevisionModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
     RevisionModel(QObject *parent = 0);
 
-    QModelIndex index(int row, int column, const QModelIndex &parent = QModelIndex()) const;
-    QModelIndex parent(const QModelIndex &child) const;
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
 
     revision_graph graph() const;
     void debugTree(const revision_graph &graph) const;
     void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
     void setInitialNode(const RevisionNode &);
 
+    void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
+
+private:
+    vertex vertexAt(int row) const;
+
 private:
     revision_graph mGraph;
+    std::map<std::string, std::map<std::string,QVariant>> mPropertyMaps;//property maps by property name
+    boost::dynamic_properties mProperties;
+    std::vector< vertex > sorted_vertices;
 };
 
 #endif // REVISIONMODEL_H
