@@ -4,12 +4,12 @@
 #include <QPaintEvent>
 
 SplashScreen::SplashScreen(QWidget *parent) :
-    QWidget(parent)
-{
+    QWidget(parent),
+    mPercentage(0),
+    mStartWidth(0),
+    mEndWidth(0)
+{    
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint | Qt::FramelessWindowHint);
-    mPercentage = 0;
-    mStartWidth = 0;
-    mEndWidth = 0;
 }
 
 void SplashScreen::setSplashScreen(const QPixmap &pSplash)

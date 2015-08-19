@@ -15,7 +15,7 @@ const QString invalidCharacters = "\\/:*?\"<>|";
 ExplorerItemDelegate::ExplorerItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
 {
-    mFModel = new QFileSystemModel(this);
+    mFModel = nullptr;
 }
 
 void ExplorerItemDelegate::setFileSystemModel(QFileSystemModel *model)
