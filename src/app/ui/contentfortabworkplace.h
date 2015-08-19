@@ -54,20 +54,14 @@ public:
      * \param pVisible
      */
     void setVisibleForContent(bool pVisible);
-    /*!
-     * \brief saveSettings
-     * \param pTabName
-     */
-    void saveSettings();
-
-    void restoreSettings();
 
     bool isContentVisible();
 
     QByteArray tabState() const;
 
 public slots:
-    void setTabState(QByteArray pTabState);
+    void setTabState(QVariant pTabState);
+    void sentSignalTabStateChanged();
 
 signals:
     void tabStateChanged(QByteArray pTabState);
@@ -85,8 +79,10 @@ private:
     ConsoleView *uiConsoleContents;
     bool mIsVisble;
     QString mPathToSettingsFile;
-    QSettings *mSettings;
-    QByteArray m_tabState;
+    QSettings *mSettings;    
+
+private:
+    void closeEvent(QCloseEvent *pEvent);
 };
 
 #endif // CONTENTFORTABWORKPLACE_H

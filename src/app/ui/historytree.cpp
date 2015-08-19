@@ -1,8 +1,10 @@
 #include "historytree.h"
 #include "ui_historytree.h"
 #include "guidefs.h"
+#include "qtimer.h"
 
 #include <QWidget>
+#include <QMessageBox>
 
 HistoryTree::HistoryTree(QWidget *parent) :
     GenericDockWidget(parent),

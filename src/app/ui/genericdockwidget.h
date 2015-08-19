@@ -10,7 +10,7 @@
  */
 class GenericDockWidget : public QDockWidget
 {
-    Q_OBJECT
+    Q_OBJECT    
 public:
     explicit GenericDockWidget(QWidget *parent = 0);
 
@@ -28,12 +28,25 @@ public:
      */
     void addPage(int pIndex, QWidget *pWidget);
 
+signals:
+    void dockSizeChanged();
+
 public slots:
     /*!
      * \brief Should be called when current page in application was changed.
      * \param pPage Current page that corresponds to current active repository tab in application.
      */
     void slotSetPage(int pPage);
+
+private:
+    QTimer* mTimer;
+
+private slots:
+    void reportDockChanged();
+
+private:
+    void resizeEvent(QResizeEvent *pEvent);
+
 };
 
 #endif // GENERICDOCKWIDGET_H

@@ -20,7 +20,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainWindow(SettingsManager *pSettingsManager, QWidget *parent = 0);
+    explicit MainWindow(SettingsManager *pSettingsManager, SettingStorage *mStorage, QWidget *parent = 0);
     ~MainWindow();
     Ui::MainWindow *ui;
 

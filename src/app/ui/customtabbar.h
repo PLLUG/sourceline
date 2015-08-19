@@ -29,6 +29,8 @@
 
 class QWidget;
 class Settings;
+class ContentForTabWorkplace;
+class SettingStorage;
 
 namespace Ui {
 class CustomTabBar;
@@ -39,7 +41,7 @@ class CustomTabBar : public QTabWidget
     Q_OBJECT
 
 public:
-    explicit CustomTabBar(SettingsManager *pSettingsManager, QWidget *parent = 0);
+    explicit CustomTabBar(SettingsManager *pSettingsManager, SettingStorage *pStorage, QWidget *parent = 0);
     ~CustomTabBar();
 public slots:
     /*!
@@ -63,6 +65,11 @@ private:
     Ui::CustomTabBar *ui;
 
     Settings *mSettings;
+    SettingStorage *mStorage;
+    SettingsManager *mSettingsManager;
+
+private:
+    ContentForTabWorkplace *getWidget(int pIndex);
 };
 
 #endif // CUSTOMTABBAR_H

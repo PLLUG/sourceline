@@ -177,7 +177,7 @@ void ApplicationBuilder::initApp()
 void ApplicationBuilder::createUi()
 {
     // Application main window
-    mMainWindow = new MainWindow(mSettingsManager);
+    mMainWindow = new MainWindow(mSettingsManager, mStorage);
     mMainWindow->lower();
 
     // Helper class for building main menu

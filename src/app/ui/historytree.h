@@ -4,6 +4,7 @@
 #include "genericdockwidget.h"
 
 class QWidget;
+class QTimer;
 
 namespace Ui {
 class HistoryTree;
@@ -18,11 +19,11 @@ public:
     DockTypes::DockType type() const;
     ~HistoryTree();
 
-private:
-    Ui::HistoryTree *ui;
-
 public slots:
     void slotSetPage(int pPage);
+
+private:
+    Ui::HistoryTree *ui;
 };
 
 #endif // HISTORYTREE_H

@@ -21,6 +21,9 @@
 ***                                                                          ***
 *******************************************************************************/
 
+#include <QCloseEvent>
+#include <QTimer>
+
 #include "contentfortabworkplace.h"
 #include "ui_contentfortabworkplace.h"
 #include "ui/consoleview.h"
@@ -50,20 +53,28 @@ ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent, QString TabName)
     uiHistoryTreeContents = new RevisionView(uiHistoryTree);
     uiHistoryTree->setWidget(uiHistoryTreeContents);
     addDockWidget(static_cast<Qt::DockWidgetArea>(8), uiHistoryTree);
+    connect(uiHistoryTree, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(uiHistoryTree, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
 
     //COMMENT: Create DockWidget EditorView and add this EditorView to ContentForTabWorkplace
     uiEditorView = new EditorView(this);
     addDockWidget(static_cast<Qt::DockWidgetArea>(8), uiEditorView);
+    connect(uiEditorView, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(uiEditorView, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
 
     //COMMENT: Create DockWidget DockFileView, set content for it and add this DockFileView to ContentForTabWorkplace
     uiFileView = new DockFileView(this);
     uiFileViewContents = new FileView(uiFileView);
     uiFileView->setWidget(uiFileViewContents);
     addDockWidget(static_cast<Qt::DockWidgetArea>(1), uiFileView);
+    connect(uiFileView, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(uiFileView, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
 
     //COMMENT: Create DockWidget RevisionTable and add this RevisionTable to ContentForTabWorkplace
     uiRevisionTable = new RevisionTable(this);
     addDockWidget(static_cast<Qt::DockWidgetArea>(2), uiRevisionTable);
+    connect(uiRevisionTable, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(uiRevisionTable, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
 
     //COMMENT: Create DockWidget DockConsole, set content for it and add this DockConsole to ContentForTabWorkplace
     uiConsole = new DockConsole(this);
@@ -71,45 +82,25 @@ ContentForTabWorkplace::ContentForTabWorkplace(QWidget *parent, QString TabName)
     uiConsoleContents = new ConsoleView(uiConsole);
     uiConsole->setWidget(uiConsoleContents);
     addDockWidget(static_cast<Qt::DockWidgetArea>(2), uiConsole);
+    connect(uiConsole, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(uiConsole, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
 
     splitDockWidget(uiRevisionTable, uiEditorView, Qt::Horizontal);
     splitDockWidget(uiEditorView, uiConsole, Qt::Vertical);
     tabifyDockWidget(uiEditorView, uiFileView);
     tabifyDockWidget(uiRevisionTable, uiHistoryTree);
 
-    mPathToSettingsFile = "Tabs Settings/" + TabName + ".ini";
-
-    mSettings = new QSettings(mPathToSettingsFile, QSettings::IniFormat);
-
-    saveSettings();
-
     mIsVisble = true;
 }
 
 ContentForTabWorkplace::~ContentForTabWorkplace()
 {
-    QFile::remove(mPathToSettingsFile);
     delete uiConsole;
     delete uiEditorView;
     delete uiFileView;
     delete uiHistoryTree;
     delete uiRevisionTable;
     delete ui;
-}
-
-void ContentForTabWorkplace::saveSettings()
-{
-    mSettings->setValue("state",saveState());
-    mSettings->setValue("geometry",saveGeometry());
-    mSettings->sync();
-}
-
-void ContentForTabWorkplace::restoreSettings()
-{
-    QByteArray lGeometryData = mSettings->value("geometry").toByteArray();
-    restoreGeometry(lGeometryData);
-    QByteArray lStateData = mSettings->value("state").toByteArray();
-    restoreState(lStateData);
 }
 
 void ContentForTabWorkplace::setVisibleForContent(bool pVisible)
@@ -132,11 +123,25 @@ QByteArray ContentForTabWorkplace::tabState() const
     return saveState();
 }
 
-void ContentForTabWorkplace::setTabState(QByteArray pTabState)
+void ContentForTabWorkplace::setTabState(QVariant pTabState)
 {
-    if (tabState() == pTabState)
+    QByteArray lTabState = pTabState.toByteArray();
+    if (tabState() == lTabState)
         return;
+    blockSignals(true);
+    restoreState(lTabState);
+    blockSignals(false);
+    emit tabStateChanged(lTabState);
+}
 
-    restoreState(pTabState);
-    emit tabStateChanged(pTabState);
+void ContentForTabWorkplace::sentSignalTabStateChanged()
+{
+    emit tabStateChanged(tabState());
+}
+
+void ContentForTabWorkplace::closeEvent(QCloseEvent *pEvent)
+{
+    emit tabStateChanged(tabState());
+    pEvent->accept();
+    QMainWindow::closeEvent(pEvent);
 }

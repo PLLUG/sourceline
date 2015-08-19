@@ -16,7 +16,7 @@
 #include <QTabWidget>
 #include <QHBoxLayout>
 
-MainWindow::MainWindow(SettingsManager *pSettingsManager, QWidget *parent) :
+MainWindow::MainWindow(SettingsManager *pSettingsManager, SettingStorage *mStorage, QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
@@ -37,13 +37,13 @@ MainWindow::MainWindow(SettingsManager *pSettingsManager, QWidget *parent) :
 
     // TASK: creation of PageManager should be performed by ApplicationBuilder
     mTabsAPI = new TabsAPI(this);
-    mTabBar = new CustomTabBar(pSettingsManager, this);
+    mTabBar = new CustomTabBar(pSettingsManager, mStorage, this);
     connect(TrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
                  this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
 
     this->setCentralWidget(mTabBar);
 
-    connect(mTabBar, &CustomTabBar::tabCloseRequested, mTabBar, &CustomTabBar::removeTab);
+    //connect(mTabBar, &CustomTabBar::tabCloseRequested, mTabBar, &CustomTabBar::removeTab);
 
     mAmountOpenedTabs = 0;
 

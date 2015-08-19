@@ -25,11 +25,12 @@
 #include "ui_customtabbar.h"
 #include "contentfortabworkplace.h"
 #include "settings.h"
+#include "settings_dialog/settingstorage.h"
 
 #include <QDebug>
 #include <QWidget>
 
-CustomTabBar::CustomTabBar(SettingsManager *pSettingsManager, QWidget *parent) :
+CustomTabBar::CustomTabBar(SettingsManager *pSettingsManager, SettingStorage *pStorage, QWidget *parent) :
     QTabWidget(parent),
     ui(new Ui::CustomTabBar)
 {
@@ -42,7 +43,10 @@ CustomTabBar::CustomTabBar(SettingsManager *pSettingsManager, QWidget *parent) :
     connect(this, SIGNAL(currentChanged(int)),this,SLOT(setAllTabsInvisibleExceptCurrentTab(int)));    
     mSettings = new Settings(this);
     mSettings->setAutoCommit(true);
-    pSettingsManager->addSettings("settingsTabs","tab",mSettings);
+    mSettingsManager = pSettingsManager;
+    mSettingsManager->addSettings("settingsTabs", "tab", mSettings);
+    mStorage = pStorage;
+    //mStorage->slotLoadSettings(mSettingsManager->pathBySettings(mSettings));
 }
 
 CustomTabBar::~CustomTabBar()
@@ -53,35 +57,41 @@ CustomTabBar::~CustomTabBar()
 void CustomTabBar::slotAddNewWorkplace(const QString &pName)
 {
     QTabWidget::addTab(new ContentForTabWorkplace(this, pName), pName);
-    setCurrentIndex(this->count()-1);
-    mSettings->add(tabText(currentIndex()),dynamic_cast<ContentForTabWorkplace*>(currentWidget()),"tabState");
-    mSettings->subscribe(tabText(currentIndex()),dynamic_cast<ContentForTabWorkplace*>(widget(currentIndex())),SLOT(setTabState(QByteArray)));
-    //mSettings->setSettingsPath("view_settings/tabs_settings");
+    setCurrentIndex(this->count()-1);    
+    mSettings->add(pName, getWidget(currentIndex()), "tabState");
+    mSettings->subscribe(pName, getWidget(currentIndex()), SLOT(setTabState(QVariant)));
 }
 
 void CustomTabBar::slotCloseWorkplace(int pIndex)
-{    
-    dynamic_cast<ContentForTabWorkplace*>(widget(pIndex))->~ContentForTabWorkplace();
+{
+    getWidget(pIndex)->close();
+    getWidget(pIndex)->~ContentForTabWorkplace();
 }
 
 void CustomTabBar::setAllTabsInvisibleExceptCurrentTab(int pIndex)
 {   
-    for(int i = 0; i < count(); i++)
+    /*for(int i = 0; i < count(); i++)
     {
 
         if(i == pIndex)
         {
-            dynamic_cast<ContentForTabWorkplace*>(widget(pIndex))->setVisibleForContent(true);
+            getWidget(pIndex)->setVisibleForContent(true);
             //dynamic_cast<ContentForTabWorkplace*>(widget(pIndex))->restoreSettings();
+            mStorage->slotLoadSettings(mSettingsManager->pathBySettings(mSettings));
         }
         else
         {
-            if(dynamic_cast<ContentForTabWorkplace*>(widget(i))->isContentVisible())
+            if(getWidget(i)->isContentVisible())
             {
-                //dynamic_cast<ContentForTabWorkplace*>(widget(i))->saveSettings();
+                getWidget(i)->sentSignalTabStateChanged();
                 //mSettings->commit();
-                dynamic_cast<ContentForTabWorkplace*>(widget(i))->setVisibleForContent(false);
+                getWidget(i)->setVisibleForContent(false);
             }
         }
-    }
+    }*/
+}
+
+ContentForTabWorkplace* CustomTabBar::getWidget(int pIndex)
+{
+    return dynamic_cast<ContentForTabWorkplace*>(widget(pIndex));
 }
