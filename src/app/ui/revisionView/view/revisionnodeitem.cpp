@@ -30,9 +30,9 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QStyleOptionGraphicsItem>
 
-RevisionNodeItem::RevisionNodeItem(RevisionNode *dataNode, QGraphicsItem *parent) :
+RevisionNodeItem::RevisionNodeItem(RevisionNode *pDataNode, QGraphicsItem *parent) :
     QGraphicsItem(parent),
-    mData(dataNode)
+    mData(pDataNode)
 {
     mSize = QSize(10, 10);
     setAcceptHoverEvents(true);
@@ -43,39 +43,43 @@ QRectF RevisionNodeItem::boundingRect() const
     return QRectF(0, 0, mSize.width(), mSize.height());
 }
 
-void RevisionNodeItem::paintRevisionPoint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *) const
+void RevisionNodeItem::paintRevisionPoint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *) const
 {
-    painter->setRenderHint(QPainter::Antialiasing);
-    if ( option->state & QStyle::State_MouseOver )
+    pPainter->setRenderHint(QPainter::Antialiasing);
+    if (pOption->state & QStyle::State_MouseOver)
     {
-        painter->setBrush(QColor(255, 150, 150));
+        pPainter->setBrush(QColor(255, 150, 150));
     }
     else
     {
-        painter->setBrush(QColor(255, 0, 0));
+        pPainter->setBrush(QColor(255, 0, 0));
     }
-    painter->setPen(Qt::NoPen);
-    painter->drawEllipse(boundingRect().center(), 3, 3);
-    painter->setBrush(Qt::NoBrush);
-    painter->setPen(Qt::red);
-    painter->drawEllipse(boundingRect());
+    pPainter->setPen(Qt::NoPen);
+    pPainter->drawEllipse(boundingRect().center(), 3, 3);
+    pPainter->setBrush(Qt::NoBrush);
+    pPainter->setPen(Qt::red);
+    pPainter->drawEllipse(boundingRect());
 }
 
-void RevisionNodeItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void RevisionNodeItem::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
 {
-    paintRevisionPoint(painter, option, widget);
+    paintRevisionPoint(pPainter, pOption, pWidget);
 }
 
 void RevisionNodeItem::hoverEnterEvent(QGraphicsSceneHoverEvent *)
 {
-    RevisionGrid *grid = dynamic_cast<RevisionGrid*>(parentItem());
-    if ( grid )
-        grid->drawText(mData->data(RevisionNode::IDR_DisplayRole).toString(), this);
+    RevisionGrid *lGrid = dynamic_cast<RevisionGrid*>(parentItem());
+    if (lGrid)
+    {
+        lGrid->drawText(mData->data(RevisionNode::IDR_DisplayRole).toString(), this);
+    }
 }
 
 void RevisionNodeItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *)
 {
-    RevisionGrid *grid = dynamic_cast<RevisionGrid*>(parentItem());
-    if ( grid )
-        grid->drawText(QString(), this);
+    RevisionGrid *lGrid = dynamic_cast<RevisionGrid*>(parentItem());
+    if (lGrid)
+    {
+        lGrid->drawText(QString(), this);
+    }
 }

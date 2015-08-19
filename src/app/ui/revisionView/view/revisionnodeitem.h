@@ -31,13 +31,13 @@ class RevisionNode;
 class RevisionNodeItem : public QGraphicsItem/*, public RevisionNode*/
 {
 public:
-    RevisionNodeItem(RevisionNode *dataNode, QGraphicsItem *parentNode = 0);
+    RevisionNodeItem(RevisionNode *pDataNode, QGraphicsItem *parentNode = 0);
     QRectF boundingRect() const;
 
-    virtual void paintRevisionPoint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0) const;
+    virtual void paintRevisionPoint(QPainter * pPainter, const QStyleOptionGraphicsItem * pOption, QWidget *) const;
 
 protected:
-    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    void paint(QPainter * pPainter, const QStyleOptionGraphicsItem * pOption, QWidget * pWidget = 0);
     void hoverEnterEvent(QGraphicsSceneHoverEvent * event);
     void hoverLeaveEvent(QGraphicsSceneHoverEvent * event);
 

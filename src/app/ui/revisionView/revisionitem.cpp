@@ -23,18 +23,33 @@
 
 #include "revisionitem.h"
 
-RevisionItem::RevisionItem(const QString &message) :
-    mMessage(message),
+RevisionItem::RevisionItem(const QString &pMessage) :
+    mMessage(pMessage),
     mParent(0)
 {
 }
 
-void RevisionItem::addBranch(RevisionItem *b)
+QString RevisionItem::message() const
 {
-    mBranches.append(b);
+    return mMessage;
 }
 
-void RevisionItem::setParentBranch(Branch *p)
+void RevisionItem::addBranch(RevisionItem *pBranch)
 {
-    mParent = p;
+    mBranches.append(pBranch);
+}
+
+void RevisionItem::setParentBranch(Branch *pParentBranch)
+{
+    mParent = pParentBranch;
+}
+
+Branch *RevisionItem::parentBranch() const
+{
+    return mParent;
+}
+
+QList<RevisionItem *> RevisionItem::branches() const
+{
+    return mBranches;
 }

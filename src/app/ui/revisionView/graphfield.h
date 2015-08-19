@@ -33,11 +33,11 @@ class GraphField
 public:
     GraphField();
 
-    int width() const { return mWidth; }
-    int height() const { return mHeight; }
+    int width() const;
+    int height() const;
 
-    void addCommit(Node *n, Node *parent);
-    void addBranch(Node *n);
+    void addCommit(Node *pNode, Node *pParent);
+    void addBranch(Node *pNode);
 
 private:
     int mWidth;

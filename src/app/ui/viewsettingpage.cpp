@@ -61,15 +61,15 @@ ViewSettingPage::~ViewSettingPage()
     delete mDialogUi;
 }
 
-void ViewSettingPage::setMainUi(Ui::MainWindow *lMainUi)
+void ViewSettingPage::setMainUi(Ui::MainWindow *pMainUi)
 {
-    mMainUi = lMainUi;
+    mMainUi = pMainUi;
 }
 
 void ViewSettingPage::slotBtnOpen()
 {
-    consolePath = QFileDialog::getOpenFileName();
-    mDialogUi->lineEdit->setText(consolePath);
+    mConsolePath = QFileDialog::getOpenFileName();
+    mDialogUi->lineEdit->setText(mConsolePath);
 //    ConsoleView *lConsoleView = qobject_cast<ConsoleView *>(mMainUi->uiConsole->widget());
 //    if(lConsoleView)
 //    {

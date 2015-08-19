@@ -49,7 +49,7 @@ private slots:
     void slotBtnOk();
     void slotBtnCancel();
     void slotBtnApply();
-    void slotOnListItemClicked(int index);
+    void slotOnListItemClicked(int pIndex);
 
     void slotPageModified();
 
@@ -57,7 +57,7 @@ private:
     Ui::AppSettingsDialog *ui;
     QPushButton* mApplyButton;
     QStringList mSettingsNameList;
-    QVector<QWidget*> settingsWidgetList;
+    QVector<QWidget*> mSettingsWidgetList;
     QList<SettingsPage*> mSettingPages;
 
     bool mSettingsChanged;

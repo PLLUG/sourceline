@@ -201,15 +201,15 @@ void ConsoleView::startProcess()
     }
 }
 
-QByteArray ConsoleView::clearAppend(const QString &tmp)
+QByteArray ConsoleView::clearAppend(const QString &pTmp)
 {
     mData.clear();
-    return mData.append(tmp);
+    return mData.append(pTmp);
 }
 
-void ConsoleView::slotPrintWorkingDir(const QString &dir)
+void ConsoleView::slotPrintWorkingDir(const QString &pDir)
 {
-    QString lWorkDir = dir;
+    QString lWorkDir = pDir;
 
     ui->plainTextEdit->putData(clearAppend(lWorkDir+"~>"));
     mDirPrinted = true;

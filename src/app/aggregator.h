@@ -31,9 +31,9 @@ class Aggregator: public QObject
     Q_OBJECT
 
 public:
-    Aggregator(QObject *parent = nullptr);
+    explicit Aggregator(QObject *parent = nullptr);
     ~Aggregator();
-    void addObject(QObject *obj);
+    void addObject(QObject *pObj);
 
     template <typename T>
     T* object();
@@ -50,9 +50,8 @@ T* Aggregator::object()
     T * rObj = nullptr;
     QObjectList children = this->children();
     for(int i = 0; i < children.count(); i++)
-    {
-        T *rObj = qobject_cast<T*>(children[i]);
-        if(T *rObj = qobject_cast<T*>(children[i]))
+    {        
+        if(rObj = qobject_cast<T*>(children[i]))
         {
             break;
         }

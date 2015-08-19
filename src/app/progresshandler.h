@@ -9,7 +9,7 @@ class ProgressHandler : public QObject
 public:
     void addStage();
     void setStageCount(int pStageCount);
-    void setCurrentStageProgress(int progress);
+    void setCurrentStageProgress(int pProgress);
 
     void finishStage();
     void finish();

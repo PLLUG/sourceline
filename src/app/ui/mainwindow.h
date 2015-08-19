@@ -3,7 +3,7 @@
 
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#include "contentfortabworkplace.h"
+#include "contentfortab.h"
 
 class TabsAPI;
 class CustomTabBar;
@@ -23,11 +23,11 @@ public:
     Ui::MainWindow *ui;
 
 private:
-    QSystemTrayIcon *TrayIcon;
-    QMenu *trayMenu;
+    QSystemTrayIcon *mTrayIcon;
+    QMenu *mTrayMenu;
     CustomTabBar *mTabBar;
     TabsAPI *mTabsAPI;
-    int amountOpenedTabs;
+    int mAmountOpenedTabs;
 
 
 signals:

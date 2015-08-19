@@ -100,7 +100,7 @@ ApplicationBuilder::~ApplicationBuilder()
 
 void ApplicationBuilder::slotBuild()
 {
-    qDebug("SourceLine : Building Application");
+    qDebug("    SourceLine : Building Application");
     ProgressHandler::instance()->setStageCount(5);
 
     /*!
@@ -204,7 +204,6 @@ void ApplicationBuilder::createUi()
     // -= Create User Actions
     createUiActions(mMainWindow);
     ProgressHandler::instance()->setCurrentStageProgress(66);
-
 
     ProgressHandler::instance()->finishStage();
 }

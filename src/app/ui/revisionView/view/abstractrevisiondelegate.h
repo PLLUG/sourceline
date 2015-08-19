@@ -40,20 +40,20 @@ class AbstractRevisionDelegate : public QObject, public QGraphicsItem
     friend class Bubble;
 public:
     enum DataRole { DR_Drawing, DR_Text, DR_Id };
-    AbstractRevisionDelegate(QGraphicsItem *parent = 0);
+    explicit AbstractRevisionDelegate(QGraphicsItem *parent = 0);
     QRectF boundingRect() const;
-    void setSize(qreal width, qreal height);
+    void setSize(qreal pWidth, qreal pHeight);
 
-    void setPreviousState(const QPointF &pos);
+    void setPreviousState(const QPointF &pPos);
 
 signals:
-    void needRequestFromView(AbstractRevisionDelegate *item);
+    void needRequestFromView(AbstractRevisionDelegate *pItem);
 
     void commit(AbstractRevisionDelegate*);
     void branch(AbstractRevisionDelegate*);
 
 protected:
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget = 0);
     void mouseReleaseEvent(QGraphicsSceneMouseEvent *event);
     void contextMenuEvent(QGraphicsSceneContextMenuEvent * event);
 

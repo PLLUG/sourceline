@@ -61,13 +61,13 @@ HEADERS += \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
     ui/clonedialog.h \
-    ui/contentfortabworkplace.h \
     ui/tabsapi.h \
     aggregator.h \
     ui/genericcomponent.h \
     workplace.h \
     transitionsignals.h \
     ui/errordialog.h \
+    ui/contentfortab.h
 
 SOURCES += \
     main.cpp \
@@ -91,12 +91,12 @@ SOURCES += \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
     ui/clonedialog.cpp \
-    ui/contentfortabworkplace.cpp \
     ui/tabsapi.cpp \
     aggregator.cpp \
     ui/genericcomponent.cpp \
     workplace.cpp \
     ui/errordialog.cpp \
+    ui/contentfortab.cpp
 
 # Application UI
 HEADERS += \
@@ -160,8 +160,8 @@ FORMS += \
     ui/plugininfodialog.ui \
     ui/revisionview.ui \
     ui/clonedialog.ui \
-    ui/contentfortabworkplace.ui \
     ui/errordialog.ui \
+    ui/contentfortab.ui
 
 # Application Settings
 HEADERS += \
