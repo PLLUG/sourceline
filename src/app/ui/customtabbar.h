@@ -43,6 +43,9 @@ class CustomTabBar : public QTabWidget
 public:
     explicit CustomTabBar(SettingsManager *pSettingsManager, SettingStorage *pStorage, QWidget *parent = 0);
     ~CustomTabBar();
+
+    void loadSettingsForTabs();
+
 public slots:
     /*!
      * \brief Add New Workplace in mainwindow

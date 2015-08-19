@@ -66,6 +66,10 @@ public:
      */
     QWidget* getWidget(CustomTabBar *pTabBar, int pIndex);
 
+    void loadSettingsForTabs(CustomTabBar *pTabBar);
+
+    QString getNameOfTabById(CustomTabBar *pTabBar, int pId) const;
+
 public slots:
     /*!
      * \brief Add New Workplace in main menu

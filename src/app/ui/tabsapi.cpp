@@ -40,6 +40,16 @@ int TabsAPI::getCountTabs(CustomTabBar *pTabBar)
     return pTabBar->count();
 }
 
+void TabsAPI::loadSettingsForTabs(CustomTabBar *pTabBar)
+{
+    pTabBar->loadSettingsForTabs();
+}
+
+QString TabsAPI::getNameOfTabById(CustomTabBar *pTabBar, int pId) const
+{
+    return pTabBar->tabText(pId);
+}
+
 QWidget* getCurrentWidget(CustomTabBar *pTabBar)
 {
     return pTabBar->currentWidget();

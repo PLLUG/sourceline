@@ -51,7 +51,12 @@ CustomTabBar::CustomTabBar(SettingsManager *pSettingsManager, SettingStorage *pS
 
 CustomTabBar::~CustomTabBar()
 {
-    delete ui;    
+    delete ui;
+}
+
+void CustomTabBar::loadSettingsForTabs()
+{
+    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(mSettings));
 }
 
 void CustomTabBar::slotAddNewWorkplace(const QString &pName)
