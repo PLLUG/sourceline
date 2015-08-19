@@ -22,6 +22,7 @@
 ***                                                                          ***
 *******************************************************************************/
 
+
 #include "console.h"
 #include <QScrollBar>
 #include <QDebug>
@@ -34,6 +35,7 @@ Console::Console(QWidget *parent)
     mMaximumBlockCount = 1000;
     mColorBase = Qt::black;
     mColorInputText = Qt::green;
+    mReadOnlyLen = 2;
 
     document()->setMaximumBlockCount(mMaximumBlockCount);
     QPalette p = palette();
@@ -42,24 +44,25 @@ Console::Console(QWidget *parent)
     setPalette(p);
 }
 
-void Console::putData(const QByteArray &pData)
+void Console::putData(const QByteArray &data)
 {
-    insertPlainText(QString(pData.constData()));
+    insertPlainText(QString(data.constData()));
 
     QScrollBar *bar = verticalScrollBar();
     bar->setValue(bar->maximum());
 }
 
-void Console::setLocalEchoEnabled(bool pSet)
+void Console::setLocalEchoEnabled(bool set)
 {
-    mLocalEchoEnabled = pSet;
+    mLocalEchoEnabled = set;
 }
 
 void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
     case Qt::Key_Backspace:
-        if(!mCurrentCmd.isEmpty() && mCursor.positionInBlock() > 2)
+        //if(!mCurrentCmd.isEmpty() && mCursor.positionInBlock() > mReadOnlyLen)
+        if(mCursor.positionInBlock() > mReadOnlyLen)
         {
             moveCursorToEnd();
             mCurrentCmd.remove(mCurrentCmd.length()-1, 1);
@@ -73,7 +76,7 @@ void Console::keyPressEvent(QKeyEvent *e)
         mCurrentCmd.clear();
         break;
     case Qt::Key_Up:
-        if(mCursor.positionInBlock()>=2)
+        if(mCursor.positionInBlock() >= mReadOnlyLen)
         {
             mCurrentCmd = mPreviousCmd;
             insertPlainText(mCurrentCmd);
@@ -81,7 +84,7 @@ void Console::keyPressEvent(QKeyEvent *e)
         }
         break;
     case Qt::Key_Left:
-        if(mCursor.positionInBlock()>2)
+        if(mCursor.positionInBlock() > mReadOnlyLen)
             mCursor.movePosition(QTextCursor::Left);
         QPlainTextEdit::keyPressEvent(e);
         break;
@@ -91,25 +94,30 @@ void Console::keyPressEvent(QKeyEvent *e)
         QPlainTextEdit::keyPressEvent(e);
         break;
     default:
+        if (!(e->matches(QKeySequence::Copy) || e->key() == Qt::Key_Control))
+        {
         moveCursorToEnd();
         setTextCursor(mCursor);
         if (mLocalEchoEnabled)
-            QPlainTextEdit::keyPressEvent(e);
         mCurrentCmd.append(e->text());
-        emit getData(e->text().toLocal8Bit());
+        emit dataChanged(e->text().toLocal8Bit());
+        }
+        QPlainTextEdit::keyPressEvent(e);
     }
 }
 
 void Console::moveCursorToEnd()
 {
-    if(mCursor.positionInBlock()<2)
+    if(mCursor.positionInBlock() < mReadOnlyLen)
     {
         mCursor.setPosition(QTextCursor::EndOfLine);
     }
 }
 
 /*!
- * function : Clear console with mouse double click(as example)
+ * \brief Console::mouseDoubleClickEvent,
+ * Clear console with mouse double click(as example)
+ * \param e
  */
 void Console::mouseDoubleClickEvent(QMouseEvent *e)
 {
@@ -118,6 +126,10 @@ void Console::mouseDoubleClickEvent(QMouseEvent *e)
     insertPlainText("Console was cleared with double clicking!\n~>");
 }
 
+/*!
+ * \brief Console::contextMenuEvent
+ * \param e
+ */
 void Console::contextMenuEvent(QContextMenuEvent *e)
 {
     Q_UNUSED(e)

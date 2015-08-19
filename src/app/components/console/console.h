@@ -41,18 +41,21 @@ protected:
     virtual void contextMenuEvent(QContextMenuEvent *e);
 
 signals:
-    void getData(const QByteArray &pData);
+    void dataChanged(const QByteArray &data);
     void signalSendCmd(QString);
+
+private:
+    void moveCursorToEnd();
 
 private:
     bool mLocalEchoEnabled;
     int mMaximumBlockCount;
+    int mReadOnlyLen;
     QString mCurrentCmd;
     QString mPreviousCmd;
     QColor mColorBase;
     QColor mColorInputText;
     QTextCursor mCursor;
-    void moveCursorToEnd();
 };
 
 #endif // CONSOLE_H
