@@ -34,6 +34,7 @@ Console::Console(QWidget *parent)
     mMaximumBlockCount = 1000;
     mColorBase = Qt::black;
     mColorInputText = Qt::green;
+    mReadOnlyLen = 2;
 
     document()->setMaximumBlockCount(mMaximumBlockCount);
     QPalette p = palette();
@@ -59,7 +60,7 @@ void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
     case Qt::Key_Backspace:
-        if(!mCurrentCmd.isEmpty() && mCursor.positionInBlock() > 2)
+        if(!mCurrentCmd.isEmpty() && mCursor.positionInBlock() > mReadOnlyLen)
         {
             moveCursorToEnd();
             mCurrentCmd.remove(mCurrentCmd.length()-1, 1);
@@ -73,7 +74,7 @@ void Console::keyPressEvent(QKeyEvent *e)
         mCurrentCmd.clear();
         break;
     case Qt::Key_Up:
-        if(mCursor.positionInBlock()>=2)
+        if(mCursor.positionInBlock() >= mReadOnlyLen)
         {
             mCurrentCmd = mPreviousCmd;
             insertPlainText(mCurrentCmd);
@@ -81,7 +82,7 @@ void Console::keyPressEvent(QKeyEvent *e)
         }
         break;
     case Qt::Key_Left:
-        if(mCursor.positionInBlock()>2)
+        if(mCursor.positionInBlock() > mReadOnlyLen)
             mCursor.movePosition(QTextCursor::Left);
         QPlainTextEdit::keyPressEvent(e);
         break;
@@ -102,7 +103,7 @@ void Console::keyPressEvent(QKeyEvent *e)
 
 void Console::moveCursorToEnd()
 {
-    if(mCursor.positionInBlock()<2)
+    if(mCursor.positionInBlock() < mReadOnlyLen)
     {
         mCursor.setPosition(QTextCursor::EndOfLine);
     }

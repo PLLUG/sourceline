@@ -47,6 +47,7 @@ signals:
 private:
     bool mLocalEchoEnabled;
     int mMaximumBlockCount;
+    int mReadOnlyLen;
     QString mCurrentCmd;
     QString mPreviousCmd;
     QColor mColorBase;
