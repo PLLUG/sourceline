@@ -7,6 +7,7 @@ PasswordDialog::PasswordDialog(QWidget *parent) :
     ui(new Ui::PasswordDialog)
 {
     ui->setupUi(this);
+    ui->password->setEchoMode(QLineEdit::Password);
 }
 
 PasswordDialog::~PasswordDialog()
