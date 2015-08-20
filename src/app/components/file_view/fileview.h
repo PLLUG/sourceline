@@ -92,7 +92,9 @@ private slots:
 
     void slotGoToPath();
 
-    void slotRightBtnClick(QPoint);
+    void slotRightBtnClick();
+
+    void slotLeftBtnClick();
 
     void slotCreateNewFolder();
 

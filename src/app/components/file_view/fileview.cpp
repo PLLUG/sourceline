@@ -95,7 +95,8 @@ FileView::FileView(QWidget *parent) :
     mFileModel->setReadOnly(false);
     setRootPath(QDir::currentPath());
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
-    connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
+    connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick()));
+    connect(ui->listView, SIGNAL(clicked(QModelIndex)), SLOT(slotLeftBtnClick()));
     connect(actionGoUp, SIGNAL(triggered(bool)), SLOT(slotGoUp()));
     ui->lineEdit->installEventFilter(this);
 }
@@ -252,6 +253,13 @@ void FileView::slotRightBtnClick()
             flag = flag | SelectionFlag::FileSelection;
         }
     }
+}
+
+void FileView::slotLeftBtnClick()
+{
+    QString path = mFileModel->fileInfo(ui->listView->currentIndex()).absoluteFilePath();
+    int indexSlash = path.lastIndexOf("/");
+    cd(path.left(indexSlash+1));
 }
 
 /*!
