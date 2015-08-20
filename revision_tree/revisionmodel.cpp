@@ -140,6 +140,7 @@ void RevisionModel::putProperty(const std::string &pRecepientId, const std::stri
         boost::associative_property_map<std::map<std::string, QVariant>>
                 associativePropertyMap(mPropertyMaps.at(property));
         mProperties.property(property,associativePropertyMap);
+        mPropertyNames.push_back(property);
     }
     put(property,mProperties,pRecepientId,value);
 }
@@ -189,7 +190,7 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
         }
         else
         {
-            const std::string property = headerData(index.column(),Qt::Horizontal,role).toString().toStdString();
+            const std::string property = mPropertyNames.at(index.column()-DefaultColumnsCount);
             const std::string &name = mGraph[v].name;
 
             //NOTE: add mutable to use this
@@ -243,7 +244,9 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
                 {
                     if(i + DefaultColumnsCount == section)
                     {
-                        headerName.setValue(QString::fromStdString(name.first));
+                        QString headerStr = QString::fromStdString(name.first).toLower();
+                        headerStr[0] = headerStr[0].toUpper();
+                        headerName.setValue(headerStr);
                         break;
                     }
                     ++i;

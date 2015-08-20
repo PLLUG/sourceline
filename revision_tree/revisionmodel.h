@@ -69,6 +69,7 @@ private:
     std::map<std::string, std::map<std::string,QVariant>> mPropertyMaps;//property maps by property name
     boost::dynamic_properties mProperties;
     std::vector< vertex > sorted_vertices;
+    std::vector<std::string> mPropertyNames;
 };
 
 #endif // REVISIONMODEL_H
