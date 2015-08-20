@@ -3,26 +3,34 @@
 
 #include "command.h"
 
-class TestCommand : public Command
+class CloneCommand : public Command
 {
     Q_OBJECT
 
+private:
+    QString commandName;
+
 public:
-    //TestCommand(QObject *parent = nullptr);
-    TestCommand(QString str, QString pr1 = 0, QString pr2 = 0, QObject *parent = nullptr);
-    QString commandString() const;
-    QStringList parametersList() const;
+    /*!
+     * \brief Set up name and icon for command
+     * \param parent
+     */
+    CloneCommand(QObject *parent = nullptr);
+
+    void init(Aggregator &api);
+
+    void trigger(Aggregator &api);
+
+    void processResult(Aggregator &api);
+
+    /*!
+     * \brief Return command name
+     * \return
+     */
     QString name() const
     {
-        return commandStr;
+        return commandName;
     }
-    Commands::CommandKind commandKind() const
-    {
-        return Commands::UknownCommand;
-    }
-private:
-    QString commandStr;
-    QStringList paramList;
 };
 
 #endif // TESTCOMMAND_H
