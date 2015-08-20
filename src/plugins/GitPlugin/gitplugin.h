@@ -12,6 +12,7 @@ class GITPLUGINSHARED_EXPORT GitPlugin :
     Q_PLUGIN_METADATA(IID "GitPlugin" FILE "GitPlugin.json")
 public:
     explicit GitPlugin(QObject *pParent = 0);
+    void Clone();
 };
 
 #endif // GITPLUGIN_H

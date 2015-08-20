@@ -205,3 +205,5 @@ OTHER_FILES +=
 SUBDIRS += \
     ui/revisionView/revTree.pro
 
+LIBS += -lextensions
+

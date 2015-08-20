@@ -31,8 +31,10 @@ DISTFILES += \
 HEADERS += \
     gitplugin_global.h \
     gitplugin.h \
-    gitsettings.h
+    gitsettings.h \
+    testcommand.h
 
 SOURCES += \
     gitplugin.cpp \
-    gitsettings.cpp
+    gitsettings.cpp \
+    testcommand.cpp

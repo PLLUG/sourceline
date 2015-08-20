@@ -36,7 +36,11 @@ SOURCES += \
     plugin.cpp \
     settingspage.cpp \
     command.cpp \
-    settings.cpp
+    settings.cpp \
+    apiclient.cpp \
+    apiprovider.cpp \
+    publictestinterface.cpp \
+    testinerface.cpp \
 
 HEADERS +=\
     extensions_global.h\
@@ -46,7 +50,13 @@ HEADERS +=\
     settingspage.h \
     command.h \
     defs.h \
-    settings.h
+    settings.h \
+    apiclient.h \
+    apiprovider.h \
+    genericargumentholder.h \
+    publictestinterface.h \
+    testinerface.h \
+    typedgenericargumentholder.h \
 
 #TODO: add copying of pri file
 
