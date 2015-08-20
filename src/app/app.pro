@@ -25,10 +25,16 @@ TEMPLATE = app
 QT += widgets
 
 # Pro file is a part of source line project structure
-CONFIG += sl_project
+CONFIG += \
+    sl_project \
+    C++11 \
 
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
+
+include($$PWD/components/console/console.pri)
+include($$PWD/components/example_component/example_component.pri)
+include($$PWD/components/file_view/FileView.pri)
 
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
@@ -54,7 +60,14 @@ HEADERS += \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
-    ui/clonedialog.h
+    ui/clonedialog.h \
+    ui/tabsapi.h \
+    aggregator.h \
+    ui/genericcomponent.h \
+    workplace.h \
+    transitionsignals.h \
+    ui/errordialog.h \
+    ui/contentfortab.h
 
 SOURCES += \
     main.cpp \
@@ -77,7 +90,13 @@ SOURCES += \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
-    ui/clonedialog.cpp
+    ui/clonedialog.cpp \
+    ui/tabsapi.cpp \
+    aggregator.cpp \
+    ui/genericcomponent.cpp \
+    workplace.cpp \
+    ui/errordialog.cpp \
+    ui/contentfortab.cpp
 
 # Application UI
 HEADERS += \
@@ -89,20 +108,14 @@ HEADERS += \
     ui/guidefs.h \
     ui/historytree.h \
     ui/mainwindow.h \
-    ui/pagemanager.h \
     ui/revisiontable.h \
     ui/appsettingsdialog.h \
     ui/viewsettingpage.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    ui/fileview.h \
     ui/dockfileview.h \
     ui/dockconsole.h \
-    ui/fileview/exploreritemdelegate.h \
-    ui/fileview/iconizedlineedit.h \
-    ui/console/console.h \
-    ui/consoleview.h \
     ui/about.h \
     ui/plugininfodialog.h \
     ui/useraction.h \
@@ -116,7 +129,6 @@ SOURCES += \
     ui/genericdockwidget.cpp \
     ui/historytree.cpp \
     ui/mainwindow.cpp \
-    ui/pagemanager.cpp \
     ui/revisiontable.cpp \
     ui/appsettingsdialog.cpp \
     ui/viewsettingpage.cpp \
@@ -126,13 +138,8 @@ SOURCES += \
     ui/about.cpp \
     ui/plugininfodialog.cpp \
     ui/useraction.cpp \
-    ui/fileview.cpp \
     ui/dockconsole.cpp \
     ui/dockfileview.cpp \
-    ui/fileview/exploreritemdelegate.cpp \
-    ui/fileview/iconizedlineedit.cpp \
-    ui/console/console.cpp \
-    ui/consoleview.cpp \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
 
@@ -149,12 +156,12 @@ FORMS += \
     ui/dialogplugins.ui \
     ui/dockconsole.ui \
     ui/dockfileview.ui \
-    ui/fileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
-    ui/consoleview.ui \
     ui/revisionview.ui \
-    ui/clonedialog.ui
+    ui/clonedialog.ui \
+    ui/errordialog.ui \
+    ui/contentfortab.ui
 
 # Application Settings
 HEADERS += \

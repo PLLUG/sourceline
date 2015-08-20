@@ -100,7 +100,7 @@ ApplicationBuilder::~ApplicationBuilder()
 
 void ApplicationBuilder::slotBuild()
 {
-    qDebug("SourceLine : Building Application");
+    qDebug("    SourceLine : Building Application");
     ProgressHandler::instance()->setStageCount(5);
 
     /*!
@@ -205,7 +205,6 @@ void ApplicationBuilder::createUi()
     createUiActions(mMainWindow);
     ProgressHandler::instance()->setCurrentStageProgress(66);
 
-
     ProgressHandler::instance()->finishStage();
 }
 
@@ -215,10 +214,9 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
     // TASK: add implementation for opening existing repository
     mActionManager->add(FileMenuGroup, lActionOpen);
 
-    // COMMENT: temporary action - create new tab (testing)
-    UserAction *lActionAddPage = new UserAction(tr("&Add Page"), this);
-    connect(lActionAddPage, SIGNAL(triggered()), pMainWindow, SLOT(slotAddPage()));
-    mActionManager->add(FileMenuGroup, lActionAddPage);
+    UserAction *lActionAddNewWorkplace = new UserAction(tr("&New Workplace"), this);
+    connect(lActionAddNewWorkplace, SIGNAL(triggered()), pMainWindow, SLOT(slotAddNewWorkplace()));
+    mActionManager->add(FileMenuGroup, lActionAddNewWorkplace);
 
     UserAction *lActionQuit = new UserAction(tr("&Quit"), this);
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));

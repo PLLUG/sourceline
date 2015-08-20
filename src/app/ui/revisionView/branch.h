@@ -32,15 +32,15 @@ class RevisionItem;
 class Branch
 {
 public:
-    Branch(RevisionItem *item, const QString &name);
+    Branch(RevisionItem *pItem, const QString &pName);
 
-    void addCommit(RevisionItem *i);
-    RevisionItem* head() const { return mLast; }
-    RevisionItem* first() const { return mFirst; }
-    QString name() const { return mName; }
+    void addCommit(RevisionItem *pItem);
+    RevisionItem* head() const;
+    RevisionItem* first() const;
+    QString name() const;
 
-    void setStartY(int value);
-    int startY() const { return mStartY; }
+    void setStartY(int pValue);
+    int startY() const;
 
 private:
     RevisionItem *mLast;

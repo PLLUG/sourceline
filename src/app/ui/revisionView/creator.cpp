@@ -39,90 +39,107 @@ Creator::Creator() :
     addCommit(new RevisionItem("master/third commit"));
 }
 
-RevisionItem *Creator::item(int position) const
+GraphField *Creator::field()
 {
-    foreach(RevisionItem *i, mItems)
+    return &mField;
+}
+
+RevisionItem *Creator::item(int pPosition) const
+{
+    foreach(RevisionItem *lItem, mItems)
     {
-        if (i->y() == position)
-            return i;
+        if (lItem->y() == pPosition)
+            return lItem;
     }
     return 0;
 }
 
-void Creator::addCommit(RevisionItem *c)
+void Creator::addCommit(RevisionItem *pCommit)
 {
     if (mCurrent)
     {
-        mField.addCommit(c, mCurrent->head());
-        mCurrent->addCommit(c);
+        mField.addCommit(pCommit, mCurrent->head());
+        mCurrent->addCommit(pCommit);
     }
-    mItems.append(c);
+    mItems.append(pCommit);
 }
 
-void Creator::addBranch(RevisionItem *b, const QString &name)
+void Creator::addBranch(RevisionItem *pBranch, const QString &pName)
 {
-    mBranches.append(new Branch(b, name));
-    mField.addBranch(b);
+    mBranches.append(new Branch(pBranch, pName));
+    mField.addBranch(pBranch);
     if (mCurrent && mCurrent->head())
     {
-        mCurrent->head()->addBranch(b);
+        mCurrent->head()->addBranch(pBranch);
         mBranches.last()->setStartY(mCurrent->head()->y());
     }
     mCurrent = mBranches.last();
-    mItems.append(b);
+    mItems.append(pBranch);
 }
 
-void Creator::merge(RevisionItem *from, RevisionItem *to)
+void Creator::merge(RevisionItem *pFrom, RevisionItem *pTo)
 {
-    Q_UNUSED(from)
-    Q_UNUSED(to)
+    Q_UNUSED(pFrom)
+    Q_UNUSED(pTo)
     //
 }
 
-void Creator::switchTo(Branch *b)
+void Creator::switchTo(Branch *pBranch)
 {
-    mCurrent = b;
+    mCurrent = pBranch;
 }
 
-QList<QVariant> Creator::branchesBefore(RevisionItem *i) const
+QList<QVariant> Creator::branchesBefore(RevisionItem *pItem) const
 {
-    QList<QVariant> ret;
-    foreach (Branch *b, mBranches)
+    QList<QVariant> rList;
+    foreach (Branch *lBranch, mBranches)
     {
-        if (i->parentBranch() != b)
-            if (b->head())
+        if (pItem->parentBranch() != lBranch)
+        {
+            if (lBranch->head())
             {
-                if (b->head()->x() < i->x())
-                    if (b->head()->y() > i->y())
-                        ret.append(b->head()->x());
+                if (lBranch->head()->x() < pItem->x())
+                {
+                    if (lBranch->head()->y() > pItem->y())
+                    {
+                        rList.append(lBranch->head()->x());
+                    }
+                }
             }
+        }
     }
-    return ret;
+    return rList;
 }
 
-QList<QVariant> Creator::branchesAfter(RevisionItem *i) const
+QList<QVariant> Creator::branchesAfter(RevisionItem *pItem) const
 {
-    QList<QVariant> ret;
-    foreach (Branch *b, mBranches)
+    QList<QVariant> rList;
+    foreach (Branch *lBranch, mBranches)
     {
-        if (i->parentBranch() != b)
-            if (b->head())
+        if (pItem->parentBranch() != lBranch)
+        {
+            if (lBranch->head())
             {
-                if (b->head()->x() > i->x())
-                    if ((b->startY() < i->y())
-                        && (b->head()->y() > i->y()))
-                        ret.append(b->head()->x());
+                if (lBranch->head()->x() > pItem->x())
+                {
+                    if ((lBranch->startY() < pItem->y())
+                        && (lBranch->head()->y() > pItem->y()))
+                    {
+                        rList.append(lBranch->head()->x());
+                    }
+                }
             }
+        }
     }
-    return ret;
+    return rList;
 }
 
-QList<QVariant> Creator::brPos(RevisionItem *i) const
+QList<QVariant> Creator::brPos(RevisionItem *pItem) const
 {
-    QList<QVariant> ret;
-    foreach (RevisionItem *b, i->branches())
+    QList<QVariant> rList;
+    foreach (RevisionItem *lBranch, pItem->branches())
     {
-        ret.append(b->x());
+        rList.append(lBranch->x());
     }
-    return ret;
+    return rList;
 }

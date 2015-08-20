@@ -41,7 +41,9 @@ RevisionTableModel::RevisionTableModel()
 int RevisionTableModel::rowCount(const QModelIndex &) const
 {
     if (mGraph)
+    {
         return mGraph->field()->height();
+    }
     return 0;
 }
 
@@ -50,59 +52,77 @@ int RevisionTableModel::columnCount(const QModelIndex &) const
     return 3;
 }
 
-QVariant RevisionTableModel::data(const QModelIndex &index, int role) const
+QVariant RevisionTableModel::data(const QModelIndex &pIndex, int pRole) const
 {
     if (!mGraph)
-        return QVariant();
-    if ( role == Qt::DisplayRole )
     {
-        if ( index.column() == 2 )
+        return QVariant();
+    }
+    if (pRole == Qt::DisplayRole)
+    {
+        if (pIndex.column() == 2)
         {
-            if (mGraph->item(index.row()))
-                return mGraph->item(index.row())->message();
-        }
-        else if ( index.column() == 1 )
-        {
-        }
-        else if ( index.column() == 0 )
-        {
-            if (mGraph->item(index.row()))
+            if (mGraph->item(pIndex.row()))
             {
-                QMap<QString, QVariant> map;
-                RevisionItem *item = mGraph->item(index.row());
-                Branch *branch = item->parentBranch();
-                if (branch)
+                return mGraph->item(pIndex.row())->message();
+            }
+        }
+        else
+        {
+            if (pIndex.column() == 1)
+            {
+            }
+            else
+            {
+                if (pIndex.column() == 0)
                 {
-                    map.insert("pos", item->x());
-                    map.insert("head", bool(branch->head() == item));
-                    map.insert("branches", mGraph->brPos(item));
-                    map.insert("x", item->x());
-                    map.insert("y", item->y());
-                    map.insert("branchesBefore", mGraph->branchesBefore(item));
-                    map.insert("branchesAfter", mGraph->branchesAfter(item));
-                    return map;
+                    if (mGraph->item(pIndex.row()))
+                    {
+                        QMap<QString, QVariant> rMap;
+                        RevisionItem *lItem = mGraph->item(pIndex.row());
+                        Branch *lBranch = lItem->parentBranch();
+                        if (lBranch)
+                        {
+                            rMap.insert(tr("pos"), lItem->x());
+                            rMap.insert(tr("head"), bool(lBranch->head() == lItem));
+                            rMap.insert(tr("branches"), mGraph->brPos(lItem));
+                            rMap.insert(tr("x"), lItem->x());
+                            rMap.insert(tr("y"), lItem->y());
+                            rMap.insert(tr("branchesBefore"), mGraph->branchesBefore(lItem));
+                            rMap.insert(tr("branchesAfter"), mGraph->branchesAfter(lItem));
+                            return rMap;
+                        }
+                    }
                 }
             }
         }
     }
-    if ( role == Qt::TextAlignmentRole )
+    if (pRole == Qt::TextAlignmentRole)
     {
-        if ( index.column() == 1 )
+        if (pIndex.column() == 1)
+        {
             return Qt::AlignCenter;
+        }
     }
     return QVariant();
 }
 
-QVariant RevisionTableModel::headerData(int section, Qt::Orientation orientation, int role) const
+QVariant RevisionTableModel::headerData(int pSection, Qt::Orientation pOrientation, int pRole) const
 {
-    if ( role == Qt::DisplayRole && orientation == Qt::Horizontal)
+    if (pRole == Qt::DisplayRole && pOrientation == Qt::Horizontal)
     {
-        if ( section == 0 )
-            return "Graph";
-        if ( section == 1 )
-            return "rev.";
-        if ( section == 2 )
-            return "Message";
+        if (pSection == 0)
+        {
+            return tr("Graph");
+        }
+        if (pSection == 1)
+        {
+            return tr("rev.");
+        }
+        if (pSection == 2)
+        {
+            return tr("Message");
+        }
     }
     return QVariant();
 }
@@ -112,4 +132,7 @@ void RevisionTableModel::dataChange()
     emit dataChanged(index(0, 0), index(rowCount() - 1, columnCount() - 1));
 }
 
-Creator *RevisionTableModel::graph() const { return mGraph; }
+Creator *RevisionTableModel::graph() const
+{
+    return mGraph;
+}

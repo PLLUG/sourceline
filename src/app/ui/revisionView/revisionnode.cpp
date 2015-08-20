@@ -25,80 +25,91 @@
 #include <QDebug>
 
 RevisionNode::RevisionNode() :
-    parent(0),
-    child(0),
-    graphicsItem(0),
+    mParent(0),
+    mChild(0),
+    mGraphicsItem(0),
     mMergeTo(0),
     mPos(0)
 {
+    mBranchCount = 0;
+    mIsLast = true;
 }
 
-RevisionNode::RevisionNode(const QString &message)
+RevisionNode::RevisionNode(const QString &pMessage)
 {
-    static int rev = 0;
-    setData(IDR_DisplayRole, message);
-    setRevId(QString().setNum(rev++));
+    static int lRev = 0;
+    setData(IDR_DisplayRole, pMessage);
+    setRevId(QString().setNum(lRev++));
     mPos = 0;
 }
 
 int RevisionNode::count() const
 {
-    int count = 0;
-    const RevisionNode *ch = this;
-    while ( ch )
+    int rCount = 0;
+    const RevisionNode *lHead = this;
+    while (lHead)
     {
-        ++count;
-        for (int i = 0; i < ch->branches.size(); ++i)
-            count += ch->branches.at(i)->count();
-        ch = ch->child;
+        ++rCount;
+        for (int i = 0; i < lHead->mBranches.size(); ++i)
+        {
+            rCount += lHead->mBranches.at(i)->count();
+        }
+        lHead = lHead->mChild;
     }
-    return count;
+    return rCount;
 }
 
-const RevisionNode *RevisionNode::node(int rev) const
+const RevisionNode *RevisionNode::node(int pRev) const
 {
-    const RevisionNode *node = this;
-    QString revId = QString().setNum(rev);
-    while ( node && node->revId() != revId )
+    const RevisionNode *rNode = this;
+    QString lRevId = QString().setNum(pRev);
+    while (rNode && (rNode->revId() != lRevId))
     {
-        if ( !node->branches.isEmpty() )
+        if (!rNode->mBranches.isEmpty())
         {
-            for (int i = 0; i < node->branches.size(); ++i)
+            for (int i = 0; i < rNode->mBranches.size(); ++i)
             {
-                const RevisionNode * tmp = node->branches.at(i)->node(rev);
-                if ( tmp )
-                    return tmp;
+                const RevisionNode * lTmpNode = rNode->mBranches.at(i)->node(pRev);
+                if (lTmpNode)
+                {
+                    return lTmpNode;
+                }
             }
         }
-        node = node->child;
+        rNode = rNode->mChild;
     }
-    return node;
+    return rNode;
 }
 
-QVariant RevisionNode::data(ItemDataRole role) const
+QVariant RevisionNode::data(ItemDataRole pRole) const
 {
-    if (mData.contains(role))
-        return mData.value(role);
-    return QVariant();
+    if (mData.contains(pRole))
+    {
+        return mData.value(pRole);
+    }
+    else
+    {
+        return QVariant();
+    }
 }
 
 void RevisionNode::updateData()
 {
     mDrawData.insert("pos", mPos);
     mDrawData.insert("branches", 0);
-    mDrawData.insert("children", branchCount);
-    mDrawData.insert("last", isLast);
+    mDrawData.insert("children", mBranchCount);
+    mDrawData.insert("last", mIsLast);
     setData(IDR_DrawRole, mDrawData);
 }
 
-void RevisionNode::setData(RevisionNode::ItemDataRole role, const QVariant &data)
+void RevisionNode::setData(RevisionNode::ItemDataRole pRole, const QVariant &pData)
 {
-    mData[role] = data;
+    mData[pRole] = pData;
 }
 
 int RevisionNode::pos() const
 {
-    int p = 0;
+    int rPos = 0;
 //    const RevisionNode *node = this;
 //    while ( node->parent )
 //    {
@@ -106,99 +117,111 @@ int RevisionNode::pos() const
 //        node = node->parent;
 //    }
 //    p += branchNumber(const_cast<RevisionNode*>(this));
-    return p;
+    return rPos;
 }
 
 bool RevisionNode::isHeadInBranch() const
 {
-    return (child == 0);
+    return (mChild == 0);
 }
 
-bool RevisionNode::hasRevision(RevisionNode *r) const
+bool RevisionNode::hasRevision(RevisionNode *pRevision) const
 {
-    const RevisionNode *node = this;
-    while (node)
+    const RevisionNode *lNode = this;
+    while (lNode)
     {
-        if ( node == r )
+        if (lNode == pRevision)
+        {
             return true;
-        node = node->child;
+        }
+        lNode = lNode->mChild;
     }
     return false;
 }
 
-void RevisionNode::setRevId(const QString &id)
+void RevisionNode::setRevId(const QString &pId)
 {
-    _revId = id;
+    mRevId = pId;
 }
 
 QString RevisionNode::revId() const
 {
-    return _revId;
+    return mRevId;
 }
 
 int RevisionNode::row() const
 {
-    if ( parent )
+    if (mParent)
     {
-        return parent->branches.indexOf(const_cast<RevisionNode*>(this));
+        return mParent->mBranches.indexOf(const_cast<RevisionNode*>(this));
     }
-    return 0;
-}
-
-void RevisionNode::addChild(RevisionNode *node)
-{
-    if ( node )
+    else
     {
-        child = node;
-        child->parent = parent;
+        return 0;
     }
 }
 
-void RevisionNode::addBranch(RevisionNode *nodes)
+void RevisionNode::addChild(RevisionNode *pNode)
 {
-    if ( nodes ) {
-        branches.append(nodes);
-        nodes->parent = this;
+    if (pNode)
+    {
+        mChild = pNode;
+        mChild->mParent = mParent;
     }
 }
 
-void RevisionNode::mergeTo(RevisionNode *rev)
+void RevisionNode::addBranch(RevisionNode *pNodes)
 {
-    mMergeTo = rev;
+    if (pNodes)
+    {
+        mBranches.append(pNodes);
+        pNodes->mParent = this;
+    }
+}
+
+void RevisionNode::mergeTo(RevisionNode *pRev)
+{
+    mMergeTo = pRev;
 }
 
 RevisionNode *RevisionNode::HEAD() const
 {
-    RevisionNode *head = child;
-    while ( head != 0 )
+    RevisionNode *rHead = mChild;
+    while (rHead != 0)
     {
-        if ( head->child == 0 )
-            break;
-        head = head->child;
-    }
-    if ( !head )
-        head = const_cast<RevisionNode *>(this);
-    return head;
-}
-
-bool RevisionNode::operator ==(const RevisionNode &another)
-{
-    return _revId == another._revId;
-}
-
-int RevisionNode::branchNumber(RevisionNode *node) const
-{
-    if ( node->parent )
-    {
-        RevisionNode *tmp;
-        for (int i = 0; i < node->parent->branches.size(); ++i)
+        if (rHead->mChild == 0)
         {
-            tmp = node->parent->branches.at(i);
-            while ( tmp )
+            break;
+        }
+        rHead = rHead->mChild;
+    }
+    if (!rHead)
+    {
+        rHead = const_cast<RevisionNode *>(this);
+    }
+    return rHead;
+}
+
+bool RevisionNode::operator ==(const RevisionNode &pAnother)
+{
+    return mRevId == pAnother.mRevId;
+}
+
+int RevisionNode::branchNumber(RevisionNode *pNode) const
+{
+    if (pNode->mParent)
+    {
+        RevisionNode *lTmpNode;
+        for (int i = 0; i < pNode->mParent->mBranches.size(); ++i)
+        {
+            lTmpNode = pNode->mParent->mBranches.at(i);
+            while (lTmpNode)
             {
-                if ( tmp == node )
+                if (lTmpNode == pNode)
+                {
                     return i;
-                tmp = tmp->child;
+                }
+                lTmpNode = lTmpNode->mChild;
             }
         }
     }
@@ -208,11 +231,11 @@ int RevisionNode::branchNumber(RevisionNode *node) const
 int RevisionNode::nextBranchSize() const
 {
     //TODO: check coments
-    RevisionNode *node = parent;
-    Q_UNUSED(node)
-    RevisionNode *currentItem = const_cast<RevisionNode*>(this);
-    Q_UNUSED(currentItem)
-    int counter = 0;
+    RevisionNode *lNode = mParent;
+    Q_UNUSED(lNode)
+    RevisionNode *lCurrentItem = const_cast<RevisionNode*>(this);
+    Q_UNUSED(lCurrentItem)
+    int rCounter = 0;
 //    while (node)
 //    {
 //        if (!node->branches.isEmpty())
@@ -234,5 +257,5 @@ int RevisionNode::nextBranchSize() const
 //        currentItem = node;
 //        node = node->parent;
 //    }
-    return counter;
+    return rCounter;
 }

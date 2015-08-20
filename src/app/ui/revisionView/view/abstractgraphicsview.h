@@ -40,17 +40,17 @@ public:
     ~AbstractGraphicsView();
     QRectF boundingRect() const;
     QRectF rect() const;
-    void setSize(qreal width, qreal height);
-    void setSize(const QSizeF &size);
+    void setSize(qreal pWidth, qreal pHeight);
+    void setSize(const QSizeF &pSize);
 
-    void setItemDelegate(AbstractRevisionDelegate *item);
-    virtual void setModel(QAbstractItemModel *model);
+    void setItemDelegate(AbstractRevisionDelegate *pItem);
+    virtual void setModel(QAbstractItemModel *pModel);
 
 signals:
     void updateUI();
 
 protected:
-    virtual ModelIndex createIndex(int row, int column);
+    virtual ModelIndex createIndex(int pRow, int pColumn);
     virtual void updateGeometry();
 
 private:
@@ -59,16 +59,16 @@ private:
     QList<AbstractRevisionDelegate *>::iterator mItemIterator;
     QAbstractItemModel *mModel;
 
-    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
+    void paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget);
     void updateModelData();
     QRectF resizeRect() const;
 
 private slots:
-    void slotRequestForItem(AbstractRevisionDelegate *item);
+    void slotRequestForItem(AbstractRevisionDelegate *pItem);
     void slotModelChanged();
 
-    void branchClicked(AbstractRevisionDelegate *d);
-    void commitClicked(AbstractRevisionDelegate *);
+    void branchClicked(AbstractRevisionDelegate *pDelegate);
+    void commitClicked(AbstractRevisionDelegate *pDelegate);
 };
 
 #endif // ABSTRACTGRAPHICSVIEW_H

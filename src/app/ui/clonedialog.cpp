@@ -23,7 +23,8 @@ void CloneDialog::browse()
                                                     QDir::homePath(),
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
-    if (!directory.isEmpty()) {
+    if (!directory.isEmpty())
+    {
         ui->cloneLineEdit->setText(directory);
     }
 }

@@ -1,0 +1,25 @@
+                                                     +---+                                                                         
+                                                     |{o}|                                                                         
+                                                     +-+-+                                                                         
+                                                       |                                                                           
+                               Initialization          |            Action                                                         
+       +-----------------+     selected         +------v-------+    selected   +---------------+   Configured   +-----------------+
+       |  Configuring    <----------------------+              +--------------->  Configuring  +---------------->   Action        |
+       |  initialization |                      |     Ready    |               |  action       |                |   in progress   |
+       |                 +---------------------->              <---------------+               <----------------+                 |
+       +------+---^------+     Initialization   +--^----+----^-+     Cancel    +-------------+-+      Config    +----+------+-----+
+              |   |            canceled            |    |    |       action            Fatal |        error          |      |      
+              |   |                                |    |    |                               |                       |      |Fatal 
+Initialization|   |Initialization                  |    |    +-------------------------------------------------------+      |error 
+started       |   |error                           |    |              Action finished       |                              |      
+              |   |                                |    |Close                               |                              |      
+              |   |                                |    |tab                               +-v----------------+             |      
+              |   |          Initialization        |    |                                  |                  |             |      
+       +------v---+------+   finished              |    |                                  |    Not valid     <-------------+      
+       |  Initialization +-------------------------+  +------------------------------------>                  |                    
+       |  in progress    |                            | |                                  +---------+--------+                    
+       |                 +----------------------------+ |                                            |                             
+       +-----------------+    Fatal error               |                                            |Close                        
+                                                        |                 +-------+                  |tab                          
+                                                        +----------------->{o}cBLK<------------------+                             
+                                                                          +-------+                                                
