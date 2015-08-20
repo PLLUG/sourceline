@@ -23,7 +23,7 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include <Qt>
+#include <QColor>
 /*!
  * \brief The VertexType enum represents types of vertexes.
  *
@@ -61,7 +61,7 @@ struct RevisionVertex
 {
     VertexType type;
     VertexShape shape;
-    Qt::GlobalColor color;
+    QColor color;
     int row;
     int column;
 };

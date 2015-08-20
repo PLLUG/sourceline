@@ -20,6 +20,15 @@ public:
 
     void setGraph(const revision_graph &pGraph);
 
+    float offset() const;
+    void setOffset(float offset);
+
+    int radius() const;
+    void setRadius(int radius);
+
+    float width() const;
+    void setWidth(float width);
+
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
     void resizeEvent(QResizeEvent *e) Q_DECL_OVERRIDE;
@@ -35,6 +44,9 @@ private:
 private:
 
     revision_graph mGraph;
+    float mOffset;
+    int mRadius;
+    float mWidth;
 
     VertexIntMap mColumnMap;
     VertexIntMap mRowMap;

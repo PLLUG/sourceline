@@ -96,7 +96,10 @@ private:
 };
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
-    QWidget{parent}
+    QWidget{parent},
+    mOffset{20},
+    mRadius{8},
+    mWidth{25}
 {
 }
 
@@ -183,6 +186,36 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
 
     return rRevisionVertexes;
 }
+float RevisionTreeWidget::width() const
+{
+    return mWidth;
+}
+
+void RevisionTreeWidget::setWidth(float width)
+{
+    mWidth = width;
+}
+
+int RevisionTreeWidget::radius() const
+{
+    return mRadius;
+}
+
+void RevisionTreeWidget::setRadius(int radius)
+{
+    mRadius = radius;
+}
+
+float RevisionTreeWidget::offset() const
+{
+    return mOffset;
+}
+
+void RevisionTreeWidget::setOffset(float offset)
+{
+    mOffset = offset;
+}
+
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
 {
@@ -213,9 +246,9 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     //perform sort by time
     row = 0;
     std::vector< vertex > sortedVerticesByTime = getSortedGraphByTime(mGraph);
-    for ( auto ii=sortedVerticesByTime.begin()+1; ii!=sortedVerticesByTime.end(); ++ii)
+    for ( auto ii=sortedVerticesByTime.rbegin(); ii!=sortedVerticesByTime.rend(); ++ii)
     {
-        put(rowIndex, *ii, ++row);
+        put(rowIndex, *ii, row++);
     }
 
 
@@ -263,10 +296,6 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
     QPainter painter(this);
 
-    const int offset{20};
-    const float width = 25;
-    const float radius = 8;
-
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
@@ -282,16 +311,16 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         switch(revisionVertexes[v].shape)
         {
         case vsSquare:
-            painter.drawRect(width*col + offset - radius, width*row - radius,
-                             radius*2, radius*2);
+            painter.drawRect(width()*col + offset() - radius(), width()*row - radius() + offset(),
+                             radius()*2, radius()*2);
             break;
         case vsCircle:
-            painter.drawEllipse(QPointF{width*col + offset, width*row},
-                                radius, radius);
+            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset()},
+                                radius(), radius());
             break;
         }
 
-        painter.drawText(QPointF{width*col + offset, width*row + radius}, QString::number(v));
+        painter.drawText(QPointF{width()*col + offset(), width()*row + radius() + offset()}, QString::number(v));
     }
 
     painter.setPen(Qt::darkGray);
@@ -301,8 +330,7 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         int sourceCol = get(colIndex, boost::source(e, mGraph));
         int targetRow = get(rowIndex, boost::target(e, mGraph));
         int targetCol = get(colIndex, boost::target(e, mGraph));
-        painter.drawLine(QPoint(width*sourceCol + offset, width*sourceRow), QPoint(width*targetCol + offset, width*sourceRow));
-        painter.drawLine(QPoint(width*targetCol + offset, width*targetRow), QPoint(width*targetCol + offset, width*sourceRow));
+        painter.drawLine(QPoint(width()*sourceCol + offset(), width()*sourceRow + offset()), QPoint(width()*targetCol + offset(), width()*targetRow + offset()));
     }
 }
 
@@ -338,7 +366,7 @@ std::vector<vertex> RevisionTreeWidget::getSortedGraphByTime(const revision_grap
     std::sort(rVector.begin(), rVector.end(),
               [&graph](const vertex &vert1, const vertex &vert2) -> bool
     {
-        return graph[vert1].created > graph[vert2].created;
+        return graph[vert1].created < graph[vert2].created;
     });
 
     return rVector;
