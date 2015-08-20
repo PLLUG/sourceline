@@ -47,10 +47,10 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(mProcess, SIGNAL(readyRead()), this, SLOT(slotReadConsoleOutput()));
     connect(mProcess, SIGNAL(readChannelFinished()), SLOT(slotPrintWorkingDir()));
 
-    connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
+    /*connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
     connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
     connect(mCmdProcess, SIGNAL(errorOutput(QString)), this, SLOT(slotOut(QString)));
-    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));
+    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));*/
 
     //Debug connections
     connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
