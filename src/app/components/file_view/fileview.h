@@ -25,6 +25,7 @@
 #define FILEVIEW_H
 
 #include <QWidget>
+#include <QStandardPaths>
 
 namespace Ui
 {
@@ -42,7 +43,8 @@ class FileView : public QWidget
 
 public:
 
-    enum SelectionFlag {
+    enum SelectionFlag
+    {
         NoneSelection = 0x00,
         FileSelection = 0x01,
         FolderSelection = 0x02,
@@ -74,6 +76,7 @@ public:
         #ifdef Q_OS_MAC
         rHomePath = "/";
         #endif
+        rHomePath = QStandardPaths::HomeLocation;
         return rHomePath;
     }
 
@@ -89,7 +92,7 @@ private slots:
 
     void slotGoToPath();
 
-    void slotRightBtnClick();
+    void slotRightBtnClick(QPoint);
 
     void slotCreateNewFolder();
 

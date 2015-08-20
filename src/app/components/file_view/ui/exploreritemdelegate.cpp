@@ -12,10 +12,10 @@
 #include <QFileSystemWatcher>
 #include <QHash>
 #include <QDateTime>
+#include <QDebug>
 
 //TASK: move to ui folder (together with fileview folder)
 const QString invalidCharacters = "\\/:*?\"<>|";
-QHash<QString,QDateTime> files;
 
 ExplorerItemDelegate::ExplorerItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
@@ -128,6 +128,7 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 
     int indexSlash = pathToFile.lastIndexOf("/");
     QString newPathToFile = pathToFile.left(indexSlash+1);
+    qDebug()<<newPathToFile;
     newPathToFile += newFileName;
 
     QFile file(pathToFile);

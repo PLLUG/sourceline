@@ -60,9 +60,9 @@ FileView::FileView(QWidget *parent) :
     QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
     connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
     mFileMenu->addAction(actionDeleteFile);
-//    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
-//    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
-//    mFileMenu->addAction(actionRemaneFile);
+    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
+    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
+    mFileMenu->addAction(actionRemaneFile);
 
     //menu for dirs
     mDirMenu = new QMenu(this);
@@ -95,7 +95,7 @@ FileView::FileView(QWidget *parent) :
     mFileModel->setReadOnly(false);
     setRootPath(QDir::currentPath());
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
-    connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick()));
+    connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
     connect(actionGoUp, SIGNAL(triggered(bool)), SLOT(slotGoUp()));
     ui->lineEdit->installEventFilter(this);
 }
@@ -114,7 +114,6 @@ void FileView::setRootPath(const QString &pPath)
     cd(pPath);
     mFileModel->setRootPath(pPath);
     ui->listView->setRootIndex(mFileModel->index(pPath));
-
 }
 
 void FileView::cd(const QString &path)
@@ -125,7 +124,11 @@ void FileView::cd(const QString &path)
 
 void FileView::registerAction(QAction *pAction, SelectionFlags pSelecitonFlags)
 {
-    // More code here...
+    if (!mMenuBySelectionFlags.contains(pSelecitonFlags))
+    {
+        mMenuBySelectionFlags.insert(pSelecitonFlags,new QMenu(this));
+    }
+    mMenuBySelectionFlags[pSelecitonFlags]->addAction(pAction);
 }
 
 /*!
@@ -225,34 +228,29 @@ void FileView::slotRightBtnClick()
 //    {
 //        mMenu->exec(QCursor::pos());
 //    }
-    bool isDir = false;
-    bool isFile = false;
-    QStringList list;
-    foreach(const QModelIndex &index, ui->listView->selectionModel()->selectedIndexes())
+    SelectionFlags flag;
+    QModelIndexList listIndexes = ui->listView->selectionModel()->selectedIndexes();
+    if (listIndexes.length() == 0)
     {
-        if(mFileModel->fileInfo(index).isDir())
-        {
-            isDir = true;
-        }
-        if(mFileModel->fileInfo(index).isFile())
-        {
-            isFile = true;
-        }
-    }
-    if (isDir && isFile)
-    {
-        qDebug()<<"dirs and file";
+        flag = SelectionFlag::NoneSelection;
     }
     else
     {
-    if (isDir)
-    {
-        qDebug()<<"dirs";
+        if (listIndexes.length() > 1)
+        {
+            flag = SelectionFlag::MultiSeleciton;
+        }
     }
-    if (isFile)
+    foreach(const QModelIndex &index, listIndexes)
     {
-        qDebug()<<"files";
-    }
+        if(mFileModel->fileInfo(index).isDir())
+        {
+            flag = flag | SelectionFlag::FolderSelection;
+        }
+        if(mFileModel->fileInfo(index).isFile())
+        {
+            flag = flag | SelectionFlag::FileSelection;
+        }
     }
 }
 
