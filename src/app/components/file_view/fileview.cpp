@@ -90,6 +90,9 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
     ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    ui->listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
+
     mFileModel->setReadOnly(false);
     setRootPath(QDir::currentPath());
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
