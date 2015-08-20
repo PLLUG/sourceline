@@ -30,7 +30,7 @@ public:
     virtual QObjectList components() const = 0;
 };
 
-#define PluginInterface_iid "org.PLUG.Qt.Sf.Houd1ny"
+#define PluginInterface_iid "org.PLUG.SL.PluginInterface"
 
 Q_DECLARE_INTERFACE(PluginInterface, PluginInterface_iid)
 

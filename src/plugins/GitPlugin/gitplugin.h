@@ -3,6 +3,8 @@
 
 #include "plugin.h"
 #include "gitplugin_global.h"
+#include "commandapi.h"
+#include "clonecommand.h"
 
 class GITPLUGINSHARED_EXPORT GitPlugin :
         public Plugin
@@ -12,7 +14,8 @@ class GITPLUGINSHARED_EXPORT GitPlugin :
     Q_PLUGIN_METADATA(IID "GitPlugin" FILE "GitPlugin.json")
 public:
     explicit GitPlugin(QObject *pParent = 0);
-    void Clone();
+
+    void init(CommandAPI * cAPI);
 };
 
 #endif // GITPLUGIN_H

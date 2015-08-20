@@ -1,18 +1,15 @@
 #include "gitplugin.h"
-#include "testcommand.h"
 #include <QDebug>
 
 
 GitPlugin::GitPlugin(QObject *pParent) :
     Plugin(pParent)
 {
-    TestCommand testcommand("clone", "username", "password");
-    qDebug() << testcommand.commandString();
-    qDebug() << testcommand.parametersList();
 }
 
-void GitPlugin::Clone()
+
+void GitPlugin::init(CommandAPI *cAPI)
 {
-    qDebug() << "Clonning...";
+    // create clone command
+    // call CommandAPI->registerCommand(Command *), pass clone command as a parameter
 }
-

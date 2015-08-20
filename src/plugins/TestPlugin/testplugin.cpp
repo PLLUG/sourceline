@@ -38,6 +38,6 @@ TestPlugin::TestPlugin(QObject *pParent) :
     CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);
     this->addComponent(lSettingPage);
 
-    FakeCommand *lFakeCommand = new FakeCommand(this);
-    this->addComponent(lFakeCommand);
+    //FakeCommand *lFakeCommand = new FakeCommand(this);
+    //this->addComponent(lFakeCommand);
 }
