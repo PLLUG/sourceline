@@ -24,6 +24,7 @@
 #include "revisiontree.h"
 #include "ui_revisiontree.h"
 #include <QDebug>
+#include <QHeaderView>
 #include <iostream>
 #include <boost/graph/topological_sort.hpp>
 #include <algorithm>
@@ -33,6 +34,9 @@ RevisionTree::RevisionTree(QWidget *parent) :
     ui(new Ui::RevisionTree)
 {
     ui->setupUi(this);
+    ui->revisionTableView->horizontalHeader()->setSectionsMovable(true);
+    ui->revisionTableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
+    ui->revisionTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
 
 RevisionTree::~RevisionTree()

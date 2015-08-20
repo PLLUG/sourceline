@@ -26,6 +26,7 @@
 #include <boost/graph/graphviz.hpp>
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/topological_sort.hpp>
+#include <QColor>
 
 //maybe use labeled_graph where labeles are commit ids (and remove id from property)? - no
 //#include <boost/graph/labeled_graph.hpp>
@@ -58,6 +59,7 @@ RevisionModel::RevisionModel(QObject *parent):
  */
 void RevisionModel::debugTree(const revision_graph &graph) const
 {
+    std::cout << "number of vertices in graph: " << boost::num_vertices(mGraph) << std::endl;
     std::cout << "======== rev tree =========" << std::endl;
     boost::write_graphviz(std::cout, graph);
     std::cout << "======= end rev tree ======" << std::endl;
@@ -154,7 +156,7 @@ int RevisionModel::rowCount(const QModelIndex &) const
 
 int RevisionModel::columnCount(const QModelIndex &) const
 {
-    return mPropertyMaps.size();
+    return DefaultColumnsCount + mPropertyMaps.size();
 }
 
 template<typename Value, typename Key>
@@ -175,23 +177,45 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
     if(Qt::DisplayRole == role || Qt::AccessibleTextRole == role)
     {
         vertex v = vertexAt(index.row());
-        const std::string property = headerData(index.column(),Qt::Horizontal,role).toString().toStdString();
-        const std::string &name = mGraph[v].name;
+        if(index.column() < DefaultColumnsCount)
+        {
+            switch (index.column()) {
+            case IdColumn:
+                return QString::fromStdString(mGraph[v].name);
+                break;
+            default:
+                break;
+            }
+        }
+        else
+        {
+            const std::string property = headerData(index.column(),Qt::Horizontal,role).toString().toStdString();
+            const std::string &name = mGraph[v].name;
 
-        //NOTE: add mutable to use this
-        //        boost::associative_property_map<std::map<std::string, QVariant>>
-        //                associativePropertyMap(mPropertyMaps.at(property));
-        //        return get(associativePropertyMap,name);
+            //NOTE: add mutable to use this
+            //        boost::associative_property_map<std::map<std::string, QVariant>>
+            //                associativePropertyMap(mPropertyMaps.at(property));
+            //        return get(associativePropertyMap,name);
 
-        //        QVariant (*get_test)(const std::string& name, const boost::dynamic_properties& dp,const QVariant& key)
-        //                = &boost::get<QVariant,std::string>;
-        //ERROR: compiler doesn't see this function overload in dynamic_property_map.hpp but it works when I renamed, why?
-        //        return boost::get<QVariant>(property, mProperties, name);
+            //        QVariant (*get_test)(const std::string& name, const boost::dynamic_properties& dp,const QVariant& key)
+            //                = &boost::get<QVariant,std::string>;
+            //ERROR: compiler doesn't see this function overload in dynamic_property_map.hpp but it works when I renamed, why?
+            //        return boost::get<QVariant>(property, mProperties, name);
 
-        return get_copied<QVariant>(property, mProperties, name);
+            return get_copied<QVariant>(property, mProperties, name);
+        }
+    }
+    else if (Qt::BackgroundColorRole == role)
+    {
+        if (index.row() % 2)
+            return QColor("#DEE8D0");
+        else
+            return QColor(Qt::white);
     }
     else
+    {
         return QVariant();
+    }
 }
 
 QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int role) const
@@ -202,15 +226,33 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
         if(Qt::Horizontal == orientation)
         {
             //TODO:choose container for property names or smth
-            int i = 0;
-            for(const auto &name: mPropertyMaps)
+            if(section < DefaultColumnsCount)
             {
-                if(i++ == section)
-                {
-                    headerName.setValue(QString::fromStdString(name.first));
+                switch (section) {
+                case IdColumn:
+                    headerName = tr("Id");
+                    break;
+                default:
                     break;
                 }
             }
+            else
+            {
+                int i = 0;
+                for(const auto &name: mPropertyMaps)
+                {
+                    if(i + DefaultColumnsCount == section)
+                    {
+                        headerName.setValue(QString::fromStdString(name.first));
+                        break;
+                    }
+                    ++i;
+                }
+            }
+        }
+        else
+        {
+            headerName = QString::number(section);
         }
     }
     return headerName;

@@ -36,6 +36,12 @@ boost::bidirectionalS, // bidirectional because we want to show lists of parents
 RevisionNode>;
 using vertex = boost::graph_traits<revision_graph>::vertex_descriptor;
 
+enum DefaultColumns
+{
+    IdColumn = 0,
+    DefaultColumnsCount
+};
+
 class RevisionModel : public QAbstractTableModel
 {
     Q_OBJECT
