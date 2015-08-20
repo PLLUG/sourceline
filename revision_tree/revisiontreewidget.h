@@ -20,14 +20,20 @@ public:
 
     void setGraph(const revision_graph &pGraph);
 
-    float offset() const;
-    void setOffset(float offset);
-
     int radius() const;
     void setRadius(int radius);
 
     float width() const;
     void setWidth(float width);
+
+    float getLeftOffset() const;
+    void setLeftOffset(float leftOffset);
+
+    float getTopOffset() const;
+    void setTopOffset(float topOffset);
+
+    float getBottomOffset() const;
+    void setBottomOffset(float bottomOffset);
 
 protected:
     void paintEvent(QPaintEvent *e) Q_DECL_OVERRIDE;
@@ -44,7 +50,9 @@ private:
 private:
 
     revision_graph mGraph;
-    float mOffset;
+    float mLeftOffset;
+    float mTopOffset;
+    float mBottomOffset;
     int mRadius;
     float mWidth;
 

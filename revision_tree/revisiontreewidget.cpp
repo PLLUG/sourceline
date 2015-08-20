@@ -97,10 +97,12 @@ private:
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent},
-    mOffset{45},
+    mLeftOffset{20},
+    mTopOffset{45}, // height of row of tableView * 3/2
     mRadius{8},
-    mWidth{30}
+    mWidth{30} // height of row of tableView
 {
+    mBottomOffset = mWidth / 2;
 }
 
 RevisionTreeWidget::~RevisionTreeWidget()
@@ -186,6 +188,36 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
 
     return rRevisionVertexes;
 }
+float RevisionTreeWidget::getBottomOffset() const
+{
+    return mBottomOffset;
+}
+
+void RevisionTreeWidget::setBottomOffset(float bottomOffset)
+{
+    mBottomOffset = bottomOffset;
+}
+
+float RevisionTreeWidget::getTopOffset() const
+{
+    return mTopOffset;
+}
+
+void RevisionTreeWidget::setTopOffset(float topOffset)
+{
+    mTopOffset = topOffset;
+}
+
+float RevisionTreeWidget::getLeftOffset() const
+{
+    return mLeftOffset;
+}
+
+void RevisionTreeWidget::setLeftOffset(float leftOffset)
+{
+    mLeftOffset = leftOffset;
+}
+
 float RevisionTreeWidget::width() const
 {
     return mWidth;
@@ -205,17 +237,6 @@ void RevisionTreeWidget::setRadius(int radius)
 {
     mRadius = radius;
 }
-
-float RevisionTreeWidget::offset() const
-{
-    return mOffset;
-}
-
-void RevisionTreeWidget::setOffset(float offset)
-{
-    mOffset = offset;
-}
-
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
 {
@@ -250,7 +271,6 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     {
         put(rowIndex, *ii, row++);
     }
-
 
 // sample of using dominator tree algorithm
 //    using IndexMapD = boost::property_map<revision_graph, boost::vertex_index_t>::const_type;
@@ -287,7 +307,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
 //    std::cout << "DOMINATOR TREE with root " << root_vertex << " : " << mGraph[root_vertex].message << std::endl;
 //    std::copy(idom.begin(), idom.end(), std::ostream_iterator<int>(std::cout, " "));
 //    std::cout << std::endl;
-    setMinimumHeight(mWidth * num_vertices(mGraph) + 2*radius());
+    setMinimumHeight(mTopOffset + mWidth * (num_vertices(mGraph) - 1) + mBottomOffset);
 }
 
 
@@ -311,16 +331,20 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         switch(revisionVertexes[v].shape)
         {
         case vsSquare:
-            painter.drawRect(width()*col + offset() - radius(), width()*row - radius() + offset(),
-                             radius()*2, radius()*2);
+            painter.drawRect(mLeftOffset + col*mWidth - mRadius, // left corner X
+                             mTopOffset + row*mWidth - mRadius, // left corner Y
+                             mRadius*2, mRadius*2); // sizes of sides
             break;
         case vsCircle:
-            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset()},
-                                radius(), radius());
+            painter.drawEllipse(QPointF{mWidth*col + mLeftOffset, // center X
+                                        mWidth*row + mTopOffset}, // center Y
+                                mRadius, mRadius);
             break;
         }
 
-        painter.drawText(QPointF{width()*col + offset(), width()*row + radius() + offset() - radius()}, QString::number(v));
+        painter.drawText(QPointF{mWidth*col + mLeftOffset,
+                                 mWidth*row + mTopOffset},
+                         QString::number(v));
     }
 
     painter.setPen(Qt::darkGray);
@@ -330,8 +354,10 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         int sourceCol = get(colIndex, boost::source(e, mGraph));
         int targetRow = get(rowIndex, boost::target(e, mGraph));
         int targetCol = get(colIndex, boost::target(e, mGraph));
-        painter.drawLine(QPoint(width()*sourceCol + offset(), width()*sourceRow + offset() - radius()),
-                         QPoint(width()*targetCol + offset(), width()*targetRow + offset() - radius()));
+        painter.drawLine(QPoint(mWidth*sourceCol + mLeftOffset,
+                                mWidth*sourceRow + mTopOffset),
+                         QPoint(mWidth*targetCol + mLeftOffset,
+                                mWidth*targetRow + mTopOffset));
     }
 }
 

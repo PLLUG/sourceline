@@ -43,6 +43,9 @@ RevisionTree::RevisionTree(QWidget *parent) :
     connect(ui->revisionTableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotScrollChanged(int)));
     connect(this, SIGNAL(scrollChanged(int)), ui->scrollArea->verticalScrollBar(), SLOT(setValue(int)));
 
+//    connect(ui->scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->revisionTableView->verticalScrollBar(), SLOT(setValue(int)));
+//    connect(this, SIGNAL(scrollChanged(int)), ui->scrollArea->verticalScrollBar(), SLOT(setValue(int)));
+
     ui->revisionTableView->horizontalHeader()->setSectionsMovable(true);
     ui->revisionTableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     ui->revisionTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
