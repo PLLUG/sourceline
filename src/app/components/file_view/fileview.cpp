@@ -189,6 +189,7 @@ void FileView::slotGoUp()
     {
         cd(FileView::getHomePathForCurrentSystem());
     }
+
 }
 
 /*!
