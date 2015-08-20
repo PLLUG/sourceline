@@ -43,9 +43,10 @@ HEADERS  += mainwindow.h \
     revisiontree.h \
     revisionmodel.h \
     revisionnode.h \
-    revisiontreewidget.h
+    revisiontreewidget.h \
+    revisionvertex.h
 
 FORMS    += mainwindow.ui \
     revisiontree.ui
 
-INCLUDEPATH += D:/boost/boost_1_58_0
+INCLUDEPATH += D:/boost_1_58_0
