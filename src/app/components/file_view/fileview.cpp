@@ -60,9 +60,9 @@ FileView::FileView(QWidget *parent) :
     QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
     connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
     mFileMenu->addAction(actionDeleteFile);
-    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
-    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
-    mFileMenu->addAction(actionRemaneFile);
+//    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
+//    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
+//    mFileMenu->addAction(actionRemaneFile);
 
     //menu for dirs
     mDirMenu = new QMenu(this);
@@ -90,13 +90,12 @@ FileView::FileView(QWidget *parent) :
     ui->listView->setDragDropMode(QAbstractItemView::DragDrop);
     ui->listView->setContextMenuPolicy(Qt::CustomContextMenu);
     ui->listView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-
     ui->listView->setSelectionMode( QAbstractItemView::ExtendedSelection );
 
     mFileModel->setReadOnly(false);
     setRootPath(QDir::currentPath());
     connect(ui->listView, SIGNAL(doubleClicked(QModelIndex)), SLOT(slotDoubleClick(QModelIndex)));
-    connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick(QPoint)));
+    connect(ui->listView, SIGNAL(customContextMenuRequested(QPoint)), SLOT(slotRightBtnClick()));
     connect(actionGoUp, SIGNAL(triggered(bool)), SLOT(slotGoUp()));
     ui->lineEdit->installEventFilter(this);
 }
@@ -211,20 +210,49 @@ void FileView::slotGoToPath()
  * \brief action create menu on right button click
  * \param position item on view
  */
-void FileView::slotRightBtnClick(const QPoint &pos)
+void FileView::slotRightBtnClick()
 {
-    QModelIndex lIndex = ui->listView->indexAt(pos);
-    if(mFileModel->fileInfo(lIndex).isDir())
+//    QModelIndex lIndex = ui->listView->indexAt(pos);
+//    if(mFileModel->fileInfo(lIndex).isDir())
+//    {
+//        mDirMenu->exec(QCursor::pos());
+//    }
+//    else if(mFileModel->fileInfo(lIndex).isFile())
+//    {
+//        mFileMenu->exec(QCursor::pos());
+//    }
+//    else
+//    {
+//        mMenu->exec(QCursor::pos());
+//    }
+    bool isDir = false;
+    bool isFile = false;
+    QStringList list;
+    foreach(const QModelIndex &index, ui->listView->selectionModel()->selectedIndexes())
     {
-        mDirMenu->exec(QCursor::pos());
+        if(mFileModel->fileInfo(index).isDir())
+        {
+            isDir = true;
+        }
+        if(mFileModel->fileInfo(index).isFile())
+        {
+            isFile = true;
+        }
     }
-    else if(mFileModel->fileInfo(lIndex).isFile())
+    if (isDir && isFile)
     {
-        mFileMenu->exec(QCursor::pos());
+        qDebug()<<"dirs and file";
     }
     else
     {
-        mMenu->exec(QCursor::pos());
+    if (isDir)
+    {
+        qDebug()<<"dirs";
+    }
+    if (isFile)
+    {
+        qDebug()<<"files";
+    }
     }
 }
 

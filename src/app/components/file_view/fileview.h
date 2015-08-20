@@ -89,7 +89,7 @@ private slots:
 
     void slotGoToPath();
 
-    void slotRightBtnClick(const QPoint &pos);
+    void slotRightBtnClick();
 
     void slotCreateNewFolder();
 
