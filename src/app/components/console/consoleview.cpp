@@ -47,10 +47,10 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(mProcess, SIGNAL(readyRead()), this, SLOT(slotReadConsoleOutput()));
     connect(mProcess, SIGNAL(readChannelFinished()), SLOT(slotPrintWorkingDir()));
 
-    /*connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
+    connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
     connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
     connect(mCmdProcess, SIGNAL(errorOutput(QString)), this, SLOT(slotOut(QString)));
-    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));*/
+    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));
 
     //Debug connections
     connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
@@ -74,16 +74,16 @@ void ConsoleView::debugTextChanged()
 void ConsoleView::debugdataChanged(QByteArray data)
 {
     //Debug func
-    qDebug() << "ConsoleView:: Data :" << data;
+    qDebug() << "ConsoleView:: Data : " << data;
 }
 
 void ConsoleView::debugBlockCountChanged(int count)
 {
     //Debug func
-    qDebug() << "ConsoleView::BlockCountChanged to:" << count;
+    qDebug() << "ConsoleView::BlockCountChanged to : " << count;
 }
 
-void ConsoleView::execute(const QString &pCommand)
+void ConsoleView::execute(const QString &pCommand) //as command use @cd C:\Users&ls -R@ or @tree C:\ /A@
 {
     ui->plainTextEdit->putData("\n");
 
@@ -93,12 +93,14 @@ void ConsoleView::execute(const QString &pCommand)
         slotPrintWorkingDir();
     }
     QProcess* console = nullptr;
-    slotPrintWorkingDir(console->workingDirectory());
     if(osInfo()=="windows")
     {
         console = new QProcess(this);
         QByteArray resultConsole;
         QStringList args;
+        //console->setWorkingDirectory("C:\\");
+        //slotPrintWorkingDir(console->workingDirectory());
+        //qDebug() << console->workingDirectory();
         args << "/c"  << pCommand;
         console->start("C:\\Windows\\System32\\cmd", args);
         if (!console->waitForStarted())
@@ -106,7 +108,6 @@ void ConsoleView::execute(const QString &pCommand)
             qDebug() << " cmd crashed.";
             return;
         }
-
         console->waitForFinished();
         console->waitForReadyRead();
         console->waitForBytesWritten();
@@ -233,12 +234,12 @@ void ConsoleView::slotOut(QString out)
 
 void ConsoleView::slotLock()
 {
-
+    ui->plainTextEdit->setReadOnly(true);
 }
 
 void ConsoleView::slotUnlock()
 {
-
+    ui->plainTextEdit->setReadOnly(false);
 }
 
 void ConsoleView::startProcess()
@@ -261,9 +262,9 @@ QByteArray ConsoleView::clearAppend(const QString &tmp)
 
 void ConsoleView::slotPrintWorkingDir(const QString &dir)
 {
-    QString lWorkDir = dir;
+    //QString lWorkDir = dir;
 
-    ui->plainTextEdit->putData(clearAppend(lWorkDir + mReadOnlyIndicator));
+    ui->plainTextEdit->putData(clearAppend(dir + mReadOnlyIndicator));
     mDirPrinted = true;
 }
 

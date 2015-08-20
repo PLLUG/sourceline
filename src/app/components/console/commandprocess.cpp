@@ -24,5 +24,6 @@ void CommandProcess::readStandardOutput()
 
 void CommandProcess::readStandardError()
 {
+
 }
 
