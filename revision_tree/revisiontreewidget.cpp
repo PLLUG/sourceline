@@ -97,9 +97,9 @@ private:
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent},
-    mOffset{20},
+    mOffset{45},
     mRadius{8},
-    mWidth{25}
+    mWidth{30}
 {
 }
 
@@ -287,7 +287,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
 //    std::cout << "DOMINATOR TREE with root " << root_vertex << " : " << mGraph[root_vertex].message << std::endl;
 //    std::copy(idom.begin(), idom.end(), std::ostream_iterator<int>(std::cout, " "));
 //    std::cout << std::endl;
-    setMinimumHeight(25*num_vertices(mGraph));
+    setMinimumHeight(30*num_vertices(mGraph) + offset());
 }
 
 
@@ -311,16 +311,16 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         switch(revisionVertexes[v].shape)
         {
         case vsSquare:
-            painter.drawRect(width()*col + offset() - radius(), width()*row - radius() + offset(),
+            painter.drawRect(width()*col + offset() - radius(), width()*row - 2*radius() + offset(),
                              radius()*2, radius()*2);
             break;
         case vsCircle:
-            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset()},
+            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset() - radius()},
                                 radius(), radius());
             break;
         }
 
-        painter.drawText(QPointF{width()*col + offset(), width()*row + radius() + offset()}, QString::number(v));
+        painter.drawText(QPointF{width()*col + offset(), width()*row + radius() + offset() - radius()}, QString::number(v));
     }
 
     painter.setPen(Qt::darkGray);
@@ -330,7 +330,8 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         int sourceCol = get(colIndex, boost::source(e, mGraph));
         int targetRow = get(rowIndex, boost::target(e, mGraph));
         int targetCol = get(colIndex, boost::target(e, mGraph));
-        painter.drawLine(QPoint(width()*sourceCol + offset(), width()*sourceRow + offset()), QPoint(width()*targetCol + offset(), width()*targetRow + offset()));
+        painter.drawLine(QPoint(width()*sourceCol + offset(), width()*sourceRow + offset() - radius()),
+                         QPoint(width()*targetCol + offset(), width()*targetRow + offset() - radius()));
     }
 }
 

@@ -27,12 +27,19 @@
 #include <iostream>
 #include <boost/graph/topological_sort.hpp>
 #include <algorithm>
+#include <QScrollBar>
+#include <QScrollArea>
 
 RevisionTree::RevisionTree(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RevisionTree)
+    ui(new Ui::RevisionTree),
+    mRowHeight{30}
 {
     ui->setupUi(this);
+    ui->scrollArea->verticalScrollBar()->setHidden(true);
+
+    connect(ui->revisionTableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotScrollChanged(int)));
+    connect(this, SIGNAL(scrollChanged(int)), ui->scrollArea->verticalScrollBar(), SLOT(setValue(int)));
 }
 
 RevisionTree::~RevisionTree()
@@ -48,6 +55,12 @@ void RevisionTree::setModel(RevisionModel *model)
     clearScene();
     read();
     resize(width(),ui->revisionTreeWidget->height());
+
+    int rowNum = ui->revisionTableView->model()->rowCount();
+    for(int i = 0; i < rowNum; i++)
+    {
+        ui->revisionTableView->setRowHeight(i, rowHeight());
+    }
 }
 
 void RevisionTree::clearScene()
@@ -57,3 +70,18 @@ void RevisionTree::clearScene()
 void RevisionTree::read()
 {
 }
+int RevisionTree::rowHeight() const
+{
+    return mRowHeight;
+}
+
+void RevisionTree::setRowHeight(int rowHeight)
+{
+    mRowHeight = rowHeight;
+}
+
+void RevisionTree::slotScrollChanged(int value)
+{
+    emit scrollChanged(value * rowHeight());
+}
+

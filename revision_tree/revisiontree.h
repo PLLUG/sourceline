@@ -41,6 +41,16 @@ public:
     ~RevisionTree();
 
     void setModel(RevisionModel *model);
+
+    int rowHeight() const;
+    void setRowHeight(int rowHeight);
+
+signals:
+    void scrollChanged(int);
+
+public slots:
+    void slotScrollChanged(int value);
+
 private:
     void clearScene();
     void read();
@@ -49,6 +59,7 @@ private:
     Ui::RevisionTree *ui;
 
     revision_graph mGraph;
+    int mRowHeight;
 
 };
 
