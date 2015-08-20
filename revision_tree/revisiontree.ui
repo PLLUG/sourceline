@@ -60,6 +60,19 @@
        <height>700</height>
       </size>
      </property>
+     <property name="styleSheet">
+      <string notr="true">QHeaderView::section {
+    background-color: grey;
+    color: white;
+    padding-left: 4px;
+    border: 1px solid #6c6c6c;
+}
+
+QHeaderView::section:checked
+{
+    background-color: rgb(47, 85, 27);
+}</string>
+     </property>
     </widget>
    </item>
   </layout>

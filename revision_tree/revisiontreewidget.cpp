@@ -287,7 +287,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
 //    std::cout << "DOMINATOR TREE with root " << root_vertex << " : " << mGraph[root_vertex].message << std::endl;
 //    std::copy(idom.begin(), idom.end(), std::ostream_iterator<int>(std::cout, " "));
 //    std::cout << std::endl;
-    setMinimumHeight(30*num_vertices(mGraph) + offset());
+    setMinimumHeight(mWidth * num_vertices(mGraph) + 2*radius());
 }
 
 
@@ -311,11 +311,11 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         switch(revisionVertexes[v].shape)
         {
         case vsSquare:
-            painter.drawRect(width()*col + offset() - radius(), width()*row - 2*radius() + offset(),
+            painter.drawRect(width()*col + offset() - radius(), width()*row - radius() + offset(),
                              radius()*2, radius()*2);
             break;
         case vsCircle:
-            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset() - radius()},
+            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset()},
                                 radius(), radius());
             break;
         }

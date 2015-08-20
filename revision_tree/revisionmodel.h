@@ -36,6 +36,12 @@ boost::bidirectionalS, // bidirectional because we want to show lists of parents
 RevisionNode>;
 using vertex = boost::graph_traits<revision_graph>::vertex_descriptor;
 
+enum DefaultColumns
+{
+    IdColumn = 0,
+    DefaultColumnsCount
+};
+
 class RevisionModel : public QAbstractTableModel
 {
     Q_OBJECT
@@ -63,6 +69,7 @@ private:
     std::map<std::string, std::map<std::string,QVariant>> mPropertyMaps;//property maps by property name
     boost::dynamic_properties mProperties;
     std::vector< vertex > sorted_vertices;
+    std::vector<std::string> mPropertyNames;
 };
 
 #endif // REVISIONMODEL_H

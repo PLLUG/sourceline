@@ -46,7 +46,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(mProcess,&QProcess::readyReadStandardOutput, this, [=]()
     {
-        QStringList commits = QString(mProcess->readAllStandardOutput()).split("\n");
+        QStringList commits = QString(mProcess->readAllStandardOutput()).split("\n",QString::SkipEmptyParts);
         QRegExp rxlen("([^,]*)\a([^,]*)\a([^,]*)\a([^,]*)\a([^,]*)\a([^,]*)\a");
         for(auto commit : commits)
         {
@@ -84,7 +84,6 @@ MainWindow::MainWindow(QWidget *parent) :
             {
                 mModel->addNode(parent.toStdString(), newCommit);
             }
-            mModel->putProperty(hash.toStdString(),"hash",hash);
             mModel->putProperty(hash.toStdString(),"author",author);
             mModel->putProperty(hash.toStdString(),"email",email);
             mModel->putProperty(hash.toStdString(),"time",QDateTime::fromTime_t(time.toInt()));
