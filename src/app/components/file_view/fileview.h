@@ -64,21 +64,21 @@ public:
      * \brief set root path in different platforms
      * \return path
      */
-    static QString getHomePathForCurrentSystem()
-    {
-        QString rHomePath;
-        #ifdef Q_OS_LINUX
-        rHomePath = "/";
-        #endif
-        #ifdef Q_OS_WIN
-        rHomePath = "My Computer";
-        #endif
-        #ifdef Q_OS_MAC
-        rHomePath = "/";
-        #endif
-        rHomePath = QStandardPaths::HomeLocation;
-        return rHomePath;
-    }
+//    static QString getHomePathForCurrentSystem()
+//    {
+//        QString rHomePath;
+//        #ifdef Q_OS_LINUX
+//        rHomePath = "/";
+//        #endif
+//        #ifdef Q_OS_WIN
+//        rHomePath = "My Computer";
+//        #endif
+//        #ifdef Q_OS_MAC
+//        rHomePath = "/";
+//        #endif
+//        rHomePath = QStandardPaths::HomeLocation;
+//        return rHomePath;
+//    }
 
     void registerAction(QAction *pAction, SelectionFlags pSelecitonFlags);
 

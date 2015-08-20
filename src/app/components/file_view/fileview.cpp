@@ -187,7 +187,8 @@ void FileView::slotGoUp()
     }
     else
     {
-        cd(FileView::getHomePathForCurrentSystem());
+        QString homePath = QStandardPaths::HomeLocation;
+        cd(homePath);
     }
 
 }
