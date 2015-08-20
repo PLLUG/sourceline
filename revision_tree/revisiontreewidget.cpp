@@ -11,6 +11,7 @@
 #include <boost/graph/topology.hpp>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QDateTime>
 
 using IndexPropertyMap = boost::property_map<revision_graph, boost::vertex_index_t>::type;
 using PredMap = boost::iterator_property_map<typename std::vector<vertex>::iterator, IndexPropertyMap>;
@@ -95,7 +96,10 @@ private:
 };
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
-    QWidget{parent}
+    QWidget{parent},
+    mOffset{20},
+    mRadius{8},
+    mWidth{25}
 {
 }
 
@@ -117,6 +121,101 @@ vertex RevisionTreeWidget::findRoot(const revision_graph &pGraph)
     }
     return root_vertex;
 }
+
+/*!
+ * \brief RevisionTreeWidget::revisionVertexVector according to pGraph,
+ *  build RevisionVertex vector.
+ * \param pGraph - revision graph
+ * \return vector with RevisionVertex values.
+ */
+std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revision_graph &pGraph)
+{
+    boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
+    boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
+
+    std::vector<RevisionVertex> rRevisionVertexes(num_vertices(pGraph));
+
+    // Setting values of vertexes from rRevisionVertexes
+    BGL_FORALL_VERTICES(v, pGraph, revision_graph)
+    {
+        rRevisionVertexes[v].row = get(rowIndex, v);
+        rRevisionVertexes[v].column = get(colIndex, v);
+
+        // Initial commit
+        if(!boost::in_degree(v,pGraph))
+        {
+            rRevisionVertexes[v].type = vtNoIn;
+            rRevisionVertexes[v].color = Qt::black;
+            rRevisionVertexes[v].shape = vsCircle;
+        }
+        // Last commit
+        else if(!boost::out_degree(v,pGraph))
+        {
+            rRevisionVertexes[v].type = vtNoOut;
+            rRevisionVertexes[v].color = Qt::yellow;
+            rRevisionVertexes[v].shape = vsCircle;
+        }
+        else if(boost::in_degree(v,pGraph) > 1 && boost::out_degree(v,pGraph) > 1)
+        {
+            rRevisionVertexes[v].type = vtManyInManyOut;
+            rRevisionVertexes[v].color = Qt::magenta;
+            rRevisionVertexes[v].shape = vsSquare;
+        }
+        // Merge
+        else if(boost::in_degree(v,pGraph) > 1)
+        {
+            rRevisionVertexes[v].type = vtManyInOneOut;
+            rRevisionVertexes[v].color = Qt::red;
+            rRevisionVertexes[v].shape = vsSquare;
+        }
+        // Branching
+        else if(boost::out_degree(v,pGraph) > 1)
+        {
+            rRevisionVertexes[v].type = vtOneInManyOut;
+            rRevisionVertexes[v].color = Qt::blue;
+            rRevisionVertexes[v].shape = vsSquare;
+        }
+        // Usual commit
+        else
+        {
+            rRevisionVertexes[v].type = vtOneInOneOut;
+            rRevisionVertexes[v].color = Qt::green;
+            rRevisionVertexes[v].shape = vsCircle;
+        }
+    }
+
+    return rRevisionVertexes;
+}
+float RevisionTreeWidget::width() const
+{
+    return mWidth;
+}
+
+void RevisionTreeWidget::setWidth(float width)
+{
+    mWidth = width;
+}
+
+int RevisionTreeWidget::radius() const
+{
+    return mRadius;
+}
+
+void RevisionTreeWidget::setRadius(int radius)
+{
+    mRadius = radius;
+}
+
+float RevisionTreeWidget::offset() const
+{
+    return mOffset;
+}
+
+void RevisionTreeWidget::setOffset(float offset)
+{
+    mOffset = offset;
+}
+
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
 {
@@ -147,9 +246,9 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     //perform sort by time
     row = 0;
     std::vector< vertex > sortedVerticesByTime = getSortedGraphByTime(mGraph);
-    for ( auto ii=sortedVerticesByTime.begin()+1; ii!=sortedVerticesByTime.end(); ++ii)
+    for ( auto ii=sortedVerticesByTime.rbegin(); ii!=sortedVerticesByTime.rend(); ++ii)
     {
-        put(rowIndex, *ii, ++row);
+        put(rowIndex, *ii, row++);
     }
 
 
@@ -197,53 +296,33 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     QWidget::paintEvent(e);
     QPainter painter(this);
 
-    painter.setBrush(Qt::red);
-    painter.setPen(Qt::black);
-
-    const int offset{20};
-    const float width = 25;
-    const float radius = 8;
-
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
+    std::vector<RevisionVertex> revisionVertexes = revisionVertexVector(mGraph);
+
     BGL_FORALL_VERTICES(v, mGraph, revision_graph)
     {
-        int row = get(rowIndex, v);
-        int col = get(colIndex, v);
-        if(!boost::in_degree(v,mGraph))
+        int row = revisionVertexes[v].row;
+        int col = revisionVertexes[v].column;
+        painter.setBrush(revisionVertexes[v].color);
+
+        // Drawing vertex
+        switch(revisionVertexes[v].shape)
         {
-            painter.setBrush(Qt::black);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
+        case vsSquare:
+            painter.drawRect(width()*col + offset() - radius(), width()*row - radius() + offset(),
+                             radius()*2, radius()*2);
+            break;
+        case vsCircle:
+            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset()},
+                                radius(), radius());
+            break;
         }
-        else if(!boost::out_degree(v,mGraph))
-        {
-            painter.setBrush(Qt::yellow);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else if(boost::in_degree(v,mGraph) > 1 && boost::out_degree(v,mGraph) > 1)
-        {
-            painter.setBrush(Qt::magenta);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else if(boost::in_degree(v,mGraph) > 1)
-        {
-            painter.setBrush(Qt::red);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else if(boost::out_degree(v,mGraph) > 1)
-        {
-            painter.setBrush(Qt::blue);
-            painter.drawRect(width*col + offset - radius, width*row - radius, radius*2, radius*2);
-        }
-        else
-        {
-            painter.setBrush(Qt::green);
-            painter.drawEllipse(QPointF{width*col + offset, width*row},
-                                radius, radius);
-        }
-        painter.drawText(QPointF{width*col + offset, width*row + radius}, QString::number(v));
+
+        painter.drawText(QPointF{width()*col + offset(), width()*row + radius() + offset()}, QString::number(v));
     }
+
     painter.setPen(Qt::darkGray);
     BGL_FORALL_EDGES(e, mGraph, revision_graph)
     {
@@ -251,7 +330,7 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         int sourceCol = get(colIndex, boost::source(e, mGraph));
         int targetRow = get(rowIndex, boost::target(e, mGraph));
         int targetCol = get(colIndex, boost::target(e, mGraph));
-        painter.drawLine(QPoint(width*sourceCol + offset, width*sourceRow), QPoint(width*targetCol + offset, width*targetRow));
+        painter.drawLine(QPoint(width()*sourceCol + offset(), width()*sourceRow + offset()), QPoint(width()*targetCol + offset(), width()*targetRow + offset()));
     }
 }
 
