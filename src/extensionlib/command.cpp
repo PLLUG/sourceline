@@ -42,12 +42,12 @@ Command::CommandFlags Command::flags() const
     return NoFlags;
 }
 
-QString Command::toString() const
-{
-    return QString("%1 %2")
-        .arg(commandString())
-        .arg(parametersList().join(ARGUMENT_SEPARATOR));
-}
+//QString Command::toString() const
+//{
+//    return QString("%1 %2")
+//        .arg(commandString())
+//        .arg(parametersList().join(ARGUMENT_SEPARATOR));
+//}
 
 void Command::setIcon(const QIcon &pIcon)
 {

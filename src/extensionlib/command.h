@@ -4,7 +4,7 @@
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
-***    Copyright (C) 2014  by                                                ***
+***    Copyright (C) 2014, 2015  by                                                ***
 ***            Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)          ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
@@ -30,6 +30,8 @@
 #include "defs.h"
 #include "extensions_global.h"
 
+class Aggregator;
+
 /*!
  * \brief The abstract Command class implements command that could be executed by vcs or command
  *  interpreter in SL process execution environment.
@@ -38,6 +40,9 @@ class EXTENSIONSSHARED_EXPORT Command : public QObject
 {
     Q_OBJECT
 public:
+    /*!
+     * \brief The CommandFlag enum describes specific command properties.
+     */
     enum CommandFlag
     {
         NoFlags = 0x0000
@@ -65,24 +70,39 @@ public:
      */
     virtual CommandFlags flags() const;
 
-    virtual QString commandString() const = 0;
-    virtual QStringList parametersList() const = 0;
-    /*!
-     * \brief commandKind Return flags that describers type of command
-     * \return this flag
-     */
-    virtual Commands::CommandKind commandKind() const  = 0;
+//    virtual QString commandString() const = 0;
+//    virtual QStringList parametersList() const = 0;
+//    /*!
+//     * \brief commandKind Return flags that describers type of command
+//     * \return this flag
+//     */
+//    virtual Commands::CommandKind commandKind() const  = 0;
+
+//    /*!
+//     * \brief Returns string that equivalent to command in command line to execute current Command
+//     *  instance.
+//     * \return String with command and parameters.
+//     */
+//    QString toString() const;
 
     /*!
-     * \brief Returns string that equivalent to command in command line to execute current Command
-     *  instance.
-     * \return String with command and parameters.
+     * \brief Initializes plugin. Should contain all api calls necessary for command
+     * initialization and registration.
+     * \param api SL public API aggregator.
      */
-    QString toString() const;
+    virtual void init(Aggregator &api) = 0;
 
-signals:
+    /*!
+     * \brief Should be called when user runs command using associated UI controls.
+     * \param api SL public API aggregator.
+     */
+    virtual void trigger(Aggregator &api) = 0;
 
-public slots:
+    /*!
+     * \brief Processes command output and performs appropriate actions.
+     * \param api SL public API aggregator.
+     */
+    virtual void processResult(Aggregator &api) = 0;
 
 protected:
     /*!
