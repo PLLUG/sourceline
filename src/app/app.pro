@@ -60,6 +60,7 @@ HEADERS += \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
+    ui/passworddialog.h \
     ui/clonedialog.h \
     ui/tabsapi.h \
     aggregator.h \
@@ -90,6 +91,7 @@ SOURCES += \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
+    ui/passworddialog.cpp \
     ui/clonedialog.cpp \
     ui/tabsapi.cpp \
     aggregator.cpp \
@@ -143,7 +145,6 @@ SOURCES += \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
 
-
 FORMS += \
     ui/customtabbar.ui \
     ui/editorview.ui \
@@ -154,10 +155,11 @@ FORMS += \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui \
-    ui/dockconsole.ui \
     ui/dockfileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
+    ui/dockconsole.ui \
+    ui/passworddialog.ui \
     ui/revisionview.ui \
     ui/clonedialog.ui \
     ui/errordialog.ui \
