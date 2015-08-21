@@ -18,8 +18,8 @@
     <rect>
      <x>9</x>
      <y>9</y>
-     <width>1111</width>
-     <height>471</height>
+     <width>781</width>
+     <height>481</height>
     </rect>
    </property>
    <property name="orientation">
@@ -38,7 +38,7 @@
        <x>0</x>
        <y>0</y>
        <width>69</width>
-       <height>469</height>
+       <height>479</height>
       </rect>
      </property>
      <property name="sizePolicy">

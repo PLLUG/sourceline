@@ -3,6 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2015  by                                                ***
 ***            Halyna Butovych (galynabutovych@gmail.com)                    ***
+***            Nazarii Plebanskii (nazar796@gmail.com)                       ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -40,11 +41,11 @@ RevisionTree::RevisionTree(QWidget *parent) :
     ui->scrollArea->verticalScrollBar()->setHidden(true);
     ui->revisionTableView->horizontalHeader()->setFixedHeight(mRowHeight);
 
-    connect(ui->revisionTableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotScrollChanged(int)));
-    connect(this, SIGNAL(scrollChanged(int)), ui->scrollArea->verticalScrollBar(), SLOT(setValue(int)));
+    connect(ui->revisionTableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotTableScrollChanged(int)));
+    connect(this, SIGNAL(tableScrollChanged(int)), ui->scrollArea->verticalScrollBar(), SLOT(setValue(int)));
 
-//    connect(ui->scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)), ui->revisionTableView->verticalScrollBar(), SLOT(setValue(int)));
-//    connect(this, SIGNAL(scrollChanged(int)), ui->scrollArea->verticalScrollBar(), SLOT(setValue(int)));
+    connect(ui->scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotAreaScrollChanged(int)));
+    connect(this, SIGNAL(areaScrollChanged(int)), ui->revisionTableView->verticalScrollBar(), SLOT(setValue(int)));
 
     ui->revisionTableView->horizontalHeader()->setSectionsMovable(true);
     ui->revisionTableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -89,8 +90,13 @@ void RevisionTree::setRowHeight(int rowHeight)
     mRowHeight = rowHeight;
 }
 
-void RevisionTree::slotScrollChanged(int value)
+void RevisionTree::slotAreaScrollChanged(int value)
 {
-    emit scrollChanged(value * rowHeight());
+    emit areaScrollChanged(static_cast<int>(value / rowHeight()));
+}
+
+void RevisionTree::slotTableScrollChanged(int value)
+{
+    emit tableScrollChanged(value * rowHeight());
 }
 

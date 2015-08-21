@@ -46,10 +46,12 @@ public:
     void setRowHeight(int rowHeight);
 
 signals:
-    void scrollChanged(int);
+    void tableScrollChanged(int);
+    void areaScrollChanged(int);
 
-public slots:
-    void slotScrollChanged(int value);
+private slots:
+    void slotTableScrollChanged(int value);
+    void slotAreaScrollChanged(int value);
 
 private:
     void clearScene();
