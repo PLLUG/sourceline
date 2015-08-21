@@ -23,6 +23,7 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <QObject>
+
 class PluginInfo;
 
 class ComponentSupplier

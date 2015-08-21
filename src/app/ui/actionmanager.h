@@ -22,12 +22,13 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
 #include "guidefs.h"
+
+#include <QObject>
 #include <QMap>
-#include <QAction>
-#include <QString>
 #include <QList>
+
+class QMenu;
 
 class MenuCreationStrategy;
 class UserAction;

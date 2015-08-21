@@ -25,15 +25,27 @@
 
 Node::Node()
 {
+    mX = 0;
+    mY = 0;
 }
 
-void Node::setCoorginate(int x, int y)
+void Node::setCoorginate(int pX, int pY)
 {
-    mX = x;
-    mY = y;
+    mX = pX;
+    mY = pY;
 }
 
-bool Node::operator ==(const QPair<int, int> &coordinate) const
+int Node::x() const
 {
-    return ((mX == coordinate.first) && (mY == coordinate.second));
+    return mX;
+}
+
+int Node::y() const
+{
+    return mY;
+}
+
+bool Node::operator ==(const QPair<int, int> &pCoordinate) const
+{
+    return ((mX == pCoordinate.first) && (mY == pCoordinate.second));
 }

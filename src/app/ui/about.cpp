@@ -1,6 +1,10 @@
 #include "about.h"
 #include "ui_about.h"
 
+#include <QDebug>
+#include <QTextStream>
+#include <QFile>
+
 // TASK: rename class to AboutDialog
 About::About(QWidget *parent) :
     QDialog(parent,
@@ -30,12 +34,12 @@ About::~About()
     delete ui;
 }
 
-QString About::textFromFile(QString address)
+QString About::textFromFile(QString pAddress)
 {
-    QFile file(address);
+    QFile file(pAddress);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << QString("Cannot open ") + address;
+        qDebug() << QString("Cannot open ") + pAddress;
         return QString();
     }
 

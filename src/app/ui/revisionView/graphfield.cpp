@@ -22,6 +22,7 @@
 *******************************************************************************/
 
 #include "graphfield.h"
+#include "node.h"
 
 GraphField::GraphField() :
     mWidth(0),
@@ -29,15 +30,25 @@ GraphField::GraphField() :
 {
 }
 
-void GraphField::addCommit(Node *n, Node *parent)
+int GraphField::width() const
 {
-    n->setCoorginate(parent ? parent->x() : mWidth, mHeight);
+    return mWidth;
+}
+
+int GraphField::height() const
+{
+    return mHeight;
+}
+
+void GraphField::addCommit(Node *pNode, Node *pParent)
+{
+    pNode->setCoorginate(pParent ? pParent->x() : mWidth, mHeight);
     ++mHeight;
 }
 
-void GraphField::addBranch(Node *n)
+void GraphField::addBranch(Node *pNode)
 {
-    n->setCoorginate(mWidth, mHeight);
+    pNode->setCoorginate(mWidth, mHeight);
     ++mWidth;
     ++mHeight;
 }

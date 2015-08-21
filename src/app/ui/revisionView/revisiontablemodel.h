@@ -25,8 +25,9 @@
 #define REVISIONTABLEMODEL_H
 
 #include <QAbstractTableModel>
-#include "revisionnode.h"
-#include "creator.h"
+
+class Creator;
+class RevisionNode;
 
 class RevisionTableModel : public QAbstractTableModel
 {
@@ -36,11 +37,11 @@ public:
     int rowCount(const QModelIndex &parent = QModelIndex()) const;
     int columnCount(const QModelIndex &parent = QModelIndex()) const;
 
-    QVariant data(const QModelIndex &index, int role) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    QVariant data(const QModelIndex &pIndex, int pRole) const;
+    QVariant headerData(int pSection, Qt::Orientation pOrientation, int pRole) const;
 
     void dataChange();
-    Creator* graph() const { return mGraph; }
+    Creator* graph() const;
 
 private:
     RevisionNode *mRoot;

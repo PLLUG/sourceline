@@ -22,6 +22,8 @@
 *******************************************************************************/
 
 #include "createtree.h"
+#include "revisionnode.h"
+
 #include <QDebug>
 
 CreateTree::CreateTree()
@@ -30,53 +32,56 @@ CreateTree::CreateTree()
 
 RevisionNode *CreateTree::create() const
 {
-    int revCount = 0;
-    RevisionNode *root = createSimpleNode("master", QString("%1").arg(revCount++));
-    mAllRevisions.append(root);
-    addCommit(root->HEAD(), createSimpleNode("Master: first commit", QString("%1").arg(revCount++)));
-    RevisionNode *branch = createSimpleNode("test branch #1: first commit", QString("%1").arg(revCount++));
-    addBranch(root->HEAD(), branch);
-    addBranch(root->HEAD(), createSimpleNode("test branch #2: first commit", QString("%1").arg(revCount++)));
+    int lRevCount = 0;
+    RevisionNode *rRoot = createSimpleNode("master", QString("%1").arg(lRevCount++));
+    mAllRevisions.append(rRoot);
+    addCommit(rRoot->HEAD(), createSimpleNode("Master: first commit", QString("%1").arg(lRevCount++)));
+    RevisionNode *lBranch = createSimpleNode("test branch #1: first commit", QString("%1").arg(lRevCount++));
+    addBranch(rRoot->HEAD(), lBranch);
+    addBranch(rRoot->HEAD(), createSimpleNode("test branch #2: first commit", QString("%1").arg(lRevCount++)));
     //RevisionNode *n = root->HEAD();
 
-    addCommit(branch->HEAD(), createSimpleNode("test branch #1: second commit", QString("%1").arg(revCount++)));
+    addCommit(lBranch->HEAD(), createSimpleNode("test branch #1: second commit", QString("%1").arg(lRevCount++)));
 
-    addCommit(root->HEAD()->branches.at(1)->HEAD(), createSimpleNode("test branch #2: second commit", QString("%1").arg(revCount++)));
-    addCommit(branch->HEAD(), createSimpleNode("test branch #1: third commit", QString("%1").arg(revCount++)));
+    addCommit(rRoot->HEAD()->mBranches.at(1)->HEAD(), createSimpleNode("test branch #2: second commit", QString("%1").arg(lRevCount++)));
+    addCommit(lBranch->HEAD(), createSimpleNode("test branch #1: third commit", QString("%1").arg(lRevCount++)));
 
-    addBranch(branch->HEAD(), createSimpleNode("test branch #3: first commit", QString("%1").arg(revCount++)));
+    addBranch(lBranch->HEAD(), createSimpleNode("test branch #3: first commit", QString("%1").arg(lRevCount++)));
 
-    addCommit(branch->HEAD(), createSimpleNode("test branch #1: fourth commit", QString("%1").arg(revCount++)));
+    addCommit(lBranch->HEAD(), createSimpleNode("test branch #1: fourth commit", QString("%1").arg(lRevCount++)));
 
-    addCommit(root->HEAD(), createSimpleNode("master: second commit merged from test branch #1", QString("%1").arg(revCount++)));
+    addCommit(rRoot->HEAD(), createSimpleNode("master: second commit merged from test branch #1", QString("%1").arg(lRevCount++)));
 
     //branch->HEAD()->mergeTo(root->HEAD());
 
-    addCommit(root->HEAD(), createSimpleNode("master: third commit", QString("%1").arg(revCount++)));
+    addCommit(rRoot->HEAD(), createSimpleNode("master: third commit", QString("%1").arg(lRevCount++)));
     //addBranch(n, createSimpleNode("test branch #1_1: first commit", QString("%1").arg(revCount++)));
-    foreach (RevisionNode *node, mAllRevisions)
-        node->updateData();
-    return root;
+    foreach (RevisionNode *lNode, mAllRevisions)
+        lNode->updateData();
+    return rRoot;
 }
 
-RevisionNode *CreateTree::createSimpleNode(const QString &message, const QString &id) const
+RevisionNode *CreateTree::createSimpleNode(const QString &pMessage, const QString &pId) const
 {
-    RevisionNode *node = new RevisionNode;
-    node->setData(RevisionNode::IDR_DisplayRole, message);
-    node->setRevId(id);
-    mAllRevisions.append(node);
-    return node;
+    RevisionNode *rNode = new RevisionNode;
+    rNode->setData(RevisionNode::IDR_DisplayRole, pMessage);
+    rNode->setRevId(pId);
+    mAllRevisions.append(rNode);
+    return rNode;
 }
 
-void CreateTree::addCommit(RevisionNode *head, RevisionNode *commit) const
+void CreateTree::addCommit(RevisionNode *pHead, RevisionNode *pCommit) const
 {
-    if ( head && commit ) {
-        head->addChild(commit);
+    if (pHead && pCommit)
+    {
+        pHead->addChild(pCommit);
     }
 }
 
-void CreateTree::addBranch(RevisionNode *from, RevisionNode *to) const
+void CreateTree::addBranch(RevisionNode *pFrom, RevisionNode *pTo) const
 {
-    if ( from && to )
-        from->addBranch(to);
+    if (pFrom && pTo)
+    {
+        pFrom->addBranch(pTo);
+    }
 }

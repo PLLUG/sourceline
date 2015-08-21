@@ -24,6 +24,9 @@
 #include "appsettingsdialog.h"
 #include "ui_appsettingsdialog.h"
 
+#include <QPushButton>
+#include <QDebug>
+
 AppSettingsDialog::AppSettingsDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::AppSettingsDialog)
@@ -84,9 +87,9 @@ void AppSettingsDialog::slotBtnApply()
     mSettingPages.at(ui->stackedWidget->currentIndex())->settings()->commit();
 }
 
-void AppSettingsDialog::slotOnListItemClicked(int index)
+void AppSettingsDialog::slotOnListItemClicked(int pIndex)
 {
-    ui->stackedWidget->setCurrentIndex(index);
+    ui->stackedWidget->setCurrentIndex(pIndex);
 }
 
 void AppSettingsDialog::slotPageModified()

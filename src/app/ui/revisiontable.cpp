@@ -2,6 +2,8 @@
 #include "ui_revisiontable.h"
 #include "guidefs.h"
 
+#include <QWidget>
+
 RevisionTable::RevisionTable(QWidget *parent) :
     GenericDockWidget(parent),
     ui(new Ui::RevisionTable)
@@ -21,5 +23,5 @@ DockTypes::DockType RevisionTable::type() const
 
 void RevisionTable::slotSetPage(int pPage)
 {
-    ui->label->setText("Page " + QString::number(pPage));
+    ui->label->setText(tr("Page ") + QString::number(pPage));
 }

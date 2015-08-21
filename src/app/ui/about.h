@@ -2,10 +2,7 @@
 #define ABOUT_H
 
 #include <QDialog>
-#include <QFile>
 #include <QString>
-#include <QTextStream>
-#include <QDebug>
 
 namespace Ui {
 class About;
@@ -25,7 +22,7 @@ public:
 private:
     Ui::About *ui;
 
-    QString textFromFile(QString address);
+    QString textFromFile(QString pAddress);
 };
 
 #endif // ABOUT_H

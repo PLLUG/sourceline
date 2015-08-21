@@ -24,8 +24,9 @@
 #ifndef CREATETREE_H
 #define CREATETREE_H
 
-#include "revisionnode.h"
 #include <QVector>
+
+QT_FORWARD_DECLARE_CLASS(RevisionNode)
 
 class CreateTree
 {
@@ -35,9 +36,9 @@ public:
     RevisionNode *create() const;
 
 private:
-    RevisionNode *createSimpleNode(const QString &message, const QString &id) const;
-    void addCommit(RevisionNode *head, RevisionNode *commit) const;
-    void addBranch(RevisionNode *from, RevisionNode *to) const;
+    RevisionNode *createSimpleNode(const QString &pMessage, const QString &pId) const;
+    void addCommit(RevisionNode *pHead, RevisionNode *pCommit) const;
+    void addBranch(RevisionNode *pFrom, RevisionNode *pTo) const;
 
     mutable QVector<RevisionNode*> mAllRevisions;
 };

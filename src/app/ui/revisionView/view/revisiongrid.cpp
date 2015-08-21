@@ -22,6 +22,8 @@
 *******************************************************************************/
 
 #include "revisiongrid.h"
+#include "../revisionnode.h"
+#include "revisionnodeitem.h"
 
 #include <QPainter>
 #include <QDebug>
@@ -31,24 +33,25 @@ RevisionGrid::RevisionGrid()
 {
     mSize = QSizeF(250, 250);
 //    setFlag(ItemIsMovable);
+    mRoot = new RevisionNode();
 }
 
-void RevisionGrid::setBoundingRect(const QSizeF size)
+void RevisionGrid::setBoundingRect(const QSizeF pSize)
 {
     prepareGeometryChange();
-    mSize = size;
+    mSize = pSize;
 }
 
-void RevisionGrid::setBoundingRect(qreal w, qreal h)
+void RevisionGrid::setBoundingRect(qreal pWidth, qreal pHeight)
 {
-    setBoundingRect(QSizeF(w, h));
+    setBoundingRect(QSizeF(pWidth, pHeight));
 }
 
-void RevisionGrid::view(RevisionNode *root)
+void RevisionGrid::view(RevisionNode *pRoot)
 {
-    mRoot = root;
+    mRoot = pRoot;
     drawNode(mRoot, gridStep());
-    drawLines(root);
+    drawLines(pRoot);
 }
 
 QRectF RevisionGrid::boundingRect() const
@@ -66,40 +69,42 @@ int RevisionGrid::gridStep() const
     return 20;
 }
 
-void RevisionGrid::drawText(const QString &txt, RevisionNodeItem *i)
+void RevisionGrid::drawText(const QString &pText, RevisionNodeItem *pItem)
 {
-    mText = txt;
-    mTextPos = i->pos() + i->boundingRect().topRight();
+    mText = pText;
+    mTextPos = pItem->pos() + pItem->boundingRect().topRight();
     update();
 }
 
-void RevisionGrid::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void RevisionGrid::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
 {
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(QBrush(QColor(100, 100, 100)));
-    painter->drawRoundedRect(boundingRect(), 5, 5);
+    Q_UNUSED(pOption)
+    Q_UNUSED(pWidget)
+    pPainter->setRenderHint(QPainter::Antialiasing);
+    pPainter->setPen(Qt::NoPen);
+    pPainter->setBrush(QBrush(QColor(100, 100, 100)));
+    pPainter->drawRoundedRect(boundingRect(), 5, 5);
 
-    if ( !mText.isEmpty())
+    if (!mText.isEmpty())
     {
-        QFontMetricsF fm(painter->font());
-        QRectF rect (mTextPos + QPointF(10, 0), QSizeF(fm.width(mText) + 5, fm.height() + 5));
-        painter->setBrush(QColor(150, 150, 150));
-        painter->drawRoundedRect(rect, 3, 3);
-        painter->setPen(Qt::white);
-        painter->drawText(rect, mText, QTextOption(Qt::AlignCenter));
+        QFontMetricsF lFontMetrics(pPainter->font());
+        QRectF lRect (mTextPos + QPointF(10, 0), QSizeF(lFontMetrics.width(mText) + 5, lFontMetrics.height() + 5));
+        pPainter->setBrush(QColor(150, 150, 150));
+        pPainter->drawRoundedRect(lRect, 3, 3);
+        pPainter->setPen(Qt::white);
+        pPainter->drawText(lRect, mText, QTextOption(Qt::AlignCenter));
     }
 }
 
 bool RevisionGrid::eventFilter(QObject *obj, QEvent *event)
 {
-    if ( event->type() == QEvent::Wheel)
+    if (event->type() == QEvent::Wheel)
     {
         QWheelEvent *e = dynamic_cast<QWheelEvent *>(event);
         static qreal sc = 1.0;
-        if ( e->modifiers() & Qt::ControlModifier )
+        if (e->modifiers() & Qt::ControlModifier)
         {
-            if ( e->delta() > 0 )
+            if (e->delta() > 0)
             {
                 sc += 0.1;
             }
@@ -114,66 +119,68 @@ bool RevisionGrid::eventFilter(QObject *obj, QEvent *event)
     return QObject::eventFilter(obj, event);
 }
 
-void RevisionGrid::drawNode(RevisionNode *item, int currentCol)
+void RevisionGrid::drawNode(RevisionNode *pItem, int pCurrentCol)
 {
-    static int currentRow = gridStep();
-    int currentColumn = currentCol;
-    RevisionNode *node = item;
-    while ( node != 0 )
+    static int lCurrentRow = gridStep();
+    int lCurrentColumn = pCurrentCol;
+    RevisionNode *lNode = pItem;
+    while (lNode != 0)
     {
-        RevisionNodeItem *it = new RevisionNodeItem(node, this);
-        node->graphicsItem = it;
-        it->setPos(startPoint() + QPoint(currentColumn, -currentRow));
-        currentRow += gridStep();
-        if ( !node->branches.isEmpty() )
+        RevisionNodeItem *lItem = new RevisionNodeItem(lNode, this);
+        lNode->mGraphicsItem = lItem;
+        lItem->setPos(startPoint() + QPoint(lCurrentColumn, -lCurrentRow));
+        lCurrentRow += gridStep();
+        if (!lNode->mBranches.isEmpty())
         {
-            for (int i = 0; i < node->branches.size(); ++i)
+            for (int i = 0; i < lNode->mBranches.size(); ++i)
             {
-                RevisionNodeItem *it = new RevisionNodeItem(node->branches.at(i), this);
-                node->branches.at(i)->graphicsItem = it;
-                it->setPos(startPoint() + QPoint(currentColumn + gridStep() * (i+1), -currentRow));
-                currentRow += gridStep();
+                RevisionNodeItem *lIt = new RevisionNodeItem(lNode->mBranches.at(i), this);
+                lNode->mBranches.at(i)->mGraphicsItem = lIt;
+                lIt->setPos(startPoint() + QPoint(lCurrentColumn + gridStep() * (i+1), -lCurrentRow));
+                lCurrentRow += gridStep();
             }
-            for (int i = 0; i < node->branches.size(); ++i)
+            for (int i = 0; i < lNode->mBranches.size(); ++i)
             {
-                if ( node->branches.at(i)->child )
-                    drawNode(node->branches.at(i)->child, currentCol + gridStep() * (i + 1));
+                if (lNode->mBranches.at(i)->mChild)
+                {
+                    drawNode(lNode->mBranches.at(i)->mChild, pCurrentCol + gridStep() * (i + 1));
+                }
             }
         }
-        node = node->child;
+        lNode = lNode->mChild;
     }
 }
 
-void RevisionGrid::drawLines(RevisionNode *root)
+void RevisionGrid::drawLines(RevisionNode *pRoot)
 {
-    RevisionNode *next = root;
-    while ( next )
+    RevisionNode *lNext = pRoot;
+    while (lNext)
     {
-        if ( next->mMergeTo )
+        if (lNext->mMergeTo)
         {
-            drawBezier(next->graphicsItem, next->mMergeTo->graphicsItem);
+            drawBezier(lNext->mGraphicsItem, lNext->mMergeTo->mGraphicsItem);
         }
-        if ( next->child )
+        if (lNext->mChild)
         {
-            drawLine(next->graphicsItem, next->child->graphicsItem);
-            if ( !next->branches.isEmpty() )
+            drawLine(lNext->mGraphicsItem, lNext->mChild->mGraphicsItem);
+            if (!lNext->mBranches.isEmpty())
             {
-                for (int i = 0; i < next->branches.size(); ++i)
+                for (int i = 0; i < lNext->mBranches.size(); ++i)
                 {
-                    drawBezier(next->graphicsItem, next->branches.at(i)->graphicsItem);
-                    drawLines(next->branches.at(i));
+                    drawBezier(lNext->mGraphicsItem, lNext->mBranches.at(i)->mGraphicsItem);
+                    drawLines(lNext->mBranches.at(i));
                 }
             }
-            next = next->child;
+            lNext = lNext->mChild;
         }
         else
         {
-            if ( !next->branches.isEmpty() )
+            if (!lNext->mBranches.isEmpty())
             {
-                for (int i = 0; i < next->branches.size(); ++i)
+                for (int i = 0; i < lNext->mBranches.size(); ++i)
                 {
-                    drawBezier(next->graphicsItem, next->branches.at(i)->graphicsItem);
-                    drawLines(next->branches.at(i));
+                    drawBezier(lNext->mGraphicsItem, lNext->mBranches.at(i)->mGraphicsItem);
+                    drawLines(lNext->mBranches.at(i));
                 }
             }
             break;
@@ -181,25 +188,25 @@ void RevisionGrid::drawLines(RevisionNode *root)
     }
 }
 
-void RevisionGrid::drawBezier(RevisionNodeItem *from, RevisionNodeItem *to)
+void RevisionGrid::drawBezier(RevisionNodeItem *pFrom, RevisionNodeItem *pTo)
 {
-    QGraphicsPathItem *item = new QGraphicsPathItem(this);
-    QPainterPath path;
-    QRectF rect(from->pos() + from->boundingRect().center(), to->pos() + to->boundingRect().center());
-    path.moveTo(rect.topLeft());
-    QPointF c1 = QPointF(rect.bottomLeft().x(), rect.bottomLeft().y() - rect.height() - gridStep() * 0.7);
-    QPointF c2 = rect.topRight();
-    path.cubicTo(c1, c2, rect.bottomRight());
-    item->setPen(QPen(Qt::red));
-    item->setPath(path);
+    QGraphicsPathItem *lItem = new QGraphicsPathItem(this);
+    QPainterPath lPath;
+    QRectF lRect(pFrom->pos() + pFrom->boundingRect().center(), pTo->pos() + pTo->boundingRect().center());
+    lPath.moveTo(lRect.topLeft());
+    QPointF lPoint1 = QPointF(lRect.bottomLeft().x(), lRect.bottomLeft().y() - lRect.height() - gridStep() * 0.7);
+    QPointF lPoint2 = lRect.topRight();
+    lPath.cubicTo(lPoint1, lPoint2, lRect.bottomRight());
+    lItem->setPen(QPen(Qt::red));
+    lItem->setPath(lPath);
 
 //    QGraphicsLineItem *line = new QGraphicsLineItem(this);
 //    line->setLine(QLineF(c1, c2));
 }
 
-void RevisionGrid::drawLine(RevisionNodeItem *from, RevisionNodeItem *to)
+void RevisionGrid::drawLine(RevisionNodeItem *pFrom, RevisionNodeItem *pTo)
 {
-    QGraphicsLineItem *line = new QGraphicsLineItem(this);
-    line->setPen(QPen(Qt::red));
-    line->setLine(QLineF(from->pos() + from->boundingRect().center(), to->pos() + to->boundingRect().center()));
+    QGraphicsLineItem *lLine = new QGraphicsLineItem(this);
+    lLine->setPen(QPen(Qt::red));
+    lLine->setLine(QLineF(pFrom->pos() + pFrom->boundingRect().center(), pTo->pos() + pTo->boundingRect().center()));
 }

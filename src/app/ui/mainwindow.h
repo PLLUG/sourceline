@@ -1,21 +1,13 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-// TASK: refactor: too many includes
 #include <QMainWindow>
 #include <QSystemTrayIcon>
-#include <QIcon>
-#include <QMenu>
-#include <QCloseEvent>
-#include <QApplication>
-#include "settings.h"
-#include "appsettingsdialog.h"
-#include "viewsettingpage.h"
-#include "settings_dialog/settingstorage.h"
-#include "settings_dialog/settingsmanager.h"
-#include "customtabbar.h"
-#include "pagemanager.h"
-#include "about.h"
+#include "contentfortab.h"
+
+class TabsAPI;
+class CustomTabBar;
+class QMenu;
 
 namespace Ui {
 class MainWindow;
@@ -31,10 +23,12 @@ public:
     Ui::MainWindow *ui;
 
 private:
-    QSystemTrayIcon *TrayIcon;
-    QMenu *trayMenu;
+    QSystemTrayIcon *mTrayIcon;
+    QMenu *mTrayMenu;
     CustomTabBar *mTabBar;
-    PageManager *mPageManager;
+    TabsAPI *mTabsAPI;
+    int mAmountOpenedTabs;
+
 
 signals:
     void mysignal();
@@ -49,7 +43,7 @@ private slots:
 
     void slotQuit();
 
-    void slotAddPage();
+    void slotAddNewWorkplace();
 };
 
 #endif // MAINWINDOW_H

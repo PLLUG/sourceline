@@ -30,6 +30,9 @@ GraphicsView::GraphicsView(QWidget *parent) :
 
 void GraphicsView::resizeEvent(QResizeEvent *event)
 {
-    if ( scene() )
+    Q_UNUSED(event)
+    if (scene())
+    {
         scene()->setSceneRect(rect());
+    }
 }

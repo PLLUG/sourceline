@@ -28,17 +28,8 @@
 
 #include <QDialog>
 #include <QString>
-#include <QPixmap>
-#include <QModelIndex>
-#include <QSettings>
 
-#include <QDebug>
-#include <QLayout>
-#include <QLayoutItem>
-#include <QHBoxLayout>
-#include <QLabel>
-#include <QCheckBox>
-#include <QPushButton>
+class QPushButton;
 
 namespace Ui {
     class AppSettingsDialog;
@@ -58,7 +49,7 @@ private slots:
     void slotBtnOk();
     void slotBtnCancel();
     void slotBtnApply();
-    void slotOnListItemClicked(int index);
+    void slotOnListItemClicked(int pIndex);
 
     void slotPageModified();
 
@@ -66,7 +57,7 @@ private:
     Ui::AppSettingsDialog *ui;
     QPushButton* mApplyButton;
     QStringList mSettingsNameList;
-    QVector<QWidget*> settingsWidgetList;
+    QVector<QWidget*> mSettingsWidgetList;
     QList<SettingsPage*> mSettingPages;
 
     bool mSettingsChanged;

@@ -24,6 +24,9 @@
 
 #include "settings.h"
 
+#include <QSignalMapper>
+#include <QDebug>
+
 Settings::Settings(QObject *parent) :
     QObject(parent),
     mPropertyMapper(new QSignalMapper(this)),
@@ -62,21 +65,21 @@ bool Settings::add(const QString &pName, QObject *pObject, const QString &pPrope
 
 bool Settings::subscribe(const QString &pName, QObject *pObject, const QByteArray &pSignature)
 {
-    bool lResult = false;
+    bool rResult = false;
 
     if (!pObject || pSignature.isEmpty())
     {
         qDebug("Settings: could not subscribe - invalid parameter value");
-        return lResult;
+        return rResult;
     }
 
-    if ((lResult = isMethodCouldBeSubscribed(pObject, pSignature)))
+    if ((rResult = isMethodCouldBeSubscribed(pObject, pSignature)))
     {
         QMetaMethod lMetaMethod = metaMethod(pObject, pSignature);
         mSubscribedObjectsBySetting.insert(pName, pObject);
         mSubscribedMethodBySetting.insert(pName, lMetaMethod.name());
     }
-    return lResult;
+    return rResult;
 }
 
 void Settings::commit()
@@ -89,7 +92,7 @@ void Settings::commit()
     QMap<QString, QVariant>::const_iterator it;
     for (it = mModifiedSettingsByName.begin();
          it != mModifiedSettingsByName.end();
-         it++)
+         ++it)
     {
         mSettingValueByName.insert(it.key(), it.value());
         notifySubscribers(it.key(), it.value());
@@ -130,16 +133,16 @@ void Settings::revert()
 
 bool Settings::isPropertyCouldBeAttached(QObject *pObject, const QString &pProperty)
 {
-    bool lResult = false;
+    bool rResult = false;
     QMetaProperty lMetaProperty = metaProperty(pObject, pProperty);
     if (lMetaProperty.isValid())
     {
-        lResult = lMetaProperty.isValid()
+        rResult = lMetaProperty.isValid()
             && lMetaProperty.isWritable()
             && lMetaProperty.isReadable()
             && lMetaProperty.hasNotifySignal();
     }
-    return lResult;
+    return rResult;
 }
 
 bool Settings::isMethodCouldBeSubscribed(QObject *pObject, const QString &pSignature)
@@ -177,7 +180,7 @@ void Settings::slotSetSettings(QMap<QString, QVariant> pMap)
     QMap<QString, QVariant>::const_iterator it;
     for (it = pMap.begin();
          it != pMap.end();
-         it++)
+         ++it)
     {
         mSettingValueByName.insert(it.key(), it.value());
         setValue(it.key(), it.value());
@@ -192,13 +195,13 @@ void Settings::setSettingsPath(const QString &pSettingsPath)
 
 QVariant Settings::value(const QString &pSetting) const
 {
-    QVariant lResult;
+    QVariant rResult;
     QObject *pObject = mObjectBySetting.value(pSetting);
     if (pObject && mPropertyBySetting.contains(pSetting))
     {
-        lResult = pObject->property(mPropertyBySetting[pSetting].constData());
+        rResult = pObject->property(mPropertyBySetting[pSetting].constData());
     }
-    return lResult;
+    return rResult;
 }
 
 void Settings::setValue(const QString &pSetting, const QVariant &pValue)

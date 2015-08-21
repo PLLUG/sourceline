@@ -1,8 +1,9 @@
 #ifndef REVISIONTABLE_H
 #define REVISIONTABLE_H
 
-#include <QWidget>
 #include "genericdockwidget.h"
+
+class QWidget;
 
 namespace Ui {
 class RevisionTable;

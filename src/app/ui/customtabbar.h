@@ -1,13 +1,15 @@
 #ifndef CUSTOMTABBAR_H
 #define CUSTOMTABBAR_H
 
-#include <QWidget>
-#include <QTabBar>
+#include <QTabWidget>
+
+class QWidget;
+
 namespace Ui {
 class CustomTabBar;
 }
 
-class CustomTabBar : public QTabBar
+class CustomTabBar : public QTabWidget
 {
     Q_OBJECT
 
@@ -15,8 +17,11 @@ public:
     explicit CustomTabBar(QWidget *parent = 0);
     ~CustomTabBar();
 public slots:
-    void slotAddTab(int index, QString name);
-    void slotCloseTab(int);
+    /*!
+     * \brief Add New Workplace in mainwindow
+     * \param Name of workplace
+     */
+    void slotAddNewWorkplace(const QString &pName);
 private:
     Ui::CustomTabBar *ui;
 };

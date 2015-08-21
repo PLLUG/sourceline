@@ -25,11 +25,11 @@
 #define VIEWSETTINGPAGE_H
 
 #include "settingspage.h"
-#include "settings.h"
-#include <QVariant>
-#include <QDebug>
-#include <QLayout>
 #include "ui_viewsettingpage.h"
+
+#include <QVariant>
+
+class Settings;
 
 namespace Ui {
 class MainWindow;
@@ -42,7 +42,7 @@ public:
     explicit ViewSettingPage(Settings *pSettings, QWidget *parent = 0);
     ~ViewSettingPage();
 
-    void setMainUi(Ui::MainWindow *lMainUi);
+    void setMainUi(Ui::MainWindow *pMainUi);
 
 signals:
     void signalGetSettings(QString pPath);
@@ -51,17 +51,17 @@ private slots:
     void slotBtnOpen();
 
 public slots:
-    void slotFileViewChanged(QVariant pValue);
+   /* void slotFileViewChanged(QVariant pValue);
     void slotEditorViewChanged(QVariant pValue);
     void slotRevTreeChanged(QVariant pValue);
     void slotConsoleChanged(QVariant pValue);
     void slotTreeChanged(QVariant pValue);
-    void slotConsolePath(QVariant pValue);
+    void slotConsolePath(QVariant pValue);*/
 
 private:
     Ui::Form *mDialogUi;
     Ui::MainWindow *mMainUi;
-    QString consolePath;
+    QString mConsolePath;
 
 };
 

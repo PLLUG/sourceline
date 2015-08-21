@@ -1,6 +1,9 @@
 #include "plugininfodialog.h"
 #include "ui_plugininfodialog.h"
 
+#include <QStandardItemModel>
+#include <QStandardItem>
+
 PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
     QDialog(parent,
             Qt::WindowSystemMenuHint
@@ -10,11 +13,11 @@ PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    model = new QStandardItemModel(0, 2, this);
-        model->setHorizontalHeaderItem(0, new QStandardItem(QString("Category")));
-        model->setHorizontalHeaderItem(1, new QStandardItem(QString("Info")));
+    mModel = new QStandardItemModel(0, 2, this);
+    mModel->setHorizontalHeaderItem(0, new QStandardItem(QString("Category")));
+    mModel->setHorizontalHeaderItem(1, new QStandardItem(QString("Info")));
 
-    ui->tableView->setModel(model);
+    ui->tableView->setModel(mModel);
 
     mWindowTitle = "Plugin Info: %1";
     setPluginName();
@@ -24,8 +27,8 @@ PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
            // + "font-weight: bold;"
            // + "border: 1px solid #808080;"
             + "}";
-    ui->tableView->setStyleSheet(lStyleSheet);
 
+    ui->tableView->setStyleSheet(lStyleSheet);
     ui->tableView->setAlternatingRowColors(true);
     ui->tableView->verticalHeader()->setVisible(false);
 }
@@ -50,7 +53,7 @@ void PluginInfoDialog::setPluginInfo(const QHash<QString, QString> &pInfoHash)
         i.next();
         lItems.append(new QStandardItem(i.key()));
         lItems.append(new QStandardItem(i.value()));
-        model->appendRow(lItems);
+        mModel->appendRow(lItems);
         lItems.clear();
     }
 

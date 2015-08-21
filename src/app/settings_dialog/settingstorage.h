@@ -27,9 +27,8 @@
 #include <QObject>
 #include <QMap>
 #include <QVariant>
-#include <QSettings>
-#include <QDebug>
-#include <QPoint>
+
+class QSettings;
 
 class SettingStorage : public QObject
 {

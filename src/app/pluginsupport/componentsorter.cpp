@@ -51,15 +51,15 @@ void ComponentSorter::addSupplier(ComponentSupplier *pSupplier)
 
 ComponentSupplier *ComponentSorter::supplierForComponent(QObject *pComponent)
 {
-    ComponentSupplier *lSupplier = 0;
+    ComponentSupplier *rSupplier = 0;
 
     foreach (QString lClassName, mSupplierByClassName.keys())
     {
         if (pComponent->inherits(lClassName.toUtf8().data()))
         {
-            lSupplier = mSupplierByClassName.value(lClassName);
+            rSupplier = mSupplierByClassName.value(lClassName);
         }
     }
 
-    return lSupplier;
+    return rSupplier;
 }
