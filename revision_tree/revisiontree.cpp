@@ -38,14 +38,15 @@ RevisionTree::RevisionTree(QWidget *parent) :
     mRowHeight{30}
 {
     ui->setupUi(this);
+
+    ui->revisionTableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->scrollArea->verticalScrollBar()->setHidden(true);
     ui->revisionTableView->horizontalHeader()->setFixedHeight(mRowHeight);
 
-    connect(ui->revisionTableView->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotTableScrollChanged(int)));
-    connect(this, SIGNAL(tableScrollChanged(int)), ui->scrollArea->verticalScrollBar(), SLOT(setValue(int)));
-
-    connect(ui->scrollArea->verticalScrollBar(), SIGNAL(valueChanged(int)), this, SLOT(slotAreaScrollChanged(int)));
-    connect(this, SIGNAL(areaScrollChanged(int)), ui->revisionTableView->verticalScrollBar(), SLOT(setValue(int)));
+    connect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotGraphScrollChanged,Qt::UniqueConnection);
+    connect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotTableScrollChanged,Qt::UniqueConnection);
 
     ui->revisionTableView->horizontalHeader()->setSectionsMovable(true);
     ui->revisionTableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
@@ -62,7 +63,7 @@ void RevisionTree::setModel(RevisionModel *model)
     ui->revisionTableView->setModel(model);
     ui->revisionTreeWidget->setGraph(model->graph());
     mGraph = model->graph();
-    clearScene();
+    clearGraph();
     read();
     resize(width(),ui->revisionTreeWidget->height());
 
@@ -73,13 +74,14 @@ void RevisionTree::setModel(RevisionModel *model)
     }
 }
 
-void RevisionTree::clearScene()
+void RevisionTree::clearGraph()
 {
 }
 
 void RevisionTree::read()
 {
 }
+
 int RevisionTree::rowHeight() const
 {
     return mRowHeight;
@@ -90,13 +92,21 @@ void RevisionTree::setRowHeight(int rowHeight)
     mRowHeight = rowHeight;
 }
 
-void RevisionTree::slotAreaScrollChanged(int value)
+void RevisionTree::slotGraphScrollChanged(int value)
 {
-    emit areaScrollChanged(static_cast<int>(value / rowHeight()));
+    disconnect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
+               this,&RevisionTree::slotTableScrollChanged);
+    ui->revisionTableView->verticalScrollBar()->setValue(value);
+    connect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotTableScrollChanged,Qt::UniqueConnection);
 }
 
 void RevisionTree::slotTableScrollChanged(int value)
 {
-    emit tableScrollChanged(value * rowHeight());
+    disconnect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
+               this,&RevisionTree::slotGraphScrollChanged);
+    ui->scrollArea->verticalScrollBar()->setValue(value);
+    connect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotGraphScrollChanged,Qt::UniqueConnection);
 }
 

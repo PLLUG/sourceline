@@ -13,63 +13,57 @@
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <widget class="QSplitter" name="splitter">
-   <property name="geometry">
-    <rect>
-     <x>9</x>
-     <y>9</y>
-     <width>781</width>
-     <height>481</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Horizontal</enum>
-   </property>
-   <widget class="QScrollArea" name="scrollArea">
-    <property name="verticalScrollBarPolicy">
-     <enum>Qt::ScrollBarAsNeeded</enum>
-    </property>
-    <property name="widgetResizable">
-     <bool>true</bool>
-    </property>
-    <widget class="RevisionTreeWidget" name="revisionTreeWidget">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>69</width>
-       <height>479</height>
-      </rect>
+  <layout class="QHBoxLayout" name="horizontalLayout">
+   <item>
+    <widget class="QSplitter" name="splitter">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="baseSize">
-      <size>
-       <width>100</width>
-       <height>700</height>
-      </size>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QTableView" name="revisionTableView">
-    <property name="minimumSize">
-     <size>
-      <width>20</width>
-      <height>50</height>
-     </size>
-    </property>
-    <property name="baseSize">
-     <size>
-      <width>100</width>
-      <height>700</height>
-     </size>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">QHeaderView::section {
+     <widget class="QScrollArea" name="scrollArea">
+      <property name="verticalScrollBarPolicy">
+       <enum>Qt::ScrollBarAsNeeded</enum>
+      </property>
+      <property name="widgetResizable">
+       <bool>true</bool>
+      </property>
+      <widget class="RevisionTreeWidget" name="revisionTreeWidget">
+       <property name="geometry">
+        <rect>
+         <x>0</x>
+         <y>0</y>
+         <width>73</width>
+         <height>476</height>
+        </rect>
+       </property>
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>100</width>
+         <height>700</height>
+        </size>
+       </property>
+      </widget>
+     </widget>
+     <widget class="QTableView" name="revisionTableView">
+      <property name="minimumSize">
+       <size>
+        <width>20</width>
+        <height>50</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>100</width>
+        <height>700</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QHeaderView::section {
     background-color: grey;
     color: white;
     padding-left: 4px;
@@ -80,9 +74,11 @@ QHeaderView::section:checked
 {
     background-color: rgb(47, 85, 27);
 }</string>
-    </property>
-   </widget>
-  </widget>
+      </property>
+     </widget>
+    </widget>
+   </item>
+  </layout>
  </widget>
  <customwidgets>
   <customwidget>

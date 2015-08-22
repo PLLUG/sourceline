@@ -45,16 +45,12 @@ public:
     int rowHeight() const;
     void setRowHeight(int rowHeight);
 
-signals:
-    void tableScrollChanged(int);
-    void areaScrollChanged(int);
-
 private slots:
     void slotTableScrollChanged(int value);
-    void slotAreaScrollChanged(int value);
+    void slotGraphScrollChanged(int value);
 
 private:
-    void clearScene();
+    void clearGraph();
     void read();
 
 private:
