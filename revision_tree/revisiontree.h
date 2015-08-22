@@ -41,14 +41,23 @@ public:
     ~RevisionTree();
 
     void setModel(RevisionModel *model);
+
+    int rowHeight() const;
+    void setRowHeight(int rowHeight);
+
+private slots:
+    void slotTableScrollChanged(int value);
+    void slotGraphScrollChanged(int value);
+
 private:
-    void clearScene();
+    void clearGraph();
     void read();
 
 private:
     Ui::RevisionTree *ui;
 
     revision_graph mGraph;
+    int mRowHeight;
 
 };
 

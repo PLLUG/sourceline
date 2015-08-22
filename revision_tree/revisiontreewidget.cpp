@@ -102,10 +102,12 @@ private:
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent},
-    mOffset{20},
+    mLeftOffset{20},
+    mTopOffset{45}, // height of row of tableView * 3/2
     mRadius{8},
-    mWidth{25}
+    mWidth{30} // height of row of tableView
 {
+    mBottomOffset = mWidth / 2;
 }
 
 RevisionTreeWidget::~RevisionTreeWidget()
@@ -191,6 +193,36 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
 
     return rRevisionVertexes;
 }
+float RevisionTreeWidget::getBottomOffset() const
+{
+    return mBottomOffset;
+}
+
+void RevisionTreeWidget::setBottomOffset(float bottomOffset)
+{
+    mBottomOffset = bottomOffset;
+}
+
+float RevisionTreeWidget::getTopOffset() const
+{
+    return mTopOffset;
+}
+
+void RevisionTreeWidget::setTopOffset(float topOffset)
+{
+    mTopOffset = topOffset;
+}
+
+float RevisionTreeWidget::getLeftOffset() const
+{
+    return mLeftOffset;
+}
+
+void RevisionTreeWidget::setLeftOffset(float leftOffset)
+{
+    mLeftOffset = leftOffset;
+}
+
 float RevisionTreeWidget::width() const
 {
     return mWidth;
@@ -209,16 +241,6 @@ int RevisionTreeWidget::radius() const
 void RevisionTreeWidget::setRadius(int radius)
 {
     mRadius = radius;
-}
-
-float RevisionTreeWidget::offset() const
-{
-    return mOffset;
-}
-
-void RevisionTreeWidget::setOffset(float offset)
-{
-    mOffset = offset;
 }
 
 void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
@@ -246,51 +268,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
         put(rowIndex, *ii, row++);
     }
 
-    //perform sort by time
-//    row = 0;
-//    std::vector< vertex > sortedVerticesByTime = getSortedGraphByTime(mGraph);
-//    for ( auto ii=sortedVerticesByTime.rbegin(); ii!=sortedVerticesByTime.rend(); ++ii)
-//    {
-//        put(rowIndex, *ii, row++);
-//    }
-
-
-    // sample of using dominator tree algorithm
-    //    using IndexMapD = boost::property_map<revision_graph, boost::vertex_index_t>::const_type;
-    //    using TimeMap = boost::iterator_property_map<typename std::vector<VerticesSizeType>::iterator,IndexMapD>;
-    //    using PredMap = boost::iterator_property_map<typename std::vector<vertex>::iterator, IndexMapD>;
-    //    const IndexMapD indexMap = get(boost::vertex_index, mGraph);
-    //    std::vector<vertex> domTreePredVector = std::vector<vertex>(num_vertices(mGraph), boost::graph_traits<revision_graph>::null_vertex());
-    //    std::vector<VerticesSizeType> dfnum(numOfVertices, 0);
-    //    std::vector<vertex> parent(numOfVertices, boost::graph_traits<revision_graph>::null_vertex());
-    //    //The dominator tree where parents are each children's immediate dominator.
-    //    PredMap domTreePredMap = boost::make_iterator_property_map(domTreePredVector.begin(), indexMap);
-    //    //The sequence number of depth first search.
-    //    TimeMap dfnumMap(make_iterator_property_map(dfnum.begin(), indexMap));
-    //    //The predecessor map records the parent of the depth first search tree.
-    //    PredMap parentMap(make_iterator_property_map(parent.begin(), indexMap));
-    //    // The vector containing vertices in depth first search order.
-    //    // If we access this vector sequentially, it's equivalent to access vertices by depth first search order.
-    //    std::vector<vertex> verticesByDFNum(parent);
-    //    boost::lengauer_tarjan_dominator_tree(mGraph, root_vertex,indexMap,
-    //                                          dfnumMap, parentMap,verticesByDFNum, domTreePredMap);
-    //    boost::graph_traits<revision_graph>::vertex_iterator uItr, uEnd;
-    //    std::vector<int> idom(boost::num_vertices(mGraph));
-    //    for (boost::tie(uItr, uEnd) = boost::vertices(mGraph); uItr != uEnd; ++uItr)
-    //    {
-    //        if (get(domTreePredMap, *uItr) != boost::graph_traits<revision_graph>::null_vertex())
-    //        {
-    //            //            std::cout << get(domTreePredMap, *uItr) << " => " << *uItr << std::endl;
-    //            idom[get(indexMap, *uItr)] =
-    //                    get(indexMap, get(domTreePredMap, *uItr));
-    //        }
-    //        else
-    //            idom[get(indexMap, *uItr)] = (std::numeric_limits<int>::max)();
-    //    }
-    //    std::cout << "DOMINATOR TREE with root " << root_vertex << " : " << mGraph[root_vertex].message << std::endl;
-    //    std::copy(idom.begin(), idom.end(), std::ostream_iterator<int>(std::cout, " "));
-    //    std::cout << std::endl;
-    setMinimumHeight(25*num_vertices(mGraph));
+    setMinimumHeight(mTopOffset + mWidth * (num_vertices(mGraph) - 1) + mBottomOffset);
 }
 
 
@@ -316,16 +294,19 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         switch(revisionVertexes[v].shape)
         {
         case vsSquare:
-            painter.drawRect(width()*col + offset() - radius(), width()*row - radius() + offset(),
-                             radius()*2, radius()*2);
+            painter.drawRect(mLeftOffset + col*mWidth - mRadius, // left corner X
+                             mTopOffset + row*mWidth - mRadius, // left corner Y
+                             mRadius*2, mRadius*2); // sizes of sides
             break;
         case vsCircle:
-            painter.drawEllipse(QPointF{width()*col + offset(), width()*row + offset()},
-                                radius(), radius());
+            painter.drawEllipse(QPointF{mWidth*col + mLeftOffset, // center X
+                                        mWidth*row + mTopOffset}, // center Y
+                                mRadius, mRadius);
             break;
         }
-
-        painter.drawText(QPointF{width()*col + offset(), width()*row + radius() + offset()}, QString::number(get(testAlgorithmIndexes,v)));
+        painter.drawText(QPointF{mWidth*col + mLeftOffset,
+                                         mWidth*row + mTopOffset},
+                                 QString::number(get(testAlgorithmIndexes,v)));
     }
 
     painter.setPen(Qt::darkGray);
@@ -335,7 +316,10 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         int sourceCol = get(colIndex, boost::source(e, mGraph));
         int targetRow = get(rowIndex, boost::target(e, mGraph));
         int targetCol = get(colIndex, boost::target(e, mGraph));
-        painter.drawLine(QPoint(width()*sourceCol + offset(), width()*sourceRow + offset()), QPoint(width()*targetCol + offset(), width()*targetRow + offset()));
+        painter.drawLine(QPoint(mWidth*sourceCol + mLeftOffset,
+                                mWidth*sourceRow + mTopOffset),
+                         QPoint(mWidth*targetCol + mLeftOffset,
+                                mWidth*targetRow + mTopOffset));
     }
 }
 

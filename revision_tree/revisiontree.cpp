@@ -3,6 +3,7 @@
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2015  by                                                ***
 ***            Halyna Butovych (galynabutovych@gmail.com)                    ***
+***            Nazarii Plebanskii (nazar796@gmail.com)                       ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -28,12 +29,25 @@
 #include <iostream>
 #include <boost/graph/topological_sort.hpp>
 #include <algorithm>
+#include <QScrollBar>
+#include <QScrollArea>
 
 RevisionTree::RevisionTree(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::RevisionTree)
+    ui(new Ui::RevisionTree),
+    mRowHeight{30}
 {
     ui->setupUi(this);
+
+    ui->revisionTableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
+    ui->scrollArea->verticalScrollBar()->setHidden(true);
+    ui->revisionTableView->horizontalHeader()->setFixedHeight(mRowHeight);
+
+    connect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotGraphScrollChanged,Qt::UniqueConnection);
+    connect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotTableScrollChanged,Qt::UniqueConnection);
+
     ui->revisionTableView->horizontalHeader()->setSectionsMovable(true);
     ui->revisionTableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     ui->revisionTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
@@ -49,15 +63,50 @@ void RevisionTree::setModel(RevisionModel *model)
     ui->revisionTableView->setModel(model);
     ui->revisionTreeWidget->setGraph(model->graph());
     mGraph = model->graph();
-    clearScene();
+    clearGraph();
     read();
     resize(width(),ui->revisionTreeWidget->height());
+
+    int rowNum = ui->revisionTableView->model()->rowCount();
+    for(int i = 0; i < rowNum; i++)
+    {
+        ui->revisionTableView->setRowHeight(i, rowHeight());
+    }
 }
 
-void RevisionTree::clearScene()
+void RevisionTree::clearGraph()
 {
 }
 
 void RevisionTree::read()
 {
 }
+
+int RevisionTree::rowHeight() const
+{
+    return mRowHeight;
+}
+
+void RevisionTree::setRowHeight(int rowHeight)
+{
+    mRowHeight = rowHeight;
+}
+
+void RevisionTree::slotGraphScrollChanged(int value)
+{
+    disconnect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
+               this,&RevisionTree::slotTableScrollChanged);
+    ui->revisionTableView->verticalScrollBar()->setValue(value);
+    connect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotTableScrollChanged,Qt::UniqueConnection);
+}
+
+void RevisionTree::slotTableScrollChanged(int value)
+{
+    disconnect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
+               this,&RevisionTree::slotGraphScrollChanged);
+    ui->scrollArea->verticalScrollBar()->setValue(value);
+    connect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
+            this,&RevisionTree::slotGraphScrollChanged,Qt::UniqueConnection);
+}
+
