@@ -60,6 +60,8 @@ private:
     VertexIntMap mRowMap;
 
     std::map<vertex, Point>mPositionMap;
+
+    VertexIntMap mTestBFSOrderMap;
 };
 
 #endif // REVISIONTREEWIDGET_H

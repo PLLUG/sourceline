@@ -20,9 +20,11 @@ template <typename IndexMap, typename vertex, typename graph>
 class bfs_visitor : public boost::default_bfs_visitor
 {
 public:
-    bfs_visitor(IndexMap &rowMap, IndexMap &colMap):
-        mRowIndexMap{rowMap}
+    bfs_visitor(IndexMap &colMap, IndexMap &bfsOrderMap):
+        mRowIndexMap{mRowMap}
       ,mColumnIndexMap{colMap}
+      ,mBFSOrderMap{bfsOrderMap}
+      ,discoveredVerticesCount{0}
       ,mPrevVertex{boost::graph_traits<graph>::null_vertex()}
     {
     }
@@ -48,8 +50,7 @@ public:
      */
     void examine_edge(Edge e, Graph g)
     {
-        auto source = boost::source(e,g);
-        put(mRowIndexMap, boost::target(e,g), get(mRowIndexMap,source)+1);
+        put(mRowIndexMap, boost::target(e,g), get(mRowIndexMap,boost::source(e,g))+1);
     }
 
     template < typename Vertex, typename Graph >
@@ -87,12 +88,16 @@ public:
             }
         }
         mPrevVertex = v;
+        put(mBFSOrderMap,v,discoveredVerticesCount++);
     }
 
 private:
     boost::associative_property_map<IndexMap> mRowIndexMap;
     boost::associative_property_map<IndexMap> mColumnIndexMap;
+    boost::associative_property_map<IndexMap> mBFSOrderMap;
+    int discoveredVerticesCount;
     vertex mPrevVertex;
+    VertexIntMap mRowMap;
 };
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
@@ -251,62 +256,18 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     std::cout << "root vertex is: " << root_vertex << std::endl;
 
     //perform breadth first search
-    bfs_visitor<VertexIntMap, vertex, revision_graph> vis{mRowMap, mColumnMap};
+    bfs_visitor<VertexIntMap, vertex, revision_graph> vis{mColumnMap,mTestBFSOrderMap};
     breadth_first_search(mGraph, root_vertex, visitor(vis));
 
     int row{0};
-//    //perform topological sort
-//    std::vector< vertex > sorted_vertices;
-//    topological_sort(mGraph, std::back_inserter(sorted_vertices));
-//    put(rowIndex, root_vertex, 0);
-//    for ( std::vector< vertex >::reverse_iterator ii=sorted_vertices.rbegin()+1; ii!=sorted_vertices.rend(); ++ii)
-//    {
-//        put(rowIndex, *ii, ++row);
-//    }
-
-    //perform sort by time
-    row = 0;
-    std::vector< vertex > sortedVerticesByTime = getSortedGraphByTime(mGraph);
-    for ( auto ii=sortedVerticesByTime.rbegin(); ii!=sortedVerticesByTime.rend(); ++ii)
+    //perform topological sort
+    std::vector< vertex > sorted_vertices;
+    topological_sort(mGraph, std::back_inserter(sorted_vertices));
+    for (auto ii=sorted_vertices.begin(); ii!=sorted_vertices.end(); ++ii)
     {
         put(rowIndex, *ii, row++);
     }
 
-// sample of using dominator tree algorithm
-//    using IndexMapD = boost::property_map<revision_graph, boost::vertex_index_t>::const_type;
-//    using TimeMap = boost::iterator_property_map<typename std::vector<VerticesSizeType>::iterator,IndexMapD>;
-//    using PredMap = boost::iterator_property_map<typename std::vector<vertex>::iterator, IndexMapD>;
-//    const IndexMapD indexMap = get(boost::vertex_index, mGraph);
-//    std::vector<vertex> domTreePredVector = std::vector<vertex>(num_vertices(mGraph), boost::graph_traits<revision_graph>::null_vertex());
-//    std::vector<VerticesSizeType> dfnum(numOfVertices, 0);
-//    std::vector<vertex> parent(numOfVertices, boost::graph_traits<revision_graph>::null_vertex());
-//    //The dominator tree where parents are each children's immediate dominator.
-//    PredMap domTreePredMap = boost::make_iterator_property_map(domTreePredVector.begin(), indexMap);
-//    //The sequence number of depth first search.
-//    TimeMap dfnumMap(make_iterator_property_map(dfnum.begin(), indexMap));
-//    //The predecessor map records the parent of the depth first search tree.
-//    PredMap parentMap(make_iterator_property_map(parent.begin(), indexMap));
-//    // The vector containing vertices in depth first search order.
-//    // If we access this vector sequentially, it's equivalent to access vertices by depth first search order.
-//    std::vector<vertex> verticesByDFNum(parent);
-//    boost::lengauer_tarjan_dominator_tree(mGraph, root_vertex,indexMap,
-//                                          dfnumMap, parentMap,verticesByDFNum, domTreePredMap);
-//    boost::graph_traits<revision_graph>::vertex_iterator uItr, uEnd;
-//    std::vector<int> idom(boost::num_vertices(mGraph));
-//    for (boost::tie(uItr, uEnd) = boost::vertices(mGraph); uItr != uEnd; ++uItr)
-//    {
-//        if (get(domTreePredMap, *uItr) != boost::graph_traits<revision_graph>::null_vertex())
-//        {
-//            //            std::cout << get(domTreePredMap, *uItr) << " => " << *uItr << std::endl;
-//            idom[get(indexMap, *uItr)] =
-//                    get(indexMap, get(domTreePredMap, *uItr));
-//        }
-//        else
-//            idom[get(indexMap, *uItr)] = (std::numeric_limits<int>::max)();
-//    }
-//    std::cout << "DOMINATOR TREE with root " << root_vertex << " : " << mGraph[root_vertex].message << std::endl;
-//    std::copy(idom.begin(), idom.end(), std::ostream_iterator<int>(std::cout, " "));
-//    std::cout << std::endl;
     setMinimumHeight(mTopOffset + mWidth * (num_vertices(mGraph) - 1) + mBottomOffset);
 }
 
@@ -318,6 +279,8 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
+
+    boost::associative_property_map<VertexIntMap> testAlgorithmIndexes{mTestBFSOrderMap};
 
     std::vector<RevisionVertex> revisionVertexes = revisionVertexVector(mGraph);
 
@@ -341,10 +304,9 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
                                 mRadius, mRadius);
             break;
         }
-
         painter.drawText(QPointF{mWidth*col + mLeftOffset,
-                                 mWidth*row + mTopOffset},
-                         QString::number(v));
+                                         mWidth*row + mTopOffset},
+                                 QString::number(get(testAlgorithmIndexes,v)));
     }
 
     painter.setPen(Qt::darkGray);
