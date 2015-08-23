@@ -32,7 +32,8 @@ ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConsoleView)
 {
-    mReadOnlyIndicator = "~>";
+    //mReadOnlyIndicator = "~>";
+    mReadOnlyIndicator = "";
     mDirPrinted = true;
     mCmdProcess = new CommandProcess(this);
     ui->setupUi(this);
@@ -48,8 +49,8 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(mProcess, SIGNAL(readyRead()), this, SLOT(slotReadConsoleOutput()));
     connect(mProcess, SIGNAL(readChannelFinished()), SLOT(slotPrintWorkingDir()));
 
-    /*connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
-    connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));*/
+    connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
+    connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
     connect(this, SIGNAL(commandEntered(QString,QString,QStringList)), mCmdProcess, SLOT(execute(QString,QString,QStringList)));
     connect(mCmdProcess, SIGNAL(standardOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
     connect(mCmdProcess, SIGNAL(errorOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));

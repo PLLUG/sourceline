@@ -32,6 +32,7 @@ CommandProcess::CommandProcess(QObject *parent)
     connect(mProcess, SIGNAL(finished(int)), this, SIGNAL(finished()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readStandardOutput()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readStandardError()), Qt::UniqueConnection);
+    connect(mProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotAfterFinished(int,int)));
 }
 
 /*!
@@ -43,37 +44,41 @@ CommandProcess::CommandProcess(QObject *parent)
 void CommandProcess::execute(QString shell, QString command, QStringList parameters)
 {
     //mProcess
-    QByteArray data;
     mProcess->start(shell);
     mProcess->waitForStarted();
-    mProcess->write(data.append(command));
+    mProcess->write(mData.append(command));
     mProcess->closeWriteChannel();
-    mProcess->waitForFinished();
+    //mProcess->waitForFinished();
 
     //remove to the 2 next funcs
-    data.clear();
-    data = mProcess->readAllStandardOutput();
-    mProcess->close();
 
-    if(!data.isEmpty())
-    {
-        emit standardOutput(data);
-    }
 
-    data = mProcess->readAllStandardError();
-    if(!data.isEmpty())
-    {
-        emit errorOutput(data);
-    }
 }
 
 void CommandProcess::readStandardOutput()
 {
-
+    mData.clear();
+    mData = mProcess->readAllStandardOutput();
+    if(!mData.isEmpty())
+    {
+        emit standardOutput(mData);
+    }
 }
 
 void CommandProcess::readStandardError()
 {
+    mData.clear();
+    mData = mProcess->readAllStandardError();
+    if(!mData.isEmpty())
+    {
+        emit errorOutput(mData);
+    }
+}
 
+void CommandProcess::slotAfterFinished(int exitStatus, int exitCode)
+{
+    mProcess->close();
+    readStandardOutput();
+    readStandardError();
 }
 

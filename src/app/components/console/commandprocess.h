@@ -50,9 +50,11 @@ public slots:
 private slots:
     void readStandardOutput();
     void readStandardError();
+    void slotAfterFinished(int exitStatus, int exitCode);
 
 private:
     QProcess *mProcess;
+    QByteArray mData;
 };
 
 #endif // COMMANDPROCESS_H
