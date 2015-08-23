@@ -39,8 +39,8 @@ public:
     explicit CommandProcess(QObject *parent = 0);
 
 signals:
-    void standardOutput(QString text);
-    void errorOutput(QString text);
+    void standardOutput(QByteArray out);
+    void errorOutput(QByteArray out);
     void started();
     void finished();
 

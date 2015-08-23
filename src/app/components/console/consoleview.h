@@ -47,7 +47,7 @@ public slots:
     void slotSetConsolePath(const QString &pPath);
     void slotReadConsoleOutput();
     void slotExec(QString cmd);
-    void slotOut(QString out);
+    void slotOut(QByteArray out);
     void slotLock();
     void slotUnlock();
 
@@ -57,7 +57,7 @@ public slots:
     void debugBlockCountChanged(int count);
 
 signals:
-    void commandEntered(QString shell, QString cmd , QStringList args = 0);
+    void commandEntered(QString shell, QString cmd , QStringList args);
 
 private:
     void startProcess();

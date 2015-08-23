@@ -43,22 +43,27 @@ CommandProcess::CommandProcess(QObject *parent)
 void CommandProcess::execute(QString shell, QString command, QStringList parameters)
 {
     //mProcess
+    QByteArray data;
     mProcess->start(shell);
     mProcess->waitForStarted();
-    mProcess->write(command);
+    mProcess->write(data.append(command));
     mProcess->closeWriteChannel();
     mProcess->waitForFinished();
 
     //remove to the 2 next funcs
-    QString out = mProcess->readAllStandardOutput();
-    if(!out.isEmpty())
+    data.clear();
+    data = mProcess->readAllStandardOutput();
+    mProcess->close();
+
+    if(!data.isEmpty())
     {
-        emit standardOutput(out);
+        emit standardOutput(data);
     }
-    out = mProcess->readAllStandardError();
-    else if(!out.isEmpty())
+
+    data = mProcess->readAllStandardError();
+    if(!data.isEmpty())
     {
-        emit errorOutput(out);
+        emit errorOutput(data);
     }
 }
 

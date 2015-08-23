@@ -34,6 +34,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
 {
     mReadOnlyIndicator = "~>";
     mDirPrinted = true;
+    mCmdProcess = new CommandProcess(this);
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
     ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
@@ -48,12 +49,10 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(mProcess, SIGNAL(readChannelFinished()), SLOT(slotPrintWorkingDir()));
 
     /*connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
-    connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
-    connect(mCmdProcess, SIGNAL(errorOutput(QString)), this, SLOT(slotOut(QString)));
-    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));*/
+    connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));*/
     connect(this, SIGNAL(commandEntered(QString,QString,QStringList)), mCmdProcess, SLOT(execute(QString,QString,QStringList)));
-    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));
-    connect(mCmdProcess, SIGNAL(errorOutput(QString)), this, SLOT(slotOut(QString)));
+    connect(mCmdProcess, SIGNAL(standardOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
+    connect(mCmdProcess, SIGNAL(errorOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
 
     //Debug connections
     connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
@@ -88,8 +87,8 @@ void ConsoleView::debugBlockCountChanged(int count)
 
 
 /*!
-* \brief ConsoleView::toExecute
-* \param pCommand
+* \brief ConsoleView::toExecute is function what prepare all to execute the command
+* \param pCommand is QString line what entered user for executing
 */
 void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Users&ls -R@ or @tree C:\ /A@
 {
@@ -102,6 +101,7 @@ void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Use
     }
 
     QString shell;
+    QStringList args;
     if(osInfo()=="windows")
     {
         //args << "/c"  << pCommand;
@@ -113,83 +113,7 @@ void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Use
     else if(QSysInfo::kernelType()=="linux")
     {
         shell = "sh";
-        emit commandEntered(shell, pCommand);
-    }
-
-
-    //code to remove . Cut all what is need
-    QProcess* console = nullptr;
-    if(osInfo()=="windows")
-    {
-        console = new QProcess(this);
-        QByteArray resultConsole;
-        QStringList args;
-        //console->setWorkingDirectory("C:\\");
-        //slotPrintWorkingDir(console->workingDirectory());
-        //qDebug() << console->workingDirectory();
-        args << "/c"  << pCommand;
-        console->start("C:\\Windows\\System32\\cmd", args);
-        if (!console->waitForStarted())
-        {
-            qDebug() << " cmd crashed.";
-            return;
-        }
-        console->waitForFinished();
-        console->waitForReadyRead();
-        console->waitForBytesWritten();
-        resultConsole = console->readAll();
-        qDebug() << resultConsole;
-
-        //TODO : очікування на ввід.
-
-        if(!resultConsole.isEmpty())
-            ui->plainTextEdit->putData(" RESULT : "
-                                       + resultConsole
-                                       + mReadOnlyIndicator);
-        console->waitForFinished();
-        if(console->exitCode() == 1)
-            ui->plainTextEdit->putData(" ERROR \n" + mReadOnlyIndicator);
-        qDebug() << console->exitCode();
-    }
-
-    else if(QSysInfo::kernelType()=="linux")
-    {
-        console = new QProcess(this);
-        console->start("sh");
-        qDebug() << QDir::currentPath();
-        if (!console->waitForStarted())
-        {
-            qDebug() << " sh crashed.";
-            return;
-        }
-        console->write(clearAppend(pCommand));
-        console->closeWriteChannel();
-
-        console->waitForFinished();
-        QByteArray resultSH = console->readAll();
-        console->close();
-        if(!resultSH.isEmpty())
-            ui->plainTextEdit->putData(" RESULT : "
-                                       + resultSH
-                                       + mReadOnlyIndicator);
-    }
-
-    else
-    {
-        ui->plainTextEdit->clear();
-        ui->plainTextEdit->putData("\nProductType: " + clearAppend(QSysInfo::productType())
-                                   + "\nPrettyProductName: " + clearAppend(QSysInfo::prettyProductName())
-                                   + "\nProductVersion: " + clearAppend(QSysInfo::productVersion())
-                                   + "\nKernelType: " + clearAppend(QSysInfo::kernelType())
-                                   + "\nKernelVersion: " + clearAppend(QSysInfo::kernelVersion())
-                                   + "\n NOW THIS OS IS NOT SUPPORTED.");
-        ui->plainTextEdit->setDisabled(true);
-    }
-
-    //Command inside СonsoleView
-    if(pCommand == "close\n")
-    {
-        qApp->quit();
+        emit commandEntered(shell, pCommand, args);
     }
 }
 
@@ -253,9 +177,12 @@ void ConsoleView::slotExec(QString cmd)
     toExecute(cmd);
 }
 
-void ConsoleView::slotOut(QString out)
+void ConsoleView::slotOut(QByteArray out)
 {
-    Q_UNUSED(out)
+    if(!out.isEmpty())
+        ui->plainTextEdit->putData(" RESULT : "
+                                   + out
+                                   + mReadOnlyIndicator);
 }
 
 void ConsoleView::slotLock()
