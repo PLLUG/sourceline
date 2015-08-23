@@ -28,6 +28,10 @@ CommandProcess::CommandProcess(QObject *parent)
     : QObject(parent),
       mProcess(new QProcess(this))
 {
+    //QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+    //mProcess->setProcessEnvironment(env);
+    //mProcess->setProcessChannelMode(QProcess::MergedChannels);
+
     connect(mProcess, SIGNAL(started()), this, SIGNAL(started()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(finished(int)), this, SIGNAL(finished()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readStandardOutput()), Qt::UniqueConnection);
@@ -41,11 +45,12 @@ CommandProcess::CommandProcess(QObject *parent)
  * \param command
  * \param parameters
  */
-void CommandProcess::execute(QString shell, QString command, QStringList parameters)
+void CommandProcess::execute(const QString &shell, const QString &command,const QStringList &parameters)
 {
     //mProcess
-    mProcess->start(shell);
+    mProcess->start(shell,parameters);
     mProcess->waitForStarted();
+    //mProcess->write("echo off");
     mProcess->write(mData.append(command));
     mProcess->closeWriteChannel();
     //mProcess->waitForFinished();
@@ -62,6 +67,7 @@ void CommandProcess::readStandardOutput()
     if(!mData.isEmpty())
     {
         emit standardOutput(mData);
+        mData.clear();
     }
 }
 
@@ -72,6 +78,7 @@ void CommandProcess::readStandardError()
     if(!mData.isEmpty())
     {
         emit errorOutput(mData);
+        mData.clear();
     }
 }
 

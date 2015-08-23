@@ -32,14 +32,15 @@ ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConsoleView)
 {
-    //mReadOnlyIndicator = "~>";
-    mReadOnlyIndicator = "";
+    mReadOnlyIndicator = "~>";
+    //mReadOnlyIndicator = "";
     mDirPrinted = true;
     mCmdProcess = new CommandProcess(this);
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
     ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
 
+    //for deleting mProcess
     mProcess = new QProcess(this);
     QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
     mProcess->setProcessEnvironment(env);
@@ -106,7 +107,7 @@ void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Use
     if(osInfo()=="windows")
     {
         //args << "/c"  << pCommand;
-        args << "/c";
+        args << "/k" << "echo off";
         shell = "C:\\Windows\\System32\\cmd";
         emit commandEntered(shell, pCommand, args);
     }

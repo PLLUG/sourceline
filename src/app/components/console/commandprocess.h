@@ -45,7 +45,7 @@ signals:
     void finished();
 
 public slots:
-    void execute(QString shell, QString command, QStringList parameters);
+    void execute(const QString &shell, const QString &command, const QStringList &parameters);
 
 private slots:
     void readStandardOutput();
