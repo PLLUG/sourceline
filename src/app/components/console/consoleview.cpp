@@ -51,6 +51,9 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
     connect(mCmdProcess, SIGNAL(errorOutput(QString)), this, SLOT(slotOut(QString)));
     connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));*/
+    connect(this, SIGNAL(commandEntered(QString,QString,QStringList)), mCmdProcess, SLOT(execute(QString,QString,QStringList)));
+    connect(mCmdProcess, SIGNAL(standardOutput(QString)), this, SLOT(slotOut(QString)));
+    connect(mCmdProcess, SIGNAL(errorOutput(QString)), this, SLOT(slotOut(QString)));
 
     //Debug connections
     connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
@@ -83,7 +86,12 @@ void ConsoleView::debugBlockCountChanged(int count)
     qDebug() << "ConsoleView::BlockCountChanged to : " << count;
 }
 
-void ConsoleView::execute(const QString &pCommand) //as command use @cd C:\Users&ls -R@ or @tree C:\ /A@
+
+/*!
+* \brief ConsoleView::toExecute
+* \param pCommand
+*/
+void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Users&ls -R@ or @tree C:\ /A@
 {
     ui->plainTextEdit->putData("\n");
 
@@ -92,6 +100,24 @@ void ConsoleView::execute(const QString &pCommand) //as command use @cd C:\Users
     {
         slotPrintWorkingDir();
     }
+
+    QString shell;
+    if(osInfo()=="windows")
+    {
+        //args << "/c"  << pCommand;
+        args << "/c";
+        shell = "C:\\Windows\\System32\\cmd";
+        emit commandEntered(shell, pCommand, args);
+    }
+
+    else if(QSysInfo::kernelType()=="linux")
+    {
+        shell = "sh";
+        emit commandEntered(shell, pCommand);
+    }
+
+
+    //code to remove . Cut all what is need
     QProcess* console = nullptr;
     if(osInfo()=="windows")
     {
@@ -224,7 +250,7 @@ void ConsoleView::slotExec(QString cmd)
 {
     cmd +='\n';
     mDirPrinted = false;
-    execute(cmd);
+    toExecute(cmd);
 }
 
 void ConsoleView::slotOut(QString out)

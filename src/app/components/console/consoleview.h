@@ -40,7 +40,7 @@ class ConsoleView : public QWidget
 public:
     explicit ConsoleView(QWidget *parent = 0);
     ~ConsoleView();
-    void execute(const QString &pCommand);
+    void toExecute(const QString &pCommand);
     const QString consolePath();
     QString osInfo() const;
 public slots:
@@ -57,7 +57,7 @@ public slots:
     void debugBlockCountChanged(int count);
 
 signals:
-    void commandEntered(QString cmd);
+    void commandEntered(QString shell, QString cmd , QStringList args = 0);
 
 private:
     void startProcess();
