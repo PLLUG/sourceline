@@ -177,9 +177,6 @@ HEADERS += \
     pluginsupport/componentsorter.h \
     pluginsupport/supliers/componentsupplier.h \
     pluginsupport/supliers/fakecomponentsupplier.h \
-    pluginsupport/plugininfo.h \
-    pluginsupport/pluginloader.h \
-    pluginsupport/pluginmanager.h \
     pluginsupport/pluginsettingsmediator.h \
     pluginsupport/supliers/commandcomponentsupplier.h \
     pluginsupport/supliers/settingspagesupplier.h
@@ -187,9 +184,6 @@ HEADERS += \
 SOURCES += \
     pluginsupport/componentsorter.cpp \
     pluginsupport/supliers/fakecomponentsupplier.cpp \
-    pluginsupport/plugininfo.cpp \
-    pluginsupport/pluginloader.cpp \
-    pluginsupport/pluginmanager.cpp \
     pluginsupport/pluginsettingsmediator.cpp \
     pluginsupport/supliers/settingspagesupplier.cpp \
     pluginsupport/supliers/commandcomponentsupplier.cpp

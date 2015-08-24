@@ -27,9 +27,10 @@
 #include <QList>
 #include <QStringList>
 #include "plugininfo.h"
+#include "pluginmanager_global.h"
 
 
-class PluginLoader : public QObject
+class PLUGINMANAGERSHARED_EXPORT PluginLoader : public QObject
 {
     Q_OBJECT
 public:

@@ -25,21 +25,30 @@ QT       -= gui
 
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = pluginmanager
+CONFIG += sl_project
 
 TEMPLATE = lib
 CONFIG += C++11
 
 DEFINES += PLUGINMANAGER_LIBRARY
 
-SOURCES += pluginmodel.cpp
+SOURCES += pluginmodel.cpp \
+    plugininfo.cpp \
+    pluginloader.cpp \
+    pluginmanager.cpp
 
 HEADERS += pluginmodel.h\
-        pluginmanager_global.h
+        pluginmanager_global.h \
+    plugininfo.h \
+    pluginloader.h \
+    pluginmanager.h
 
 unix {
     target.path = /usr/lib
     INSTALLS += target
 }
+
+include(./../extensionlib/extensionlib.pri)
 
 # TODO: make separate pri file for including this library into project
 OTHER_FILES += \

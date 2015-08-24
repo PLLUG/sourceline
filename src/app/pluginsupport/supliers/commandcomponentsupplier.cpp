@@ -25,7 +25,7 @@
 #include <command.h>
 #include "../../ui/useraction.h"
 #include "../../ui/actionmanager.h"
-#include "pluginsupport/plugininfo.h"
+#include "plugininfo.h"
 
 CommandComponentSupplier::CommandComponentSupplier() :
     mActionManager(0)

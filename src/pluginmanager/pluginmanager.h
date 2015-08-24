@@ -1,5 +1,5 @@
-#ifndef PLUGINDESCRIPTION_H
-#define PLUGINDESCRIPTION_H
+#ifndef PLUGINMANAGER_H
+#define PLUGINMANAGER_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,27 +22,43 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QString>
-#include <QHash>
+#include <QObject>
+#include <QStringList>
+#include <QMap>
+#include "plugininfo.h"
+#include "pluginmanager_global.h"
 
-class PluginInfo
+class PluginLoader;
+class Plugin;
+
+class PLUGINMANAGERSHARED_EXPORT PluginManager : public QObject
 {
+    Q_OBJECT
+    Q_PROPERTY(QStringList activePlugins READ activePlugins WRITE slotSetActivePlugins NOTIFY activePluginsChanged)
 public:
-    PluginInfo(QString pPluginId, QString pVer, QString pDescr, QString pCategory, QHash<QString, QString> pAdditionalInfo);
-    PluginInfo();
-    //TASK : plugin id SLOULD NOT be the same as filename - there are some differences in library
-    // namings in Linux and Windows. Plugin id SHOULD BE unique! like org.PLLUG.git-plugin
-    QString pluginId() const;
-    QString ver() const;
-    QString description() const;
-    QString category() const ;
-    QHash<QString, QString> additionalInfo() const;
+    explicit PluginManager(QObject *parent = 0);
+
+    void setPluginLoader(PluginLoader *pPluginLoader);
+
+    QStringList availablePlugins();
+    QList<PluginInfo> pluginsInfo();
+    PluginInfo pluginInfo(QString pPluginId);
+    bool loadPlugin(const QString &pPluginId);
+    Plugin* loadedPluginInstance(QString pPluginId);
+    QStringList activePlugins();
+    QStringList loadedPlugins();
+
+signals:
+    void activePluginsChanged(QStringList);
+
+public slots:
+    void slotSetActivePlugins(const QStringList &pActivePlugins);
+
 private:
-    QString mPluginId;
-    QString mVer;
-    QString mDescr;
-    QString mCategory;
-    QHash<QString, QString> mAdditionalInfo;
+    PluginLoader *mPluginLoader;
+    QMap<QString, PluginInfo> mPluginsInfoByPluginId;
+    QMap<QString, Plugin *> mLoadedPluginByPluginId;
+    QStringList mActivePlugins;
 };
 
-#endif // PLUGINDESCRIPTION_H
+#endif // PLUGINMANAGER_H

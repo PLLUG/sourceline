@@ -22,7 +22,7 @@
 *******************************************************************************/
 
 #include "fakecomponentsupplier.h"
-#include "../plugininfo.h"
+#include "plugininfo.h"
 #include "fakecomponent.h"
 
 FakeComponentSupplier::FakeComponentSupplier()

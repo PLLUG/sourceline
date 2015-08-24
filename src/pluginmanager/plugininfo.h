@@ -1,5 +1,5 @@
-#ifndef PLUGINMANAGER_H
-#define PLUGINMANAGER_H
+#ifndef PLUGINDESCRIPTION_H
+#define PLUGINDESCRIPTION_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,42 +22,29 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QObject>
-#include <QStringList>
-#include <QMap>
-#include "plugininfo.h"
+#include <QString>
+#include <QHash>
 
-class PluginLoader;
-class Plugin;
+#include "pluginmanager_global.h"
 
-class PluginManager : public QObject
+class PLUGINMANAGERSHARED_EXPORT PluginInfo
 {
-    Q_OBJECT
-    Q_PROPERTY(QStringList activePlugins READ activePlugins WRITE slotSetActivePlugins NOTIFY activePluginsChanged)
 public:
-    explicit PluginManager(QObject *parent = 0);
-
-    void setPluginLoader(PluginLoader *pPluginLoader);
-
-    QStringList availablePlugins();
-    QList<PluginInfo> pluginsInfo();
-    PluginInfo pluginInfo(QString pPluginId);
-    bool loadPlugin(const QString &pPluginId);
-    Plugin* loadedPluginInstance(QString pPluginId);
-    QStringList activePlugins();
-    QStringList loadedPlugins();
-
-signals:
-    void activePluginsChanged(QStringList);
-
-public slots:
-    void slotSetActivePlugins(const QStringList &pActivePlugins);
-
+    PluginInfo(QString pPluginId, QString pVer, QString pDescr, QString pCategory, QHash<QString, QString> pAdditionalInfo);
+    PluginInfo();
+    //TASK : plugin id SLOULD NOT be the same as filename - there are some differences in library
+    // namings in Linux and Windows. Plugin id SHOULD BE unique! like org.PLLUG.git-plugin
+    QString pluginId() const;
+    QString ver() const;
+    QString description() const;
+    QString category() const ;
+    QHash<QString, QString> additionalInfo() const;
 private:
-    PluginLoader *mPluginLoader;
-    QMap<QString, PluginInfo> mPluginsInfoByPluginId;
-    QMap<QString, Plugin *> mLoadedPluginByPluginId;
-    QStringList mActivePlugins;
+    QString mPluginId;
+    QString mVer;
+    QString mDescr;
+    QString mCategory;
+    QHash<QString, QString> mAdditionalInfo;
 };
 
-#endif // PLUGINMANAGER_H
+#endif // PLUGINDESCRIPTION_H
