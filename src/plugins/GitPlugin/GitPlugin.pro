@@ -32,11 +32,11 @@ HEADERS += \
     gitplugin_global.h \
     gitplugin.h \
     gitsettings.h \
-    clonecommand.h \
+#    clonecommand.h \
     commandapi.h
 
 SOURCES += \
     gitplugin.cpp \
     gitsettings.cpp \
-    clonecommand.cpp \
+#    clonecommand.cpp \
     commandapi.cpp

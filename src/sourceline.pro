@@ -24,6 +24,7 @@
 TEMPLATE = subdirs
 
 CONFIG += ordered
+CONFIG += silent
 
 SUBDIRS += \
     extensionlib \

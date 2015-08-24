@@ -25,3 +25,6 @@ TEMPLATE = subdirs
 
 OTHER_FILES += \
     templates/source-header-template.txt
+
+SUBDIRS += \
+    extension_introspection

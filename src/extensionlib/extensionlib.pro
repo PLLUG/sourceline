@@ -29,34 +29,29 @@ TARGET = extensions
 DESTDIR = $$PLUGINAPI_PATH/lib
 TEMPLATE = lib
 
+CONFIG += \
+    C++11
+
 DEFINES += EXTENSIONS_LIBRARY
 
+include($$_PRO_FILE_PWD_/metaconnector/metaconnector.pri)
+
 SOURCES += \
-    fakecomponent.cpp \
-    plugin.cpp \
-    settingspage.cpp \
-    command.cpp \
-    settings.cpp \
-    apiclient.cpp \
-    apiprovider.cpp \
-    publictestinterface.cpp \
-    testinerface.cpp \
+    $$PWD/fakecomponent.cpp \
+    $$PWD/plugin.cpp \
+    $$PWD/settingspage.cpp \
+    $$PWD/command.cpp \
+    $$PWD/settings.cpp
 
 HEADERS +=\
-    extensions_global.h\
-    fakecomponent.h\
-    plugin-interface.h\
-    plugin.h\
-    settingspage.h \
-    command.h \
-    defs.h \
-    settings.h \
-    apiclient.h \
-    apiprovider.h \
-    genericargumentholder.h \
-    publictestinterface.h \
-    testinerface.h \
-    typedgenericargumentholder.h \
+    $$PWD/extensions_global.h\
+    $$PWD/fakecomponent.h\
+    $$PWD/plugin-interface.h\
+    $$PWD/plugin.h\
+    $$PWD/settingspage.h \
+    $$PWD/command.h \
+    $$PWD/defs.h \
+    $$PWD/settings.h
 
 #TODO: add copying of pri file
 
@@ -72,9 +67,15 @@ win32: copytarget.files ~= s,/,\\,g
 DirSep = /
 win32: DirSep = \\
 
-for(f,copytarget.files) tmp += $$PWD$$DirSep$${f} ## make absolute paths
-copycompiler.input        = tmp
+# TODO: move to separate function
+#for(f,copytarget.files) {
+#    if ()
+#    tmp += $$PWD$$DirSep$${f} ## make absolute paths
+#}
+#copycompiler.input        = tmp
+copycompiler.input        = copytarget.files
 
+# TODO: move to separate pri file (to make more re usable)
 isEmpty(DESTDIR):DESTDIR=.
 PLUGINAPI_INCLUDE_PATH = $$PLUGINAPI_PATH/include
 win32 {

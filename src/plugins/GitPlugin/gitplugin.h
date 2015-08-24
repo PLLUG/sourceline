@@ -4,7 +4,7 @@
 #include "plugin.h"
 #include "gitplugin_global.h"
 #include "commandapi.h"
-#include "clonecommand.h"
+//#include "clonecommand.h"
 
 class GITPLUGINSHARED_EXPORT GitPlugin :
         public Plugin
