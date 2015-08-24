@@ -54,10 +54,6 @@ void CommandProcess::execute(const QString &shell, const QString &command,const 
     mProcess->write(mData.append(command));
     mProcess->closeWriteChannel();
     //mProcess->waitForFinished();
-
-    //remove to the 2 next funcs
-
-
 }
 
 void CommandProcess::readStandardOutput()

@@ -44,8 +44,6 @@ public:
     const QString consolePath();
     QString osInfo() const;
 public slots:
-    void slotSetConsolePath(const QString &pPath);
-    void slotReadConsoleOutput();
     void slotExec(QString cmd);
     void slotOut(QByteArray out);
     void slotLock();
@@ -73,7 +71,6 @@ private:
     CommandProcess *mCmdProcess;
     QByteArray mData;
     QByteArray mReadOnlyIndicator;
-    QProcess *mProcess;
     QString mPath;
     Ui::ConsoleView *ui;
 };

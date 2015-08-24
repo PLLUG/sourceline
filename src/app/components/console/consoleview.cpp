@@ -40,15 +40,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
     ui->plainTextEdit->setLocalEchoEnabled(true);
     ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
 
-    //for deleting mProcess
-    mProcess = new QProcess(this);
-    QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
-    mProcess->setProcessEnvironment(env);
-    mProcess->setProcessChannelMode(QProcess::MergedChannels);
-
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
-    connect(mProcess, SIGNAL(readyRead()), this, SLOT(slotReadConsoleOutput()));
-    connect(mProcess, SIGNAL(readChannelFinished()), SLOT(slotPrintWorkingDir()));
 
     connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
     connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
@@ -96,12 +88,6 @@ void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Use
 {
     ui->plainTextEdit->putData("\n");
 
-    mProcess->write(pCommand.toUtf8());
-    if(mProcess->atEnd() && !mDirPrinted)
-    {
-        slotPrintWorkingDir();
-    }
-
     QString shell;
     QStringList args;
     if(osInfo()=="windows")
@@ -136,42 +122,6 @@ const QString ConsoleView::consolePath()
     return mPath;
 }
 
-void ConsoleView::slotSetConsolePath(const QString &pPath)
-{
-    if(!mPath.isEmpty() && (mPath != pPath))
-    {
-        mProcess->close();
-        mProcess->terminate();
-        qDebug() << mPath << "close";
-    }
-    if(!pPath.isEmpty())
-    {
-        mPath = pPath;
-        startProcess();
-    }
-    else
-    {
-        ui->plainTextEdit->clear();
-        ui->plainTextEdit->appendPlainText("Please select commad-line interpreter in Setting!");
-    }
-}
-
-void ConsoleView::slotReadConsoleOutput()
-{
-    QByteArray output = mProcess->readAll();
-    ui->plainTextEdit->putData(output);
-    ui->plainTextEdit->putData("\n");
-
-    if (!mProcess->atEnd())
-    {
-        slotReadConsoleOutput();
-    }
-    else
-    {
-        slotPrintWorkingDir();
-    }
-}
-
 void ConsoleView::slotExec(QString cmd)
 {
     cmd +='\n';
@@ -197,17 +147,6 @@ void ConsoleView::slotUnlock()
     ui->plainTextEdit->setReadOnly(false);
 }
 
-void ConsoleView::startProcess()
-{
-    if(mProcess->state() != QProcess::Running)
-    {
-        qDebug() << mPath << "start";
-        ui->plainTextEdit->clear();
-        mProcess->start(mPath, QStringList());
-        mProcess->waitForStarted();
-        slotPrintWorkingDir();
-    }
-}
 
 QByteArray ConsoleView::clearAppend(const QString &tmp)
 {
@@ -225,7 +164,5 @@ void ConsoleView::slotPrintWorkingDir(const QString &dir)
 
 ConsoleView::~ConsoleView()
 {
-    mProcess->close();
-    mProcess->terminate();
     delete ui;
 }
