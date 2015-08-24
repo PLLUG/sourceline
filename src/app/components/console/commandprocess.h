@@ -1,8 +1,7 @@
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
-***    Copyright (C) 2014  by                                                ***
-***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***    Copyright (C) 2015  by                                                ***
 ***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
@@ -22,57 +21,40 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef CONSOLEVIEW_H
-#define CONSOLEVIEW_H
+#ifndef COMMANDPROCESS_H
+#define COMMANDPROCESS_H
 
-#include <QWidget>
-#include "commandprocess.h"
+#include <QObject>
 
-namespace Ui {
-class ConsoleView;
-}
 class QProcess;
 
-class ConsoleView : public QWidget
+/*!
+ * \brief The CommandProcess class is responsible for execution of commands as a separate
+ * processes.
+ */
+class CommandProcess : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit ConsoleView(QWidget *parent = 0);
-    ~ConsoleView();
-    void toExecute(const QString &pCommand);
-    const QString consolePath();
-    QString osInfo() const;
-public slots:
-    void slotExec(QString cmd);
-    void slotOut(QByteArray out);
-    void slotLock();
-    void slotUnlock();
-
-    void debugCursorPositionChanged();
-    void debugTextChanged();
-    void debugdataChanged(QByteArray data);
-    void debugBlockCountChanged(int count);
+    explicit CommandProcess(QObject *parent = 0);
 
 signals:
-    void commandEntered(QString shell, QString cmd , QStringList args);
+    void standardOutput(QByteArray out);
+    void errorOutput(QByteArray out);
+    void started();
+    void finished();
 
-private:
-    void startProcess();
-    QByteArray clearAppend(const QString &pTmp);
+public slots:
+    void execute(const QString &shell, const QString &command, const QStringList &parameters);
 
 private slots:
-    void slotPrintWorkingDir(const QString &pDir = QString());
-
+    void readStandardOutput();
+    void readStandardError();
+    void slotAfterFinished(int exitStatus, int exitCode);
 
 private:
-
-    bool mDirPrinted;
-    CommandProcess *mCmdProcess;
+    QProcess *mProcess;
     QByteArray mData;
-    QByteArray mReadOnlyIndicator;
-    QString mPath;
-    Ui::ConsoleView *ui;
 };
 
-#endif // CONSOLEVIEW_H
+#endif // COMMANDPROCESS_H
