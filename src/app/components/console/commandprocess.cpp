@@ -80,6 +80,8 @@ void CommandProcess::readStandardError()
 
 void CommandProcess::slotAfterFinished(int exitStatus, int exitCode)
 {
+    Q_UNUSED(exitStatus)
+    Q_UNUSED(exitCode)
     mProcess->close();
     readStandardOutput();
     readStandardError();
