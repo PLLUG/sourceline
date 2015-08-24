@@ -42,5 +42,5 @@ unix {
 }
 
 # TODO: make separate pri file for including this library into project
-#OTHER_FILES += \
-#    extensionlib.pri
+OTHER_FILES += \
+    pluginmanager.pri

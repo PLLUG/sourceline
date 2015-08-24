@@ -7,10 +7,7 @@
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-DESTDIR = $$_PRO_FILE_PWD_/../../bin
-
-# Extension support library
-include(./../../extensionlib/extensionlib.pri)
+DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 
 CONFIG += C++11
 CONFIG += sl_project
@@ -24,3 +21,6 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+# Extension support library
+include(./../../extensionlib/extensionlib.pri)

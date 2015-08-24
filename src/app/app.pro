@@ -200,6 +200,9 @@ HEADERS +=
 # Extension support library
 include(./../extensionlib/extensionlib.pri)
 
+# Plugin management library
+include(./../pluginmanager/pluginmanager.pri)
+
 # Resources and additional files
 RESOURCES += \
     resources/resources.qrc
