@@ -2,7 +2,7 @@
 ###                                                                          ###
 ###    SourceLine - Crossplatform VCS Client                                 ###
 ###    Copyright (C) 2014  by                                                ###
-###                   Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   ###
+###                   Alex Chmykhalo (alex18cas@gmail.com)                   ###
 ###                                                                          ###
 ###    This file is part of SourceLine Project.                              ###
 ###                                                                          ###
@@ -21,14 +21,26 @@
 ###                                                                          ###
 ################################################################################
 
-TEMPLATE = subdirs
+QT       -= gui
 
-CONFIG += ordered
-CONFIG += silent
+DESTDIR = $$_PRO_FILE_PWD_/../../bin
+TARGET = pluginmanager
 
-SUBDIRS += \
-    extensionlib \
-    pluginmanager \
-    app \
-    plugins \
-    tools \
+TEMPLATE = lib
+CONFIG += C++11
+
+DEFINES += PLUGINMANAGER_LIBRARY
+
+SOURCES += pluginmodel.cpp
+
+HEADERS += pluginmodel.h\
+        pluginmanager_global.h
+
+unix {
+    target.path = /usr/lib
+    INSTALLS += target
+}
+
+# TODO: make separate pri file for including this library into project
+#OTHER_FILES += \
+#    extensionlib.pri

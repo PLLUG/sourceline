@@ -8,5 +8,5 @@ CONFIG(sl_project) {
     unix|win32: LIBS += -L$$PWD/lib/
 }
 
-unix|win32: LIBS += -lextensions
+LIBS += -lextensions
 

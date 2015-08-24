@@ -13,6 +13,7 @@ DESTDIR = $$_PRO_FILE_PWD_/../../bin
 include(./../../extensionlib/extensionlib.pri)
 
 CONFIG += C++11
+CONFIG += sl_project
 
 TARGET = extension_introspection
 TEMPLATE = app
