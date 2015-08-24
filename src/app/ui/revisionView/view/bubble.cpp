@@ -41,23 +41,23 @@ QRectF Bubble::boundingRect() const
     return QRectF(mArea.x() - 1, mArea.y() - 1, mArea.width() + 2, mArea.height() + 2);
 }
 
-void Bubble::setPen(const QPen &pen)
+void Bubble::setPen(const QPen &pPen)
 {
-    mPen = pen;
+    mPen = pPen;
     update();
 }
 
-void Bubble::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+void Bubble::paint(QPainter *pPainter, const QStyleOptionGraphicsItem *pOption, QWidget *pWidget)
 {
-    Q_UNUSED(option)
-    Q_UNUSED(widget)
-    painter->setRenderHint(QPainter::Antialiasing);
-    painter->setPen(Qt::NoPen);
-    painter->setBrush(mPen.brush());
-    painter->drawEllipse(boundingRect().center(), 3, 3);
-    painter->setPen(mPen);
-    painter->setBrush(Qt::NoBrush);
-    painter->drawEllipse(boundingRect());
+    Q_UNUSED(pOption)
+    Q_UNUSED(pWidget)
+    pPainter->setRenderHint(QPainter::Antialiasing);
+    pPainter->setPen(Qt::NoPen);
+    pPainter->setBrush(mPen.brush());
+    pPainter->drawEllipse(boundingRect().center(), 3, 3);
+    pPainter->setPen(mPen);
+    pPainter->setBrush(Qt::NoBrush);
+    pPainter->drawEllipse(boundingRect());
 }
 
 void Bubble::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)

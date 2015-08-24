@@ -60,14 +60,15 @@ HEADERS += \
     ui/revisionView/view/revisiongrid.h \
     ui/revisionView/view/revisionnodeitem.h \
     ui/revisionView/view/simpleline.h \
+    ui/passworddialog.h \
     ui/clonedialog.h \
-    ui/contentfortabworkplace.h \
     ui/tabsapi.h \
     aggregator.h \
     ui/genericcomponent.h \
     workplace.h \
     transitionsignals.h \
     ui/errordialog.h \
+    ui/contentfortab.h
 
 SOURCES += \
     main.cpp \
@@ -90,13 +91,14 @@ SOURCES += \
     ui/revisionView/view/revisiongrid.cpp \
     ui/revisionView/view/revisionnodeitem.cpp \
     ui/revisionView/view/simpleline.cpp \
+    ui/passworddialog.cpp \
     ui/clonedialog.cpp \
-    ui/contentfortabworkplace.cpp \
     ui/tabsapi.cpp \
     aggregator.cpp \
     ui/genericcomponent.cpp \
     workplace.cpp \
     ui/errordialog.cpp \
+    ui/contentfortab.cpp
 
 # Application UI
 HEADERS += \
@@ -143,7 +145,6 @@ SOURCES += \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
 
-
 FORMS += \
     ui/customtabbar.ui \
     ui/editorview.ui \
@@ -154,14 +155,15 @@ FORMS += \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui \
-    ui/dockconsole.ui \
     ui/dockfileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
+    ui/dockconsole.ui \
+    ui/passworddialog.ui \
     ui/revisionview.ui \
     ui/clonedialog.ui \
-    ui/contentfortabworkplace.ui \
     ui/errordialog.ui \
+    ui/contentfortab.ui
 
 # Application Settings
 HEADERS += \

@@ -23,5 +23,5 @@ DockTypes::DockType RevisionTable::type() const
 
 void RevisionTable::slotSetPage(int pPage)
 {
-    ui->label->setText("Page " + QString::number(pPage));
+    ui->label->setText(tr("Page ") + QString::number(pPage));
 }

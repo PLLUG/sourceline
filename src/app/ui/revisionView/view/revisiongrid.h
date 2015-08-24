@@ -35,20 +35,20 @@ class RevisionGrid : public QObject, public QGraphicsItem
     Q_INTERFACES(QGraphicsItem)
 public:
     RevisionGrid();
-    void setBoundingRect(const QSizeF size);
-    void setBoundingRect(qreal w, qreal h);
+    void setBoundingRect(const QSizeF pSize);
+    void setBoundingRect(qreal pWidth, qreal pHeight);
 
-    void view(RevisionNode *root);
+    void view(RevisionNode *pRoot);
 
     QRectF boundingRect() const;
 
     QPoint startPoint() const;
     int gridStep() const;
 
-    void drawText(const QString &txt, RevisionNodeItem *i);
+    void drawText(const QString &pText, RevisionNodeItem *pItem);
 
 protected:
-    void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
+    void paint(QPainter * pPainter, const QStyleOptionGraphicsItem * pOption, QWidget * pWidget = 0);
     bool eventFilter(QObject *obj, QEvent *event);
 
 private:
@@ -57,11 +57,11 @@ private:
     QString mText;
     QPointF mTextPos;
 
-    void drawNode(RevisionNode *item, int currentCol);
-    void drawLines(RevisionNode *root);
+    void drawNode(RevisionNode *pItem, int pCurrentCol);
+    void drawLines(RevisionNode *pRoot);
 
-    void drawBezier(RevisionNodeItem *from, RevisionNodeItem *to);
-    void drawLine(RevisionNodeItem *from, RevisionNodeItem *to);
+    void drawBezier(RevisionNodeItem *pFrom, RevisionNodeItem *pTo);
+    void drawLine(RevisionNodeItem *pFrom, RevisionNodeItem *pTo);
 };
 
 #endif // REVISIONGRID_H

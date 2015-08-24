@@ -28,7 +28,7 @@ class ModelIndex
 {
 public:
     ModelIndex();
-    ModelIndex(int row, int column);
+    ModelIndex(int pRow, int pColumn);
 
 private:
     int mRow;

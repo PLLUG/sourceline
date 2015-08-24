@@ -36,7 +36,6 @@ SettingStorage::SettingStorage(QObject *parent) :
 
 void SettingStorage::slotSaveSettings(QString pSettingPath, QMap<QString, QVariant> pHashData)
 {
-
     QStringList lGroupsList = parsePath(pSettingPath);
 
     for(int i = 0; i < lGroupsList.count(); i++)
@@ -80,15 +79,15 @@ void SettingStorage::slotLoadSettings(QString pSettingPath)
 
 QStringList SettingStorage::parsePath(QString pPath)
 {
-    QStringList lGroupsList;
+    QStringList rGroupsList;
     QStringList lTmpList = pPath.split(QRegExp("/"));
     for(int i = 0; i < lTmpList.count(); i++)
     {
         QString elem = lTmpList.at(i);
         if(!elem.isEmpty())
         {
-            lGroupsList.append(elem);
+            rGroupsList.append(elem);
         }
     }
-    return lGroupsList;
+    return rGroupsList;
 }

@@ -1,6 +1,6 @@
 #include "customtabbar.h"
 #include "ui_customtabbar.h"
-#include "contentfortabworkplace.h"
+#include "contentfortab.h"
 
 #include <QDebug>
 #include <QWidget>
@@ -24,5 +24,5 @@ CustomTabBar::~CustomTabBar()
 
 void CustomTabBar::slotAddNewWorkplace(const QString &pName)
 {
-    QTabWidget::addTab(new ContentForTabWorkplace(this), pName);
+    QTabWidget::addTab(new ContentForTab(this), pName);
 }

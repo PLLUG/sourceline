@@ -147,18 +147,15 @@ void ConsoleView::slotUnlock()
     ui->plainTextEdit->setReadOnly(false);
 }
 
-
-QByteArray ConsoleView::clearAppend(const QString &tmp)
+QByteArray ConsoleView::clearAppend(const QString &pTmp)
 {
     mData.clear();
-    return mData.append(tmp);
+    return mData.append(pTmp);
 }
 
-void ConsoleView::slotPrintWorkingDir(const QString &dir)
+void ConsoleView::slotPrintWorkingDir(const QString &pDir)
 {
-    //QString lWorkDir = dir;
-
-    ui->plainTextEdit->putData(clearAppend(dir + mReadOnlyIndicator));
+    ui->plainTextEdit->putData(clearAppend(pDir + mReadOnlyIndicator));
     mDirPrinted = true;
 }
 

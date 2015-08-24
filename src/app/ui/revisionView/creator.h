@@ -36,18 +36,18 @@ class Creator
 public:
     Creator();
 
-    GraphField* field() { return &mField; }
-    RevisionItem* item(int position) const;
+    GraphField* field();
+    RevisionItem* item(int pPosition) const;
 
-    void addCommit(RevisionItem *c);
-    void addBranch(RevisionItem *b, const QString &name);
-    void merge(RevisionItem *from, RevisionItem *to);
+    void addCommit(RevisionItem *pCommit);
+    void addBranch(RevisionItem *pBranch, const QString &pName);
+    void merge(RevisionItem *pFrom, RevisionItem *pTo);
 
-    void switchTo(Branch *b);
+    void switchTo(Branch *pBranch);
 
-    QList<QVariant> branchesBefore(RevisionItem *i) const;
-    QList<QVariant> branchesAfter(RevisionItem *i) const;
-    QList<QVariant> brPos(RevisionItem *i) const;
+    QList<QVariant> branchesBefore(RevisionItem *pItem) const;
+    QList<QVariant> branchesAfter(RevisionItem *pItem) const;
+    QList<QVariant> brPos(RevisionItem *pItem) const;
 
 private:
     QList<RevisionItem*> mItems;

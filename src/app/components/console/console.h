@@ -32,8 +32,8 @@ class Console : public QPlainTextEdit
     Q_OBJECT
 public:
     explicit Console(QWidget *parent = 0);
-    void putData(const QByteArray &data);
-    void setLocalEchoEnabled(bool set);
+    void putData(const QByteArray &pData);
+    void setLocalEchoEnabled(bool pSet);
 
 protected:
     virtual void keyPressEvent(QKeyEvent *e);
@@ -45,6 +45,9 @@ signals:
     void signalSendCmd(QString);
 
 private:
+    void moveCursorToEnd();
+
+private:
     bool mLocalEchoEnabled;
     int mMaximumBlockCount;
     int mReadOnlyLen;
@@ -53,7 +56,6 @@ private:
     QColor mColorBase;
     QColor mColorInputText;
     QTextCursor mCursor;
-    void moveCursorToEnd();
 };
 
 #endif // CONSOLE_H

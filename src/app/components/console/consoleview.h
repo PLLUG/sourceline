@@ -59,10 +59,10 @@ signals:
 
 private:
     void startProcess();
-    QByteArray clearAppend(const QString &tmp);
+    QByteArray clearAppend(const QString &pTmp);
 
 private slots:
-    void slotPrintWorkingDir(const QString &dir = QString());
+    void slotPrintWorkingDir(const QString &pDir = QString());
 
 
 private:

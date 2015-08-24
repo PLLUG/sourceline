@@ -15,7 +15,7 @@ class CloneDialog : public QDialog
     Q_OBJECT
 
 public:
-    CloneDialog(QWidget *parent = 0);
+    explicit CloneDialog(QWidget *parent = 0);
     ~CloneDialog();
 
 private slots:

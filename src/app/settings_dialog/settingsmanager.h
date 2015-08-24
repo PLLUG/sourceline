@@ -38,7 +38,7 @@ class SettingsManager : public QObject
 public:
     explicit SettingsManager(QObject *parent = 0);
 
-    void setStorage(SettingStorage *);
+    void setStorage(SettingStorage *pStorage);
     QString pathBySettings(Settings *pSettings);
 
     void addSettings(const QString &pPluginId, const QString &pSettingsGroupName, Settings *pSettings);
