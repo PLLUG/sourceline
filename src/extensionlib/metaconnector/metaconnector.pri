@@ -10,6 +10,8 @@ HEADERS += \
     $$PWD/publictestinterface.h \
     $$PWD/testinerface.h \
     $$PWD/genericargumentholder.h \
-    $$PWD/typedgenericargumentholder.h
+    $$PWD/typedgenericargumentholder.h \
+    $$PWD/typedgenericreturnargumentholder.h \
+    $$PWD/genericreturnargumentholder.h
 
 HEADERS += $$PWD/genericargumentholder.h

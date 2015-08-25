@@ -2,13 +2,7 @@
 #define TESTINERFACE_H
 
 #include <QObject>
-
 class QPlainTextEdit;
-
-#ifndef Q_MOC_RUN
-#define PUBLIC_API
-#endif
-const QString PUBLIC_API_TAG_VALUE("PUBLIC_API");
 
 class TestInerface : public QObject
 {
@@ -19,7 +13,8 @@ public:
 signals:
 
 public slots:
-    PUBLIC_API void setText(QString text);
+    Q_REVISION(1) void setText(QString text);
+    Q_REVISION(1) int testReturn(QString test);
 
 private:
     QPlainTextEdit *mTextEdit;

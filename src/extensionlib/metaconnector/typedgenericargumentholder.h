@@ -41,7 +41,8 @@ public:
 
     QGenericArgument arg() const override
     {
-        return Q_ARG(T, mVal);
+        const char *typeName = QMetaType::typeName(qMetaTypeId<T>());
+        return QArgument<T>(typeName, mVal);
     }
 
 private:
