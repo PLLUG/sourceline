@@ -24,3 +24,6 @@ FORMS    += mainwindow.ui
 
 # Extension support library
 include(./../../extensionlib/extensionlib.pri)
+
+# Plugin management support library
+include(./../../pluginmanager/pluginmanager.pri)
