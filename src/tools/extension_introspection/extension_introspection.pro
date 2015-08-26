@@ -9,6 +9,8 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 
+QMAKE_CXXFLAGS += -std=c++11
+
 CONFIG += C++11
 CONFIG += sl_project
 
@@ -17,10 +19,16 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    testcommand.cpp
+    testcommand.cpp \
+    pluginapi.cpp \
+    commandmanager.cpp \
+    publiccommandapi.cpp
 
 HEADERS  += mainwindow.h \
-    testcommand.h
+    testcommand.h \
+    pluginapi.h \
+    commandmanager.h \
+    publiccommandapi.h
 
 FORMS    += mainwindow.ui
 

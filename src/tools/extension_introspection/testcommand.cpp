@@ -1,8 +1,13 @@
 #include "testcommand.h"
 
-TestCommand::TestCommand(QObject *parent) : QObject(parent)
+TestCommand::TestCommand(QObject *parent) : Command(parent)
 {
 
+}
+
+QString TestCommand::name() const
+{
+    return "123";
 }
 
 /// To register command:

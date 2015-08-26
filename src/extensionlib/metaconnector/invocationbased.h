@@ -33,6 +33,8 @@
 #include "typedgenericargumentholder.h"
 #include "typedgenericreturnargumentholder.h"
 
+#include "extensions_global.h"
+
 class GenericArgumentHolder;
 class GenericReturnArgumentHolder;
 
@@ -88,7 +90,7 @@ extern void initInvocationBasedClasses();
  * immediately in the point where invoke() or invokeAndReturn() methods are called. This also
  * means that target object which methods will be called should reside in the same thread.
  */
-class InvocationBased : public QObject
+class EXTENSIONSSHARED_EXPORT InvocationBased : public QObject
 {
     Q_OBJECT
 public:
