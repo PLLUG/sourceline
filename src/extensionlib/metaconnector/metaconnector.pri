@@ -2,7 +2,8 @@ SOURCES += \
     $$PWD/apiclient.cpp \
     $$PWD/apiprovider.cpp \
     $$PWD/publictestinterface.cpp \
-    $$PWD/testinerface.cpp
+    $$PWD/testinerface.cpp \
+    $$PWD/invocationbased.cpp
 
 HEADERS += \
     $$PWD/apiclient.h \
@@ -12,6 +13,7 @@ HEADERS += \
     $$PWD/genericargumentholder.h \
     $$PWD/typedgenericargumentholder.h \
     $$PWD/typedgenericreturnargumentholder.h \
-    $$PWD/genericreturnargumentholder.h
+    $$PWD/genericreturnargumentholder.h \
+    $$PWD/invocationbased.h
 
 HEADERS += $$PWD/genericargumentholder.h
