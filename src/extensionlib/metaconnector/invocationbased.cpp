@@ -28,11 +28,13 @@ QHash<int, ReturnArgConverionFunc> InvocationBased::returnArgConvertors;
 
 IB_DECLARE_ARGUMENT_CONVERTORS(QString)
 IB_DECLARE_ARGUMENT_CONVERTORS(int)
+IB_DECLARE_ARGUMENT_CONVERTORS(double)
 
 void initInvocationBasedClasses()
 {
     ibRegisterTypeConvertors(QString);
     ibRegisterTypeConvertors(int);
+    ibRegisterTypeConvertors(double);
 }
 
 /*!

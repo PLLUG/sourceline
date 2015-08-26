@@ -16,9 +16,11 @@ TARGET = extension_introspection
 TEMPLATE = app
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    testcommand.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    testcommand.h
 
 FORMS    += mainwindow.ui
 
