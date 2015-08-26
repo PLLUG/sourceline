@@ -47,7 +47,7 @@ void SettingStorage::slotSaveSettings(QString pSettingPath, QMap<QString, QVaria
     for(int i = 0; i < lList.count(); i++)
     {
         QString lKey = lList.at(i);
-        qDebug() << lKey << pHashData.value(lKey).toString();
+        qDebug() << "save: " << lKey << pHashData.value(lKey).toString();
         mSettings->setValue(lKey, pHashData.value(lKey));
     }
     for(int i = 0; i < lGroupsList.count(); i++)
@@ -69,6 +69,7 @@ void SettingStorage::slotLoadSettings(QString pSettingPath)
     for(int i = 0; i < lList.count(); i++)
     {
         QString lKey = lList.at(i);
+        qDebug() << "load: " << lKey << lHashSetting.value(lKey).toString();
         lHashSetting.insert(lKey, mSettings->value(lKey));
     }
     for(int i = 0; i < lGroupsList.count(); i++)
