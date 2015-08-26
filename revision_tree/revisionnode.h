@@ -31,8 +31,6 @@
 struct RevisionNode
 {
     std::string name;
-    std::string message;
-    std::string author;
     QDateTime created;
 };
 

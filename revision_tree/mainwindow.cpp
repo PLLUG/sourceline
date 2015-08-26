@@ -69,8 +69,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
             RevisionNode newCommit = {
                 hash.toStdString(),
-                message.toStdString(),
-                author.toStdString(),
                 QDateTime::fromTime_t(time.toInt())
             };
 

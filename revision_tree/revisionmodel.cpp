@@ -110,9 +110,7 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
     else
     {
         // node already in, modify data, because probably it was empty
-        mGraph[v_new].author = pNodeInfo.author;
         mGraph[v_new].created = pNodeInfo.created;
-        mGraph[v_new].message = pNodeInfo.message;
     }
     if(boost::graph_traits<revision_graph>::null_vertex() != v_parent &&
             boost::graph_traits<revision_graph>::null_vertex() != v_new &&
@@ -263,7 +261,6 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
 
 revision_graph RevisionModel::graph() const
 {
-    debugTree(mGraph);
     return mGraph;
 }
 

@@ -12,93 +12,10 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QDateTime>
+#include "bfs_visitor.h"
 
 using IndexPropertyMap = boost::property_map<revision_graph, boost::vertex_index_t>::type;
 using PredMap = boost::iterator_property_map<typename std::vector<vertex>::iterator, IndexPropertyMap>;
-
-template <typename IndexMap, typename vertex, typename graph>
-class bfs_visitor : public boost::default_bfs_visitor
-{
-public:
-    bfs_visitor(IndexMap &colMap, IndexMap &bfsOrderMap):
-        mRowIndexMap{mRowMap}
-      ,mColumnIndexMap{colMap}
-      ,mBFSOrderMap{bfsOrderMap}
-      ,discoveredVerticesCount{0}
-      ,mPrevVertex{boost::graph_traits<graph>::null_vertex()}
-    {
-    }
-
-    template < typename Vertex, typename Graph >
-    /*!
-     * \brief initialize_vertex is invoked on every vertex before the start of the search
-     * \param v vertex
-     * \param g graph
-     */
-    void initialize_vertex(Vertex v, const Graph & g)
-    {
-        Q_UNUSED(g)
-        put(mColumnIndexMap, v, 0);
-        put(mRowIndexMap, v, 0);
-    }
-
-    template < typename Edge, typename Graph >
-    /*!
-     * \brief examine_edge is invoked on every out-edge of each vertex immediately after the vertex is removed from the queue
-     * \param e edge
-     * \param g graph
-     */
-    void examine_edge(Edge e, Graph g)
-    {
-        put(mRowIndexMap, boost::target(e,g), get(mRowIndexMap,boost::source(e,g))+1);
-    }
-
-    template < typename Vertex, typename Graph >
-    /*!
-     * \brief discover_vertex is invoked the first time the algorithm encounters vertex u.
-     * All vertices closer to the source vertex have been discovered,
-     * and vertices further from the source have not yet been discovered.
-     * \param u vertex
-     * \param g graph
-     */
-    void discover_vertex(Vertex v, const Graph & g) const
-    {
-        Q_UNUSED(v)
-        Q_UNUSED(g)
-    }
-
-    template <typename Vertex, typename Graph>
-    /*!
-     * \brief examine_vertex is invoked in each vertex as it is removed from the queue.
-     * \param u
-     * \param g
-     */
-    void examine_vertex(Vertex v, Graph& g)
-    {
-        Q_UNUSED(g)
-        if(boost::graph_traits<graph>::null_vertex() != mPrevVertex)
-        {
-            if(get(mRowIndexMap,mPrevVertex) == get(mRowIndexMap,v))
-            {
-                put(mColumnIndexMap,v, get(mColumnIndexMap,mPrevVertex)+1 );
-            }
-            else
-            {
-                put(mColumnIndexMap,v,0); //TODO: maybe use some column of some dominator vertex of v
-            }
-        }
-        mPrevVertex = v;
-        put(mBFSOrderMap,v,discoveredVerticesCount++);
-    }
-
-private:
-    boost::associative_property_map<IndexMap> mRowIndexMap;
-    boost::associative_property_map<IndexMap> mColumnIndexMap;
-    boost::associative_property_map<IndexMap> mBFSOrderMap;
-    int discoveredVerticesCount;
-    vertex mPrevVertex;
-    VertexIntMap mRowMap;
-};
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent},
@@ -256,7 +173,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     std::cout << "root vertex is: " << root_vertex << std::endl;
 
     //perform breadth first search
-    bfs_visitor<VertexIntMap, vertex, revision_graph> vis{mColumnMap,mTestBFSOrderMap};
+    bfs_visitor<VertexIntMap, vertex, revision_graph> vis{mColumnMap,mTestBFSOrderMap, mRowMap};
     breadth_first_search(mGraph, root_vertex, visitor(vis));
 
     int row{0};
@@ -269,6 +186,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     }
 
     setMinimumHeight(mTopOffset + mWidth * (num_vertices(mGraph) - 1) + mBottomOffset);
+    updateGeometry();
 }
 
 
@@ -305,8 +223,11 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
             break;
         }
         painter.drawText(QPointF{mWidth*col + mLeftOffset,
-                                         mWidth*row + mTopOffset},
-                                 QString::number(get(testAlgorithmIndexes,v)));
+                                 mWidth*row + mTopOffset},
+                         QString::number(get(testAlgorithmIndexes,v)));
+        //        painter.drawText(QPointF{mWidth*col + mLeftOffset,
+        //                                 mWidth*row + mTopOffset},
+        //                         QString::number(v));
     }
 
     painter.setPen(Qt::darkGray);
