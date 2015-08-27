@@ -1,5 +1,8 @@
-#include "commandmanager.h"
 #include <QDebug>
+
+#include "commandmanager.h"
+#include "publiccommandapi.h"
+#include "pluginapi.h"
 
 CommandManager::CommandManager(QObject *parent) : QObject(parent)
 {

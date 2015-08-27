@@ -1,4 +1,5 @@
 #include "testcommand.h"
+#include "aggregator.h"
 
 TestCommand::TestCommand(QObject *parent) : Command(parent)
 {
@@ -24,7 +25,7 @@ QString TestCommand::name() const
 
 void TestCommand::init(Aggregator &api)
 {
-
+    api.registerCommand(this);
 }
 
 void TestCommand::trigger(/*Aggregator &api*/)

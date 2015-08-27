@@ -1,5 +1,6 @@
 #include "pluginapi.h"
 #include "invocationbased.h"
+#include "testcommand.h"
 
 PluginAPI::PluginAPI(QObject *parent) : QObject(parent)
 {

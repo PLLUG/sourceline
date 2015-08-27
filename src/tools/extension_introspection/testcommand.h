@@ -3,6 +3,8 @@
 
 #include "command.h"
 
+class Aggregator;
+
 class TestCommand : public Command
 {
     Q_OBJECT

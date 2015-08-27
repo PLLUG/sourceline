@@ -4,8 +4,9 @@
 #include <QObject>
 #include <QString>
 #include <QList>
-#include "publiccommandapi.h"
-#include "pluginapi.h"
+
+class PublicCommandAPI;
+class PluginAPI;
 
 class CommandManager : public QObject
 {

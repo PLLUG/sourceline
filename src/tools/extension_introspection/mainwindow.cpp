@@ -5,6 +5,7 @@
 #include "commandmanager.h"
 #include "pluginapi.h"
 #include "testcommand.h"
+#include "aggregator.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,8 +18,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(papi, SIGNAL(newCommandRegistered(QString)), cm, SLOT(slotCommandRegistered(QString)));
     papi->slotRegisterCommand(tc);
 
+
     connect(cm, SIGNAL(invokeCommand(QString,QByteArray)), papi, SLOT(slotInvokeCommand(QString,QByteArray)));
     cm->slotInvokeCommand();
+
+    Aggregator a;
+    tc->init(a);
 }
 
 MainWindow::~MainWindow()

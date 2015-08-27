@@ -5,7 +5,7 @@
 #include <QHash>
 #include <QString>
 
-#include "testcommand.h"
+class TestCommand;
 class InvocationBased;
 
 class PluginAPI : public QObject

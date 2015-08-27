@@ -20,13 +20,15 @@ SOURCES += main.cpp\
     testcommand.cpp \
     pluginapi.cpp \
     commandmanager.cpp \
-    publiccommandapi.cpp
+    publiccommandapi.cpp \    
+    aggregator.cpp
 
 HEADERS  += mainwindow.h \
     testcommand.h \
     pluginapi.h \
     commandmanager.h \
-    publiccommandapi.h
+    publiccommandapi.h \    
+    aggregator.h
 
 FORMS    += mainwindow.ui
 
