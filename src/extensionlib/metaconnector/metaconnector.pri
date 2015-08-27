@@ -1,6 +1,4 @@
 CONFIG += c++11
-QMAKE_CXXFLAGS += -std=c++11
-QMAKE_CXXFLAGS += -std=gnu++0x
 
 SOURCES += \
     $$PWD/apiclient.cpp \

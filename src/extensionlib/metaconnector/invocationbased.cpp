@@ -139,31 +139,53 @@ void InvocationBased::invoke(QByteArray signature, QVariant arg1, QVariant arg2,
         QScopedPointer<GenericArgumentHolder> argHolder4(convertArg(arg4));
         QScopedPointer<GenericArgumentHolder> argHolder5(convertArg(arg5));
 
-        if(argHolder1 && argHolder2 && argHolder3 && argHolder4 && argHolder5)
+        bool wasInvoked = false;
+        switch (method.parameterCount())
         {
-            method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
-                argHolder2->arg(), argHolder3->arg(), argHolder4->arg(), argHolder5->arg());
+        case 0:
+            wasInvoked = method.invoke(mTarget, Qt::DirectConnection);
+            break;
+        case 1:
+            if(argHolder1)
+            {
+                wasInvoked = method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg());
+            }
+            break;
+        case 2:
+            if(argHolder1 && argHolder2)
+            {
+                wasInvoked = method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
+                    argHolder2->arg());
+            }
+            break;
+        case 3:
+            if(argHolder1 && argHolder2 && argHolder3)
+            {
+                wasInvoked = method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
+                    argHolder2->arg(), argHolder3->arg());
+            }
+            break;
+        case 4:
+            if(argHolder1 && argHolder2 && argHolder3 && argHolder4)
+            {
+                wasInvoked = method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
+                    argHolder2->arg(), argHolder3->arg(), argHolder4->arg());
+            }
+            break;
+        case 5:
+            if(argHolder1 && argHolder2 && argHolder3 && argHolder4 && argHolder5)
+            {
+                wasInvoked = method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
+                    argHolder2->arg(), argHolder3->arg(), argHolder4->arg(), argHolder5->arg());
+            }
+            break;
+        default:
+            qDebug("InvocationBased::invoke: Could not invoke method %s with more than 5 arguments.",
+                qPrintable(signature.constData()));
+            break;
         }
-        else if(argHolder1 && argHolder2 && argHolder3 && argHolder4)
-        {
-            method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
-                argHolder2->arg(), argHolder3->arg(), argHolder4->arg());
-        }
-        else if(argHolder1 && argHolder2 && argHolder3)
-        {
-            method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
-                argHolder2->arg(), argHolder3->arg());
-        }
-        else if(argHolder1 && argHolder2)
-        {
-            method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg(),
-                argHolder2->arg());
-        }
-        else if(argHolder1)
-        {
-            method.invoke(mTarget, Qt::DirectConnection, argHolder1->arg());
-        }
-        else
+
+        if (!wasInvoked)
         {
             qDebug("InvocationBased::invoke: Could not invoke method %s with given arguments.",
                 qPrintable(signature.constData()));

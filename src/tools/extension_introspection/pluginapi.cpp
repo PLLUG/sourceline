@@ -18,11 +18,13 @@ void PluginAPI::slotRegisterCommand(TestCommand *pCommand)
     emit newCommandRegistered(lCommandID);
 }
 
+#include <QDebug>
 void PluginAPI::slotInvokeCommand(QString pCommandID, QByteArray pSignature)
 {
     InvocationBased *lInvocationBasedCommand = nullptr;
     if(lInvocationBasedCommand = mRegisteredCommands.value(pCommandID))
     {
+        qDebug() << "PluginAPI::slotInvokeCommand";
         lInvocationBasedCommand->invoke(pSignature);
     }
 }

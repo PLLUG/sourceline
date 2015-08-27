@@ -9,8 +9,6 @@ QT       += core gui
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DESTDIR = $$_PRO_FILE_PWD_/../../../bin
 
-QMAKE_CXXFLAGS += -std=c++11
-
 CONFIG += C++11
 CONFIG += sl_project
 
