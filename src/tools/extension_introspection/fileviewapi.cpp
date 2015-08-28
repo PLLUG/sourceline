@@ -21,7 +21,7 @@ void FileViewAPI::setFileView(FileView *pFileView)
 
 void FileViewAPI::addToMenu(QString pCommandID)
 {
-    PublicCommandAPI *commandApi = new PublicCommandAPI(pCommandID,this);
+    PublicCommandAPI *commandApi = mCommandManager->command(pCommandID);
     QAction* actionForCommand = new QAction(this);
     actionForCommand->setText(pCommandID);
     connect(actionForCommand, SIGNAL(triggered(bool)), commandApi, SLOT(trigger()), Qt::UniqueConnection);

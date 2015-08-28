@@ -19,7 +19,7 @@ void CommandManager::slotCommandRegistered(QString pCommandID)
     PublicCommandAPI *lCommandAPI = new PublicCommandAPI(pCommandID);
     mCommandsAPI.insert(pCommandID, lCommandAPI);
     qDebug() << "Command registered: " << pCommandID;
-    connect(lCommandAPI, SIGNAL(invokeCommand(QString,QByteArray)), this, SLOT(slotInvoke(QString,QByteArray)));
+    connect(lCommandAPI, &PublicCommandAPI::invokeCommand, this, &CommandManager::slotInvoke, Qt::UniqueConnection);
 }
 
 void CommandManager::slotInvokeCommand(QString pCommandID)
@@ -35,5 +35,6 @@ void CommandManager::slotInvokeCommand(QString pCommandID)
 
 void CommandManager::slotInvoke(QString pCommandID, QByteArray pSignature)
 {
+    qDebug() << "CommandManager::slotInvoke" << pCommandID << pSignature;
     emit invokeCommand(pCommandID, pSignature);
 }

@@ -48,31 +48,31 @@ MainWindow::MainWindow(QWidget *parent) :
 
     CommandManager *lCommandManager = new CommandManager();
     PluginAPI *lPluginAPI = new PluginAPI();
+
+    connect(lCommandManager, &CommandManager::invokeCommand, lPluginAPI, &PluginAPI::slotInvokeCommand);
+
     TestCommand *lTestCommand = new TestCommand();
     lTestCommand->mName = "TestCommand";
     FileViewAPI *lFileViewAPI = new FileViewAPI();
     lFileViewAPI->setFileView(lFileView);
+    lFileViewAPI->setCommandManeger(lCommandManager);
 
     InvocationBased *lInvocationBased = new InvocationBased();
     PublicFileViewAPI *lPublicFileViewAPI = new PublicFileViewAPI();
     lInvocationBased->setTarget(lFileViewAPI);
 
     connect(lPublicFileViewAPI, SIGNAL(invokeCommand(QByteArray,QVariant)), lInvocationBased, SLOT(invoke(QByteArray,QVariant)));
-
-    connect(lPluginAPI, SIGNAL(newCommandRegistered(QString)), lCommandManager, SLOT(slotCommandRegistered(QString)));
-    //lPluginAPI->slotRegisterCommand(lTestCommand);
-
-    connect(lCommandManager, SIGNAL(invokeCommand(QString,QByteArray)), lPluginAPI, SLOT(slotInvokeCommand(QString,QByteArray)));
+    connect(lPluginAPI, &PluginAPI::newCommandRegistered, lCommandManager, &CommandManager::slotCommandRegistered);
 
     Aggregator a;
     a.addObject(lPluginAPI);
     a.addObject(lPublicFileViewAPI);
 
-    CloneCommand *lGitTestCommand = new CloneCommand();
     lTestCommand->init(a);
+    CloneCommand *lGitTestCommand = new CloneCommand();
     lGitTestCommand->init(a);
 
-    lCommandManager->slotInvokeCommand("TestCommand");
+    //lCommandManager->slotInvokeCommand("clone");
 }
 
 MainWindow::~MainWindow()

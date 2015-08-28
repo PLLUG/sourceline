@@ -12,6 +12,7 @@ public:
 
     virtual QString name() const override;
 
+public slots:
     virtual void init(Aggregator &api) override;
     virtual void trigger() override;
     virtual void processResult(Aggregator &api) override;
