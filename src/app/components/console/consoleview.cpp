@@ -42,10 +42,6 @@ ConsoleView::ConsoleView(QWidget *parent) :
     mReadOnlyIndicator = "~>";
     mDirPrinted = true;
     CommandProcessMediator *mediator = new CommandProcessMediator(this);
-    mCmdProcess = new CommandProcess(this);
-    mCmdProcess->setProperty("shell","C:\\Windows\\System32\\cmd");
-    mCmdProcess->setProperty("shellParam",QStringList()<< "/k");
-    mCmdProcess->start();
 
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
@@ -53,11 +49,11 @@ ConsoleView::ConsoleView(QWidget *parent) :
 
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
 
-    connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
-    connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
-    connect(this, &ConsoleView::commandEntered, mediator, &CommandProcessMediator::processConsoleInput);
-    connect(mCmdProcess, SIGNAL(standardOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
-    connect(mCmdProcess, SIGNAL(errorOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
+    connect(mediator, &CommandProcessMediator::processStarted, this, &ConsoleView::slotLock);
+    connect(mediator, &CommandProcessMediator::processFinished, this, &ConsoleView::slotUnlock);
+    connect(this, &ConsoleView::commandEntered, mediator, &CommandProcessMediator::processConsoleInput, Qt::UniqueConnection);
+    connect(mediator, &CommandProcessMediator::processStandardOutput, this, &ConsoleView::slotOut, Qt::UniqueConnection);
+    connect(mediator, &CommandProcessMediator::processErrorOutput, this, &ConsoleView::slotOut, Qt::UniqueConnection);
 
     //Debug connections
     connect(ui->plainTextEdit, SIGNAL(blockCountChanged(int)),SLOT(debugBlockCountChanged(int)));
@@ -76,11 +72,7 @@ void ConsoleView::debugBlockCountChanged(int count)
 void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Users&ls -R@ or @tree C:\ /A@
 {
     ui->plainTextEdit->putData("\n");
-
-    // !!hardcode!! , dont work on linux
-
-
-        emit commandEntered(pCommand);
+    emit commandEntered(pCommand);
 }
 
 /*!

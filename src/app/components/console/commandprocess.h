@@ -58,7 +58,7 @@ public slots:
 private slots:
     void readStandardOutput();
     void readStandardError();
-    void slotAfterFinished(int exitStatus, int exitCode);
+    void slotAfterFinished();
 
 private:
     void shutdown();

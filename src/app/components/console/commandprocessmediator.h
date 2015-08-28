@@ -2,6 +2,7 @@
 #define COMMANDPROCESSMEDIATOR_H
 
 #include <QObject>
+#include "commandprocess.h"
 
 class CommandProcessMediator : public QObject
 {
@@ -12,11 +13,18 @@ public:
 signals:
     void execute(QString);
     void commandMapped(QString commandId);
+    void processStandardOutput(QByteArray out);
+    void processErrorOutput(QByteArray out);
+    void processStarted();
+    void processFinished();
 
 public slots:
     void processConsoleInput(QString input);
 
     void registerCommand(QString commandId, QString inputPattern);
+
+private:
+     CommandProcess *mProcess;
 };
 
 #endif // COMMANDPROCESSMEDIATOR_H

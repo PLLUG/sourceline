@@ -36,7 +36,7 @@ CommandProcess::CommandProcess(QObject *parent)
     connect(mProcess, SIGNAL(finished(int)), this, SIGNAL(finished()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readStandardOutput()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readStandardError()), Qt::UniqueConnection);
-    connect(mProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotAfterFinished(int,int)));
+    connect(mProcess, SIGNAL(finished(int)), this, SLOT(slotAfterFinished()));
 }
 
 /*!
@@ -124,10 +124,8 @@ void CommandProcess::readStandardError()
     }
 }
 
-void CommandProcess::slotAfterFinished(int exitStatus, int exitCode)
+void CommandProcess::slotAfterFinished()
 {
-    Q_UNUSED(exitStatus)
-    Q_UNUSED(exitCode)
     mProcess->close();
     readStandardOutput();
     readStandardError();
