@@ -39,6 +39,27 @@ CommandProcess::CommandProcess(QObject *parent)
     connect(mProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotAfterFinished(int,int)));
 }
 
+QString CommandProcess::shell()
+{
+    return mShell;
+}
+
+void CommandProcess::setShell(const QString &shell)
+{
+    mShell = shell;
+
+}
+
+QStringList CommandProcess::shellParam()
+{
+    return mShellParam;
+}
+
+void CommandProcess::setShellParam(const QStringList &shellParam)
+{
+    mShellParam = shellParam;
+}
+
 /*!
  * \brief CommandProcess::execute
  * \param shell

@@ -28,6 +28,16 @@
 #include <QDir>
 #include <QSysInfo>
 
+// make input work
+// remove platform dependent ifs
+// amke Q_PROPERTY for commandprocess
+//    * pommand interpreter
+// make methods to commandprocess
+//     * start()
+//     * shutdown()
+// all console input send to process stdin
+
+
 ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConsoleView)
@@ -90,10 +100,11 @@ void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Use
 
     QString shell;
     QStringList args;
+    mCmdProcess->setProperty("shell","cmd.exe");
     if(osInfo()=="windows")
     {
         //args << "/c"  << pCommand;
-        args << "/k" << "echo off";
+          args << "/k" << "echo off";
         shell = "C:\\Windows\\System32\\cmd";
         emit commandEntered(shell, pCommand, args);
     }
