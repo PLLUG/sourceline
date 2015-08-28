@@ -49,29 +49,29 @@ FileView::FileView(QWidget *parent) :
     ui->setupUi(this);
     QAction *actionGoUp = ui->lineEdit->addAction(QPixmap(":splash/img/up.png"), QLineEdit::TrailingPosition);
 
-    //context menu
-    mMenu = new QMenu(this);
-    QAction* actionNewFolder = new QAction("New Folder",mMenu);
-    connect(actionNewFolder, SIGNAL(triggered(bool)), this, SLOT(slotCreateNewFolder()));
-    mMenu->addAction(actionNewFolder);
+//    //context menu
+//    mMenu = new QMenu(this);
+//    QAction* actionNewFolder = new QAction("New Folder",mMenu);
+//    connect(actionNewFolder, SIGNAL(triggered(bool)), this, SLOT(slotCreateNewFolder()));
+//    mMenu->addAction(actionNewFolder);
 
-    //menu for files
-    mFileMenu = new QMenu(this);
-    QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
-    connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
-    mFileMenu->addAction(actionDeleteFile);
-    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
-    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
-    mFileMenu->addAction(actionRemaneFile);
+//    //menu for files
+//    mFileMenu = new QMenu(this);
+//    QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
+//    connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
+//    mFileMenu->addAction(actionDeleteFile);
+//    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
+//    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
+//    mFileMenu->addAction(actionRemaneFile);
 
-    //menu for dirs
-    mDirMenu = new QMenu(this);
-    QAction* actionDeleteFolder = new QAction("Delete",mDirMenu);
-    connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
-    mDirMenu->addAction(actionDeleteFolder);
-    QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
-    connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
-    mDirMenu->addAction(actionRemaneDir);
+//    //menu for dirs
+//    mDirMenu = new QMenu(this);
+//    QAction* actionDeleteFolder = new QAction("Delete",mDirMenu);
+//    connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
+//    mDirMenu->addAction(actionDeleteFolder);
+//    QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
+//    connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
+//    mDirMenu->addAction(actionRemaneDir);
 
     mFileModel = new FileModel(this);
     ui->listView->setModel(mFileModel);
@@ -255,7 +255,7 @@ void FileView::slotRightBtnClick()
             flag = flag | SelectionFlag::FileSelection;
         }
     }
-    mMenuBySelectionFlags[flag]->show();
+    mMenuBySelectionFlags[flag]->exec(QCursor::pos());
 }
 
 void FileView::slotLeftBtnClick()
