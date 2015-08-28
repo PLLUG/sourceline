@@ -35,6 +35,7 @@
 #include <QAction>
 #include <QEvent>
 #include <QKeyEvent>
+#include <QStandardPaths>
 
 #include "ui/exploreritemdelegate.h"
 
@@ -187,7 +188,7 @@ void FileView::slotGoUp()
     }
     else
     {
-        QString homePath = QStandardPaths::HomeLocation;
+        QString homePath = QStandardPaths::displayName(QStandardPaths::HomeLocation);
         cd(homePath);
     }
 
