@@ -1,5 +1,9 @@
 #include "texteditforrename.h"
 
+/*!
+ * \brief constructor with paramenters
+ * \param widget which is parent for text edit
+ */
 TextEditForRename::TextEditForRename(QWidget *parent) : QTextEdit(parent)
 {
     connect(this->document(), SIGNAL(contentsChanged()), this, SLOT(slotUpdateHeight()));
@@ -8,6 +12,10 @@ TextEditForRename::TextEditForRename(QWidget *parent) : QTextEdit(parent)
     this->installEventFilter(parent);
 }
 
+/*!
+ * \brief catch event click Key_Return for finish editing TextEdit
+ * \param action after event
+ */
 void TextEditForRename::keyPressEvent(QKeyEvent *event)
 {
     if (event->key() == Qt::Key_Return)
@@ -20,6 +28,12 @@ void TextEditForRename::keyPressEvent(QKeyEvent *event)
     }
 }
 
+/*!
+ * \brief catch events Resize and PolishRequest
+ * \param object
+ * \param event
+ * \return actions after events Resize and PolishRequest
+ */
 bool TextEditForRename::eventFilter(QObject *object, QEvent *event)
 {
     Q_UNUSED(object)
@@ -39,6 +53,9 @@ bool TextEditForRename::eventFilter(QObject *object, QEvent *event)
     return false;
 }
 
+/*!
+ * \brief update height
+ */
 void TextEditForRename::slotUpdateHeight()
 {
     //hight+5 for native look in editor

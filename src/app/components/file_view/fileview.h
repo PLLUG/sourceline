@@ -25,131 +25,98 @@
 #define FILEVIEW_H
 
 #include <QWidget>
+#include <QStandardPaths>
 
-namespace Ui {
+namespace Ui
+{
     class FileView;
 }
 
+class FileModel;
 class QMenu;
 class QFileSystemModel;
+class QAction;
 
-/*!
- * \brief The class for representation file view
- */
 class FileView : public QWidget
 {
     Q_OBJECT
 
 public:
 
+    enum SelectionFlag
+    {
+        NoneSelection = 0x00,
+        FileSelection = 0x01,
+        FolderSelection = 0x02,
+        MultiSeleciton = 0x04
+    };
+    Q_DECLARE_FLAGS(SelectionFlags, SelectionFlag)
+    Q_FLAG(SelectionFlags)
+
     explicit FileView(QWidget *parent = 0);
     ~FileView();
 
-    /*!
-     * \brief set root path for system
-     * \param path which must be root
-     */
     void setRootPath(const QString &pPath);
 
-    void setTextToLineEdit(const QString &path);
+    void cd(const QString &path);
+
     /*!
      * \brief set root path in different platforms
      * \return path
      */
-    static QString getHomePathForCurrentSystem()
-    {
-        QString rHomePath;
-        #ifdef Q_OS_LINUX
-        rHomePath = "/";
-        #endif
-        #ifdef Q_OS_WIN
-        rHomePath = "My Computer";
-        #endif
-        #ifdef Q_OS_MAC
-        rHomePath = "/";
-        #endif
-        return rHomePath;
-    }
+//    static QString getHomePathForCurrentSystem()
+//    {
+//        QString rHomePath;
+//        #ifdef Q_OS_LINUX
+//        rHomePath = "/";
+//        #endif
+//        #ifdef Q_OS_WIN
+//        rHomePath = "My Computer";
+//        #endif
+//        #ifdef Q_OS_MAC
+//        rHomePath = "/";
+//        #endif
+//        rHomePath = QStandardPaths::HomeLocation;
+//        return rHomePath;
+//    }
+
+    void registerAction(QAction *pAction, SelectionFlags pSelecitonFlags);
 
 private:
-
-    /*!
-      * \brief filter for events for object
-      * \param object name
-      * \param event for this object
-      * \return
-      */
      bool eventFilter(QObject *obj, QEvent *event);
 private slots:
 
-    /*!
-     * \brief open folder on double click
-     * \param index item in model
-     */
     void slotDoubleClick(const QModelIndex &index);
 
-    /*!
-     * \brief go up to repository
-     */
     void slotGoUp();
 
-    /*!
-     * \brief go to last repository
-     */
     void slotGoToPath();
 
-    /*!
-     * \brief action create menu on right button click
-     * \param position item on view
-     */
-    void slotRightBtnClick(const QPoint &pos);
+    void slotRightBtnClick();
 
-    /*!
-     * \brief create new folder
-     */
+    void slotLeftBtnClick();
+
     void slotCreateNewFolder();
 
-    /*!
-     * \brief delete folder
-     */
     void slotDeleteFolder();
 
-    /*!
-     * \brief delete file
-     */
     void slotDeleteFile();
 
-    /*!
-     * \brief rename rolder or file
-     */
     void slotRenameFolderOrFile();
 
 private:
 
-    /*!
-     * \brief user interface
-     */
     Ui::FileView *ui;
 
-    /*!
-     * \brief main context menu
-     */
     QMenu *mMenu;
 
-    /*!
-     * \brief context menu for file
-     */
     QMenu *mFileMenu;
 
-    /*!
-     * \brief context menu for folders
-     */
     QMenu *mDirMenu;
 
-    /*!
-     * \brief file model
-     */
-    QFileSystemModel *mFileModel;
+    FileModel *mFileModel;
+
+    QHash<SelectionFlags, QMenu *> mMenuBySelectionFlags;
 };
 
 #endif // FILEVIEW_H
