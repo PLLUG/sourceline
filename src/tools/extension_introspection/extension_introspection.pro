@@ -42,7 +42,8 @@ HEADERS  += mainwindow.h \
     file_view/filemodel.h \
     file_view/fileview.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    file_view/ui/fileview.ui
 
 # Extension support library
 include(./../../extensionlib/extensionlib.pri)
