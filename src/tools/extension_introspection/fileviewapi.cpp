@@ -2,6 +2,7 @@
 #include "commandmanager.h"
 #include "file_view/fileview.h"
 #include <QAction>
+#include "publiccommandapi.h"
 
 FileViewAPI::FileViewAPI(QObject *parent) : QObject(parent)
 {
