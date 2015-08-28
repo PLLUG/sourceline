@@ -1,5 +1,6 @@
 #include "testcommand.h"
 #include "aggregator.h"
+#include "pluginapi.h"
 
 TestCommand::TestCommand(QObject *parent) : Command(parent)
 {
@@ -23,9 +24,15 @@ QString TestCommand::name() const
 ///  (1) new PublicCommandAPI for id <- CommandManager::slotCommandRegistered() <- ( emit commandRegistered( id ) ) <- PluginAPI::register(TestCommand *)
 ///  (2) PublicCommandAPI -> ( emit invoke() ) -> PluginAPI -> ( InvocableBased->invoke() ) -> TestCommand::triggered()
 
+
+
+
 void TestCommand::init(Aggregator &api)
 {
-    api.registerCommand(this);
+
+//    api.registerCommand(this);
+    PluginAPI *pluginAPI = api.object<PluginAPI>();
+    pluginAPI->slotRegisterCommand(this);
 }
 
 void TestCommand::trigger(/*Aggregator &api*/)

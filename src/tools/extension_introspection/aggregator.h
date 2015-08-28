@@ -39,12 +39,8 @@ public:
     void addObject(QObject *pObj);
 
     template <typename T>
-    T* object();
+    T* object();    
 
-    void registerCommand(TestCommand *pCommand);
-
-private:
-    PluginAPI *mPluginAPI;
 };
 
 /*!
@@ -55,11 +51,10 @@ private:
 template <typename T>
 T* Aggregator::object()
 {
-    T * rObj = nullptr;
-    QObjectList children = this->children();
-    for(int i = 0; i < children.count(); i++)
-    {        
-        if(rObj = qobject_cast<T*>(children[i]))
+    T* rObj = nullptr;
+    for (QObject *o: children())
+    {
+        if(rObj = qobject_cast<T*>(o))
         {
             break;
         }

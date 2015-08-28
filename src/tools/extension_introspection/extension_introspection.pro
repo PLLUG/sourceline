@@ -21,14 +21,18 @@ SOURCES += main.cpp\
     pluginapi.cpp \
     commandmanager.cpp \
     publiccommandapi.cpp \    
-    aggregator.cpp
+    aggregator.cpp \
+    fileviewapi.cpp \
+    publicfileviewapi.cpp
 
 HEADERS  += mainwindow.h \
     testcommand.h \
     pluginapi.h \
     commandmanager.h \
     publiccommandapi.h \    
-    aggregator.h
+    aggregator.h \
+    fileviewapi.h \
+    publicfileviewapi.h
 
 FORMS    += mainwindow.ui
 

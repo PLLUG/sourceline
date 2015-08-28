@@ -7,6 +7,21 @@
 #include "testcommand.h"
 #include "aggregator.h"
 
+/// MK: commit everything, merge to metaconnector-refactoring
+/// MK: include fileview.pri
+/// MM: create class FileViewAPI
+///      * slot addToMenu(QString commandId)
+///      * setCommandManager(CommandManager *)
+/// MM: create new InvokationBased
+///      * setTarget(FileViewAPI)
+/// MM: create PublicFileViewAPI
+///      * connect to InvokationBased (FileViewAPI)
+///
+///
+///
+///
+///
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -23,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     cm->slotInvokeCommand();
 
     Aggregator a;
+    a.addObject(papi);
     tc->init(a);
 }
 
