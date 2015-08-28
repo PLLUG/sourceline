@@ -41,3 +41,6 @@ include(./../../extensionlib/extensionlib.pri)
 
 # Plugin management support library
 include(./../../pluginmanager/pluginmanager.pri)
+
+# File View support library
+include(./../../FileView/FileView.pri)
