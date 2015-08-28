@@ -39,25 +39,33 @@ MainWindow::MainWindow(QWidget *parent) :
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    CommandManager *cm = new CommandManager();
-    PluginAPI *papi = new PluginAPI();
-    TestCommand *tc = new TestCommand();
-    FileViewAPI *fvAPI = new FileViewAPI();
-    InvocationBased *ib = new InvocationBased();
-    PublicFileViewAPI *pfvAPI = new PublicFileViewAPI();
-    ib->setTarget(fvAPI);
+    CommandManager *lCommandManager = new CommandManager();
+    PluginAPI *lPluginAPI = new PluginAPI();
+    TestCommand *lTestCommand = new TestCommand();
+    lTestCommand->mName = "TestCommand";
+    FileViewAPI *lFileViewAPI = new FileViewAPI();
+    InvocationBased *lInvocationBased = new InvocationBased();
+    PublicFileViewAPI *lPublicFileViewAPI = new PublicFileViewAPI();
+    lInvocationBased->setTarget(lFileViewAPI);
 
-    connect(pfvAPI, SIGNAL(invokeCommand(QByteArray)), ib, SLOT(invoke(QByteArray,QVariant,QVariant,QVariant,QVariant,QVariant)));
+    connect(lPublicFileViewAPI, SIGNAL(invokeCommand(QByteArray)), lInvocationBased, SLOT(invoke(QByteArray,QVariant,QVariant,QVariant,QVariant,QVariant)));
 
-    connect(papi, SIGNAL(newCommandRegistered(QString)), cm, SLOT(slotCommandRegistered(QString)));
-    papi->slotRegisterCommand(tc);
+    connect(lPluginAPI, SIGNAL(newCommandRegistered(QString)), lCommandManager, SLOT(slotCommandRegistered(QString)));
+    //lPluginAPI->slotRegisterCommand(lTestCommand);
 
-    connect(cm, SIGNAL(invokeCommand(QString,QByteArray)), papi, SLOT(slotInvokeCommand(QString,QByteArray)));
-    cm->slotInvokeCommand();
+    connect(lCommandManager, SIGNAL(invokeCommand(QString,QByteArray)), lPluginAPI, SLOT(slotInvokeCommand(QString,QByteArray)));
 
     Aggregator a;
-    a.addObject(papi);
-    tc->init(a);
+    a.addObject(lPluginAPI);
+    a.addObject(lPublicFileViewAPI);
+
+    TestCommand *lGitCloneCommand = new TestCommand();
+    lGitCloneCommand->mName = "GitCloneCommand";
+
+    lTestCommand->init(a);
+    lGitCloneCommand->init(a);
+
+    lCommandManager->slotInvokeCommand("TestCommand");
 }
 
 MainWindow::~MainWindow()

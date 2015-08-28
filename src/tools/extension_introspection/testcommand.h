@@ -13,6 +13,8 @@ public:
 
     QString name() const override;
 
+    QString mName;
+
 public slots:
     /*!
      * \brief Initializes plugin. Should contain all api calls necessary for command

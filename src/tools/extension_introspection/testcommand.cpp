@@ -9,7 +9,7 @@ TestCommand::TestCommand(QObject *parent) : Command(parent)
 
 QString TestCommand::name() const
 {
-    return "123";
+    return mName;
 }
 
 /// To register command:

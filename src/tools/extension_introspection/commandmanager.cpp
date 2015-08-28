@@ -9,21 +9,31 @@ CommandManager::CommandManager(QObject *parent) : QObject(parent)
 
 }
 
-void CommandManager::slotCommandRegistered(QString pCommandID)
+PublicCommandAPI *CommandManager::command(QString pCommandID)
 {
-    mCommandsAPI = new PublicCommandAPI(pCommandID);
-    qDebug() << "Command registered: " << pCommandID;
-    connect(mCommandsAPI, SIGNAL(invokeCommand(QString,QByteArray)), this, SLOT(slotInvoke(QString,QByteArray)));
+    return mCommandsAPI.value(pCommandID);
 }
 
-void CommandManager::slotInvokeCommand()
+void CommandManager::slotCommandRegistered(QString pCommandID)
+{
+    PublicCommandAPI *lCommandAPI = new PublicCommandAPI(pCommandID);
+    mCommandsAPI.insert(pCommandID, lCommandAPI);
+    qDebug() << "Command registered: " << pCommandID;
+    connect(lCommandAPI, SIGNAL(invokeCommand(QString,QByteArray)), this, SLOT(slotInvoke(QString,QByteArray)));
+}
+
+void CommandManager::slotInvokeCommand(QString pCommandID)
 {
     qDebug() << "About to invoke command";
-    mCommandsAPI->trigger();
+    PublicCommandAPI *lCommandAPI;
+    if(lCommandAPI = mCommandsAPI.value(pCommandID))
+    {
+        qDebug() << "PluginAPI::slotInvokeCommand";
+        lCommandAPI->trigger();
+    }
 }
 
 void CommandManager::slotInvoke(QString pCommandID, QByteArray pSignature)
 {
     emit invokeCommand(pCommandID, pSignature);
 }
-
