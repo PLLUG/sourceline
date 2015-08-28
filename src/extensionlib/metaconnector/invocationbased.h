@@ -77,7 +77,7 @@ typedef GenericReturnArgumentHolder* (*ReturnArgConverionFunc)();
 /*!
  * \brief Should be called to register basic types for arguments.
  */
-extern void initInvocationBasedClasses();
+extern EXTENSIONSSHARED_EXPORT void initInvocationBasedClasses();
 
 /*!
  * \brief The InvocationBased class is the base class for all classes that should perform

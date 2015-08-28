@@ -2,6 +2,7 @@
 #define PUBLICFILEVIEWAPI_H
 
 #include <QObject>
+#include <QVariant>
 
 class InvocationBased;
 class FileViewAPI;
@@ -13,9 +14,10 @@ public:
     explicit PublicFileViewAPI(QObject *parent = 0);
 
 signals:
-    void invokeCommand(QByteArray pSignature);
+    void invokeCommand(QByteArray pSignature, QVariant);
 
 public slots:
+    void addToMenu(QString commandId);
 };
 
 #endif // PUBLICFILEVIEWAPI_H

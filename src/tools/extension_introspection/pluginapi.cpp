@@ -7,7 +7,7 @@ PluginAPI::PluginAPI(QObject *parent) : QObject(parent)
 
 }
 
-void PluginAPI::slotRegisterCommand(TestCommand *pCommand)
+void PluginAPI::slotRegisterCommand(Command *pCommand)
 {
     InvocationBased *lInvocationBasedCommand = new InvocationBased();
     lInvocationBasedCommand->setTarget(pCommand);

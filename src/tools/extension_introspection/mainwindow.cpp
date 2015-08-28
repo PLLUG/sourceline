@@ -1,3 +1,4 @@
+#include "clonecommand.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -9,6 +10,7 @@
 #include "fileviewapi.h"
 #include "invocationbased.h"
 #include "publicfileviewapi.h"
+#include "file_view/fileview.h"
 
 /// MK: commit everything, merge to metaconnector-refactoring
 /// MK: include fileview.pri
@@ -34,21 +36,28 @@
 ///     * set QAction text as commandId
 ///     * add QAction to FileView context menu (No selection)
 
+
+
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    FileView* lFileView = new FileView();
+    setCentralWidget(lFileView);
+
     CommandManager *lCommandManager = new CommandManager();
     PluginAPI *lPluginAPI = new PluginAPI();
     TestCommand *lTestCommand = new TestCommand();
     lTestCommand->mName = "TestCommand";
     FileViewAPI *lFileViewAPI = new FileViewAPI();
+    lFileViewAPI->setFileView(lFileView);
+
     InvocationBased *lInvocationBased = new InvocationBased();
     PublicFileViewAPI *lPublicFileViewAPI = new PublicFileViewAPI();
     lInvocationBased->setTarget(lFileViewAPI);
 
-    connect(lPublicFileViewAPI, SIGNAL(invokeCommand(QByteArray)), lInvocationBased, SLOT(invoke(QByteArray,QVariant,QVariant,QVariant,QVariant,QVariant)));
+    connect(lPublicFileViewAPI, SIGNAL(invokeCommand(QByteArray,QVariant)), lInvocationBased, SLOT(invoke(QByteArray,QVariant)));
 
     connect(lPluginAPI, SIGNAL(newCommandRegistered(QString)), lCommandManager, SLOT(slotCommandRegistered(QString)));
     //lPluginAPI->slotRegisterCommand(lTestCommand);
@@ -59,11 +68,9 @@ MainWindow::MainWindow(QWidget *parent) :
     a.addObject(lPluginAPI);
     a.addObject(lPublicFileViewAPI);
 
-    TestCommand *lGitCloneCommand = new TestCommand();
-    lGitCloneCommand->mName = "GitCloneCommand";
-
+    CloneCommand *lGitTestCommand = new CloneCommand();
     lTestCommand->init(a);
-    lGitCloneCommand->init(a);
+    lGitTestCommand->init(a);
 
     lCommandManager->slotInvokeCommand("TestCommand");
 }

@@ -9,12 +9,12 @@ class PublicCommandAPI : public QObject
 public:
     explicit PublicCommandAPI(QString pCommandID, QObject *parent = 0);
 
-    void trigger();
 
 signals:
     void invokeCommand(QString pCommandID, QByteArray pSignature);
 
 public slots:
+    void trigger();
 
 private:
     QString mCommandID;

@@ -130,7 +130,7 @@ void FileView::registerAction(QAction *pAction, SelectionFlags pSelecitonFlags)
     {
         mMenuBySelectionFlags.insert(pSelecitonFlags,new QMenu(this));
     }
-    mMenuBySelectionFlags[pSelecitonFlags]->addAction(pAction);
+    mMenuBySelectionFlags.value(pSelecitonFlags)->addAction(pAction);
 }
 
 /*!
@@ -256,7 +256,10 @@ void FileView::slotRightBtnClick()
             flag = flag | SelectionFlag::FileSelection;
         }
     }
-    mMenuBySelectionFlags[flag]->exec(QCursor::pos());
+    if(QMenu *menu =  mMenuBySelectionFlags.value(flag))
+    {
+        menu->exec(QCursor::pos());
+    }
 }
 
 void FileView::slotLeftBtnClick()

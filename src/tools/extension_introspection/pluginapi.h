@@ -7,6 +7,7 @@
 
 class TestCommand;
 class InvocationBased;
+class Command;
 
 class PluginAPI : public QObject
 {
@@ -18,7 +19,7 @@ signals:
     void newCommandRegistered(QString pID);
 
 public slots:
-    void slotRegisterCommand(TestCommand *pCommand);
+    void slotRegisterCommand(Command *pCommand);
     void slotInvokeCommand(QString pCommandID, QByteArray pSignature);
 
 private:
