@@ -7,7 +7,7 @@
 using VertexIntMap = std::map<vertex, int>;
 
 /*!
- * \brief The RevisionTreeWidget class Paints revision graph
+ * \brief The RevisionTreeWidget class Paints revision graph.
  */
 class RevisionTreeWidget : public QWidget
 {
@@ -20,8 +20,8 @@ public:
     int radius() const;
     void setRadius(int radius);
 
-    float width() const;
-    void setWidth(float width);
+    float rowHeight() const;
+    void setRowHeight(float width);
 
     float getLeftOffset() const;
     void setLeftOffset(float leftOffset);
@@ -34,28 +34,24 @@ public:
 
 protected:
     void paintEvent(QPaintEvent *e) override;
-    void resizeEvent(QResizeEvent *e) override;
-    bool event(QEvent *e) override;
 
 private:
     std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
     static vertex findRoot(const revision_graph &pGraph);
-
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
 
 private:
-
     revision_graph mGraph;
     float mLeftOffset;
     float mTopOffset;
     float mBottomOffset;
     int mRadius;
-    float mWidth;
+    float mRowHeight;
 
     VertexIntMap mColumnMap;
     VertexIntMap mRowMap;
 
-    VertexIntMap mTestBFSOrderMap;
+    VertexIntMap mTestOrderMap;
 };
 
 #endif // REVISIONTREEWIDGET_H

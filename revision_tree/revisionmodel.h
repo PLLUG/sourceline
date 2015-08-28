@@ -25,7 +25,6 @@
 #include <QAbstractTableModel>
 #include <boost/property_map/dynamic_property_map.hpp>
 #include <boost/graph/adjacency_list.hpp>
-#include <set>
 #include <map>
 #include "revisionnode.h"
 
@@ -34,6 +33,8 @@ boost::listS,
 boost::vecS,
 boost::bidirectionalS, // bidirectional because we want to show lists of parents and children of nodes
 RevisionNode>;
+//TODO: choose the best containers for V and E
+
 using vertex = boost::graph_traits<revision_graph>::vertex_descriptor;
 
 enum DefaultColumns
@@ -42,26 +43,27 @@ enum DefaultColumns
     DefaultColumnsCount
 };
 
+/*!
+ * \brief The RevisionModel class Represents revision data. Holds data in boost graph.
+ */
 class RevisionModel : public QAbstractTableModel
 {
     Q_OBJECT
 
 public:
-    RevisionModel(QObject *parent = 0);
+    RevisionModel(QObject *parent = nullptr);
 
-    int rowCount(const QModelIndex &parent = QModelIndex()) const;
-    int columnCount(const QModelIndex &parent = QModelIndex()) const;
-    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
-    QVariant headerData(int section, Qt::Orientation orientation, int role) const;
+    int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+    int columnCount(const QModelIndex &parent = QModelIndex()) const override;
+    QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+    QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     revision_graph graph() const;
     void debugTree(const revision_graph &graph) const;
     void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
-    void setInitialNode(const RevisionNode &);
 
     void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
 
-private:
     vertex vertexAt(int row) const;
 
 private:

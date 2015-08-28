@@ -45,7 +45,8 @@ HEADERS  += mainwindow.h \
     revisionnode.h \
     revisiontreewidget.h \
     revisionvertex.h \
-    bfs_visitor.h
+    bfs_visitor.h \
+    dfs_visitor.h
 
 FORMS    += mainwindow.ui \
     revisiontree.ui

@@ -31,7 +31,7 @@
 struct RevisionNode
 {
     std::string name;
-    QDateTime created;
+    QDateTime created;//TODO: remove
 };
 
 #endif // REVISIONNODE_H

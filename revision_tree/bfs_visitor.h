@@ -18,6 +18,7 @@ public:
       ,mPrevVertex{boost::graph_traits<graph>::null_vertex()}
       ,mPrevTreeEdgeTarget{boost::graph_traits<graph>::null_vertex()}
     {
+        Q_UNUSED(rowMap)
     }
 
     template < typename Vertex, typename Graph >

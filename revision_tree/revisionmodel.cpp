@@ -36,16 +36,28 @@
 
 //boost bundled properties
 //modified adjacency_list.hpp because of compile error
-//TODO: choose the best containers for V and E
 
 std::ostream& operator<<(std::ostream& os, const QVariant& pVariant)
 {
     return os << pVariant.toString().toStdString();
 }
 
-std::istream& operator>>(std::istream& is, const QVariant& pVariant) //(not supported)
+std::istream& operator>>(std::istream& is, const QVariant&) //(not supported)
 {
     return is;
+}
+
+template<typename Value, typename Key>
+Value
+get_copied(const std::string& name, const boost::dynamic_properties& dp, const Key& key)
+{
+    for (boost::dynamic_properties::const_iterator i = dp.lower_bound(name);
+         i != dp.end() && i->first == name; ++i) {
+        if (i->second->key() == typeid(key))
+            return boost::any_cast<Value>(i->second->get(key));
+    }
+
+    BOOST_THROW_EXCEPTION(boost::dynamic_get_failure(name));
 }
 
 RevisionModel::RevisionModel(QObject *parent):
@@ -55,7 +67,7 @@ RevisionModel::RevisionModel(QObject *parent):
 
 /*!
  * \brief RevisionModel::debugTree Represent graph in DOT format and send to cout
- * \param graph
+ * \param graph Boost graph.
  */
 void RevisionModel::debugTree(const revision_graph &graph) const
 {
@@ -119,20 +131,25 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
     {
         boost::add_edge(v_parent, v_new, mGraph);
     }
-
     //TODO: take to account that vertices were already sorted
     //perform topological sort (or some other sort later)
     sorted_vertices.clear();
     topological_sort(mGraph, std::back_inserter(sorted_vertices));
 }
 
+/*!
+ * \brief RevisionModel::putProperty Adds property for revision item.
+ * \param pRecepientId Revision item ID.
+ * \param property Property name.
+ * \param value Property value for revision item.
+ */
 void RevisionModel::putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value)
 {
     if(pRecepientId.empty() || property.empty())
         return;
     if(!mPropertyMaps.count(property))
     {
-        //if conteiner for property doesn't exist, create one
+        // if conteiner for property doesn't exist, create one
         std::map<std::string, QVariant> propertyMap;
         mPropertyMaps.insert(std::make_pair(property,std::move(propertyMap)));
         boost::associative_property_map<std::map<std::string, QVariant>>
@@ -143,34 +160,40 @@ void RevisionModel::putProperty(const std::string &pRecepientId, const std::stri
     put(property,mProperties,pRecepientId,value);
 }
 
+/*!
+ * \brief RevisionModel::vertexAt Returns vertex at given row according to current sort order.
+ * \param row Row.
+ * \return Vertex of boost graph.
+ */
 vertex RevisionModel::vertexAt(int row) const
 {
     return sorted_vertices.at(row);
 }
 
+/*!
+ * \brief RevisionModel::rowCount Returns row count - count of revision items.
+ * \return Row count.
+ */
 int RevisionModel::rowCount(const QModelIndex &) const
 {
     return boost::num_vertices(mGraph);
 }
 
+/*!
+ * \brief RevisionModel::columnCount Returns column count. Columns are default columns (id) and user-defined properties for revision items.
+ * \return Column count.
+ */
 int RevisionModel::columnCount(const QModelIndex &) const
 {
     return DefaultColumnsCount + mPropertyMaps.size();
 }
 
-template<typename Value, typename Key>
-Value
-get_copied(const std::string& name, const boost::dynamic_properties& dp, const Key& key)
-{
-    for (boost::dynamic_properties::const_iterator i = dp.lower_bound(name);
-         i != dp.end() && i->first == name; ++i) {
-        if (i->second->key() == typeid(key))
-            return boost::any_cast<Value>(i->second->get(key));
-    }
-
-    BOOST_THROW_EXCEPTION(boost::dynamic_get_failure(name));
-}
-
+/*!
+ * \brief RevisionModel::data Returns the data stored under the given role for the item referred to by the index.
+ * \param index Index
+ * \param role Role
+ * \return Data for index and role.
+ */
 QVariant RevisionModel::data(const QModelIndex &index, int role) const
 {
     if(Qt::DisplayRole == role || Qt::AccessibleTextRole == role)
@@ -190,17 +213,6 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
         {
             const std::string property = mPropertyNames.at(index.column()-DefaultColumnsCount);
             const std::string &name = mGraph[v].name;
-
-            //NOTE: add mutable to use this
-            //        boost::associative_property_map<std::map<std::string, QVariant>>
-            //                associativePropertyMap(mPropertyMaps.at(property));
-            //        return get(associativePropertyMap,name);
-
-            //        QVariant (*get_test)(const std::string& name, const boost::dynamic_properties& dp,const QVariant& key)
-            //                = &boost::get<QVariant,std::string>;
-            //ERROR: compiler doesn't see this function overload in dynamic_property_map.hpp but it works when I renamed, why?
-            //        return boost::get<QVariant>(property, mProperties, name);
-
             return get_copied<QVariant>(property, mProperties, name);
         }
     }
@@ -211,12 +223,17 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
         else
             return QColor(Qt::white);
     }
-    else
-    {
-        return QVariant();
-    }
+    return QVariant();
+
 }
 
+/*!
+ * \brief RevisionModel::headerData Returns the data for the given role and section in the header with the specified orientation.
+ * \param section Column number for horizontal headers, row number for vertical headers.
+ * \param orientation Horizontal or vertical orientation of header.
+ * \param role Role.
+ * \return Header data for role and orientation.
+ */
 QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
     QVariant headerName;
@@ -237,18 +254,10 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
             }
             else
             {
-                int i = 0;
-                for(const auto &name: mPropertyMaps)
-                {
-                    if(i + DefaultColumnsCount == section)
-                    {
-                        QString headerStr = QString::fromStdString(name.first).toLower();
-                        headerStr[0] = headerStr[0].toUpper();
-                        headerName.setValue(headerStr);
-                        break;
-                    }
-                    ++i;
-                }
+                const std::string property = mPropertyNames.at(section-DefaultColumnsCount);
+                QString headerStr = QString::fromStdString(property).toLower();
+                headerStr[0] = headerStr[0].toUpper();
+                headerName.setValue(headerStr);
             }
         }
         else
@@ -259,6 +268,10 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
     return headerName;
 }
 
+/*!
+ * \brief RevisionModel::graph Returns graph that holds data about revisions.
+ * \return Boost graph.
+ */
 revision_graph RevisionModel::graph() const
 {
     return mGraph;
