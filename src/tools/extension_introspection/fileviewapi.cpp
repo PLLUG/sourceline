@@ -1,6 +1,7 @@
 #include "fileviewapi.h"
 #include "commandmanager.h"
 #include "file_view/fileview.h"
+#include <QAction>
 
 FileViewAPI::FileViewAPI(QObject *parent) : QObject(parent)
 {
@@ -19,6 +20,9 @@ void FileViewAPI::setFileView(FileView *pFileView)
 
 void FileViewAPI::addToMenu(QString pCommandID)
 {
-
+    PublicCommandAPI *commandApi = new PublicCommandAPI(pCommandID,this);
+    QAction* actionForCommand = new QAction(this);
+    actionForCommand->setText(pCommandID);
+    mFileView->registerAction(actionForCommand,FileView::SelectionFlag::NoneSelection);
 }
 
