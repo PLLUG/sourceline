@@ -23,7 +23,11 @@ SOURCES += main.cpp\
     publiccommandapi.cpp \    
     aggregator.cpp \
     fileviewapi.cpp \
-    publicfileviewapi.cpp
+    publicfileviewapi.cpp \
+    file_view/ui/exploreritemdelegate.cpp \
+    file_view/ui/texteditforrename.cpp \
+    file_view/filemodel.cpp \
+    file_view/fileview.cpp
 
 HEADERS  += mainwindow.h \
     testcommand.h \
@@ -32,7 +36,11 @@ HEADERS  += mainwindow.h \
     publiccommandapi.h \    
     aggregator.h \
     fileviewapi.h \
-    publicfileviewapi.h
+    publicfileviewapi.h \
+    file_view/ui/exploreritemdelegate.h \
+    file_view/ui/texteditforrename.h \
+    file_view/filemodel.h \
+    file_view/fileview.h
 
 FORMS    += mainwindow.ui
 
