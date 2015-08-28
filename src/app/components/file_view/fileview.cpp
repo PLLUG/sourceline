@@ -255,6 +255,7 @@ void FileView::slotRightBtnClick()
             flag = flag | SelectionFlag::FileSelection;
         }
     }
+    mMenuBySelectionFlags[flag]->show();
 }
 
 void FileView::slotLeftBtnClick()
