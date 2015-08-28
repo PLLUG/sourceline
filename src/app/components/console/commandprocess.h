@@ -39,10 +39,12 @@ class CommandProcess : public QObject
     Q_PROPERTY(QStringList shellParam READ shellParam WRITE setShellParam)
 public:
     explicit CommandProcess(QObject *parent = 0);
+    void start();
     QString shell();
     void setShell(const QString &shell);
     QStringList shellParam();
     void setShellParam(const QStringList &shellParam);
+    ~CommandProcess();
 
 signals:
     void standardOutput(QByteArray out);
@@ -51,12 +53,15 @@ signals:
     void finished();
 
 public slots:
-    void execute(const QString &shell, const QString &command, const QStringList &parameters);
+    void execute(const QString &command);
 
 private slots:
     void readStandardOutput();
     void readStandardError();
     void slotAfterFinished(int exitStatus, int exitCode);
+
+private:
+    void shutdown();
 
 private:
     QProcess *mProcess;

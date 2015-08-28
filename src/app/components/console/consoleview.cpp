@@ -29,12 +29,12 @@
 #include <QSysInfo>
 
 // make input work
-// remove platform dependent ifs
-// amke Q_PROPERTY for commandprocess
+// remove platform dependent ifs +
+// amke Q_PROPERTY for commandprocess +
 //    * pommand interpreter
 // make methods to commandprocess
-//     * start()
-//     * shutdown()
+//     * start() +
+//     * shutdown() +
 // all console input send to process stdin
 
 
@@ -46,6 +46,10 @@ ConsoleView::ConsoleView(QWidget *parent) :
     //mReadOnlyIndicator = "";
     mDirPrinted = true;
     mCmdProcess = new CommandProcess(this);
+    mCmdProcess->setProperty("shell","C:\\Windows\\System32\\cmd");
+    mCmdProcess->setProperty("shellParam",QStringList()<< "/k");
+    mCmdProcess->start();
+
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
     ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
@@ -54,7 +58,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
 
     connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
     connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
-    connect(this, SIGNAL(commandEntered(QString,QString,QStringList)), mCmdProcess, SLOT(execute(QString,QString,QStringList)));
+    connect(this, &ConsoleView::commandEntered, mCmdProcess, &CommandProcess::execute);
     connect(mCmdProcess, SIGNAL(standardOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
     connect(mCmdProcess, SIGNAL(errorOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
 
@@ -98,22 +102,10 @@ void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Use
 {
     ui->plainTextEdit->putData("\n");
 
-    QString shell;
-    QStringList args;
-    mCmdProcess->setProperty("shell","cmd.exe");
-    if(osInfo()=="windows")
-    {
-        //args << "/c"  << pCommand;
-          args << "/k" << "echo off";
-        shell = "C:\\Windows\\System32\\cmd";
-        emit commandEntered(shell, pCommand, args);
-    }
+    // !!hardcode!! , dont work on linux
 
-    else if(QSysInfo::kernelType()=="linux")
-    {
-        shell = "sh";
-        emit commandEntered(shell, pCommand, args);
-    }
+
+        emit commandEntered(pCommand);
 }
 
 /*!

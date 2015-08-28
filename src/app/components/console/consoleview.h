@@ -55,7 +55,7 @@ public slots:
     void debugBlockCountChanged(int count);
 
 signals:
-    void commandEntered(QString shell, QString cmd , QStringList args);
+    void commandEntered(QString cmd);
 
 private:
     void startProcess();

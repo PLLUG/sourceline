@@ -39,22 +39,52 @@ CommandProcess::CommandProcess(QObject *parent)
     connect(mProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotAfterFinished(int,int)));
 }
 
+/*!
+ * \brief CommandProcess::start Process with two arguments shell and shell parameters
+ */
+void CommandProcess::start()
+{
+    //mProcess
+    if(!mProcess->isOpen())
+    {
+        mProcess->start(mShell,mShellParam);
+        mProcess->waitForStarted();
+    }
+    else{}
+}
+
+/*!
+ * \brief CommandProcess::shell
+ * \return
+ */
 QString CommandProcess::shell()
 {
     return mShell;
 }
 
+/*!
+ * \brief CommandProcess::setShell
+ * \param shell
+ */
 void CommandProcess::setShell(const QString &shell)
 {
     mShell = shell;
-
 }
 
+/*!
+ * \brief CommandProcess::shellParam
+ * \return
+ */
 QStringList CommandProcess::shellParam()
 {
     return mShellParam;
 }
 
+
+/*!
+ * \brief CommandProcess::setShellParam
+ * \param shellParam
+ */
 void CommandProcess::setShellParam(const QStringList &shellParam)
 {
     mShellParam = shellParam;
@@ -62,18 +92,13 @@ void CommandProcess::setShellParam(const QStringList &shellParam)
 
 /*!
  * \brief CommandProcess::execute
- * \param shell
  * \param command
- * \param parameters
  */
-void CommandProcess::execute(const QString &shell, const QString &command,const QStringList &parameters)
+void CommandProcess::execute(const QString &command)
 {
-    //mProcess
-    mProcess->start(shell,parameters);
-    mProcess->waitForStarted();
     //mProcess->write("echo off");
     mProcess->write(mData.append(command));
-    mProcess->closeWriteChannel();
+    //mProcess->closeWriteChannel();
     //mProcess->waitForFinished();
 }
 
@@ -108,3 +133,15 @@ void CommandProcess::slotAfterFinished(int exitStatus, int exitCode)
     readStandardError();
 }
 
+void CommandProcess::shutdown()
+{
+    if(mProcess->isOpen()){
+        mProcess->terminate();
+        mProcess->close();
+    }
+}
+
+CommandProcess::~CommandProcess()
+{
+    shutdown();
+}
