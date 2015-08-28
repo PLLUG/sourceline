@@ -5,6 +5,7 @@
 #include <QString>
 
 class CommandManager;
+class FileView;
 
 class FileViewAPI : public QObject
 {
@@ -14,6 +15,8 @@ public:
 
     void setCommandManeger(CommandManager *pCommandManager);
 
+    void setFileView(FileView *pFileView);
+
 signals:
 
 public slots:
@@ -21,6 +24,7 @@ public slots:
 
 private:
     CommandManager *mCommandManager;
+    FileView* mFileView;
 };
 
 #endif // FILEVIEWAPI_H
