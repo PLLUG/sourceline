@@ -49,9 +49,6 @@ public slots:
     void slotLock();
     void slotUnlock();
 
-    void debugCursorPositionChanged();
-    void debugTextChanged();
-    void debugdataChanged(QByteArray data);
     void debugBlockCountChanged(int count);
 
 signals:

@@ -60,28 +60,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(mCmdProcess, SIGNAL(errorOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
 
     //Debug connections
-    connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
-    connect(ui->plainTextEdit, SIGNAL(textChanged()), SLOT(debugTextChanged()));
-    connect(ui->plainTextEdit, SIGNAL(dataChanged(QByteArray)),SLOT(debugdataChanged(QByteArray)));
     connect(ui->plainTextEdit, SIGNAL(blockCountChanged(int)),SLOT(debugBlockCountChanged(int)));
-}
-
-void ConsoleView::debugCursorPositionChanged()
-{
-    //Debug func
-    qDebug() << " ConsoleView::Cursor position changed;" ;
-}
-
-void ConsoleView::debugTextChanged()
-{
-    //Debug func
-    qDebug() << " ConsoleView::Text changed;";
-}
-
-void ConsoleView::debugdataChanged(QByteArray data)
-{
-    //Debug func
-    qDebug() << "ConsoleView:: Data : " << data;
 }
 
 void ConsoleView::debugBlockCountChanged(int count)
@@ -89,7 +68,6 @@ void ConsoleView::debugBlockCountChanged(int count)
     //Debug func
     qDebug() << "ConsoleView::BlockCountChanged to : " << count;
 }
-
 
 /*!
 * \brief ConsoleView::toExecute is function what prepare all to execute the command
