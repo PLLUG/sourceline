@@ -261,7 +261,7 @@ void FileView::slotRightBtnClick()
 void FileView::slotLeftBtnClick()
 {
     QString path = mFileModel->fileInfo(ui->listView->currentIndex()).absoluteFilePath();
-    int indexSlash = path.lastIndexOf("/");
+    int indexSlash = path.lastIndexOf(QDir::fromNativeSeparators("/"));
     cd(path.left(indexSlash+1));
 }
 
