@@ -40,7 +40,7 @@ CommandProcess::CommandProcess(QObject *parent)
 }
 
 /*!
- * \brief CommandProcess::start Process with two arguments shell and shell parameters
+ * \brief CommandProcess::start is func what start Process with two arguments shell and shell parameters
  */
 void CommandProcess::start()
 {
@@ -55,7 +55,7 @@ void CommandProcess::start()
 
 /*!
  * \brief CommandProcess::shell
- * \return
+ * \return shell name in QString
  */
 QString CommandProcess::shell()
 {

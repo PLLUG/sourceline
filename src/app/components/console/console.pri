@@ -26,11 +26,13 @@ HEADERS += \
     $$PWD/consoleview.h \
     $$PWD/console.h \
     $$PWD/commandprocess.h \
+    $$PWD/commandprocessmediator.h \
 
 SOURCES += \
     $$PWD/consoleview.cpp \
     $$PWD/console.cpp \
     $$PWD/commandprocess.cpp \
+    $$PWD/commandprocessmediator.cpp \
 
 FORMS += \
     $$PWD/consoleview.ui \

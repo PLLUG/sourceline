@@ -23,11 +23,8 @@
 
 #include "consoleview.h"
 #include "ui_consoleview.h"
-#include <QProcess>
 #include <QDebug>
-#include <QDir>
-#include <QSysInfo>
-
+#include "commandprocessmediator.h"
 // make input work
 // remove platform dependent ifs +
 // amke Q_PROPERTY for commandprocess +
@@ -43,8 +40,8 @@ ConsoleView::ConsoleView(QWidget *parent) :
     ui(new Ui::ConsoleView)
 {
     mReadOnlyIndicator = "~>";
-    //mReadOnlyIndicator = "";
     mDirPrinted = true;
+    CommandProcessMediator *mediator = new CommandProcessMediator(this);
     mCmdProcess = new CommandProcess(this);
     mCmdProcess->setProperty("shell","C:\\Windows\\System32\\cmd");
     mCmdProcess->setProperty("shellParam",QStringList()<< "/k");
@@ -58,7 +55,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
 
     connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
     connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
-    connect(this, &ConsoleView::commandEntered, mCmdProcess, &CommandProcess::execute);
+    connect(this, &ConsoleView::commandEntered, mediator, &CommandProcessMediator::processConsoleInput);
     connect(mCmdProcess, SIGNAL(standardOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
     connect(mCmdProcess, SIGNAL(errorOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
 
