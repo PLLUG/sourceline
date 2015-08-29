@@ -11,7 +11,9 @@ Dependencies are stored in src/3rdparty folder
 
 ## boost
 Boost was added as a submodule. To get it use:
+```text
 git submodule update --init --recursive --depth 1
+```
 and you will get modular boost into 3rdparty/boost folder
 Refer to git submodules documentation for more information.
 
