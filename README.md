@@ -23,15 +23,22 @@ For example, Qt5 with latest gcc or clang on Linux and Qt5 VS 2013 or Qt5MinGW o
 # Project workflow
 
 ## Directory Structure
+
+```text
 sourceline
-        src
-            3rdparty
-            app
-            extensionlib
-            plugins
-            tools
-            sourceline.pro
-	docs
+├── docs
+└── src
+    ├── app
+    │   ├── 3rdparty
+    │   ├── pluginsupport
+    │   ├── resources
+    │   ├── settings_dialog
+    │   └── ui
+    ├── extensionlib
+    ├── plugin
+    ├──tools
+    └── sourceline.pro
+```
 
 ## Branches, git workflow
 Project has at least the two branches master and development. When adding new feature one creates features/feature_name branch from development branch where feature_name can start with task number. Pull requests with features are merged into development branch. Experiment features are in experiments/feature_name branches.

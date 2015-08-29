@@ -51,6 +51,5 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     revisiontree.ui
 
-INCLUDEPATH += ../src/3rdparty/boost/libs/graph/include \
-               ../src/3rdparty/boost/libs/property_map/include \
-
+INCLUDEPATH += $$_PRO_FILE_PWD_$$/../src/app/3rdparty/boost/libs/graph/include \
+               $$_PRO_FILE_PWD_$$/../src/app/3rdparty/boost/libs/property_map/include \
