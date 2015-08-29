@@ -27,6 +27,7 @@
 #include <boost/graph/iteration_macros.hpp>
 #include <boost/graph/topological_sort.hpp>
 #include <QColor>
+#include <QVariant>
 
 //maybe use labeled_graph where labeles are commit ids (and remove id from property)? - no
 //#include <boost/graph/labeled_graph.hpp>
@@ -45,19 +46,6 @@ std::ostream& operator<<(std::ostream& os, const QVariant& pVariant)
 std::istream& operator>>(std::istream& is, const QVariant&) //(not supported)
 {
     return is;
-}
-
-template<typename Value, typename Key>
-Value
-get_copied(const std::string& name, const boost::dynamic_properties& dp, const Key& key)
-{
-    for (boost::dynamic_properties::const_iterator i = dp.lower_bound(name);
-         i != dp.end() && i->first == name; ++i) {
-        if (i->second->key() == typeid(key))
-            return boost::any_cast<Value>(i->second->get(key));
-    }
-
-    BOOST_THROW_EXCEPTION(boost::dynamic_get_failure(name));
 }
 
 RevisionModel::RevisionModel(QObject *parent):
@@ -213,7 +201,9 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
         {
             const std::string property = mPropertyNames.at(index.column()-DefaultColumnsCount);
             const std::string &name = mGraph[v].name;
-            return get_copied<QVariant>(property, mProperties, name);
+            QVariant (*pOverloadedGetFunction)(const std::string&, const boost::dynamic_properties&, const std::string& ) =
+                    &boost::get<QVariant>;//can not call directly - compile error
+            return pOverloadedGetFunction(property, mProperties, name);
         }
     }
     else if (Qt::BackgroundColorRole == role)
@@ -224,7 +214,6 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
             return QColor(Qt::white);
     }
     return QVariant();
-
 }
 
 /*!

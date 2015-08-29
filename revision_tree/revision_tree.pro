@@ -51,4 +51,6 @@ HEADERS  += mainwindow.h \
 FORMS    += mainwindow.ui \
     revisiontree.ui
 
-INCLUDEPATH += D:/boost_1_58_0
+INCLUDEPATH += ../src/3rdparty/boost/libs/graph/include \
+               ../src/3rdparty/boost/libs/property_map/include \
+
