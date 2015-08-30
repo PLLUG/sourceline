@@ -48,8 +48,6 @@ public slots:
     void slotLock();
     void slotUnlock();
 
-    void debugBlockCountChanged(int count);
-
 signals:
     void commandEntered(QString cmd);
 
@@ -57,16 +55,10 @@ private:
     void startProcess();
     QByteArray clearAppend(const QString &pTmp);
 
-private slots:
-    void slotPrintWorkingDir(const QString &pDir = QString());
-
 
 private:
 
-    bool mDirPrinted;
     QByteArray mData;
-    QByteArray mReadOnlyIndicator;
-    QString mPath;
     Ui::ConsoleView *ui;
 };
 

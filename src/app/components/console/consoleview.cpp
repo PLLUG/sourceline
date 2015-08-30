@@ -39,13 +39,12 @@ ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConsoleView)
 {
-    mReadOnlyIndicator = "~>";
-    mDirPrinted = true;
     CommandProcessMediator *mediator = new CommandProcessMediator(this);
 
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
-    ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
+    ui->plainTextEdit->putData(clearAppend("\t<SL-CONSOLE>\n\nINTRO:\n*If you double click console will be cleared,\n"
+                                           "*Do not put exit command , it will close console and you will not be able to use that.\n\n"));
 
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
 
@@ -54,15 +53,6 @@ ConsoleView::ConsoleView(QWidget *parent) :
     connect(this, &ConsoleView::commandEntered, mediator, &CommandProcessMediator::processConsoleInput, Qt::UniqueConnection);
     connect(mediator, &CommandProcessMediator::processStandardOutput, this, &ConsoleView::slotOut, Qt::UniqueConnection);
     connect(mediator, &CommandProcessMediator::processErrorOutput, this, &ConsoleView::slotOut, Qt::UniqueConnection);
-
-    //Debug connections
-    connect(ui->plainTextEdit, SIGNAL(blockCountChanged(int)),SLOT(debugBlockCountChanged(int)));
-}
-
-void ConsoleView::debugBlockCountChanged(int count)
-{
-    //Debug func
-    qDebug() << "ConsoleView::BlockCountChanged to : " << count;
 }
 
 /*!
@@ -84,27 +74,17 @@ QString ConsoleView::osInfo() const
     return QSysInfo::productType();
 }
 
-/*!
- * function what return current PATH for QProcess::setWorkingDirectory
- */
-const QString ConsoleView::consolePath()
-{
-    return mPath;
-}
 
 void ConsoleView::slotExec(QString cmd)
 {
     cmd +='\n';
-    mDirPrinted = false;
     toExecute(cmd);
 }
 
 void ConsoleView::slotOut(QByteArray out)
 {
-    if(!out.isEmpty())
-        ui->plainTextEdit->putData(" RESULT : "
-                                   + out
-                                   + mReadOnlyIndicator);
+    if(out.at(0) != '\n')
+        ui->plainTextEdit->putData(out);
 }
 
 void ConsoleView::slotLock()
@@ -121,12 +101,6 @@ QByteArray ConsoleView::clearAppend(const QString &pTmp)
 {
     mData.clear();
     return mData.append(pTmp);
-}
-
-void ConsoleView::slotPrintWorkingDir(const QString &pDir)
-{
-    ui->plainTextEdit->putData(clearAppend(pDir + mReadOnlyIndicator));
-    mDirPrinted = true;
 }
 
 ConsoleView::~ConsoleView()
