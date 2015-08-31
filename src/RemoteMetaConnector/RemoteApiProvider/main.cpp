@@ -12,8 +12,11 @@ int main(int argc, char *argv[])
 
     MainWindow w;
     w.show();
+
     QProcess client;
-    client.start("C:/sourceline/src/build-remotemetaconnector-Desktop_Qt_5_5_0_MinGW_32bit-Debug/RemoteApiClient/debug/RemoteApiClient.exe");
+    QStringList args;
+    args << "--id=1234567890";
+    client.start("C:/sourceline/src/build-remotemetaconnector-Desktop_Qt_5_5_0_MinGW_32bit-Debug/RemoteApiClient/debug/RemoteApiClient.exe", args);
 
     return a.exec();
 }

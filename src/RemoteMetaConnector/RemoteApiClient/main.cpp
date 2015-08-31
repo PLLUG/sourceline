@@ -4,6 +4,7 @@
 #include "texteditinterface.h"
 #include "remoteapiclient.h"
 #include <QDebug>
+#include <QCommandLineParser>
 
 int main(int argc, char *argv[])
 {
@@ -15,7 +16,6 @@ int main(int argc, char *argv[])
 
     QObject::connect(mInterface, &TextEditInterface::invoked, mRemoteClient, &RemoteApiClient::slotInvoke, Qt::UniqueConnection);
     mRemoteClient->connectToProvider("sl");
-    while(1)
     mInterface->setText("Text test from client . ");
 
     return a.exec();
