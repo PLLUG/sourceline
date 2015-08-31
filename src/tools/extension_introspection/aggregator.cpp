@@ -1,7 +1,4 @@
 #include "aggregator.h"
-#include "pluginapi.h"
-#include "testcommand.h"
-
 
 Aggregator::Aggregator(QObject *parent): QObject(parent)
 {
@@ -16,5 +13,8 @@ Aggregator::~Aggregator()
  */
 void Aggregator::addObject(QObject *pObj)
 {
-    pObj->setParent(this);
+    if (!mContents.contains(pObj))
+    {
+        mContents.append(pObj);
+    }
 }

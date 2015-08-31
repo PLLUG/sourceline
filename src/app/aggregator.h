@@ -37,6 +37,9 @@ public:
 
     template <typename T>
     T* object();
+
+private:
+    QObjectList mContents;
 };
 
 /*!
@@ -48,10 +51,9 @@ template <typename T>
 T* Aggregator::object()
 {
     T * rObj = nullptr;
-    QObjectList children = this->children();
-    for(int i = 0; i < children.count(); i++)
-    {        
-        if(rObj = qobject_cast<T*>(children[i]))
+    for (QObject *o: mContents)
+    {
+        if(rObj = qobject_cast<T*>(o))
         {
             break;
         }

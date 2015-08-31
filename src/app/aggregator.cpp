@@ -13,5 +13,8 @@ Aggregator::~Aggregator()
  */
 void Aggregator::addObject(QObject *pObj)
 {
-    pObj->setParent(this);
+    if (!mContents.contains(pObj))
+    {
+        mContents.append(pObj);
+    }
 }

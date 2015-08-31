@@ -26,9 +26,6 @@
 
 #include <QObject>
 
-class PluginAPI;
-class TestCommand;
-
 class Aggregator: public QObject
 {
     Q_OBJECT
@@ -39,8 +36,10 @@ public:
     void addObject(QObject *pObj);
 
     template <typename T>
-    T* object();    
+    T* object();
 
+private:
+    QObjectList mContents;
 };
 
 /*!
@@ -51,8 +50,8 @@ public:
 template <typename T>
 T* Aggregator::object()
 {
-    T* rObj = nullptr;
-    for (QObject *o: children())
+    T * rObj = nullptr;
+    for (QObject *o: mContents)
     {
         if(rObj = qobject_cast<T*>(o))
         {
