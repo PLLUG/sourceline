@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
     qDebug() << "Client started";
 
     QObject::connect(mInterface, &TextEditInterface::invoked, mRemoteClient, &RemoteApiClient::slotInvoke, Qt::UniqueConnection);
-    mRemoteClient->connectToProvider("sl");
+    mRemoteClient->connectToProvider(string);
     mInterface->setText(string);
 
     return a.exec();
