@@ -7,7 +7,7 @@ http://hostedredmine.com/projects/source_line
 
 # Dependencies
 
-Dependencies are stored in src/3rdparty folder
+Dependencies are stored in src/app/3rdparty folder
 
 ## boost
 Boost was added as a submodule. To get it use:
