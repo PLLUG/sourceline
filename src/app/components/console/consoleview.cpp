@@ -23,62 +23,37 @@
 
 #include "consoleview.h"
 #include "ui_consoleview.h"
-#include <QProcess>
 #include <QDebug>
-#include <QDir>
-#include <QSysInfo>
+#include "commandprocessmediator.h"
+// make input work
+// remove platform dependent ifs +
+// amke Q_PROPERTY for commandprocess +
+//    * pommand interpreter
+// make methods to commandprocess
+//     * start() +
+//     * shutdown() +
+// all console input send to process stdin
+
 
 ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ConsoleView)
 {
-    mReadOnlyIndicator = "~>";
-    //mReadOnlyIndicator = "";
-    mDirPrinted = true;
-    mCmdProcess = new CommandProcess(this);
+    CommandProcessMediator *mediator = new CommandProcessMediator(this);
+
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
-    ui->plainTextEdit->putData(clearAppend(mReadOnlyIndicator));
+    ui->plainTextEdit->putData(clearAppend("\t<SL-CONSOLE>\n\nINTRO:\n*If you double click console will be cleared,\n"
+                                           "*Do not put exit command , it will close console and you will not be able to use that.\n\n"));
 
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
 
-    connect(mCmdProcess, SIGNAL(started()), this, SLOT(slotLock()));
-    connect(mCmdProcess, SIGNAL(finished()), this, SLOT(slotUnlock()));
-    connect(this, SIGNAL(commandEntered(QString,QString,QStringList)), mCmdProcess, SLOT(execute(QString,QString,QStringList)));
-    connect(mCmdProcess, SIGNAL(standardOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
-    connect(mCmdProcess, SIGNAL(errorOutput(QByteArray)), this, SLOT(slotOut(QByteArray)));
-
-    //Debug connections
-    connect(ui->plainTextEdit, SIGNAL(cursorPositionChanged()), SLOT(debugCursorPositionChanged()));
-    connect(ui->plainTextEdit, SIGNAL(textChanged()), SLOT(debugTextChanged()));
-    connect(ui->plainTextEdit, SIGNAL(dataChanged(QByteArray)),SLOT(debugdataChanged(QByteArray)));
-    connect(ui->plainTextEdit, SIGNAL(blockCountChanged(int)),SLOT(debugBlockCountChanged(int)));
+    connect(mediator, &CommandProcessMediator::processStarted, this, &ConsoleView::slotLock);
+    connect(mediator, &CommandProcessMediator::processFinished, this, &ConsoleView::slotUnlock);
+    connect(this, &ConsoleView::commandEntered, mediator, &CommandProcessMediator::processConsoleInput, Qt::UniqueConnection);
+    connect(mediator, &CommandProcessMediator::processStandardOutput, this, &ConsoleView::slotOut, Qt::UniqueConnection);
+    connect(mediator, &CommandProcessMediator::processErrorOutput, this, &ConsoleView::slotOut, Qt::UniqueConnection);
 }
-
-void ConsoleView::debugCursorPositionChanged()
-{
-    //Debug func
-    qDebug() << " ConsoleView::Cursor position changed;" ;
-}
-
-void ConsoleView::debugTextChanged()
-{
-    //Debug func
-    qDebug() << " ConsoleView::Text changed;";
-}
-
-void ConsoleView::debugdataChanged(QByteArray data)
-{
-    //Debug func
-    qDebug() << "ConsoleView:: Data : " << data;
-}
-
-void ConsoleView::debugBlockCountChanged(int count)
-{
-    //Debug func
-    qDebug() << "ConsoleView::BlockCountChanged to : " << count;
-}
-
 
 /*!
 * \brief ConsoleView::toExecute is function what prepare all to execute the command
@@ -87,22 +62,7 @@ void ConsoleView::debugBlockCountChanged(int count)
 void ConsoleView::toExecute(const QString &pCommand) //as command use @cd C:\Users&ls -R@ or @tree C:\ /A@
 {
     ui->plainTextEdit->putData("\n");
-
-    QString shell;
-    QStringList args;
-    if(osInfo()=="windows")
-    {
-        //args << "/c"  << pCommand;
-        args << "/k" << "echo off";
-        shell = "C:\\Windows\\System32\\cmd";
-        emit commandEntered(shell, pCommand, args);
-    }
-
-    else if(QSysInfo::kernelType()=="linux")
-    {
-        shell = "sh";
-        emit commandEntered(shell, pCommand, args);
-    }
+    emit commandEntered(pCommand);
 }
 
 /*!
@@ -114,27 +74,17 @@ QString ConsoleView::osInfo() const
     return QSysInfo::productType();
 }
 
-/*!
- * function what return current PATH for QProcess::setWorkingDirectory
- */
-const QString ConsoleView::consolePath()
-{
-    return mPath;
-}
 
 void ConsoleView::slotExec(QString cmd)
 {
     cmd +='\n';
-    mDirPrinted = false;
     toExecute(cmd);
 }
 
 void ConsoleView::slotOut(QByteArray out)
 {
-    if(!out.isEmpty())
-        ui->plainTextEdit->putData(" RESULT : "
-                                   + out
-                                   + mReadOnlyIndicator);
+    if(out.at(0) != '\n')
+        ui->plainTextEdit->putData(out);
 }
 
 void ConsoleView::slotLock()
@@ -151,12 +101,6 @@ QByteArray ConsoleView::clearAppend(const QString &pTmp)
 {
     mData.clear();
     return mData.append(pTmp);
-}
-
-void ConsoleView::slotPrintWorkingDir(const QString &pDir)
-{
-    ui->plainTextEdit->putData(clearAppend(pDir + mReadOnlyIndicator));
-    mDirPrinted = true;
 }
 
 ConsoleView::~ConsoleView()

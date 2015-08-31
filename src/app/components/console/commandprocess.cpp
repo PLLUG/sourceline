@@ -36,23 +36,69 @@ CommandProcess::CommandProcess(QObject *parent)
     connect(mProcess, SIGNAL(finished(int)), this, SIGNAL(finished()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(readyReadStandardOutput()), this, SLOT(readStandardOutput()), Qt::UniqueConnection);
     connect(mProcess, SIGNAL(readyReadStandardError()), this, SLOT(readStandardError()), Qt::UniqueConnection);
-    connect(mProcess, SIGNAL(finished(int,QProcess::ExitStatus)), this, SLOT(slotAfterFinished(int,int)));
+    connect(mProcess, SIGNAL(finished(int)), this, SLOT(slotAfterFinished()));
+}
+
+/*!
+ * \brief CommandProcess::start is func what start Process with two arguments shell and shell parameters
+ */
+void CommandProcess::start()
+{
+    //mProcess
+    if(!mProcess->isOpen())
+    {
+        mProcess->start(mShell,mShellParam);
+        mProcess->waitForStarted();
+    }
+    else{}
+}
+
+/*!
+ * \brief CommandProcess::shell
+ * \return shell name in QString
+ */
+QString CommandProcess::shell()
+{
+    return mShell;
+}
+
+/*!
+ * \brief CommandProcess::setShell
+ * \param shell
+ */
+void CommandProcess::setShell(const QString &shell)
+{
+    mShell = shell;
+}
+
+/*!
+ * \brief CommandProcess::shellParam
+ * \return
+ */
+QStringList CommandProcess::shellParam()
+{
+    return mShellParam;
+}
+
+
+/*!
+ * \brief CommandProcess::setShellParam
+ * \param shellParam
+ */
+void CommandProcess::setShellParam(const QStringList &shellParam)
+{
+    mShellParam = shellParam;
 }
 
 /*!
  * \brief CommandProcess::execute
- * \param shell
  * \param command
- * \param parameters
  */
-void CommandProcess::execute(const QString &shell, const QString &command,const QStringList &parameters)
+void CommandProcess::execute(const QString &command)
 {
-    //mProcess
-    mProcess->start(shell,parameters);
-    mProcess->waitForStarted();
     //mProcess->write("echo off");
     mProcess->write(mData.append(command));
-    mProcess->closeWriteChannel();
+    //mProcess->closeWriteChannel();
     //mProcess->waitForFinished();
 }
 
@@ -78,12 +124,22 @@ void CommandProcess::readStandardError()
     }
 }
 
-void CommandProcess::slotAfterFinished(int exitStatus, int exitCode)
+void CommandProcess::slotAfterFinished()
 {
-    Q_UNUSED(exitStatus)
-    Q_UNUSED(exitCode)
     mProcess->close();
     readStandardOutput();
     readStandardError();
 }
 
+void CommandProcess::shutdown()
+{
+    if(mProcess->isOpen()){
+        mProcess->terminate();
+        mProcess->close();
+    }
+}
+
+CommandProcess::~CommandProcess()
+{
+    shutdown();
+}

@@ -1,10 +1,8 @@
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
-***    Copyright (C) 2014  by                                                ***
-***            Yura Olenych (yura.olenych@users.sourceforge.net)             ***
+***    Copyright (C) 2015  by                                                ***
 ***            Olexandr Lynda (sanya.l9519@gmail.com)                        ***
-***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
 ***    SourceLine is free software: you can redistribute it and/or modify    ***
@@ -22,44 +20,34 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#ifndef CONSOLEVIEW_H
-#define CONSOLEVIEW_H
 
-#include <QWidget>
+#ifndef COMMANDPROCESSMEDIATOR_H
+#define COMMANDPROCESSMEDIATOR_H
 
-namespace Ui {
-class ConsoleView;
-}
-class QProcess;
+#include <QObject>
+#include "commandprocess.h"
 
-class ConsoleView : public QWidget
+class CommandProcessMediator : public QObject
 {
     Q_OBJECT
-
 public:
-    explicit ConsoleView(QWidget *parent = 0);
-    ~ConsoleView();
-    void toExecute(const QString &pCommand);
-    const QString consolePath();
-    QString osInfo() const;
-public slots:
-    void slotExec(QString cmd);
-    void slotOut(QByteArray out);
-    void slotLock();
-    void slotUnlock();
+    explicit CommandProcessMediator(QObject *parent = 0);
 
 signals:
-    void commandEntered(QString cmd);
+    void execute(QString);
+    void commandMapped(QString commandId);
+    void processStandardOutput(QByteArray out);
+    void processErrorOutput(QByteArray out);
+    void processStarted();
+    void processFinished();
+
+public slots:
+    void processConsoleInput(QString input);
+
+    void registerCommand(QString commandId, QString inputPattern);
 
 private:
-    void startProcess();
-    QByteArray clearAppend(const QString &pTmp);
-
-
-private:
-
-    QByteArray mData;
-    Ui::ConsoleView *ui;
+     CommandProcess *mProcess;
 };
 
-#endif // CONSOLEVIEW_H
+#endif // COMMANDPROCESSMEDIATOR_H
