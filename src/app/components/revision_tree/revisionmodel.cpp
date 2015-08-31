@@ -119,6 +119,8 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
     {
         boost::add_edge(v_parent, v_new, mGraph);
     }
+    beginResetModel();
+    endResetModel();
     //TODO: take to account that vertices were already sorted
     //perform topological sort (or some other sort later)
     sorted_vertices.clear();
@@ -145,6 +147,8 @@ void RevisionModel::putProperty(const std::string &pRecepientId, const std::stri
         mProperties.property(property,associativePropertyMap);
         mPropertyNames.push_back(property);
     }
+    beginResetModel();
+    endResetModel();
     put(property,mProperties,pRecepientId,value);
 }
 

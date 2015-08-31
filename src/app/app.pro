@@ -36,6 +36,7 @@ TARGET = SourceLine
 include($$PWD/components/console/console.pri)
 include($$PWD/components/example_component/example_component.pri)
 include($$PWD/components/file_view/FileView.pri)
+include($$PWD/components/revision_tree/revision_tree.pri)
 
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
@@ -51,7 +52,8 @@ HEADERS += \
     workplace.h \
     transitionsignals.h \
     ui/errordialog.h \
-    ui/contentfortab.h
+    ui/contentfortab.h \
+    ui/revisiontreedock.h
 
 SOURCES += \
     main.cpp \
@@ -64,7 +66,8 @@ SOURCES += \
     ui/genericcomponent.cpp \
     workplace.cpp \
     ui/errordialog.cpp \
-    ui/contentfortab.cpp
+    ui/contentfortab.cpp \
+    ui/revisiontreedock.cpp
 
 # Application UI
 HEADERS += \
@@ -74,7 +77,6 @@ HEADERS += \
     ui/editorview.h \
     ui/genericdockwidget.h \
     ui/guidefs.h \
-    ui/historytree.h \
     ui/mainwindow.h \
     ui/appsettingsdialog.h \
     ui/viewsettingpage.h \
@@ -94,7 +96,6 @@ SOURCES += \
     ui/customtabbar.cpp \
     ui/editorview.cpp \
     ui/genericdockwidget.cpp \
-    ui/historytree.cpp \
     ui/mainwindow.cpp \
     ui/appsettingsdialog.cpp \
     ui/viewsettingpage.cpp \
@@ -124,7 +125,8 @@ FORMS += \
     ui/passworddialog.ui \
     ui/clonedialog.ui \
     ui/errordialog.ui \
-    ui/contentfortab.ui
+    ui/contentfortab.ui \
+    ui/revisiontreedock.ui
 
 # Application Settings
 HEADERS += \

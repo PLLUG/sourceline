@@ -38,4 +38,10 @@ HEADERS  += \
 
 FORMS    += \
     $$PWD/revisiontree.ui
+
+INCLUDEPATH += $$PWD
+
+INCLUDEPATH += $$_PRO_FILE_PWD_/3rdparty/boost \
+               $$_PRO_FILE_PWD_/3rdparty/boost/libs/graph/include \
+               $$_PRO_FILE_PWD_/3rdparty/boost/libs/property_map/include \
     

@@ -33,11 +33,14 @@
 #include <QScrollArea>
 
 RevisionTree::RevisionTree(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::RevisionTree),
-    mRowHeight{30}
+    QWidget(parent)
+    ,ui{new Ui::RevisionTree}
+    ,mRowHeight{30}
+  ,mModel{new RevisionModel{this}}
 {
     ui->setupUi(this);
+
+    ui->revisionTableView->setModel(mModel);
 
     ui->revisionTableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->scrollArea->verticalScrollBar()->setHidden(true);
@@ -58,13 +61,11 @@ RevisionTree::~RevisionTree()
     delete ui;
 }
 
-void RevisionTree::setModel(RevisionModel *model)
+void RevisionTree::read()
 {
-    ui->revisionTableView->setModel(model);
-    ui->revisionTreeWidget->setGraph(model->graph());
-    mGraph = model->graph();
+    ui->revisionTreeWidget->setGraph(mModel->graph());
+    mGraph = mModel->graph();
     clearGraph();
-    read();
     resize(width(),ui->revisionTreeWidget->height());
 
     int rowNum = ui->revisionTableView->model()->rowCount();
@@ -78,10 +79,6 @@ void RevisionTree::clearGraph()
 {
 }
 
-void RevisionTree::read()
-{
-}
-
 int RevisionTree::rowHeight() const
 {
     return mRowHeight;
@@ -90,6 +87,16 @@ int RevisionTree::rowHeight() const
 void RevisionTree::setRowHeight(int rowHeight)
 {
     mRowHeight = rowHeight;
+}
+
+void RevisionTree::addNode(const std::string &pParentID, const RevisionNode &pNodeInfo)
+{
+    mModel->addNode(pParentID,pNodeInfo);
+}
+
+void RevisionTree::putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value)
+{
+    mModel->putProperty(pRecepientId,property,value);
 }
 
 void RevisionTree::slotGraphScrollChanged(int value)
@@ -109,4 +116,3 @@ void RevisionTree::slotTableScrollChanged(int value)
     connect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&RevisionTree::slotGraphScrollChanged,Qt::UniqueConnection);
 }
-

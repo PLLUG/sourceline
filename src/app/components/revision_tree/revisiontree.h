@@ -1,5 +1,5 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#ifndef REVISIONTREE_H
+#define REVISIONTREE_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -22,28 +22,45 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include <QMainWindow>
-class QProcess;
-
-class RevisionModel;
+#include <QWidget>
+#include "revisionmodel.h"
+#include <vector>
 
 namespace Ui {
-class MainWindow;
+class RevisionTree;
 }
-
-class MainWindow : public QMainWindow
+/*!
+ * \brief The RevisionTree class Draws 'revision tree' (graph).
+ */
+class RevisionTree : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit MainWindow(QWidget *parent = 0);
-    ~MainWindow();
+    explicit RevisionTree(QWidget *parent = 0);
+    ~RevisionTree();
+
+    void read();
+
+    int rowHeight() const;
+    void setRowHeight(int rowHeight);
+
+    void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
+    void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
+
+private slots:
+    void slotTableScrollChanged(int value);
+    void slotGraphScrollChanged(int value);
 
 private:
-    Ui::MainWindow *ui;
-    RevisionModel *mModel;
+    void clearGraph();
 
-    QProcess *mProcess;
+private:
+    Ui::RevisionTree *ui;
+
+    revision_graph mGraph;
+    int mRowHeight;
+    RevisionModel *mModel;
 };
 
-#endif // MAINWINDOW_H
+#endif // REVISIONTREE_H
