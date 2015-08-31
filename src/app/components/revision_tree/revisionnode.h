@@ -1,11 +1,10 @@
-#ifndef AGGREGATOR_H
-#define AGGREGATOR_H
-
+#ifndef REVISIONNODE_H
+#define REVISIONNODE_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2015  by                                                ***
-***                 Mykhailo Voronovskii (mvoronovskii96@gmail.com)          ***
+***            Halyna Butovych (galynabutovych@gmail.com)                    ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -23,40 +22,16 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-
-#include <QObject>
-
-class Aggregator: public QObject
-{
-    Q_OBJECT
-
-public:
-    explicit Aggregator(QObject *parent = nullptr);
-    ~Aggregator();
-    void addObject(QObject *pObj);
-
-    template <typename T>
-    T* object();
-};
+#include <string>
+#include <QDateTime>
 
 /*!
- *\brief Template getter.
- * Allow to get pointer on Aggregator's children.
- * If Aggregator doesn't have suitable children, getter returns null pointer.
+ * \brief The RevisionNode struct Represents properties of the commit.
  */
-template <typename T>
-T* Aggregator::object()
+struct RevisionNode
 {
-    T * rObj = nullptr;
-    QObjectList children = this->children();
-    for(int i = 0; i < children.count(); i++)
-    {        
-        if((rObj = qobject_cast<T*>(children[i])))
-        {
-            break;
-        }
-    }
-    return rObj;
-}
+    std::string name;
+    QDateTime created;//TODO: remove
+};
 
-#endif // AGGREGATOR_H
+#endif // REVISIONNODE_H

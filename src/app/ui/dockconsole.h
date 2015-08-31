@@ -16,7 +16,7 @@ class DockConsole : public GenericDockWidget
 public:
     explicit DockConsole(QWidget *parent = 0);
     ~DockConsole();
-    DockTypes::DockType type() const;
+    DockType type() const;
 private:
     Ui::DockConsole *ui;
 public slots:

@@ -57,6 +57,6 @@ void CommandComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPl
     Q_UNUSED(pPluginInfo);
     if (Command* lCommand = qobject_cast<Command*>(pComponent))
     {
-        mActionManager->add(HelpMenuGroup, actionFromCommand(lCommand));
+        mActionManager->add(MenuGroup::HelpMenuGroup, actionFromCommand(lCommand));
     }
 }

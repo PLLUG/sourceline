@@ -10,14 +10,15 @@ DockConsole::DockConsole(QWidget *parent) :
 {
     ui->setupUi(this);
 }
+
 DockConsole::~DockConsole()
 {
     delete ui;
 }
 
-DockTypes::DockType DockConsole::type() const
+DockType DockConsole::type() const
 {
-    return DockTypes::Console;
+    return DockType::Console;
 }
 
 void DockConsole::slotSetPage(int pPage)

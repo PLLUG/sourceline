@@ -212,7 +212,7 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 {
     UserAction *lActionOpen = new UserAction(tr("&Open Repository..."), mMainWindow);
     // TASK: add implementation for opening existing repository
-    mActionManager->add(FileMenuGroup, lActionOpen);
+    mActionManager->add(MenuGroup::FileMenuGroup, lActionOpen);
 
     UserAction *lActionAddNewWorkplace = new UserAction(tr("&New Workplace"), this);
     connect(lActionAddNewWorkplace, SIGNAL(triggered()), pMainWindow, SLOT(slotAddNewWorkplace()));
@@ -220,29 +220,29 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 
     UserAction *lActionQuit = new UserAction(tr("&Quit"), this);
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->add(FileMenuGroup, lActionQuit);
+    mActionManager->add(MenuGroup::FileMenuGroup, lActionQuit);
 
     UserAction *lActionAboutSL = new UserAction(tr("&About SourseLine..."), this);
     connect(lActionAboutSL, SIGNAL(triggered()), mAboutDialog, SLOT(show()), Qt::UniqueConnection);
-    mActionManager->add(HelpMenuGroup, lActionAboutSL);
+    mActionManager->add(MenuGroup::HelpMenuGroup, lActionAboutSL);
 
     UserAction *lActionPlugins = new UserAction(tr("&Plugins Settings"), this);
     connect(lActionPlugins, SIGNAL(triggered()), mPluginSettingsMediator, SLOT(slotExecPluginSettings()));
-    mActionManager->add(HelpMenuGroup, lActionPlugins);
+    mActionManager->add(MenuGroup::HelpMenuGroup, lActionPlugins);
 
     UserAction *lActionSettings = new UserAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
-    mActionManager->add(ViewMenuGroup, lActionSettings);
+    mActionManager->add(MenuGroup::ViewMenuGroup, lActionSettings);
 }
 
 void ApplicationBuilder::createAppMenus()
 {
     DirectOrderSortingStrategy* lDirectOrderSortingStrategy = new DirectOrderSortingStrategy;
 
-    mActionManager->setMenuCreationStategy(FileMenuGroup, lDirectOrderSortingStrategy);
-    mActionManager->setMenuCreationStategy(ViewMenuGroup, lDirectOrderSortingStrategy);
-    mActionManager->setMenuCreationStategy(EditMenuGroup, lDirectOrderSortingStrategy);
-    mActionManager->setMenuCreationStategy(HelpMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::FileMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::ViewMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::EditMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::HelpMenuGroup, lDirectOrderSortingStrategy);
     mMainMenuBuilder->initMenu();
 }
 

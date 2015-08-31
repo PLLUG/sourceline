@@ -19,7 +19,7 @@ public:
      *  Also it could be used for checking what type of widgets dock contains.
      * \return Type of dock.
      */
-    virtual DockTypes::DockType type() const = 0;
+    virtual DockType type() const = 0;
 
     /*!
      * \brief Adds page to dock.

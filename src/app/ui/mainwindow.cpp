@@ -62,19 +62,19 @@ void MainWindow::CloseWindow()
 }
 
 void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
- {
-     switch (reason) {
-     case QSystemTrayIcon::DoubleClick:
-     {
-         this->show();
-         this->showNormal();
-         this->activateWindow();
-         this->raise();
-     }
-     default:
-         ;
-     }
- }
+{
+    switch (reason) {
+    case QSystemTrayIcon::DoubleClick:
+    {
+        this->show();
+        this->showNormal();
+        this->activateWindow();
+        this->raise();
+    }
+    default:
+        ;
+    }
+}
 
 void MainWindow::slotQuit()
 {

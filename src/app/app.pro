@@ -23,6 +23,7 @@
 
 TEMPLATE = app
 QT += widgets
+CONFIG += c++11
 
 # Pro file is a part of source line project structure
 CONFIG += \
@@ -35,6 +36,7 @@ TARGET = SourceLine
 include($$PWD/components/console/console.pri)
 include($$PWD/components/example_component/example_component.pri)
 include($$PWD/components/file_view/FileView.pri)
+include($$PWD/components/revision_tree/revision_tree.pri)
 
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
@@ -42,24 +44,6 @@ INCLUDEPATH += $$_PRO_FILE_PWD_
 HEADERS += \
     applicationbuilder.h \
     progresshandler.h \
-    ui/revisionview.h \
-    ui/revisionView/branch.h \
-    ui/revisionView/createtree.h \
-    ui/revisionView/creator.h \
-    ui/revisionView/graphfield.h \
-    ui/revisionView/node.h \
-    ui/revisionView/parameters.h \
-    ui/revisionView/revisionitem.h \
-    ui/revisionView/revisionnode.h \
-    ui/revisionView/revisiontablemodel.h \
-    ui/revisionView/view/abstractgraphicsview.h \
-    ui/revisionView/view/abstractrevisiondelegate.h \
-    ui/revisionView/view/bubble.h \
-    ui/revisionView/view/graphicsview.h \
-    ui/revisionView/view/modelindex.h \
-    ui/revisionView/view/revisiongrid.h \
-    ui/revisionView/view/revisionnodeitem.h \
-    ui/revisionView/view/simpleline.h \
     ui/passworddialog.h \
     ui/clonedialog.h \
     ui/tabsapi.h \
@@ -68,29 +52,13 @@ HEADERS += \
     workplace.h \
     transitionsignals.h \
     ui/errordialog.h \
-    ui/contentfortab.h
+    ui/contentfortab.h \
+    ui/revisiontreedock.h
 
 SOURCES += \
     main.cpp \
     applicationbuilder.cpp \
     progresshandler.cpp \
-    ui/revisionview.cpp \
-    ui/revisionView/branch.cpp \
-    ui/revisionView/createtree.cpp \
-    ui/revisionView/creator.cpp \
-    ui/revisionView/graphfield.cpp \
-    ui/revisionView/node.cpp \
-    ui/revisionView/revisionitem.cpp \
-    ui/revisionView/revisionnode.cpp \
-    ui/revisionView/revisiontablemodel.cpp \
-    ui/revisionView/view/abstractgraphicsview.cpp \
-    ui/revisionView/view/abstractrevisiondelegate.cpp \
-    ui/revisionView/view/bubble.cpp \
-    ui/revisionView/view/graphicsview.cpp \
-    ui/revisionView/view/modelindex.cpp \
-    ui/revisionView/view/revisiongrid.cpp \
-    ui/revisionView/view/revisionnodeitem.cpp \
-    ui/revisionView/view/simpleline.cpp \
     ui/passworddialog.cpp \
     ui/clonedialog.cpp \
     ui/tabsapi.cpp \
@@ -98,7 +66,8 @@ SOURCES += \
     ui/genericcomponent.cpp \
     workplace.cpp \
     ui/errordialog.cpp \
-    ui/contentfortab.cpp
+    ui/contentfortab.cpp \
+    ui/revisiontreedock.cpp
 
 # Application UI
 HEADERS += \
@@ -108,9 +77,7 @@ HEADERS += \
     ui/editorview.h \
     ui/genericdockwidget.h \
     ui/guidefs.h \
-    ui/historytree.h \
     ui/mainwindow.h \
-    ui/revisiontable.h \
     ui/appsettingsdialog.h \
     ui/viewsettingpage.h \
     ui/dialogplugins.h \
@@ -129,9 +96,7 @@ SOURCES += \
     ui/customtabbar.cpp \
     ui/editorview.cpp \
     ui/genericdockwidget.cpp \
-    ui/historytree.cpp \
     ui/mainwindow.cpp \
-    ui/revisiontable.cpp \
     ui/appsettingsdialog.cpp \
     ui/viewsettingpage.cpp \
     ui/dialogplugins.cpp \
@@ -149,9 +114,7 @@ FORMS += \
     ui/customtabbar.ui \
     ui/editorview.ui \
     ui/files.ui \
-    ui/historytree.ui \
     ui/mainwindow.ui \
-    ui/revisiontable.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui \
@@ -160,10 +123,10 @@ FORMS += \
     ui/plugininfodialog.ui \
     ui/dockconsole.ui \
     ui/passworddialog.ui \
-    ui/revisionview.ui \
     ui/clonedialog.ui \
     ui/errordialog.ui \
-    ui/contentfortab.ui
+    ui/contentfortab.ui \
+    ui/revisiontreedock.ui
 
 # Application Settings
 HEADERS += \
@@ -196,9 +159,6 @@ SOURCES += \
     pluginsupport/supliers/settingspagesupplier.cpp \
     pluginsupport/supliers/commandcomponentsupplier.cpp
 
-SOURCES +=
-HEADERS +=
-
 # Extension support library
 include(./../extensionlib/extensionlib.pri)
 
@@ -211,6 +171,5 @@ RC_FILE += \
 
 OTHER_FILES +=
 
-SUBDIRS += \
-    ui/revisionView/revTree.pro
+
 

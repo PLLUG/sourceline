@@ -2,23 +2,20 @@
 #define GUIDEFS_H
 #include <QObject>
 #include <QString>
+#include <array>
 
 /*!
  * \file guidefs.h
  */
 
-namespace DockTypes
-{
-    enum DockType {
-        UknownType = 0,
-        FileView,
-        RevisionTable,
-        HistoryTree,
-        Console,
-        EditorView,
-        DOCK_TYPE_COUNT
-    };
-}
+enum  class DockType : char {
+    UknownType = 0,
+    FileView,
+    RevisionTable,
+    HistoryTree,
+    Console,
+    EditorView
+};
 
 enum MenuGroup {
     UknownMenuGroup = 0,

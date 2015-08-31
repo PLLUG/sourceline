@@ -1,11 +1,10 @@
-#ifndef AGGREGATOR_H
-#define AGGREGATOR_H
-
+#ifndef REVISIONTREE_H
+#define REVISIONTREE_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2015  by                                                ***
-***                 Mykhailo Voronovskii (mvoronovskii96@gmail.com)          ***
+***            Halyna Butovych (galynabutovych@gmail.com)                    ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -23,40 +22,45 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
+#include <QWidget>
+#include "revisionmodel.h"
+#include <vector>
 
-#include <QObject>
-
-class Aggregator: public QObject
+namespace Ui {
+class RevisionTree;
+}
+/*!
+ * \brief The RevisionTree class Draws 'revision tree' (graph).
+ */
+class RevisionTree : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit Aggregator(QObject *parent = nullptr);
-    ~Aggregator();
-    void addObject(QObject *pObj);
+    explicit RevisionTree(QWidget *parent = 0);
+    ~RevisionTree();
 
-    template <typename T>
-    T* object();
+    void read();
+
+    int rowHeight() const;
+    void setRowHeight(int rowHeight);
+
+    void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
+    void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
+
+private slots:
+    void slotTableScrollChanged(int value);
+    void slotGraphScrollChanged(int value);
+
+private:
+    void clearGraph();
+
+private:
+    Ui::RevisionTree *ui;
+
+    revision_graph mGraph;
+    int mRowHeight;
+    RevisionModel *mModel;
 };
 
-/*!
- *\brief Template getter.
- * Allow to get pointer on Aggregator's children.
- * If Aggregator doesn't have suitable children, getter returns null pointer.
- */
-template <typename T>
-T* Aggregator::object()
-{
-    T * rObj = nullptr;
-    QObjectList children = this->children();
-    for(int i = 0; i < children.count(); i++)
-    {        
-        if((rObj = qobject_cast<T*>(children[i])))
-        {
-            break;
-        }
-    }
-    return rObj;
-}
-
-#endif // AGGREGATOR_H
+#endif // REVISIONTREE_H

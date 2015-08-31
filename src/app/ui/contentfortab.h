@@ -3,14 +3,13 @@
 
 #include <QMainWindow>
 
-class HistoryTree;
-class RevisionView;
+class RevisionTreeDock;
 class EditorView;
 class FileView;
 class DockFileView;
-class RevisionTable;
 class DockConsole;
 class ConsoleView;
+class RevisionTree;
 
 namespace Ui {
 class ContentForTab;
@@ -24,17 +23,14 @@ public:
     explicit ContentForTab(QWidget *parent = 0);
     ~ContentForTab();
 
-
-
 private:
     Ui::ContentForTab *ui;
 
-    HistoryTree *mHistoryTree;
-    RevisionView *mHistoryTreeContents;
+    RevisionTreeDock *mHistoryTree;
+    RevisionTree *mRevisionTreeContents;
     EditorView *mEditorView;
-    FileView *mFileViewContents;
     DockFileView *mFileView;
-    RevisionTable *mRevisionTable;
+    FileView *mFileViewContents;
     DockConsole *mConsole;
     ConsoleView *mConsoleContents;
 };

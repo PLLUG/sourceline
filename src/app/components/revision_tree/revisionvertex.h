@@ -1,11 +1,10 @@
-#ifndef AGGREGATOR_H
-#define AGGREGATOR_H
-
+#ifndef REVISIONVERTEX
+#define REVISIONVERTEX
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
 ***    Copyright (C) 2015  by                                                ***
-***                 Mykhailo Voronovskii (mvoronovskii96@gmail.com)          ***
+***            Nazarii Plebanskii (nazar796@gmail.com)                       ***
 ***                                                                          ***
 ***    This file is part of SourceLine Project.                              ***
 ***                                                                          ***
@@ -24,39 +23,47 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include <QObject>
-
-class Aggregator: public QObject
+#include <QColor>
+/*!
+ * \brief The VertexType enum represents types of vertexes.
+ *
+ * Vertex type is defined according to how many edges enter in vertex and
+ * how many exit from.
+ */
+enum VertexType
 {
-    Q_OBJECT
-
-public:
-    explicit Aggregator(QObject *parent = nullptr);
-    ~Aggregator();
-    void addObject(QObject *pObj);
-
-    template <typename T>
-    T* object();
+    /// Number of input edges = 0
+    vtNoIn,
+    /// Number of output edges = 0
+    vtNoOut,
+    /// Number of input edges = 1, Number of output edges = 1
+    vtOneInOneOut,
+    /// Number of input edges > 1, Number of output edges > 1
+    vtManyInManyOut,
+    /// Number of input edges = 1, Number of output edges > 1
+    vtOneInManyOut,
+    /// Number of input edges > 1, Number of output edges = 1
+    vtManyInOneOut
 };
 
 /*!
- *\brief Template getter.
- * Allow to get pointer on Aggregator's children.
- * If Aggregator doesn't have suitable children, getter returns null pointer.
+ * \brief The VertexShape enum represents shapes of vertexes.
  */
-template <typename T>
-T* Aggregator::object()
+enum VertexShape
 {
-    T * rObj = nullptr;
-    QObjectList children = this->children();
-    for(int i = 0; i < children.count(); i++)
-    {        
-        if((rObj = qobject_cast<T*>(children[i])))
-        {
-            break;
-        }
-    }
-    return rObj;
-}
+    /// Square shape of vertex
+    vsSquare,
+    /// Circle shape of vertex
+    vsCircle
+};
 
-#endif // AGGREGATOR_H
+struct RevisionVertex
+{
+    VertexType type;
+    VertexShape shape;
+    QColor color;
+    int row;
+    int column;
+};
+
+#endif // REVISIONVERTEX
