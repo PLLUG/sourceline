@@ -32,3 +32,4 @@ SUBDIRS += \
     app \
     plugins \
     tools \
+    slClient \
