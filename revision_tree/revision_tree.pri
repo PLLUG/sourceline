@@ -23,13 +23,11 @@
 
 
 SOURCES += \
-    $$PWD/mainwindow.cpp \
     $$PWD/revisiontree.cpp \
     $$PWD/revisionmodel.cpp \
     $$PWD/revisiontreewidget.cpp
 
 HEADERS  += \
-    $$PWD/mainwindow.h \
     $$PWD/revisiontree.h \
     $$PWD/revisionmodel.h \
     $$PWD/revisionnode.h \
@@ -39,6 +37,5 @@ HEADERS  += \
     $$PWD/dfs_visitor.h
 
 FORMS    += \
-    $$PWD/mainwindow.ui \
     $$PWD/revisiontree.ui
     
