@@ -61,15 +61,15 @@ ViewSettingPage::~ViewSettingPage()
     delete mDialogUi;
 }
 
-void ViewSettingPage::setMainUi(Ui::MainWindow *lMainUi)
+void ViewSettingPage::setMainUi(Ui::MainWindow *pMainUi)
 {
-    mMainUi = lMainUi;
+    mMainUi = pMainUi;
 }
 
 void ViewSettingPage::slotBtnOpen()
 {
-    consolePath = QFileDialog::getOpenFileName();
-    mDialogUi->lineEdit->setText(consolePath);
+    mConsolePath = QFileDialog::getOpenFileName();
+    mDialogUi->lineEdit->setText(mConsolePath);
 //    ConsoleView *lConsoleView = qobject_cast<ConsoleView *>(mMainUi->uiConsole->widget());
 //    if(lConsoleView)
 //    {
@@ -77,7 +77,7 @@ void ViewSettingPage::slotBtnOpen()
 //    }
 }
 
-void ViewSettingPage::slotFileViewChanged(QVariant pValue)
+/*void ViewSettingPage::slotFileViewChanged(QVariant pValue)
 {
     mMainUi->uiFileView->setVisible(pValue.toBool());
 }
@@ -109,4 +109,4 @@ void ViewSettingPage::slotConsolePath(QVariant pValue)
     {
         lConsoleView->slotSetConsolePath(pValue.toString());
     }
-}
+}*/

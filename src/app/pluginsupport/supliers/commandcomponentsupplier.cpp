@@ -45,11 +45,11 @@ void CommandComponentSupplier::setActionManager(ActionManager *pActionManager)
 
 UserAction *CommandComponentSupplier::actionFromCommand(Command *pComand)
 {
-    UserAction *lUserAction = new UserAction();
-    lUserAction->setIcon(pComand->icon());
-    lUserAction->setText(pComand->name());
-    lUserAction->setCommandKind(Commands::ImportCommand);
-    return lUserAction;
+    UserAction *rUserAction = new UserAction();
+    rUserAction->setIcon(pComand->icon());
+    rUserAction->setText(pComand->name());
+    rUserAction->setCommandKind(Commands::ImportCommand);
+    return rUserAction;
 }
 
 void CommandComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)

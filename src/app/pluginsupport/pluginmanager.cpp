@@ -27,7 +27,7 @@
 PluginManager::PluginManager(QObject *parent) :
     QObject(parent),
     mPluginLoader(NULL)
-{
+{    
 }
 
 void PluginManager::setPluginLoader(PluginLoader *pPluginLoader)

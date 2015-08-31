@@ -26,10 +26,16 @@ QT += widgets
 CONFIG += c++11
 
 # Pro file is a part of source line project structure
-CONFIG += sl_project
+CONFIG += \
+    sl_project \
+    C++11 \
 
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
+
+include($$PWD/components/console/console.pri)
+include($$PWD/components/example_component/example_component.pri)
+include($$PWD/components/file_view/FileView.pri)
 
 INCLUDEPATH += $$_PRO_FILE_PWD_
 
@@ -37,42 +43,28 @@ INCLUDEPATH += $$_PRO_FILE_PWD_
 HEADERS += \
     applicationbuilder.h \
     progresshandler.h \
-    ui/revisionview.h \
-    ui/revisionView/branch.h \
-    ui/revisionView/createtree.h \
-    ui/revisionView/creator.h \
-    ui/revisionView/graphfield.h \
-    ui/revisionView/node.h \
-    ui/revisionView/parameters.h \
-    ui/revisionView/revisionitem.h \
-    ui/revisionView/revisionnode.h \
-    ui/revisionView/revisiontablemodel.h \
-    ui/revisionView/view/abstractgraphicsview.h \
-    ui/revisionView/view/abstractrevisiondelegate.h \
-    ui/revisionView/view/bubble.h \
-    ui/revisionView/view/revisiongrid.h \
-    ui/revisionView/view/revisionnodeitem.h \
-    ui/revisionView/view/simpleline.h
+    ui/passworddialog.h \
+    ui/clonedialog.h \
+    ui/tabsapi.h \
+    aggregator.h \
+    ui/genericcomponent.h \
+    workplace.h \
+    transitionsignals.h \
+    ui/errordialog.h \
+    ui/contentfortab.h
 
 SOURCES += \
     main.cpp \
     applicationbuilder.cpp \
     progresshandler.cpp \
-    ui/revisionview.cpp \
-    ui/revisionView/branch.cpp \
-    ui/revisionView/createtree.cpp \
-    ui/revisionView/creator.cpp \
-    ui/revisionView/graphfield.cpp \
-    ui/revisionView/node.cpp \
-    ui/revisionView/revisionitem.cpp \
-    ui/revisionView/revisionnode.cpp \
-    ui/revisionView/revisiontablemodel.cpp \
-    ui/revisionView/view/abstractgraphicsview.cpp \
-    ui/revisionView/view/abstractrevisiondelegate.cpp \
-    ui/revisionView/view/bubble.cpp \
-    ui/revisionView/view/revisiongrid.cpp \
-    ui/revisionView/view/revisionnodeitem.cpp \
-    ui/revisionView/view/simpleline.cpp
+    ui/passworddialog.cpp \
+    ui/clonedialog.cpp \
+    ui/tabsapi.cpp \
+    aggregator.cpp \
+    ui/genericcomponent.cpp \
+    workplace.cpp \
+    ui/errordialog.cpp \
+    ui/contentfortab.cpp
 
 # Application UI
 HEADERS += \
@@ -84,20 +76,13 @@ HEADERS += \
     ui/guidefs.h \
     ui/historytree.h \
     ui/mainwindow.h \
-    ui/pagemanager.h \
-    ui/revisiontable.h \
     ui/appsettingsdialog.h \
     ui/viewsettingpage.h \
     ui/dialogplugins.h \
     ui/actionmanager.h \
     ui/mainmenubuilder.h \
-    ui/fileview.h \
     ui/dockfileview.h \
     ui/dockconsole.h \
-    ui/fileview/exploreritemdelegate.h \
-    ui/fileview/iconizedlineedit.h \
-    ui/console/console.h \
-    ui/consoleview.h \
     ui/about.h \
     ui/plugininfodialog.h \
     ui/useraction.h \
@@ -111,8 +96,6 @@ SOURCES += \
     ui/genericdockwidget.cpp \
     ui/historytree.cpp \
     ui/mainwindow.cpp \
-    ui/pagemanager.cpp \
-    ui/revisiontable.cpp \
     ui/appsettingsdialog.cpp \
     ui/viewsettingpage.cpp \
     ui/dialogplugins.cpp \
@@ -121,34 +104,27 @@ SOURCES += \
     ui/about.cpp \
     ui/plugininfodialog.cpp \
     ui/useraction.cpp \
-    ui/fileview.cpp \
     ui/dockconsole.cpp \
     ui/dockfileview.cpp \
-    ui/fileview/exploreritemdelegate.cpp \
-    ui/fileview/iconizedlineedit.cpp \
-    ui/console/console.cpp \
-    ui/consoleview.cpp \
     ui/strategies/directordersortingstrategy.cpp \
     ui/strategies/sortingstrategy.cpp
-
 
 FORMS += \
     ui/customtabbar.ui \
     ui/editorview.ui \
     ui/files.ui \
-    ui/historytree.ui \
     ui/mainwindow.ui \
-    ui/revisiontable.ui \
     ui/appsettingsdialog.ui \
     ui/viewsettingpage.ui \
     ui/dialogplugins.ui \
-    ui/dockconsole.ui \
     ui/dockfileview.ui \
-    ui/fileview.ui \
     ui/about.ui \
     ui/plugininfodialog.ui \
-    ui/consoleview.ui \
-    ui/revisionview.ui
+    ui/dockconsole.ui \
+    ui/passworddialog.ui \
+    ui/clonedialog.ui \
+    ui/errordialog.ui \
+    ui/contentfortab.ui
 
 # Application Settings
 HEADERS += \
