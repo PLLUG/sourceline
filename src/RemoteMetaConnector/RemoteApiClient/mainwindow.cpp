@@ -1,8 +1,4 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
 
-#include "texteditinterface.h"
-#include "remoteapiclient.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

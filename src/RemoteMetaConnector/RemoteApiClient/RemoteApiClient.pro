@@ -4,7 +4,10 @@
 #
 #-------------------------------------------------
 
-QT       += core gui network
+QT       += core network
+QT       -= gui
+
+CONFIG += console
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,14 +16,10 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
     texteditinterface.cpp \
     remoteapiclient.cpp
 
-HEADERS  += mainwindow.h \
-    texteditinterface.h \
+HEADERS  +=texteditinterface.h \
     remoteapiclient.h
-
-FORMS    += mainwindow.ui
 
 include(../metaconnector/metaconnector.pri)
