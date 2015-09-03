@@ -16,7 +16,9 @@ int main(int argc, char *argv[])
     QProcess client;
     QStringList args;
     args << "--id=sl";
-    client.start("D:/PllPro/SL_ClientProvider/sourceline/src/build-remotemetaconnector-Desktop_Qt_5_5_0_MSVC2013_64bit-Debug/RemoteApiClient/debug/RemoteApiClient.exe", args);
+
+    //This was hardcode. Use path to RemoteApiClient.exe on your computer.
+    client.start("$$PWD/../../../bin/RemoteMetaConnector/RemoteApiClient.exe", args);
 
     return a.exec();
 }
