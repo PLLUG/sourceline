@@ -32,6 +32,12 @@ public:
     float getBottomOffset() const;
     void setBottomOffset(float bottomOffset);
 
+    int getStep() const;
+    void setStep(int step);
+
+    int getEdgeOffset() const;
+    void setEdgeOffset(int edgeOffset);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -45,12 +51,18 @@ private:
     float mLeftOffset;
     float mTopOffset;
     float mBottomOffset;
+    // Radius of vertex
     int mRadius;
+    // Radius of round of edges
+    int mStep;
+    // Offset from center of vertex to edges, that are branches or merges
+    int mEdgeOffset;
     float mRowHeight;
 
     VertexIntMap mColumnMap;
     VertexIntMap mRowMap;
 
+    std::vector<RevisionVertex> mRevisionVertexes;
     VertexIntMap mTestOrderMap;
 };
 
