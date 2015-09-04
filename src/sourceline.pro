@@ -30,3 +30,5 @@ SUBDIRS += \
     app \
     plugins \
     tools
+
+OTHER_FILES += $$_PRO_FILE_PWD_/../README.md

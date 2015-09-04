@@ -25,6 +25,7 @@
 #define COMMANDPROCESS_H
 
 #include <QObject>
+#include <QStringList>
 
 class QProcess;
 

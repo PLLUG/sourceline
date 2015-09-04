@@ -24,6 +24,7 @@
 #include "consoleview.h"
 #include "ui_consoleview.h"
 #include <QDebug>
+#include <QSysInfo>
 #include "commandprocessmediator.h"
 // make input work
 // remove platform dependent ifs +
@@ -73,7 +74,6 @@ QString ConsoleView::osInfo() const
 {
     return QSysInfo::productType();
 }
-
 
 void ConsoleView::slotExec(QString cmd)
 {
