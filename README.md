@@ -22,7 +22,7 @@ Refer to git submodules documentation for more information.
 Use Qt5 and compiler that supports at least C++11 features. Qt must be built with the compiler that supports C++11 also.
 For example, Qt5 with latest gcc or clang on Linux and Qt5 VS 2013 or Qt5MinGW on Windows.
 
-# Project workflow
+## Project workflow
 
 ### Directory Structure
 
