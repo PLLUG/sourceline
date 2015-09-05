@@ -39,6 +39,7 @@ private:
     std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
     static vertex findRoot(const revision_graph &pGraph);
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
+    int maxColumnFromColumnMap();
 
 private:
     revision_graph mGraph;
