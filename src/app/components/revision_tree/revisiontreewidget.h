@@ -38,10 +38,10 @@ public:
     int getEdgeOffset() const;
     void setEdgeOffset(int edgeOffset);
 
-    static int maxColumnFromColumnMap(VertexIntMap pColumnMap);
+    static int maxColumnFromColumnMap(const VertexIntMap &pColumnMap);
 
-    float getWidth() const;
-    void setWidth(float width);
+    float columnWidth() const;
+    void setColumnWidth(float width);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
@@ -63,7 +63,7 @@ private:
     // Offset from center of vertex to edges, that are branches or merges
     int mEdgeOffset;
     float mRowHeight;
-    float mWidth;
+    float mColumnWidth;
 
     VertexIntMap mColumnMap;
     VertexIntMap mRowMap;
