@@ -10,6 +10,12 @@ CONFIG   -= app_bundle
 CONFIG += sl_project # Pro file is a part of source line project structure
 CONFIG += c++11
 
+CONFIG (debug, debug|release) {
+    DEFINES += DEBUG
+} else {
+    DEFINES += QT_NO_DEBUG_OUTPUT
+}
+
 SOURCES += \
     main.cpp
 
