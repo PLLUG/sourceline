@@ -17,10 +17,14 @@ CONFIG (debug, debug|release) {
 }
 
 SOURCES += \
-    main.cpp
+    main.cpp \
+    sourcelineclient.cpp
 
 # Extension support library
 include(./../extensionlib/extensionlib.pri)
 
 # Plugin management library
 include(./../pluginmanager/pluginmanager.pri)
+
+HEADERS += \
+    sourcelineclient.h

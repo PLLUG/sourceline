@@ -3,6 +3,8 @@
 
 #include <QDebug>
 
+#include "sourcelineclient.h"
+
 static const QLatin1String OPTION_CLIENT_ID_NAME("id");
 static const QLatin1String OPTION_CLIENT_ID_DESCRIPTION("SL provider connection id");
 static const QLatin1String OPTION_CLIENT_ID_VALUE_NAME("id");
@@ -38,6 +40,8 @@ int main(int argc, char *argv[])
         return RETURN_CODE_INVALID_ARGUMENTS;
 #endif
     }
+
+    SourceLineClient client(parser.value(idOption));
 
     return application.exec();
 }
