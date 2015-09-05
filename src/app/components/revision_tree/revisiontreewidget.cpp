@@ -63,7 +63,7 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     }
 
     setMinimumHeight(mTopOffset + mRowHeight * (num_vertices(mGraph) - 1) + mBottomOffset);
-    setMinimumWidth(mLeftOffset + mRowHeight * (maxColumnFromColumnMap() - 1) + 2 * mRadius);
+    setMinimumWidth(mLeftOffset + mRowHeight * maxColumnFromColumnMap() + 2 * mRadius);
     updateGeometry();
 }
 
@@ -300,14 +300,11 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
 
 int RevisionTreeWidget::maxColumnFromColumnMap()
 {
-    boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
-    int rMaxColumn = 0;
-    BGL_FORALL_VERTICES(v, mGraph, revision_graph)
-    {
-        if(get(colIndex, v) > rMaxColumn)
-        {
-            rMaxColumn = get(colIndex, v);
-        }
-    }
-    return rMaxColumn;
+     auto rMaxCol = std::max_element(mColumnMap.begin(), mColumnMap.end(),
+                             [=](const std::pair<vertex, int> &iter1, const std::pair<vertex, int> &iter2)
+     {
+         return iter1.second < iter2.second;
+     });
+
+     return rMaxCol->second;
 }
