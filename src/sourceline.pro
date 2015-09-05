@@ -33,4 +33,4 @@ SUBDIRS += \
     plugins \
     tools \
     slClient \
-    RemoteMetaConnector \
+    RemoteMetaConnector
