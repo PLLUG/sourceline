@@ -6,7 +6,11 @@
 #include <boost/graph/dominator_tree.hpp>
 #include <QPainter>
 #include <QPaintEvent>
+#include <QPainterPath>
+#include <QPen>
+#include <QLinearGradient>
 #include <QDateTime>
+#include <QApplication>
 #include "dfs_visitor.h"
 
 using IndexPropertyMap = boost::property_map<revision_graph, boost::vertex_index_t>::type;
@@ -16,10 +20,13 @@ RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent},
     mLeftOffset{20},
     mTopOffset{45}, // height of row of tableView * 3/2
-    mRadius{8},
-    mRowHeight{30} // height of row of tableView
+    mRadius{6},
+    mStep{3},
+    mRowHeight{30}, // height of row of tableView
+    mWidth{20} // width between column of revision tree
 {
     mBottomOffset = mRowHeight / 2;
+    mEdgeOffset = mRadius + mStep * 2;
 }
 
 RevisionTreeWidget::~RevisionTreeWidget()
@@ -62,8 +69,10 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
         put(rowIndex, *ii, row++);
     }
 
+    mRevisionVertexes = revisionVertexVector(mGraph);
+
     setMinimumHeight(mTopOffset + mRowHeight * (num_vertices(mGraph) - 1) + mBottomOffset);
-    setMinimumWidth(mLeftOffset + mRowHeight * maxColumnFromColumnMap() + 2 * mRadius);
+    setMinimumWidth(mLeftOffset + mWidth * maxColumnFromColumnMap(mColumnMap) + 2 * mRadius);
     updateGeometry();
 }
 
@@ -141,54 +150,141 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
     QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
-    boost::associative_property_map<VertexIntMap> testAlgorithmIndexes{mTestOrderMap};
+    // Drawing rectangle fields
+    painter.setPen(Qt::NoPen);
+    for(unsigned int row = 0; row < num_vertices(mGraph); row++)
+    {
+        ((row % 2) == 0) ? painter.setBrush(Qt::white) :
+                           painter.setBrush(QColor("#DEE8D0"));
+        int x = 0;
+        painter.drawRect(x, mRowHeight + row*mRowHeight,
+                         this->width(), mRowHeight);
+    }
 
-    std::vector<RevisionVertex> revisionVertexes = revisionVertexVector(mGraph);
+    painter.setBrush(Qt::NoBrush);
 
+    // Drawing of edges
+    QPen lPen;
+    lPen.setWidth(2);
+    lPen.setColor(Qt::darkGray);
+    BGL_FORALL_EDGES(e, mGraph, revision_graph)
+    {
+        auto v1 = boost::source(e, mGraph);
+        auto v2 = boost::target(e, mGraph);
+
+        int sourceRow = get(rowIndex, v1);
+        int sourceCol = get(colIndex, v1);
+        int targetRow = get(rowIndex, v2);
+        int targetCol = get(colIndex, v2);
+
+        QPainterPath myPath;
+        QLinearGradient gradient(QPointF(mWidth*sourceCol + 1.0 * mLeftOffset,
+                                         mRowHeight*sourceRow + 1.0 * mTopOffset),
+                                 QPointF(mWidth*targetCol + 1.0 * mLeftOffset,
+                                         mRowHeight*targetRow + 1.0 * mTopOffset));
+        gradient.setColorAt(0, mRevisionVertexes[v1].color);
+        gradient.setColorAt(1, mRevisionVertexes[v2].color);
+        lPen.setBrush(gradient);
+        painter.setPen(lPen);
+
+        if(targetCol > sourceCol)
+        {
+            // Moving to center of source vertex
+            myPath.moveTo(QPointF(mWidth*sourceCol + mLeftOffset,
+                                  mRowHeight*sourceRow + mTopOffset));
+            // Drawing line to first rounding of edge
+            myPath.lineTo(QPointF(mWidth*sourceCol + mLeftOffset,
+                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset));
+            // Drawing first rounding
+            myPath.quadTo(QPointF(mWidth*sourceCol + mLeftOffset,
+                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset),
+                          QPointF(mWidth*sourceCol + mLeftOffset + mStep,
+                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
+            // Drawing line from first rounding to second rounding
+            myPath.lineTo(QPointF(mWidth*targetCol + mLeftOffset - mStep,
+                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
+            // Drawing second rounding
+            myPath.quadTo(QPointF(mWidth*targetCol + mLeftOffset - mStep,
+                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep),
+                          QPointF(mWidth*targetCol + mLeftOffset,
+                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - 2 * mStep));
+            // Drawing line from second rouding to target vertex
+            myPath.lineTo(QPointF(mWidth*targetCol + mLeftOffset,
+                                  mRowHeight*targetRow + mTopOffset));
+        }
+        else if(targetCol < sourceCol)
+        {
+            // Moving to center of target vertex
+            myPath.moveTo(QPointF(mWidth*targetCol + mLeftOffset,
+                                  mRowHeight*targetRow + mTopOffset));
+            // Drawing line to first rounding of edge
+            myPath.lineTo(QPointF(mWidth*targetCol + mLeftOffset,
+                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset));
+            // Drawing first rounding
+            myPath.quadTo(QPointF(mWidth*targetCol + mLeftOffset,
+                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset),
+                          QPointF(mWidth*targetCol + mLeftOffset + mStep,
+                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
+            // Drawing line from first rounding to second rounding
+            myPath.lineTo(QPointF(mWidth*sourceCol + mLeftOffset - mStep,
+                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
+            // Drawing second rounding
+            myPath.quadTo(QPointF(mWidth*sourceCol + mLeftOffset - mStep,
+                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep),
+                          QPointF(mWidth*sourceCol + mLeftOffset,
+                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + 2 * mStep));
+            // Drawing line from second rouding to source vertex
+            myPath.lineTo(QPointF(mWidth*sourceCol + mLeftOffset,
+                                  mRowHeight*sourceRow + mTopOffset));
+        }
+        else
+        {
+            myPath.moveTo(QPointF(mWidth*sourceCol + mLeftOffset,
+                                  mRowHeight*sourceRow + mTopOffset));
+            myPath.lineTo(QPointF(mWidth*targetCol + mLeftOffset,
+                                  mRowHeight*targetRow + mTopOffset));
+        }
+
+        painter.drawPath(myPath);
+    }
+
+//    boost::associative_property_map<VertexIntMap> testAlgorithmIndexes{mTestOrderMap};
+
+    painter.setPen(Qt::darkGray);
     BGL_FORALL_VERTICES(v, mGraph, revision_graph)
     {
-        int row = revisionVertexes[v].row;
-        int col = revisionVertexes[v].column;
-        painter.setBrush(revisionVertexes[v].color);
+        int row = mRevisionVertexes[v].row;
+        int col = mRevisionVertexes[v].column;
 
         // Drawing vertex
-        switch(revisionVertexes[v].shape)
+        painter.setBrush(mRevisionVertexes[v].color);
+        switch(mRevisionVertexes[v].shape)
         {
         case vsSquare:
-            painter.drawRect(mLeftOffset + col*mRowHeight - mRadius, // left corner X
+            painter.drawRect(mLeftOffset + col*mWidth - mRadius, // left corner X
                              mTopOffset + row*mRowHeight - mRadius, // left corner Y
                              mRadius*2, mRadius*2); // sizes of sides
             break;
         case vsCircle:
-            painter.drawEllipse(QPointF{mRowHeight*col + mLeftOffset, // center X
+            painter.drawEllipse(QPointF{mWidth*col + mLeftOffset, // center X
                                         mRowHeight*row + mTopOffset}, // center Y
                                 mRadius, mRadius);
             break;
         }
-        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
-                                 mRowHeight*row + mTopOffset},
-                         QString::number(get(testAlgorithmIndexes,v)));
+//        // Draws number of vertex
+//        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
+//                                 mRowHeight*row + mTopOffset},
+//                         QString::number(get(testAlgorithmIndexes,v)));
         //        painter.drawText(QPointF{mWidth*col + mLeftOffset,
         //                                 mWidth*row + mTopOffset},
         //                         QString::number(v));
     }
 
-    painter.setPen(Qt::darkGray);
-    BGL_FORALL_EDGES(e, mGraph, revision_graph)
-    {
-        int sourceRow = get(rowIndex, boost::source(e, mGraph));
-        int sourceCol = get(colIndex, boost::source(e, mGraph));
-        int targetRow = get(rowIndex, boost::target(e, mGraph));
-        int targetCol = get(colIndex, boost::target(e, mGraph));
-        painter.drawLine(QPoint(mRowHeight*sourceCol + mLeftOffset,
-                                mRowHeight*sourceRow + mTopOffset),
-                         QPoint(mRowHeight*targetCol + mLeftOffset,
-                                mRowHeight*targetRow + mTopOffset));
-    }
 }
 
 /*!
@@ -297,14 +393,45 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
 
     return rRevisionVertexes;
 }
-
-int RevisionTreeWidget::maxColumnFromColumnMap()
+float RevisionTreeWidget::getWidth() const
 {
-     auto rMaxCol = std::max_element(mColumnMap.begin(), mColumnMap.end(),
-                             [=](const std::pair<vertex, int> &iter1, const std::pair<vertex, int> &iter2)
+    return mWidth;
+}
+
+void RevisionTreeWidget::setWidth(float width)
+{
+    mWidth = width;
+}
+
+
+int RevisionTreeWidget::maxColumnFromColumnMap(VertexIntMap pColumnMap)
+{
+    auto rMaxCol = std::max_element(pColumnMap.begin(), pColumnMap.end(),
+                                    [](const std::pair<vertex, int> &iter1,
+                                       const std::pair<vertex, int> &iter2)
      {
          return iter1.second < iter2.second;
      });
 
      return rMaxCol->second;
+}
+
+int RevisionTreeWidget::getEdgeOffset() const
+{
+    return mEdgeOffset;
+}
+
+void RevisionTreeWidget::setEdgeOffset(int edgeOffset)
+{
+    mEdgeOffset = edgeOffset;
+}
+
+int RevisionTreeWidget::getStep() const
+{
+    return mStep;
+}
+
+void RevisionTreeWidget::setStep(int step)
+{
+    mStep = step;
 }

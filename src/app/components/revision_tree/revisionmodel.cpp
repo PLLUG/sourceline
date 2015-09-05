@@ -205,9 +205,7 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
         {
             const std::string property = mPropertyNames.at(index.column()-DefaultColumnsCount);
             const std::string &name = mGraph[v].name;
-            QVariant (*pOverloadedGetFunction)(const std::string&, const boost::dynamic_properties&, const std::string& ) =
-                    &boost::get<QVariant>;//can not call directly - compile error
-            return pOverloadedGetFunction(property, mProperties, name);
+            return boost::get(property, mProperties, name,boost::type<QVariant>());
         }
     }
     else if (Qt::BackgroundColorRole == role)

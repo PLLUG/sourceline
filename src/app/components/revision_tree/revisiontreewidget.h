@@ -32,6 +32,17 @@ public:
     float getBottomOffset() const;
     void setBottomOffset(float bottomOffset);
 
+    int getStep() const;
+    void setStep(int step);
+
+    int getEdgeOffset() const;
+    void setEdgeOffset(int edgeOffset);
+
+    static int maxColumnFromColumnMap(VertexIntMap pColumnMap);
+
+    float getWidth() const;
+    void setWidth(float width);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -39,19 +50,25 @@ private:
     std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
     static vertex findRoot(const revision_graph &pGraph);
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
-    int maxColumnFromColumnMap();
 
 private:
     revision_graph mGraph;
     float mLeftOffset;
     float mTopOffset;
     float mBottomOffset;
+    // Radius of vertex
     int mRadius;
+    // Radius of round of edges
+    int mStep;
+    // Offset from center of vertex to edges, that are branches or merges
+    int mEdgeOffset;
     float mRowHeight;
+    float mWidth;
 
     VertexIntMap mColumnMap;
     VertexIntMap mRowMap;
 
+    std::vector<RevisionVertex> mRevisionVertexes;
     VertexIntMap mTestOrderMap;
 };
 
