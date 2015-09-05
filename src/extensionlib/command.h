@@ -96,7 +96,7 @@ public:
      * \brief Should be called when user runs command using associated UI controls.
      * \param api SL public API aggregator.
      */
-    virtual void trigger(Aggregator &api) = 0;
+    virtual void trigger(/*Aggregator &api*/) = 0;
 
     /*!
      * \brief Processes command output and performs appropriate actions.
