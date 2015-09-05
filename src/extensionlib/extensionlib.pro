@@ -22,6 +22,7 @@
 ################################################################################
 QT       += gui
 QT       += widgets
+QT       += network
 
 PLUGINAPI_PATH=$$_PRO_FILE_PWD_/../pluginapi
 
@@ -30,7 +31,7 @@ DESTDIR = $$PLUGINAPI_PATH/lib
 TEMPLATE = lib
 
 CONFIG += \
-    C++11
+    c++11
 
 DEFINES += EXTENSIONS_LIBRARY
 

@@ -5,7 +5,9 @@ SOURCES += \
     $$PWD/apiprovider.cpp \
     $$PWD/publictestinterface.cpp \
     $$PWD/testinerface.cpp \
-    $$PWD/invocationbased.cpp
+    $$PWD/invocationbased.cpp \
+    $$PWD/remoteapiclient.cpp \
+    $$PWD/remoteapiprovider.cpp
 
 HEADERS += \
     $$PWD/apiclient.h \
@@ -16,6 +18,8 @@ HEADERS += \
     $$PWD/typedgenericargumentholder.h \
     $$PWD/typedgenericreturnargumentholder.h \
     $$PWD/genericreturnargumentholder.h \
-    $$PWD/invocationbased.h
+    $$PWD/invocationbased.h \
+    $$PWD/remoteapiclient.h \
+    $$PWD/remoteapiprovider.h
 
 HEADERS += $$PWD/genericargumentholder.h
