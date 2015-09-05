@@ -21,7 +21,7 @@ QT       -= gui
 
 
 DESTDIR = $$_PRO_FILE_PWD_/../../bin
-TARGET = slClient
+TARGET = slclient
 CONFIG   -= app_bundle
 
 TEMPLATE = app
