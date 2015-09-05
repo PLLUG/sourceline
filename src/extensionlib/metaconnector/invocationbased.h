@@ -96,6 +96,7 @@ class EXTENSIONSSHARED_EXPORT InvocationBased : public QObject
 public:
     InvocationBased(QObject *parent = nullptr);
 
+    QObject *target() const;
     void setTarget(QObject *target);
 
     QVariant invokeAndReturn(QByteArray signature, QVariant arg1 = QVariant());

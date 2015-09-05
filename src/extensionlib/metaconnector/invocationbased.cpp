@@ -49,6 +49,15 @@ InvocationBased::InvocationBased(QObject *parent)
 }
 
 /*!
+ * \brief Returns target object, on which method invocation will be performed.
+ * \return Pointer to target object.
+ */
+QObject *InvocationBased::target() const
+{
+    return mTarget;
+}
+
+/*!
  * \brief Sets target object, on which method invocation will be performed.
  * \param target Pointer to target object.
  */
