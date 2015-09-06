@@ -30,7 +30,7 @@ SUBDIRS += \
     extensionlib \
     pluginmanager \
     app \
-    slclient #\
+    slclient \
+    RemoteMetaConnector
 #    plugins \
 #    tools \
-#    RemoteMetaConnector
