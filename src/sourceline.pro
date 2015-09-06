@@ -31,6 +31,5 @@ SUBDIRS += \
     pluginmanager \
     app \
     slclient \
-    tools \
-    RemoteMetaConnector
+    tools
 #    plugins \
