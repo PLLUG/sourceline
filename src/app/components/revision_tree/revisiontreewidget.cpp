@@ -18,13 +18,16 @@ using PredMap = boost::iterator_property_map<typename std::vector<vertex>::itera
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent},
-    mLeftOffset{20},
+    mLeftOffset{20}, // offset from left side
     mTopOffset{45}, // height of row of tableView * 3/2
-    mRadius{6},
-    mStep{3},
-    mRowHeight{30} // height of row of tableView
+    mRadius{6}, // radius of vertex
+    mStep{3}, // radius of rounding of edge
+    mRowHeight{30}, // height of row of tableView
+    mModel{nullptr}
 {
+    // Offset from bottom
     mBottomOffset = mRowHeight / 2;
+    // Offset from center of vertex to first rounding of edge
     mEdgeOffset = mRadius + mStep * 2;
 }
 
@@ -150,12 +153,22 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     QPainter painter(this);
     painter.setRenderHint(QPainter::Antialiasing);
 
+    // Getting of first and last visible row of revision tree
+    int rectBeginY = e->rect().y();
+    int rectEndY = rectBeginY + e->rect().height();
+    int firstRow = static_cast<int>(abs((rectBeginY - mTopOffset) / mRowHeight));
+    if(rectBeginY < mTopOffset)
+    {
+        firstRow = 0;
+    }
+    int lastRow = roundToGreater((rectEndY - mTopOffset) / mRowHeight) - 1;
+
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
     // Drawing rectangle fields
     painter.setPen(Qt::NoPen);
-    for(unsigned int row = 0; row < num_vertices(mGraph); row++)
+    for(int row = firstRow; row <= lastRow; row++)
     {
         ((row % 2) == 0) ? painter.setBrush(Qt::white) :
                            painter.setBrush(QColor("#DEE8D0"));
@@ -163,7 +176,6 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         painter.drawRect(x, mRowHeight + row*mRowHeight,
                          this->width(), mRowHeight);
     }
-
     painter.setBrush(Qt::NoBrush);
 
     // Drawing of edges
@@ -254,9 +266,13 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 //    boost::associative_property_map<VertexIntMap> testAlgorithmIndexes{mTestOrderMap};
 
     painter.setPen(Qt::darkGray);
-    BGL_FORALL_VERTICES(v, mGraph, revision_graph)
+    if(!mModel)
     {
-        int row = mRevisionVertexes[v].row;
+        return;
+    }
+    for(int row = firstRow; row <= lastRow; row++)
+    {
+        vertex v = mModel->vertexAt(row);
         int col = mRevisionVertexes[v].column;
 
         // Drawing vertex
@@ -282,7 +298,6 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         //                                 mWidth*row + mTopOffset},
         //                         QString::number(v));
     }
-
 }
 
 /*!
@@ -333,6 +348,11 @@ vertex RevisionTreeWidget::findRoot(const revision_graph &pGraph)
     return root_vertex;
 }
 
+/*!
+ * \brief RevisionTreeWidget::revisionVertexVector returns vector of RevisionVertex.
+ * \param pGraph - graph, from which vertices are taken.
+ * \return vector of RevisionVertex.
+ */
 std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revision_graph &pGraph)
 {
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
@@ -391,6 +411,35 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
 
     return rRevisionVertexes;
 }
+
+/*!
+ * \brief RevisionTreeWidget::roundToGreater rounds to greater number.
+ *
+ * i.e. roundToGreater(2.1) = 3, roundToGreater(2.0) = 2.
+ * \param number - number to be rounded
+ * \return rounded number
+ */
+int RevisionTreeWidget::roundToGreater(float number)
+{
+    int rNumb;
+    int less = static_cast<int>(number);
+    int greater = static_cast<int>(number) + 1;
+    if(less == number)
+    {
+        rNumb = less;
+    }
+    else if(number > less)
+    {
+        rNumb = greater;
+    }
+
+    return rNumb;
+}
+void RevisionTreeWidget::setModel(RevisionModel *pModel)
+{
+    mModel = pModel;
+}
+
 int RevisionTreeWidget::getEdgeOffset() const
 {
     return mEdgeOffset;

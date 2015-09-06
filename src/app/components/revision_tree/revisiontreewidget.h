@@ -38,6 +38,8 @@ public:
     int getEdgeOffset() const;
     void setEdgeOffset(int edgeOffset);
 
+    void setModel(RevisionModel *pModel);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -45,17 +47,15 @@ private:
     std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
     static vertex findRoot(const revision_graph &pGraph);
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
+    int roundToGreater(float number);
 
 private:
     revision_graph mGraph;
     float mLeftOffset;
     float mTopOffset;
     float mBottomOffset;
-    // Radius of vertex
     int mRadius;
-    // Radius of round of edges
     int mStep;
-    // Offset from center of vertex to edges, that are branches or merges
     int mEdgeOffset;
     float mRowHeight;
 
@@ -64,6 +64,7 @@ private:
 
     std::vector<RevisionVertex> mRevisionVertexes;
     VertexIntMap mTestOrderMap;
+    RevisionModel *mModel;
 };
 
 #endif // REVISIONTREEWIDGET_H

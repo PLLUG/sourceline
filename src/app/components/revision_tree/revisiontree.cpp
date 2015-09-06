@@ -41,6 +41,7 @@ RevisionTree::RevisionTree(QWidget *parent) :
     ui->setupUi(this);
 
     ui->revisionTableView->setModel(mModel);
+    ui->revisionTreeWidget->setModel(mModel);
 
     ui->revisionTableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->scrollArea->verticalScrollBar()->setHidden(true);
