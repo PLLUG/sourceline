@@ -3,6 +3,8 @@
 #include <QProcess>
 #include <QApplication>
 
+#include "remoteapiprovider.h"
+
 static const QString SL_CLIENT_EXECUTABLE_NAME("slclient");
 #ifdef Q_OS_WIN
 static const QString SL_CLIENT_EXECUTABLE_EXTENSION(".exe");
@@ -13,10 +15,11 @@ static const QString SL_CLIENT_EXECUTABLE_EXTENSION("");
 static const QString OPTION_CONNECTION_ID("--id");
 static const QString OPTION_DEBUG("--debug");
 
-ClientProcess::ClientProcess(QObject *parent) :
+ClientProcess::ClientProcess(RemoteApiProvider &remoteApiProvider, QObject *parent) :
     QObject(parent)
   , mProcess{new QProcess(this)}
   , mIsAllowDebug{false}
+  , mRemoteApiProvider{remoteApiProvider}
 {
     connect(mProcess, &QProcess::started, this, &ClientProcess::ready, Qt::UniqueConnection);
 }
@@ -39,6 +42,8 @@ void ClientProcess::start()
     {
         args << OPTION_DEBUG;
     }
+
+    mRemoteApiProvider.listen(mConnectionId);
 
     Q_CHECK_PTR(mProcess);
     mProcess->start(clientPath(), args);

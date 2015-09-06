@@ -1,8 +1,10 @@
 #include "mainwindow.h"
+
 #include <QApplication>
+#include <QPlainTextEdit>
 
 #include "invocationbased.h"
-
+#include "remoteapiprovider.h"
 #include "clientprocess.h"
 
 int main(int argc, char *argv[])
@@ -14,7 +16,13 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
 
-    ClientProcess client;
+    RemoteApiProvider *apiProvider = new RemoteApiProvider(&a);
+
+    InvocationBased *textInvoker = new InvocationBased;
+    textInvoker->setTarget(&w.textEdit());
+    apiProvider->addApiProvider(textInvoker);
+
+    ClientProcess client(*apiProvider);
     client.setConnectionId("sl");
     client.setAllowClientDebugMode(true);
     client.start();

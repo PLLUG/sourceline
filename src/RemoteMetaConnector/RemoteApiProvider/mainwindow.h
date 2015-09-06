@@ -7,7 +7,7 @@ namespace Ui {
 class MainWindow;
 }
 
-class RemoteApiProvider;
+class QPlainTextEdit;
 
 class MainWindow : public QMainWindow
 {
@@ -17,8 +17,9 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
+    QPlainTextEdit &textEdit() const;
+
 private:
-    RemoteApiProvider *mApiProvider;
     Ui::MainWindow *ui;
 };
 

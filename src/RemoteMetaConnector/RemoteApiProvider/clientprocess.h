@@ -4,6 +4,7 @@
 #include <QObject>
 
 class QProcess;
+class RemoteApiProvider;
 
 /*!
  * \brief The ClientProcess class is responsible for sl client process control.
@@ -12,7 +13,7 @@ class ClientProcess : public QObject
 {
     Q_OBJECT
 public:
-    explicit ClientProcess(QObject *parent = 0);
+    explicit ClientProcess(RemoteApiProvider &remoteApiProvider, QObject *parent = 0);
 
     void start();
 
@@ -31,6 +32,7 @@ private:
     QProcess *mProcess;
     bool mIsAllowDebug;
     QString mConnectionId;
+    RemoteApiProvider &mRemoteApiProvider;
 };
 
 #endif // CLIENTPROCESS_H
