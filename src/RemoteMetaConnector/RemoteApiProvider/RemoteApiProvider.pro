@@ -10,6 +10,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = RemoteApiProvider
 TEMPLATE = app
+DESTDIR = ../../../bin
 
 
 SOURCES += main.cpp\
