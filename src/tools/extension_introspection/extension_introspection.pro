@@ -19,14 +19,6 @@ SOURCES += main.cpp\
     pluginapi.cpp \
     commandmanager.cpp \
     publiccommandapi.cpp \
-    aggregator.cpp \
-    fileviewapi.cpp \
-    publicfileviewapi.cpp \
-    file_view/ui/exploreritemdelegate.cpp \
-    file_view/ui/texteditforrename.cpp \
-    file_view/filemodel.cpp \
-    file_view/fileview.cpp \
-    clonecommand.cpp \
     clientprocess.cpp
 
 HEADERS  += mainwindow.h \
@@ -34,21 +26,16 @@ HEADERS  += mainwindow.h \
     pluginapi.h \
     commandmanager.h \
     publiccommandapi.h \
-    aggregator.h \
-    fileviewapi.h \
-    publicfileviewapi.h \
-    file_view/ui/exploreritemdelegate.h \
-    file_view/ui/texteditforrename.h \
-    file_view/filemodel.h \
-    file_view/fileview.h \
-    clonecommand.h \
     clientprocess.h
 
-FORMS    += mainwindow.ui \
-    file_view/ui/fileview.ui
+FORMS    += mainwindow.ui
 
 # Extension support library
 include(./../../extensionlib/extensionlib.pri)
 
 # Plugin management support library
 include(./../../pluginmanager/pluginmanager.pri)
+
+include($$_PRO_FILE_PWD_/../../app/components/file_view/FileView.pri)
+
+LIBS += -lslapi

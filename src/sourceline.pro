@@ -26,10 +26,10 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS += \
+    slapi \
     extensionlib \
     pluginmanager \
     app \
     slclient \
     plugins \
     tools \
-    slapi

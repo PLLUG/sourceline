@@ -30,6 +30,7 @@ DESTDIR = $$SL_LIB_DIRECTORY
 
 QT += widgets
 
+include($$PWD/apibase/apibase.pri)
 include($$PWD/components/console/console.pri)
 include($$PWD/components/example_component/example_component.pri)
 include($$PWD/components/file_view/FileView.pri)
@@ -60,7 +61,6 @@ HEADERS += \
     ui/revisionView/view/simpleline.h \
     ui/clonedialog.h \
     ui/tabsapi.h \
-    aggregator.h \
     ui/genericcomponent.h \
     workplace.h \
     transitionsignals.h \
@@ -91,7 +91,6 @@ SOURCES += \
     ui/revisionView/view/simpleline.cpp \
     ui/clonedialog.cpp \
     ui/tabsapi.cpp \
-    aggregator.cpp \
     ui/genericcomponent.cpp \
     workplace.cpp \
     ui/errordialog.cpp \
@@ -207,4 +206,5 @@ OTHER_FILES +=
 
 SUBDIRS += \
     ui/revisionView/revTree.pro
+
 

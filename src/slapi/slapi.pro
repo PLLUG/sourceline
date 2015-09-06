@@ -36,3 +36,9 @@ HEADERS += slapifactory.h
 
 include($$PWD/../app/slapi_includes.pri)
 
+# Copy headers and pri file
+COPYFILES_PATH = $$_PRO_FILE_PWD_
+COPYFILES_FILELIST = $$HEADERS
+COPYFILES_TARGET_DIR = $$SL_INCLUDE_PLUGINAPI_DIRECTORY
+include($$_PRO_FILE_PWD_/../copyfiles.pri)
+

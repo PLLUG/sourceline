@@ -31,34 +31,44 @@ class Aggregator: public QObject
     Q_OBJECT
 
 public:
-    explicit Aggregator(QObject *parent = nullptr);
-    ~Aggregator();
-    void addObject(QObject *pObj);
+    explicit Aggregator(QObject *parent = nullptr) : QObject(parent) {}
+    virtual ~Aggregator() {}
 
+    /*!
+     * \brief Set obj as children of Aggregator class.
+     */
+    void addObject(QObject *pObj)
+    {
+        if (!mContents.contains(pObj))
+        {
+            mContents.append(pObj);
+        }
+    }
+
+    /*!
+     *\brief Template getter.
+     * Allow to get pointer on Aggregator's children.
+     * If Aggregator doesn't have suitable children, getter returns null pointer.
+     */
     template <typename T>
-    T* object();
+    T* object()
+    {
+        T * rObj = nullptr;
+        for (QObject *o: mContents)
+        {
+            if(rObj = qobject_cast<T*>(o))
+            {
+                break;
+            }
+        }
+        return rObj;
+    }
 
 private:
     QObjectList mContents;
 };
 
-/*!
- *\brief Template getter.
- * Allow to get pointer on Aggregator's children.
- * If Aggregator doesn't have suitable children, getter returns null pointer.
- */
-template <typename T>
-T* Aggregator::object()
-{
-    T * rObj = nullptr;
-    for (QObject *o: mContents)
-    {
-        if(rObj = qobject_cast<T*>(o))
-        {
-            break;
-        }
-    }
-    return rObj;
-}
+
+
 
 #endif // AGGREGATOR_H
