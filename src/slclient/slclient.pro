@@ -1,13 +1,12 @@
 
 TEMPLATE = app
 TARGET = slclient
-DESTDIR = $$_PRO_FILE_PWD_/../../bin
+
+include($$PWD/../general.pri)
+DESTDIR = $$SL_BIN_DIRECTORY
 
 QT       += core
-
 CONFIG   -= app_bundle
-CONFIG += sl_project # Pro file is a part of source line project structure
-CONFIG += c++11
 
 CONFIG (debug, debug|release) {
     DEFINES += DEBUG # Define that indicates - we are in debug mode
