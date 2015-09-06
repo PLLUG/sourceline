@@ -4,23 +4,21 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
-
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-DESTDIR = $$_PRO_FILE_PWD_/../../../bin
-
-CONFIG += C++11
-CONFIG += sl_project
-
-TARGET = extension_introspection
 TEMPLATE = app
+TARGET = extension_introspection
+
+include(./../../general.pri)
+DESTDIR = $$SL_BIN_DIRECTORY
+
+QT      += core gui
+QT      += widgets
 
 SOURCES += main.cpp\
         mainwindow.cpp \
     testcommand.cpp \
     pluginapi.cpp \
     commandmanager.cpp \
-    publiccommandapi.cpp \    
+    publiccommandapi.cpp \
     aggregator.cpp \
     fileviewapi.cpp \
     publicfileviewapi.cpp \
@@ -34,7 +32,7 @@ HEADERS  += mainwindow.h \
     testcommand.h \
     pluginapi.h \
     commandmanager.h \
-    publiccommandapi.h \    
+    publiccommandapi.h \
     aggregator.h \
     fileviewapi.h \
     publicfileviewapi.h \

@@ -15,10 +15,12 @@ DESTDIR = ../../../bin
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    remoteapiprovider.cpp
+    remoteapiprovider.cpp \
+    clientprocess.cpp
 
 HEADERS  += mainwindow.h \
-    remoteapiprovider.h
+    remoteapiprovider.h \
+    clientprocess.h
 
 FORMS    += mainwindow.ui
 
