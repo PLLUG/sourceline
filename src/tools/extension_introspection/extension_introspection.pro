@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     file_view/ui/texteditforrename.cpp \
     file_view/filemodel.cpp \
     file_view/fileview.cpp \
-    clonecommand.cpp
+    clonecommand.cpp \
+    clientprocess.cpp
 
 HEADERS  += mainwindow.h \
     testcommand.h \
@@ -40,7 +41,8 @@ HEADERS  += mainwindow.h \
     file_view/ui/texteditforrename.h \
     file_view/filemodel.h \
     file_view/fileview.h \
-    clonecommand.h
+    clonecommand.h \
+    clientprocess.h
 
 FORMS    += mainwindow.ui \
     file_view/ui/fileview.ui

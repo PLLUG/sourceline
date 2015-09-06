@@ -12,32 +12,6 @@
 #include "publicfileviewapi.h"
 #include "file_view/fileview.h"
 
-/// MK: commit everything, merge to metaconnector-refactoring
-/// MK: include fileview.pri
-/// MM: create class FileViewAPI
-///      * slot addToMenu(QString commandId)
-///      * setCommandManager(CommandManager *)
-/// MM: create new InvokationBased
-///      * setTarget(FileViewAPI)
-/// MM: create PublicFileViewAPI
-///      * connect to InvokationBased (FileViewAPI)
-///
-
-
-/// MM: implement method CommandApi *CommandManager::command(QString commandID)
-/// MM: add PublicFileViewAPI instance to Aggregare that will be passed to Command::init()
-/// MM: add second command GitCloneCommand
-///
-///
-/// MK: implement FileViewAPI::setFileView(FileView *)
-///  MK: implement FileViewAPI::addToMenu(QString commandId)
-///     * Create new QAction()
-///     * get CommandApi instance by commandId
-///     * set QAction text as commandId
-///     * add QAction to FileView context menu (No selection)
-
-
-
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
