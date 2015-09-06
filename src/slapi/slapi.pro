@@ -2,7 +2,7 @@
 ###                                                                          ###
 ###    SourceLine - Crossplatform VCS Client                                 ###
 ###    Copyright (C) 2015  by                                                ###
-###                   Mykhaylo Kopylets (kopylets2580@gmail.com)             ###
+###                   Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   ###
 ###                                                                          ###
 ###    This file is part of SourceLine Project.                              ###
 ###                                                                          ###
@@ -21,24 +21,18 @@
 ###                                                                          ###
 ################################################################################
 
+TEMPLATE = lib
+TARGET = slapi
 
-HEADERS += \
-    $$PWD/fileview.h \
-    $$PWD/ui/texteditforrename.h \
-    $$PWD/ui/exploreritemdelegate.h \
-    $$PWD/filemodel.h \
-    $$PWD/ifileviewapi.h \
-    $$PWD/fileviewapiinterface.h \
-    $$PWD/fileviewapi.h
+include($$PWD/../general.pri)
+DESTDIR += $$SL_LIB_DIRECTORY
+DEFINES += SLAPI_LIBRARY
 
-SOURCES += \
-    $$PWD/fileview.cpp \
-    $$PWD/ui/texteditforrename.cpp \
-    $$PWD/ui/exploreritemdelegate.cpp \
-    $$PWD/filemodel.cpp \
-    $$PWD/fileviewapi.cpp
+QT       -= gui
+CONFIG += staticlib
 
-FORMS += \
-    $$PWD/ui/fileview.ui
+SOURCES += slapifactory.cpp
+HEADERS += slapifactory.h
 
-include($$PWD/fileviewapi.pri)
+include($$PWD/../app/slapi_includes.pri)
+

@@ -26,7 +26,7 @@ TARGET = SourceLine
 
 
 include($$PWD/../general.pri)
-DESTDIR = $$SL_BIN_DIRECTORY
+DESTDIR = $$SL_LIB_DIRECTORY
 
 QT += widgets
 
@@ -65,7 +65,8 @@ HEADERS += \
     workplace.h \
     transitionsignals.h \
     ui/errordialog.h \
-    ui/contentfortab.h
+    ui/contentfortab.h \
+    slapi_global.h
 
 SOURCES += \
     main.cpp \
