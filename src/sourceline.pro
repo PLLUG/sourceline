@@ -1,7 +1,7 @@
 ################################################################################
 ###                                                                          ###
 ###    SourceLine - Crossplatform VCS Client                                 ###
-###    Copyright (C) 2014  by                                                ###
+###    Copyright (C) 2014, 2015  by                                          ###
 ###                   Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   ###
 ###                                                                          ###
 ###    This file is part of SourceLine Project.                              ###
@@ -24,12 +24,11 @@
 TEMPLATE = subdirs
 
 CONFIG += ordered
-CONFIG += silent
 
 SUBDIRS += \
     extensionlib \
     pluginmanager \
     app \
     slclient \
+    plugins \
     tools
-#    plugins \

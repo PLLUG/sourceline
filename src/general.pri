@@ -7,6 +7,9 @@ win32:SL_LIB_DIRECTORY = $$SL_BIN_DIRECTORY
 unix|mac:SL_LIB_DIRECTORY = $$clean_path($$SL_ROOT/lib)
 message(SourceLine lib directory: $$SL_LIB_DIRECTORY)
 
+SL_PLUGINS_DIRECTORY = $$clean_path($$SL_LIB_DIRECTORY/plugins)
+message(SourceLine plugins directory: $$SL_PLUGINS_DIRECTORY)
+
 SL_INCLUDE_DIRECTORY = $$clean_path($$SL_ROOT/include)
 message(SourceLine include directory: $$SL_INCLUDE_DIRECTORY)
 
@@ -18,6 +21,9 @@ CONFIG += sl_project
 
 # Use latest standard
 CONFIG += c++11
+
+# Less details of compilation for more clean output
+CONFIG += silent
 
 INCLUDEPATH += $$SL_INCLUDE_DIRECTORY
 INCLUDEPATH += $$SL_INCLUDE_PLUGINAPI_DIRECTORY

@@ -20,18 +20,15 @@
 ###    along with this program.  If not, see <http://www.gnu.org/licenses/>. ###
 ###                                                                          ###
 ################################################################################
-QT       += gui widgets
 
 TARGET = TestPlugin
-
 TEMPLATE = lib
 
-DESTDIR = $$_PRO_FILE_PWD_/../../../bin/plugins
+include($$PWD/../../general.pri)
+DESTDIR = $$SL_PLUGINS_DIRECTORY
 
+QT       += gui widgets
 CONFIG += shared
-
-# Pro file is a part of source line project structure
-CONFIG += sl_project
 
 DEFINES += TESTPLUGIN_LIBRARY
 
@@ -46,17 +43,7 @@ HEADERS += testplugin.h \
     customsettingpage.h \
     fakecommand.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
 include(../../extensionlib/extensionlib.pri)
-
-unix|win32: LIBS += -L$$PWD/../../pluginapi/lib/ -lextensions
-
-INCLUDEPATH += $$PWD/../../pluginapi/include
-DEPENDPATH += $$PWD/../../pluginapi/include
 
 OTHER_FILES += \
     TestPlugin.json
