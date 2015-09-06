@@ -37,7 +37,8 @@ int main(int argc, char *argv[])
 
     QCommandLineParser parser;
     parser.setApplicationDescription(QStringLiteral("SourceLine puppet process for command process execution and plugin isolation"));
-    parser.addOptions({idOption, debugOption});
+    parser.addOption(idOption);
+    parser.addOption(debugOption);
     parser.addHelpOption();
     parser.addVersionOption();
 

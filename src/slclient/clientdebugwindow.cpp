@@ -38,7 +38,7 @@ void myMessageOutput(QtMsgType type, const QMessageLogContext &context, const QS
     ClientDebugWindow::writeMessage(localMsg);
 }
 
-constexpr int UPDATE_LOG_INTERVAL(1000 * 2); // Every 2 sec.
+static const int UPDATE_LOG_INTERVAL(1000 * 2); // Every 2 sec.
 
 /*!
  * \brief Public constructor.
