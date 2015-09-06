@@ -22,15 +22,13 @@
 ################################################################################
 
 TEMPLATE = app
-QT += widgets
-
-# Pro file is a part of source line project structure
-CONFIG += \
-    sl_project \
-    C++11 \
-
-DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
+
+
+include($$PWD/../general.pri)
+DESTDIR = $$SL_BIN_DIRECTORY
+
+QT += widgets
 
 include($$PWD/components/console/console.pri)
 include($$PWD/components/example_component/example_component.pri)
@@ -208,6 +206,4 @@ OTHER_FILES +=
 
 SUBDIRS += \
     ui/revisionView/revTree.pro
-
-#LIBS += -lextensions
 

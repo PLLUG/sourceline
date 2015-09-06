@@ -29,8 +29,8 @@ CONFIG += silent
 SUBDIRS += \
     extensionlib \
     pluginmanager \
-    app \
-    plugins \
-    tools \
-    slclient \
-    RemoteMetaConnector
+    app #\
+#    plugins \
+#    tools \
+#    slclient \
+#    RemoteMetaConnector

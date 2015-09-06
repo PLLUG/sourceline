@@ -24,14 +24,16 @@ QT       += gui
 QT       += widgets
 QT       += network
 
-PLUGINAPI_PATH=$$_PRO_FILE_PWD_/../pluginapi
+include($$PWD/../general.pri)
+
+PLUGINAPI_PATH=$$SL_INCLUDE_PLUGINAPI_DIRECTORY
 
 TARGET = extensions
-DESTDIR = $$PLUGINAPI_PATH/lib
+DESTDIR = $$SL_LIB_DIRECTORY
 TEMPLATE = lib
 
-CONFIG += \
-    c++11
+#CONFIG += \
+#    c++11
 
 DEFINES += EXTENSIONS_LIBRARY
 
@@ -54,51 +56,11 @@ HEADERS +=\
     $$PWD/defs.h \
     $$PWD/settings.h
 
-#TODO: add copying of pri file
-
-## === define copy files for installation and build ===
-copytarget.path    = $$_PRO_FILE_PWD_
-copytarget.files  += $$HEADERS
-
-## wildcard for filename1 filename2 filename3 ...
-## === os specific dir separator ===
-win32: copytarget.files ~= s,/,\\,g
-
-## === copy compiler for makefile ===
-DirSep = /
-win32: DirSep = \\
-
-# TODO: move to separate function
-#for(f,copytarget.files) {
-#    if ()
-#    tmp += $$PWD$$DirSep$${f} ## make absolute paths
-#}
-#copycompiler.input        = tmp
-copycompiler.input        = copytarget.files
-
-# TODO: move to separate pri file (to make more re usable)
-isEmpty(DESTDIR):DESTDIR=.
-PLUGINAPI_INCLUDE_PATH = $$PLUGINAPI_PATH/include
-win32 {
-    PLUGINAPI_INCLUDE_PATH = $$replace(PLUGINAPI_INCLUDE_PATH, /, \\)
-}
-copycompiler.output       = $$PLUGINAPI_INCLUDE_PATH$$DirSep${QMAKE_FILE_BASE}${QMAKE_FILE_EXT}
-copycompiler.commands     = $(COPY_FILE) ${QMAKE_FILE_IN} ${QMAKE_FILE_OUT}
-copycompiler.CONFIG       = no_link no_clean
-## other CONFIG options are: depends explicit_dependencies target_predeps
-
-copycompiler.variable_out = QMAKE_DISTCLEAN
-QMAKE_EXTRA_COMPILERS += copycompiler
-
-## == makefile copy target ===
-copyfiles.recurse_target = compiler_copycompiler_make_all
-copyfiles.depends        = $$copyfiles.recurse_target
-copyfiles.CONFIG        += recursive
-
-QMAKE_EXTRA_TARGETS += copyfiles
-PRE_TARGETDEPS     += copyfiles ## copy files after source compilation
-
-INSTALLS += copytarget
+# Copy headers and pri file
+COPYFILES_PATH = $$_PRO_FILE_PWD_
+COPYFILES_FILELIST = $$HEADERS
+COPYFILES_TARGET_DIR = $$SL_INCLUDE_PLUGINAPI_DIRECTORY/private/$$TARGET
+include($$_PRO_FILE_PWD_/../copyfiles.pri)
 
 OTHER_FILES += \
     extensionlib.pri

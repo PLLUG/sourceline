@@ -23,12 +23,11 @@
 
 QT       -= gui
 
-DESTDIR = $$_PRO_FILE_PWD_/../../bin
+include($$PWD/../general.pri)
+DESTDIR = $$SL_LIB_DIRECTORY
 TARGET = pluginmanager
-CONFIG += sl_project
 
 TEMPLATE = lib
-CONFIG += C++11
 
 DEFINES += PLUGINMANAGER_LIBRARY
 
@@ -43,12 +42,13 @@ HEADERS += pluginmodel.h\
     pluginloader.h \
     pluginmanager.h
 
-unix {
-    target.path = /usr/lib
-    INSTALLS += target
-}
-
 include(./../extensionlib/extensionlib.pri)
+
+# Copy headers and pri file
+COPYFILES_PATH = $$_PRO_FILE_PWD_
+COPYFILES_FILELIST = $$HEADERS
+COPYFILES_TARGET_DIR = $$SL_INCLUDE_PLUGINAPI_DIRECTORY/private/$$TARGET
+include($$_PRO_FILE_PWD_/../copyfiles.pri)
 
 # TODO: make separate pri file for including this library into project
 OTHER_FILES += \
