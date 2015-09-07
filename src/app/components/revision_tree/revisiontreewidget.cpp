@@ -188,74 +188,79 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         const int targetRow = get(rowIndex, v2);
         const int targetCol = get(colIndex, v2);
 
-        QPainterPath myPath;
-        QLinearGradient gradient(QPointF(mRowHeight*sourceCol + 1.0 * mLeftOffset,
-                                         mRowHeight*sourceRow + 1.0 * mTopOffset),
-                                 QPointF(mRowHeight*targetCol + 1.0 * mLeftOffset,
-                                         mRowHeight*targetRow + 1.0 * mTopOffset));
-        gradient.setColorAt(0, mRevisionVertexes[v1].color);
-        gradient.setColorAt(1, mRevisionVertexes[v2].color);
-        lPen.setBrush(gradient);
-        painter.setPen(lPen);
+        // Painting of edge, only if it is within the display
+        if(!((sourceRow < firstRow && targetRow < firstRow) ||
+                (sourceRow > lastRow && targetRow > lastRow)))
+        {
+            QPainterPath myPath;
+            QLinearGradient gradient(QPointF(mRowHeight*sourceCol + 1.0 * mLeftOffset,
+                                             mRowHeight*sourceRow + 1.0 * mTopOffset),
+                                     QPointF(mRowHeight*targetCol + 1.0 * mLeftOffset,
+                                             mRowHeight*targetRow + 1.0 * mTopOffset));
+            gradient.setColorAt(0, mRevisionVertexes[v1].color);
+            gradient.setColorAt(1, mRevisionVertexes[v2].color);
+            lPen.setBrush(gradient);
+            painter.setPen(lPen);
 
-        if(targetCol > sourceCol)
-        {
-            // Moving to center of source vertex
-            myPath.moveTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
-                                  mRowHeight*sourceRow + mTopOffset));
-            // Drawing line to first rounding of edge
-            myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
-                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset));
-            // Drawing first rounding
-            myPath.quadTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
-                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset),
-                          QPointF(mRowHeight*sourceCol + mLeftOffset + mStep,
-                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
-            // Drawing line from first rounding to second rounding
-            myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset - mStep,
-                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
-            // Drawing second rounding
-            myPath.quadTo(QPointF(mRowHeight*targetCol + mLeftOffset - mStep,
-                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep),
-                          QPointF(mRowHeight*targetCol + mLeftOffset,
-                                  mRowHeight*sourceRow + mTopOffset - mEdgeOffset - 2 * mStep));
-            // Drawing line from second rouding to target vertex
-            myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
-                                  mRowHeight*targetRow + mTopOffset));
+            if(targetCol > sourceCol)
+            {
+                // Moving to center of source vertex
+                myPath.moveTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                                      mRowHeight*sourceRow + mTopOffset));
+                // Drawing line to first rounding of edge
+                myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset));
+                // Drawing first rounding
+                myPath.quadTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset),
+                              QPointF(mRowHeight*sourceCol + mLeftOffset + mStep,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
+                // Drawing line from first rounding to second rounding
+                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset - mStep,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
+                // Drawing second rounding
+                myPath.quadTo(QPointF(mRowHeight*targetCol + mLeftOffset - mStep,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep),
+                              QPointF(mRowHeight*targetCol + mLeftOffset,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - 2 * mStep));
+                // Drawing line from second rouding to target vertex
+                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                                      mRowHeight*targetRow + mTopOffset));
+            }
+            else if(targetCol < sourceCol)
+            {
+                // Moving to center of target vertex
+                myPath.moveTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                                      mRowHeight*targetRow + mTopOffset));
+                // Drawing line to first rounding of edge
+                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset));
+                // Drawing first rounding
+                myPath.quadTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset),
+                              QPointF(mRowHeight*targetCol + mLeftOffset + mStep,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
+                // Drawing line from first rounding to second rounding
+                myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset - mStep,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
+                // Drawing second rounding
+                myPath.quadTo(QPointF(mRowHeight*sourceCol + mLeftOffset - mStep,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep),
+                              QPointF(mRowHeight*sourceCol + mLeftOffset,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + 2 * mStep));
+                // Drawing line from second rouding to source vertex
+                myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                                      mRowHeight*sourceRow + mTopOffset));
+            }
+            else
+            {
+                myPath.moveTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                                      mRowHeight*sourceRow + mTopOffset));
+                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                                      mRowHeight*targetRow + mTopOffset));
+            }
+            painter.drawPath(myPath);
         }
-        else if(targetCol < sourceCol)
-        {
-            // Moving to center of target vertex
-            myPath.moveTo(QPointF(mRowHeight*targetCol + mLeftOffset,
-                                  mRowHeight*targetRow + mTopOffset));
-            // Drawing line to first rounding of edge
-            myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
-                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset));
-            // Drawing first rounding
-            myPath.quadTo(QPointF(mRowHeight*targetCol + mLeftOffset,
-                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset),
-                          QPointF(mRowHeight*targetCol + mLeftOffset + mStep,
-                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
-            // Drawing line from first rounding to second rounding
-            myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset - mStep,
-                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
-            // Drawing second rounding
-            myPath.quadTo(QPointF(mRowHeight*sourceCol + mLeftOffset - mStep,
-                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep),
-                          QPointF(mRowHeight*sourceCol + mLeftOffset,
-                                  mRowHeight*targetRow + mTopOffset + mEdgeOffset + 2 * mStep));
-            // Drawing line from second rouding to source vertex
-            myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
-                                  mRowHeight*sourceRow + mTopOffset));
-        }
-        else
-        {
-            myPath.moveTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
-                                  mRowHeight*sourceRow + mTopOffset));
-            myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
-                                  mRowHeight*targetRow + mTopOffset));
-        }
-        painter.drawPath(myPath);
     }
 
     //    boost::associative_property_map<VertexIntMap> testAlgorithmIndexes{mTestOrderMap};
