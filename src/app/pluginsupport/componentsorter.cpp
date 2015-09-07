@@ -48,7 +48,6 @@ void ComponentSorter::addSupplier(ComponentSupplier *pSupplier)
     mSupplierByClassName.insert(pSupplier->className(), pSupplier);
 }
 
-
 ComponentSupplier *ComponentSorter::supplierForComponent(QObject *pComponent)
 {
     ComponentSupplier *rSupplier = 0;

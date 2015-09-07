@@ -13,9 +13,8 @@ class RevisionTreeWidget : public QWidget
 {
 public:
     RevisionTreeWidget(QWidget* parent = nullptr);
-    ~RevisionTreeWidget();
 
-    void setGraph(const revision_graph &pGraph);
+    void resetGraph();
 
     int radius() const;
     void setRadius(int radius);
@@ -38,6 +37,8 @@ public:
     int getEdgeOffset() const;
     void setEdgeOffset(int edgeOffset);
 
+    void setModel(RevisionModel *pModel);
+
 protected:
     void paintEvent(QPaintEvent *e) override;
 
@@ -47,15 +48,11 @@ private:
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
 
 private:
-    revision_graph mGraph;
     float mLeftOffset;
     float mTopOffset;
     float mBottomOffset;
-    // Radius of vertex
     int mRadius;
-    // Radius of round of edges
     int mStep;
-    // Offset from center of vertex to edges, that are branches or merges
     int mEdgeOffset;
     float mRowHeight;
 
@@ -64,6 +61,7 @@ private:
 
     std::vector<RevisionVertex> mRevisionVertexes;
     VertexIntMap mTestOrderMap;
+    RevisionModel *mModel;
 };
 
 #endif // REVISIONTREEWIDGET_H

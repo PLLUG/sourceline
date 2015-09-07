@@ -25,6 +25,7 @@
 
 #include <boost/property_map/dynamic_property_map.hpp>
 #include <map>
+#include <iostream>
 #include "revisionnode.h"
 
 template <typename IndexMap, typename vertex, typename graph>
@@ -127,6 +128,7 @@ public:
     {
         Q_UNUSED(e)
         Q_UNUSED(g)
+        std::cout << "forward_or_cross_edge" << e << std::endl;
     }
 
     template < typename Edge, typename Graph >
@@ -138,6 +140,7 @@ public:
      */
     void tree_edge(Edge e, Graph g)
     {
+        std::cout << "tree_edge" << e << std::endl;
         if(boost::source(e,g) == mPrevTreeEdgeTarget)
         {
             put(mColumnIndexMap, boost::target(e,g), get(mColumnIndexMap,boost::source(e,g)));
