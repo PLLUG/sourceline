@@ -1,16 +1,14 @@
 #include "revisiontreewidget.h"
 #include <iostream>
-#include <boost/graph/topological_sort.hpp>
 #include <boost/graph/property_maps/container_property_map.hpp>
 #include <boost/graph/iteration_macros.hpp>
-#include <boost/graph/dominator_tree.hpp>
+#include <boost/graph/depth_first_search.hpp>
 #include <QPainter>
 #include <QPaintEvent>
 #include <QPainterPath>
 #include <QPen>
 #include <QLinearGradient>
 #include <QDateTime>
-#include <QApplication>
 #include "dfs_visitor.h"
 
 using IndexPropertyMap = boost::property_map<revision_graph, boost::vertex_index_t>::type;
@@ -31,28 +29,22 @@ RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     mEdgeOffset = mRadius + mStep * 2;
 }
 
-RevisionTreeWidget::~RevisionTreeWidget()
-{
-}
-
 /*!
- * \brief RevisionTreeWidget::setGraph Sets graph.
- * \param pGraph Boost graph.
+ * \brief RevisionTreeWidget::resetGraph Resets graph, recalculates.
  */
-void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
+void RevisionTreeWidget::resetGraph()
 {
     using boost::num_vertices;
-
-    mGraph = pGraph;
-    if (!num_vertices(mGraph)) return;
 
     mRowMap.clear();
     mColumnMap.clear();
     mTestOrderMap.clear();
 
-    boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
+    if(!mModel) return;
+    const int numVertices{num_vertices(mModel->graph())};
+    if (!numVertices) return;
 
-    vertex root_vertex = findRoot(mGraph);
+    const vertex root_vertex = findRoot(mModel->graph());
     std::cout << "root vertex is: " << root_vertex << std::endl;
 
     //perform depth first search
@@ -60,20 +52,19 @@ void RevisionTreeWidget::setGraph(const revision_graph &pGraph)
     ColorMap colorMap;
     boost::associative_property_map<ColorMap> propColorMap(colorMap);
     dfs_visitor<VertexIntMap, vertex, revision_graph> dfs_vis{mColumnMap,mTestOrderMap};
-    depth_first_search(mGraph,dfs_vis,propColorMap,root_vertex);
+    depth_first_search(mModel->graph(),dfs_vis,propColorMap,root_vertex);
 
     //perform topological sort
     int row{0};
-    std::vector< vertex > sorted_vertices;
-    topological_sort(mGraph, std::back_inserter(sorted_vertices));
-    for (auto ii=sorted_vertices.begin(); ii!=sorted_vertices.end(); ++ii)
+    boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
+    for (auto ii=mModel->sortedVertices().cbegin(); ii!=mModel->sortedVertices().cend(); ++ii)
     {
         put(rowIndex, *ii, row++);
     }
 
-    mRevisionVertexes = revisionVertexVector(mGraph);
+    mRevisionVertexes = revisionVertexVector(mModel->graph());
 
-    setMinimumHeight(mTopOffset + mRowHeight * (num_vertices(mGraph) - 1) + mBottomOffset);
+    setMinimumHeight(mTopOffset + mRowHeight * (numVertices - 1) + mBottomOffset);
     updateGeometry();
 }
 
@@ -150,31 +141,36 @@ void RevisionTreeWidget::setBottomOffset(float bottomOffset)
 void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 {
     QWidget::paintEvent(e);
-    QPainter painter(this);
-    painter.setRenderHint(QPainter::Antialiasing);
-
+    if(!mModel)
+    {
+        return;
+    }
     // Getting of first and last visible row of revision tree
-    int rectBeginY = e->rect().y();
-    int rectEndY = rectBeginY + e->rect().height();
-    int firstRow = static_cast<int>(abs((rectBeginY - mTopOffset) / mRowHeight));
+    int rectBeginY = e->rect().top();
+    int rectEndY = e->rect().bottom();
+    int firstRow = std::floor((rectBeginY - mTopOffset) / mRowHeight);
     if(rectBeginY < mTopOffset)
     {
         firstRow = 0;
     }
-    int lastRow = roundToGreater((rectEndY - mTopOffset) / mRowHeight) - 1;
+    if(firstRow >= mModel->rowCount()) return;
+    if(mRevisionVertexes.size() != mModel->rowCount()) return;
+    int lastRow = std::ceil((rectEndY - mTopOffset) / mRowHeight);
+    lastRow = std::min(lastRow,mModel->rowCount()-1);
+
+    QPainter painter(this);
+    painter.setRenderHint(QPainter::Antialiasing);
 
     boost::associative_property_map<VertexIntMap> colIndex(mColumnMap);
     boost::associative_property_map<VertexIntMap> rowIndex(mRowMap);
 
     // Drawing rectangle fields
     painter.setPen(Qt::NoPen);
-    for(int row = firstRow; row <= lastRow; row++)
+    for(int row = firstRow; row <= lastRow; ++row)
     {
-        ((row % 2) == 0) ? painter.setBrush(Qt::white) :
-                           painter.setBrush(QColor("#DEE8D0"));
-        int x = 0;
-        painter.drawRect(x, mRowHeight + row*mRowHeight,
-                         this->width(), mRowHeight);
+        painter.setBrush(mModel->data(mModel->index(row,0),Qt::BackgroundRole).value<QColor>());
+        painter.drawRect(0, mRowHeight + row*mRowHeight,
+                         width(), mRowHeight);
     }
     painter.setBrush(Qt::NoBrush);
 
@@ -182,15 +178,15 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
     QPen lPen;
     lPen.setWidth(2);
     lPen.setColor(Qt::darkGray);
-    BGL_FORALL_EDGES(e, mGraph, revision_graph)
+    BGL_FORALL_EDGES(e, mModel->graph(), revision_graph)
     {
-        auto v1 = boost::source(e, mGraph);
-        auto v2 = boost::target(e, mGraph);
+        const auto v1 = boost::source(e, mModel->graph());
+        const auto v2 = boost::target(e, mModel->graph());
 
-        int sourceRow = get(rowIndex, v1);
-        int sourceCol = get(colIndex, v1);
-        int targetRow = get(rowIndex, v2);
-        int targetCol = get(colIndex, v2);
+        const int sourceRow = get(rowIndex, v1);
+        const int sourceCol = get(colIndex, v1);
+        const int targetRow = get(rowIndex, v2);
+        const int targetCol = get(colIndex, v2);
 
         QPainterPath myPath;
         QLinearGradient gradient(QPointF(mRowHeight*sourceCol + 1.0 * mLeftOffset,
@@ -259,21 +255,16 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
             myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
                                   mRowHeight*targetRow + mTopOffset));
         }
-
         painter.drawPath(myPath);
     }
 
-//    boost::associative_property_map<VertexIntMap> testAlgorithmIndexes{mTestOrderMap};
+    //    boost::associative_property_map<VertexIntMap> testAlgorithmIndexes{mTestOrderMap};
 
     painter.setPen(Qt::darkGray);
-    if(!mModel)
+    for(int row = firstRow; row <= lastRow; ++row)
     {
-        return;
-    }
-    for(int row = firstRow; row <= lastRow; row++)
-    {
-        vertex v = mModel->vertexAt(row);
-        int col = mRevisionVertexes[v].column;
+        const vertex v = mModel->vertexAt(row);
+        const int col = mRevisionVertexes[v].column;
 
         // Drawing vertex
         painter.setBrush(mRevisionVertexes[v].color);
@@ -290,13 +281,13 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
                                 mRadius, mRadius);
             break;
         }
-//        // Draws number of vertex
-//        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
-//                                 mRowHeight*row + mTopOffset},
-//                         QString::number(get(testAlgorithmIndexes,v)));
-        //        painter.drawText(QPointF{mWidth*col + mLeftOffset,
-        //                                 mWidth*row + mTopOffset},
-        //                         QString::number(v));
+        //        // Draws number of vertex
+        //        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
+        //                                 mRowHeight*row + mTopOffset},
+        //                         QString::number(get(testAlgorithmIndexes,v)));
+        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
+                                 mRowHeight*row + mTopOffset},
+                         QString::number(v));
     }
 }
 
@@ -325,7 +316,7 @@ std::vector<vertex> RevisionTreeWidget::getSortedGraphByTime(const revision_grap
         return graph[vert1].created < graph[vert2].created;
     });
 
-    return rVector;
+    return std::move(rVector);
 }
 
 /*!
@@ -408,36 +399,16 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
             rRevisionVertexes[v].shape = vsCircle;
         }
     }
-
-    return rRevisionVertexes;
+    return std::move(rRevisionVertexes);
 }
 
-/*!
- * \brief RevisionTreeWidget::roundToGreater rounds to greater number.
- *
- * i.e. roundToGreater(2.1) = 3, roundToGreater(2.0) = 2.
- * \param number - number to be rounded
- * \return rounded number
- */
-int RevisionTreeWidget::roundToGreater(float number)
-{
-    int rNumb;
-    int less = static_cast<int>(number);
-    int greater = static_cast<int>(number) + 1;
-    if(less == number)
-    {
-        rNumb = less;
-    }
-    else if(number > less)
-    {
-        rNumb = greater;
-    }
-
-    return rNumb;
-}
 void RevisionTreeWidget::setModel(RevisionModel *pModel)
 {
     mModel = pModel;
+    if(mModel)
+    {
+//        connect(mModel,&RevisionModel::graphReset,this,&RevisionTreeWidget::resetGraph,Qt::UniqueConnection);
+    }
 }
 
 int RevisionTreeWidget::getEdgeOffset() const
@@ -459,4 +430,3 @@ void RevisionTreeWidget::setStep(int step)
 {
     mStep = step;
 }
-

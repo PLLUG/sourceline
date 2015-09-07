@@ -13,9 +13,8 @@ class RevisionTreeWidget : public QWidget
 {
 public:
     RevisionTreeWidget(QWidget* parent = nullptr);
-    ~RevisionTreeWidget();
 
-    void setGraph(const revision_graph &pGraph);
+    void resetGraph();
 
     int radius() const;
     void setRadius(int radius);
@@ -47,10 +46,8 @@ private:
     std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
     static vertex findRoot(const revision_graph &pGraph);
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
-    int roundToGreater(float number);
 
 private:
-    revision_graph mGraph;
     float mLeftOffset;
     float mTopOffset;
     float mBottomOffset;

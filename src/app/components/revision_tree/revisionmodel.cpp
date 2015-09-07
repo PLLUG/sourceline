@@ -51,6 +51,7 @@ std::istream& operator>>(std::istream& is, const QVariant&) //(not supported)
 RevisionModel::RevisionModel(QObject *parent):
     QAbstractTableModel(parent)
 {
+    qDebug("initializing RevisionModel");
 }
 
 /*!
@@ -91,6 +92,9 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
                 break;
         }
     }
+
+    beginResetModel();
+    beginResetGraphStructure();
     if(boost::graph_traits<revision_graph>::null_vertex() == v_parent)
     {
         // parent not found
@@ -119,12 +123,12 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
     {
         boost::add_edge(v_parent, v_new, mGraph);
     }
-    beginResetModel();
-    endResetModel();
     //TODO: take to account that vertices were already sorted
     //perform topological sort (or some other sort later)
-    sorted_vertices.clear();
-    topological_sort(mGraph, std::back_inserter(sorted_vertices));
+    mSortedVertices.clear();
+    topological_sort(mGraph, std::back_inserter(mSortedVertices));
+    endResetGraphStructure();
+    endResetModel();
 }
 
 /*!
@@ -148,8 +152,17 @@ void RevisionModel::putProperty(const std::string &pRecepientId, const std::stri
         mPropertyNames.push_back(property);
     }
     beginResetModel();
-    endResetModel();
     put(property,mProperties,pRecepientId,value);
+    endResetModel();
+}
+
+/*!
+ * \brief RevisionModel::graph Returns graph that holds data about revisions.
+ * \return Boost graph.
+ */
+const revision_graph &RevisionModel::graph() const
+{
+    return mGraph;
 }
 
 /*!
@@ -159,7 +172,22 @@ void RevisionModel::putProperty(const std::string &pRecepientId, const std::stri
  */
 vertex RevisionModel::vertexAt(int row) const
 {
-    return sorted_vertices.at(row);
+    return mSortedVertices.at(row);
+}
+
+const std::vector<vertex> &RevisionModel::sortedVertices() const
+{
+    return mSortedVertices;
+}
+
+void RevisionModel::beginResetGraphStructure()
+{
+
+}
+
+void RevisionModel::endResetGraphStructure()
+{
+    emit graphReset();
 }
 
 /*!
@@ -258,13 +286,3 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
     }
     return headerName;
 }
-
-/*!
- * \brief RevisionModel::graph Returns graph that holds data about revisions.
- * \return Boost graph.
- */
-revision_graph RevisionModel::graph() const
-{
-    return mGraph;
-}
-
