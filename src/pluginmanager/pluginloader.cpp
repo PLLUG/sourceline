@@ -98,6 +98,10 @@ QObject* PluginLoader::load(QString pPluginId)
     {
         rInstance = lPluginLoader.instance();
     }
+    else
+    {
+        qDebug(qPrintable(lPluginLoader.errorString()));
+    }
 
     return rInstance;
 }

@@ -23,11 +23,16 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <QtPlugin>
+#include "defs.h"
+
+class Command;
 
 class PluginInterface
 {
 public:
     virtual QObjectList components() const = 0;
+
+    virtual QList<Command *> commands(Commands::CommandKind kind = Commands::UknownCommand) = 0;
 };
 
 #define PluginInterface_iid "org.PLUG.SL.PluginInterface"

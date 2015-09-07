@@ -42,6 +42,7 @@ HEADERS += testplugin.h \
     fakecommand.h
 
 include(../../extensionlib/extensionlib.pri)
+LIBS += -lslapi
 
 OTHER_FILES += \
     TestPlugin.json

@@ -12,6 +12,7 @@ CONFIG  += shared
 DEFINES += GITPLUGIN_LIBRARY
 
 include(../../extensionlib/extensionlib.pri)
+LIBS += -lslapi
 
 DISTFILES += \
     GitPlugin.json
@@ -28,3 +29,6 @@ SOURCES += \
     gitsettings.cpp \
     commandapi.cpp \
     clonecommand.cpp
+
+OTHER_FILES += \
+    GitPlugin.json

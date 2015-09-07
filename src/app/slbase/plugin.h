@@ -34,11 +34,17 @@ class Plugin :
 public:
     explicit Plugin(QObject *pParent = 0);
 
+    QList<Command *> commands(Commands::CommandKind kind = Commands::UknownCommand) final;
+
     QObjectList components() const;
+
 protected:
      void addComponent(QObject *pComponent);
+     void registerCommand(Command *command);
+
 private:
      QObjectList mComponents;
+     QList<Command *> mListCommands;
 };
 
 #endif // PLUGIN_H

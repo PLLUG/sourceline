@@ -11,7 +11,7 @@ class GITPLUGINSHARED_EXPORT GitPlugin :
 {
     Q_OBJECT
     Q_INTERFACES(PluginInterface)
-    Q_PLUGIN_METADATA(IID "GitPlugin" FILE "GitPlugin.json")
+    Q_PLUGIN_METADATA(IID "org.PLLUG.sl.plugins.git" FILE "GitPlugin.json")
 public:
     explicit GitPlugin(QObject *pParent = 0);
 

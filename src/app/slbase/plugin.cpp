@@ -28,6 +28,11 @@ Plugin::Plugin(QObject *pParent) :
 {
 }
 
+QList<Command *> Plugin::commands(Commands::CommandKind kind)
+{
+    return mListCommands;
+}
+
 QObjectList Plugin::components() const
 {
     return mComponents;
@@ -36,4 +41,9 @@ QObjectList Plugin::components() const
 void Plugin::addComponent(QObject *pComponent)
 {
     mComponents.append(pComponent);
+}
+
+void Plugin::registerCommand(Command *command)
+{
+    mListCommands.append(command);
 }
