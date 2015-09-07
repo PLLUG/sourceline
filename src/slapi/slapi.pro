@@ -28,7 +28,6 @@ include($$PWD/../general.pri)
 DESTDIR += $$SL_LIB_DIRECTORY
 DEFINES += SLAPI_LIBRARY
 
-QT       -= gui
 CONFIG += staticlib
 
 SOURCES += slapifactory.cpp

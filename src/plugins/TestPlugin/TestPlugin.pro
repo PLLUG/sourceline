@@ -33,12 +33,10 @@ CONFIG += shared
 DEFINES += TESTPLUGIN_LIBRARY
 
 SOURCES += testplugin.cpp \
-    gitfakecomponent.cpp \
     customsettingpage.cpp \
     fakecommand.cpp
 
 HEADERS += testplugin.h \
-    gitfakecomponent.h \
     testplugin_global.h \
     customsettingpage.h \
     fakecommand.h

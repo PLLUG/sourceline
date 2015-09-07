@@ -22,7 +22,6 @@
 *******************************************************************************/
 
 #include "testplugin.h"
-#include "gitfakecomponent.h"
 #include "settings.h"
 #include "customsettingpage.h"
 #include "fakecommand.h"
@@ -30,9 +29,6 @@
 TestPlugin::TestPlugin(QObject *pParent) :
     Plugin(pParent)
 {
-    GitFakeComponent *gitFakeComponent = new GitFakeComponent(this);
-    this->addComponent(gitFakeComponent);
-
     Settings *lPSettings = new Settings(this);
 
     CustomSettingPage *lSettingPage = new CustomSettingPage(lPSettings);

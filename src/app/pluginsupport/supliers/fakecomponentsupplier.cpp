@@ -23,7 +23,6 @@
 
 #include "fakecomponentsupplier.h"
 #include "plugininfo.h"
-#include "fakecomponent.h"
 
 FakeComponentSupplier::FakeComponentSupplier()
 {
@@ -32,7 +31,7 @@ FakeComponentSupplier::FakeComponentSupplier()
 
 QString FakeComponentSupplier::className() const
 {
-    return FakeComponent::staticMetaObject.className();
+    return "FakeComponent::staticMetaObject.className()";
 }
 
 void FakeComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)

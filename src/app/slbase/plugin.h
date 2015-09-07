@@ -1,5 +1,5 @@
-#ifndef FAKECOMPONENT_H
-#define FAKECOMPONENT_H
+#ifndef PLUGIN_H
+#define PLUGIN_H
 /*******************************************************************************
 ***                                                                          ***
 ***    SourceLine - Crossplatform VCS Client.                                ***
@@ -23,15 +23,22 @@
 ***                                                                          ***
 *******************************************************************************/
 #include <QObject>
-#include "extensions_global.h"
+#include "plugin-interface.h"
 
-class EXTENSIONSSHARED_EXPORT FakeComponent : public QObject
+class Plugin :
+        public QObject,
+        public PluginInterface
 {
     Q_OBJECT
+    Q_INTERFACES(PluginInterface)
 public:
-    explicit FakeComponent(QObject *parent = 0);
-    void baseFunctionality();
-    virtual void newFunctionality() = 0;
+    explicit Plugin(QObject *pParent = 0);
+
+    QObjectList components() const;
+protected:
+     void addComponent(QObject *pComponent);
+private:
+     QObjectList mComponents;
 };
 
-#endif // FAKECOMPONENT_H
+#endif // PLUGIN_H

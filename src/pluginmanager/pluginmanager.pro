@@ -43,6 +43,7 @@ HEADERS += pluginmodel.h\
     pluginmanager.h
 
 include(./../extensionlib/extensionlib.pri)
+LIBS += -lslapi
 
 # Copy headers and pri file
 COPYFILES_PATH = $$_PRO_FILE_PWD_

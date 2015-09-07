@@ -27,8 +27,7 @@
 #include <QObject>
 
 #include <QIcon>
-#include "defs.h"
-#include "extensions_global.h"
+//#include "defs.h"
 
 class Aggregator;
 
@@ -36,7 +35,7 @@ class Aggregator;
  * \brief The abstract Command class implements command that could be executed by vcs or command
  *  interpreter in SL process execution environment.
  */
-class EXTENSIONSSHARED_EXPORT Command : public QObject
+class Command : public QObject
 {
     Q_OBJECT
 public:

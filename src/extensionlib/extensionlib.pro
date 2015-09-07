@@ -40,20 +40,12 @@ DEFINES += EXTENSIONS_LIBRARY
 include($$_PRO_FILE_PWD_/metaconnector/metaconnector.pri)
 
 SOURCES += \
-    $$PWD/fakecomponent.cpp \
-    $$PWD/plugin.cpp \
     $$PWD/settingspage.cpp \
-    $$PWD/command.cpp \
     $$PWD/settings.cpp
 
 HEADERS +=\
     $$PWD/extensions_global.h\
-    $$PWD/fakecomponent.h\
-    $$PWD/plugin-interface.h\
-    $$PWD/plugin.h\
     $$PWD/settingspage.h \
-    $$PWD/command.h \
-    $$PWD/defs.h \
     $$PWD/settings.h
 
 # Copy headers and pri file
