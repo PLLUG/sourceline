@@ -26,8 +26,8 @@ TEMPLATE = subdirs
 CONFIG += ordered
 
 SUBDIRS += \
-    slapi \
     extensionlib \
+    slapi \
     pluginmanager \
     app \
     slclient \

@@ -34,6 +34,8 @@ SOURCES += slapifactory.cpp
 HEADERS += slapifactory.h
 
 include($$PWD/../app/slapi_includes.pri)
+INCLUDEPATH += $$SL_INCLUDE_DIRECTORY/pluginapi/private/extensions
+LIBS += -lextensionlib
 
 # Copy headers and pri file
 COPYFILES_PATH = $$_PRO_FILE_PWD_

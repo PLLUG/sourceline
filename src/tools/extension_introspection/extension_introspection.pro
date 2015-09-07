@@ -16,14 +16,12 @@ QT      += widgets
 SOURCES += main.cpp\
         mainwindow.cpp \
     testcommand.cpp \
-    pluginapi.cpp \
     commandmanager.cpp \
     publiccommandapi.cpp \
     clientprocess.cpp
 
 HEADERS  += mainwindow.h \
     testcommand.h \
-    pluginapi.h \
     commandmanager.h \
     publiccommandapi.h \
     clientprocess.h

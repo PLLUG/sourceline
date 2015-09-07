@@ -22,6 +22,7 @@
 *******************************************************************************/
 
 #include "plugin.h"
+#include "pluginapi.h"
 
 Plugin::Plugin(QObject *pParent) :
     QObject(pParent)
