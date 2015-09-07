@@ -26,11 +26,19 @@ HEADERS += \
     $$PWD/fileview.h \
     $$PWD/ui/texteditforrename.h \
     $$PWD/ui/exploreritemdelegate.h \
+    $$PWD/filemodel.h \
+    $$PWD/ifileviewapi.h \
+    $$PWD/fileviewapiinterface.h \
+    $$PWD/fileviewapi.h
 
 SOURCES += \
     $$PWD/fileview.cpp \
     $$PWD/ui/texteditforrename.cpp \
     $$PWD/ui/exploreritemdelegate.cpp \
+    $$PWD/filemodel.cpp \
+    $$PWD/fileviewapi.cpp
 
 FORMS += \
-    $$PWD/ui/fileview.ui \
+    $$PWD/ui/fileview.ui
+
+include($$PWD/fileviewapi.pri)

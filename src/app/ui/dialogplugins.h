@@ -22,7 +22,7 @@
 ***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
 ***                                                                          ***
 *******************************************************************************/
-#include "../pluginsupport/plugininfo.h"
+#include "plugininfo.h"
 #include <QList>
 #include <QString>
 #include <QDialog>

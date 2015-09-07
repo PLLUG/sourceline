@@ -8,6 +8,11 @@
 #include <QTextEdit>
 #include "texteditforrename.h"
 #include <QTextCursor>
+#include "../filemodel.h"
+#include <QFileSystemWatcher>
+#include <QHash>
+#include <QDateTime>
+#include <QDebug>
 
 //TASK: move to ui folder (together with fileview folder)
 const QString invalidCharacters = "\\/:*?\"<>|";
@@ -15,19 +20,28 @@ const QString invalidCharacters = "\\/:*?\"<>|";
 ExplorerItemDelegate::ExplorerItemDelegate(QObject *parent) :
     QStyledItemDelegate(parent)
 {
-    mFModel = nullptr;
+      mFModel = nullptr;
+//    icons.insert(FileStatus::None, QStringLiteral(""));
+//    icons.insert(FileStatus::Normal, QStringLiteral(":/Overlays/overlays/normal.png"));
+//    icons.insert(FileStatus::Modified, QStringLiteral(":/Overlays/overlays/modified.png"));
 }
 
-void ExplorerItemDelegate::setFileSystemModel(QFileSystemModel *model)
+void ExplorerItemDelegate::setFileSystemModel(FileModel *model)
 {
     mFModel = model;
 }
 
-QFileSystemModel* ExplorerItemDelegate::fileSystemModel()
+FileModel* ExplorerItemDelegate::fileSystemModel()
 {
     return mFModel;
 }
 
+/*!
+ * \brief paint models
+ * \param painter
+ * \param option style
+ * \param index item on model
+ */
 void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &opt, const QModelIndex &index) const
 {
     QStyleOptionViewItemV4 optv4 = opt;
@@ -39,34 +53,37 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     optv4.decorationSize = (QSize(0,0));
     style->drawControl(QStyle::CE_ItemViewItem, &optv4, painter, optv4.widget);
 
-    QPixmap lPixmap;
-    if(mFModel->fileInfo(index).isDir())
-    {
-        lPixmap = QPixmap(":/splash/img/added.png");
-    }
-    else
-    {
-        lPixmap = QPixmap(":/splash/img/up.png");
-    }
-
     QStyledItemDelegate::paint(painter, opt, index);
-
     painter->save();
-    int l = 16;
     painter->setBrush(QColor(Qt::black));
     painter->setPen(Qt::NoPen);
 
+    QPixmap lPixmap;
+    lPixmap = QPixmap(mFModel->data(index, FileModel::FileAttributeIconRole).toString());
+    int l = 16;
     QRect rect(optv4.rect.center().x() + 2, optv4.rect.topRight().y() + 18, l, l);
     painter->drawPixmap(rect, lPixmap.scaled(l, l, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     painter->restore();
 }
 
+/*!
+ * \brief define hint size
+ * \param option style
+ * \param index item on model
+ * \return hint size
+ */
 QSize ExplorerItemDelegate::sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     return QStyledItemDelegate::sizeHint(option, index);
 }
 
-
+/*!
+ * \brief explorer item delegate for createEditor
+ * \param widget which is parent
+ * \param option style
+ * \param index item on model
+ * \return editor
+ */
 QWidget *ExplorerItemDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index)
@@ -93,6 +110,12 @@ bool checkValidName(QString nameItem)
     return true;
 }
 
+/*!
+ * \brief set data in editor
+ * \param editor
+ * \param model item
+ * \param index item on model
+ */
 void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const
 {
     Q_UNUSED(model)
@@ -106,6 +129,7 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
 
     int indexSlash = pathToFile.lastIndexOf("/");
     QString newPathToFile = pathToFile.left(indexSlash+1);
+    qDebug()<<newPathToFile;
     newPathToFile += newFileName;
 
     QFile file(pathToFile);
@@ -132,6 +156,12 @@ void ExplorerItemDelegate::setModelData(QWidget *editor, QAbstractItemModel *mod
     }
 }
 
+/*!
+ * \brief update geometry for editor
+ * \param editor
+ * \param option style
+ * \param index item on model
+ */
 void ExplorerItemDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
 {
     Q_UNUSED(index)

@@ -23,4 +23,8 @@
     <qresource prefix="/Icons">
         <file>Icons/exclamation.png</file>
     </qresource>
+    <qresource prefix="/Overlays">
+        <file>overlays/modified.png</file>
+        <file>overlays/normal.png</file>
+    </qresource>
 </RCC>
