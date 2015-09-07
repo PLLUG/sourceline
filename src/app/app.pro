@@ -22,17 +22,14 @@
 ################################################################################
 
 TEMPLATE = app
-QT += widgets
-CONFIG += c++11
-
-# Pro file is a part of source line project structure
-CONFIG += \
-    sl_project \
-    C++11 \
-
-DESTDIR = $$_PRO_FILE_PWD_/../../bin
 TARGET = SourceLine
 
+include($$PWD/../general.pri)
+DESTDIR = $$SL_LIB_DIRECTORY
+
+QT += widgets
+
+include($$PWD/slbase/slbase.pri)
 include($$PWD/components/console/console.pri)
 include($$PWD/components/example_component/example_component.pri)
 include($$PWD/components/file_view/FileView.pri)
@@ -47,13 +44,13 @@ HEADERS += \
     ui/passworddialog.h \
     ui/clonedialog.h \
     ui/tabsapi.h \
-    aggregator.h \
     ui/genericcomponent.h \
     workplace.h \
     transitionsignals.h \
     ui/errordialog.h \
     ui/contentfortab.h \
-    ui/revisiontreedock.h
+    ui/revisiontreedock.h \
+    slapi_global.h
 
 SOURCES += \
     main.cpp \
@@ -62,7 +59,6 @@ SOURCES += \
     ui/passworddialog.cpp \
     ui/clonedialog.cpp \
     ui/tabsapi.cpp \
-    aggregator.cpp \
     ui/genericcomponent.cpp \
     workplace.cpp \
     ui/errordialog.cpp \
@@ -142,9 +138,6 @@ HEADERS += \
     pluginsupport/componentsorter.h \
     pluginsupport/supliers/componentsupplier.h \
     pluginsupport/supliers/fakecomponentsupplier.h \
-    pluginsupport/plugininfo.h \
-    pluginsupport/pluginloader.h \
-    pluginsupport/pluginmanager.h \
     pluginsupport/pluginsettingsmediator.h \
     pluginsupport/supliers/commandcomponentsupplier.h \
     pluginsupport/supliers/settingspagesupplier.h
@@ -152,15 +145,15 @@ HEADERS += \
 SOURCES += \
     pluginsupport/componentsorter.cpp \
     pluginsupport/supliers/fakecomponentsupplier.cpp \
-    pluginsupport/plugininfo.cpp \
-    pluginsupport/pluginloader.cpp \
-    pluginsupport/pluginmanager.cpp \
     pluginsupport/pluginsettingsmediator.cpp \
     pluginsupport/supliers/settingspagesupplier.cpp \
     pluginsupport/supliers/commandcomponentsupplier.cpp
 
 # Extension support library
 include(./../extensionlib/extensionlib.pri)
+
+# Plugin management library
+include(./../pluginmanager/pluginmanager.pri)
 
 # Resources and additional files
 RESOURCES += \
@@ -170,6 +163,7 @@ RC_FILE += \
     resources/appicon.rc
 
 OTHER_FILES +=
+
 
 
 

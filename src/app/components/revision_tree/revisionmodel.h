@@ -58,19 +58,28 @@ public:
     QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
-    revision_graph graph() const;
     void debugTree(const revision_graph &graph) const;
     void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
 
     void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
 
+    const revision_graph& graph() const;
+
     vertex vertexAt(int row) const;
+    const std::vector< vertex >& sortedVertices() const;
+
+signals:
+    void graphReset();
+
+private:
+    void beginResetGraphStructure();
+    void endResetGraphStructure();
 
 private:
     revision_graph mGraph;
     std::map<std::string, std::map<std::string,QVariant>> mPropertyMaps;//property maps by property name
     boost::dynamic_properties mProperties;
-    std::vector< vertex > sorted_vertices;
+    std::vector< vertex > mSortedVertices;
     std::vector<std::string> mPropertyNames;
 };
 

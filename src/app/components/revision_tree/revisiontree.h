@@ -58,7 +58,6 @@ private:
 private:
     Ui::RevisionTree *ui;
 
-    revision_graph mGraph;
     int mRowHeight;
     RevisionModel *mModel;
 };

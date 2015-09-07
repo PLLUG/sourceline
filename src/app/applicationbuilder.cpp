@@ -33,8 +33,8 @@
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
 #include "pluginsupport/supliers/settingspagesupplier.h"
 #include "pluginsupport/supliers/commandcomponentsupplier.h"
-#include "pluginsupport/pluginloader.h"
-#include "pluginsupport/pluginmanager.h"
+#include "pluginloader.h"
+#include "pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
 
 // Settings

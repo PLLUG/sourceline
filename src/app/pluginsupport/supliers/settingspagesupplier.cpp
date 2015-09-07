@@ -22,7 +22,7 @@
 *******************************************************************************/
 
 #include "settingspagesupplier.h"
-#include "../plugininfo.h"
+#include "plugininfo.h"
 #include "../../settings_dialog/settingsmanager.h"
 #include <settingspage.h>
 #include "../../ui/appsettingsdialog.h"

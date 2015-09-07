@@ -38,9 +38,11 @@ RevisionTree::RevisionTree(QWidget *parent) :
     ,mRowHeight{30}
   ,mModel{new RevisionModel{this}}
 {
+    qDebug("initializing RevisionTree");
     ui->setupUi(this);
 
     ui->revisionTableView->setModel(mModel);
+    ui->revisionTreeWidget->setModel(mModel);
 
     ui->revisionTableView->setVerticalScrollMode(QAbstractItemView::ScrollPerPixel);
     ui->scrollArea->verticalScrollBar()->setHidden(true);
@@ -63,13 +65,12 @@ RevisionTree::~RevisionTree()
 
 void RevisionTree::read()
 {
-    ui->revisionTreeWidget->setGraph(mModel->graph());
-    mGraph = mModel->graph();
+    ui->revisionTreeWidget->resetGraph();
     clearGraph();
     resize(width(),ui->revisionTreeWidget->height());
 
     int rowNum = ui->revisionTableView->model()->rowCount();
-    for(int i = 0; i < rowNum; i++)
+    for(int i = 0; i < rowNum; ++i)
     {
         ui->revisionTableView->setRowHeight(i, rowHeight());
     }

@@ -24,6 +24,7 @@
 #include <QApplication>
 
 #include "applicationbuilder.h"
+#include <QDebug>
 
 /// SourceLine Main Function
 int main(int pArgc, char *pArgv[])
@@ -35,6 +36,8 @@ int main(int pArgc, char *pArgv[])
     // TASK: colaboration between SourceLineApplication instance and ApplicationBuilder?
     ApplicationBuilder lApplcationBuilder;
     Q_UNUSED(lApplcationBuilder)
+
+    //qDebug() << testcommand.commandString();
 
     int rResult = lApplication.exec();
     return rResult;
