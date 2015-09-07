@@ -47,6 +47,10 @@ public:
 signals:
 
 public slots:
+
+private:
+    QString defaultPluginDirPath() const;
+
 private:
     QDir mPluginsFolder;
 };

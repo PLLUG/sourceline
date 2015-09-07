@@ -24,17 +24,18 @@
 #include <QPluginLoader>
 #include <QFileInfo>
 #include <QtGlobal>
+#include <QCoreApplication>
 
 PluginLoader::PluginLoader(QObject *parent) :
     QObject(parent),
-    mPluginsFolder(QDir::currentPath() + "/plugins")
+    mPluginsFolder(defaultPluginDirPath())
 {
 }
+
 void PluginLoader::setPluginsFolder(QDir pPluginFolder)
 {
     mPluginsFolder = pPluginFolder;
 }
-
 
 QStringList PluginLoader::pluginsExtensionFilters()
 {
@@ -52,8 +53,18 @@ QStringList PluginLoader::pluginsExtensionFilters()
         QStringList lExtensions;
         lExtensions.append("*.so");
         return lExtensions;
-    #endif
+#endif
 }
+
+QString PluginLoader::defaultPluginDirPath() const
+{
+#ifdef Q_OS_WIN
+    return QString("%1/%2").arg(QCoreApplication::applicationDirPath(), "plugins");
+#else
+    return QDir::cleanPath(QString("%1/%2").arg(QCoreApplication::applicationDirPath(), "../lib/plugins"));
+#endif
+}
+
 QString PluginLoader::pluginsExtension()
 {
 #ifdef Q_OS_WIN32

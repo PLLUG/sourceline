@@ -30,7 +30,7 @@ DESTDIR = $$SL_LIB_DIRECTORY
 
 QT += widgets
 
-include($$PWD/apibase/apibase.pri)
+include($$PWD/slbase/slbase.pri)
 include($$PWD/components/console/console.pri)
 include($$PWD/components/example_component/example_component.pri)
 include($$PWD/components/file_view/FileView.pri)

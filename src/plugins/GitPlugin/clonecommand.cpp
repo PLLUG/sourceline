@@ -3,6 +3,8 @@
 //#include "pluginapi.h"
 //#include "publicfileviewapi.h"
 
+#include "ifileviewapi.h"
+
 CloneCommand::CloneCommand(QObject *parent) : Command(parent)
 {
 
@@ -18,8 +20,8 @@ void CloneCommand::init(Aggregator &api)
 //    PluginAPI *pluginAPI = api.object<PluginAPI>();
 //    pluginAPI->slotRegisterCommand(this);
 
-//    PublicFileViewAPI *fileViewApi =  api.object<PublicFileViewAPI>();
-//    fileViewApi->addToMenu(name());
+    IFileViewAPI *fileViewApi =  api.object<IFileViewAPI>();
+    fileViewApi->addToMenu(name());
 }
 
 void CloneCommand::trigger()

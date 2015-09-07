@@ -5,6 +5,7 @@
 
 class RemoteApiClient;
 class TextEditInterface;
+class PluginManager;
 
 /*!
  * \brief The SourceLineClient class is responsible for initialization, running and proper shutdown
@@ -22,6 +23,7 @@ public:
 
 private slots:
     void test();
+    void initPlugins();
 
 private:
     QString mConnectionId;
@@ -29,6 +31,7 @@ private:
     RemoteApiClient *mRemoteClient;
     TextEditInterface *mInterface;
     QWidget *mDebugWindowInstance;
+    PluginManager *mPluginManager;
 };
 
 #endif // SOURCELINECLIENT_H
