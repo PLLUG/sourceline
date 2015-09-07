@@ -43,7 +43,7 @@ sourceline
 ```
 
 ### Branches, git workflow
-Project has at least the two branches master and development. When adding new feature one creates features/feature_name branch from development branch where feature_name can start with task number. Pull requests with features are merged into development branch. Experiment features are in experiments/feature_name branches.
+Project has at least the two branches master and development. When adding new feature one creates features/feature_name branch from development branch where feature_name can start with task number. Pull requests with features are merged into development branch. Experiment features are in experimental/feature_name branches.
 
 ## License
 The project is licensed under GPL v3.
