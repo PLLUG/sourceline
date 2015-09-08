@@ -89,9 +89,8 @@ void Settings::commit()
         return;
     }
 
-    QMap<QString, QVariant>::const_iterator it;
-    for (it = mModifiedSettingsByName.begin();
-         it != mModifiedSettingsByName.end();
+    for (auto it = mModifiedSettingsByName.cbegin();
+         it != mModifiedSettingsByName.cend();
          ++it)
     {
         mSettingValueByName.insert(it.key(), it.value());
@@ -281,7 +280,7 @@ void Settings::invoke(QObject *pObject, const QByteArray &pSignature, const QVar
     }
     else
     {
-        qDebug("Settings::invoke: object is null");
+        qDebug() << "Settings::invoke: object is null ";
     }
 }
 

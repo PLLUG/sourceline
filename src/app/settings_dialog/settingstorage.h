@@ -44,7 +44,7 @@ public slots:
     void slotLoadSettings(QString pSettingPath);
 
 private:
-    QStringList parsePath(QString pPath);
+    QStringList parsePath(const QString &pPath);
 
 private:
     QSettings *mSettings;

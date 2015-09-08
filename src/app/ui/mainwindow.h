@@ -20,18 +20,8 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    Ui::MainWindow *ui;
 
-private:
-    QSystemTrayIcon *mTrayIcon;
-    QMenu *mTrayMenu;
-    CustomTabBar *mTabBar;
-    TabsAPI *mTabsAPI;
-    int mAmountOpenedTabs;
-
-
-signals:
-    void mysignal();
+    Ui::MainWindow *getUi() const;
 
 private:
     void resizeEvent(QResizeEvent *e);
@@ -39,11 +29,19 @@ private:
 private slots:
     void iconActivated(QSystemTrayIcon::ActivationReason);
 
-    void CloseWindow();
+    void slotCloseWindow();
 
     void slotQuit();
 
     void slotAddNewWorkplace();
+
+private:
+    QSystemTrayIcon *mTrayIcon;
+    QMenu *mTrayMenu;
+    CustomTabBar *mTabBar;
+    TabsAPI *mTabsAPI;
+    Ui::MainWindow *ui;
+    int mAmountOpenedTabs;
 };
 
 #endif // MAINWINDOW_H

@@ -28,9 +28,8 @@
 #include "plugininfo.h"
 
 CommandComponentSupplier::CommandComponentSupplier() :
-    mActionManager(0)
+    mActionManager(nullptr)
 {
-
 }
 
 QString CommandComponentSupplier::className() const

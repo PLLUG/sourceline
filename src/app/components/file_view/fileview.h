@@ -107,15 +107,10 @@ private slots:
 private:
 
     Ui::FileView *ui;
-
     QMenu *mMenu;
-
     QMenu *mFileMenu;
-
     QMenu *mDirMenu;
-
     FileModel *mFileModel;
-
     QHash<SelectionFlags, QMenu *> mMenuBySelectionFlags;
 };
 

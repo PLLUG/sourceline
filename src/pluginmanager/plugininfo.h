@@ -30,7 +30,7 @@
 class PLUGINMANAGERSHARED_EXPORT PluginInfo
 {
 public:
-    PluginInfo(QString pPluginId, QString pVer, QString pDescr, QString pCategory, QHash<QString, QString> pAdditionalInfo);
+    PluginInfo(const QString &pPluginId, const QString &pVer, const QString &pDescr, const QString &pCategory,const QHash<QString, QString> &pAdditionalInfo);
     PluginInfo();
     //TASK : plugin id SLOULD NOT be the same as filename - there are some differences in library
     // namings in Linux and Windows. Plugin id SHOULD BE unique! like org.PLLUG.git-plugin

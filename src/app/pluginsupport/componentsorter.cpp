@@ -33,7 +33,7 @@ ComponentSorter::ComponentSorter(QObject *parent) :
 
 void ComponentSorter::setComponents(QObjectList pComponents, const PluginInfo &pPluginInfo)
 {
-    foreach (QObject *lComponent, pComponents)
+    for(QObject *lComponent: pComponents)
     {
         ComponentSupplier *lSupplier = supplierForComponent(lComponent);
         if (lSupplier)
@@ -52,7 +52,7 @@ ComponentSupplier *ComponentSorter::supplierForComponent(QObject *pComponent)
 {
     ComponentSupplier *rSupplier = 0;
 
-    foreach (QString lClassName, mSupplierByClassName.keys())
+    for(const QString &lClassName: mSupplierByClassName.keys())
     {
         if (pComponent->inherits(lClassName.toUtf8().data()))
         {

@@ -8,7 +8,6 @@ GitPlugin::GitPlugin(QObject *pParent) :
 {
 }
 
-
 void GitPlugin::init(CommandAPI *cAPI)
 {
     CloneCommand *cloneCommand = new CloneCommand(this);

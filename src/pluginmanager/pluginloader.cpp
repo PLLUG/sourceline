@@ -23,7 +23,6 @@
 #include "pluginloader.h"
 #include <QPluginLoader>
 #include <QFileInfo>
-#include <QtGlobal>
 #include <QCoreApplication>
 
 PluginLoader::PluginLoader(QObject *parent) :
@@ -32,28 +31,24 @@ PluginLoader::PluginLoader(QObject *parent) :
 {
 }
 
-void PluginLoader::setPluginsFolder(QDir pPluginFolder)
+void PluginLoader::setPluginsFolder(const QDir &pPluginFolder)
 {
     mPluginsFolder = pPluginFolder;
 }
 
 QStringList PluginLoader::pluginsExtensionFilters()
 {
-    #ifdef Q_OS_WIN32
-        QStringList lExtensions;
-        lExtensions.append("*.dll");
-        return lExtensions;
-    #endif
-    #ifdef Q_OS_MAC
-        QStringList lExtensions;
-        lExtensions.append("*.lib");
-        return lExtensions;
-    #endif
-    #ifdef Q_OS_UNIX
-        QStringList lExtensions;
-        lExtensions.append("*.so");
-        return lExtensions;
+    QStringList rExtensions;
+#ifdef Q_OS_WIN32
+    rExtensions.append("*.dll");
 #endif
+#ifdef Q_OS_MAC
+    rExtensions.append("*.lib");
+#endif
+#ifdef Q_OS_UNIX
+    rExtensions.append("*.so");
+#endif
+    return std::move(rExtensions);
 }
 
 QString PluginLoader::defaultPluginDirPath() const
@@ -78,20 +73,20 @@ QString PluginLoader::pluginsExtension()
 #endif
 }
 
-QStringList PluginLoader::pluginIds()
+QStringList PluginLoader::pluginIds() const
 {
     QDir path(mPluginsFolder);
     QStringList rPluginsIdsList;
-    foreach(QFileInfo info, path.entryInfoList(PluginLoader::pluginsExtensionFilters(), QDir::Files | QDir::NoDotAndDotDot))
+    for(const QFileInfo &info: path.entryInfoList(PluginLoader::pluginsExtensionFilters(), QDir::Files | QDir::NoDotAndDotDot))
     {
         rPluginsIdsList.append(info.baseName());
     }
-    return rPluginsIdsList;
-
+    return std::move(rPluginsIdsList);
 }
-QObject* PluginLoader::load(QString pPluginId)
+
+QObject* PluginLoader::load(const QString &pPluginId)
 {
-    QObject *rInstance = 0;
+    QObject *rInstance{nullptr};
 
     QPluginLoader lPluginLoader(libPath(pPluginId));
     if (lPluginLoader.load())
@@ -102,11 +97,10 @@ QObject* PluginLoader::load(QString pPluginId)
     {
         qDebug(qPrintable(lPluginLoader.errorString()));
     }
-
     return rInstance;
 }
 
-PluginInfo PluginLoader::pluginInfo(const QString &pPluginId)
+PluginInfo PluginLoader::pluginInfo(const QString &pPluginId) const
 {
     QPluginLoader lPluginLoader(libPath(pPluginId));
     QString lVersion = lPluginLoader.metaData().value("MetaData").toObject().value("version").toString();
@@ -114,7 +108,7 @@ PluginInfo PluginLoader::pluginInfo(const QString &pPluginId)
     QString lCategory = lPluginLoader.metaData().value("MetaData").toObject().value("category").toString();
     QStringList lAdditionalKeys = lPluginLoader.metaData().value("MetaData").toObject().keys();
     QHash<QString, QString> lAdditionalInfo;
-    foreach (QString key, lAdditionalKeys)
+    for(const QString &key : lAdditionalKeys)
     {
         if (key != "version" && key != "description" && key != "category")
         {
@@ -124,13 +118,12 @@ PluginInfo PluginLoader::pluginInfo(const QString &pPluginId)
     return PluginInfo(pPluginId, lVersion, lDescription, lCategory, lAdditionalInfo);
 }
 
-
-QList<PluginInfo> PluginLoader::pluginsInfo()
+QList<PluginInfo> PluginLoader::pluginsInfo() const
 {
     QDir path(mPluginsFolder);
     QPluginLoader pluginLoader;
     QList<PluginInfo> rPluginsDescriptions;
-    foreach(QFileInfo info, path.entryInfoList(PluginLoader::pluginsExtensionFilters(), QDir::Files | QDir::NoDotAndDotDot))
+    for(const QFileInfo &info: path.entryInfoList(PluginLoader::pluginsExtensionFilters(), QDir::Files | QDir::NoDotAndDotDot))
     {
         pluginLoader.setFileName(info.absoluteFilePath());
 
@@ -139,7 +132,7 @@ QList<PluginInfo> PluginLoader::pluginsInfo()
         QString lCategory = pluginLoader.metaData().value("MetaData").toObject().value("category").toString();
         QStringList lAdditionalKeys = pluginLoader.metaData().value("MetaData").toObject().keys();
         QHash<QString, QString> lAdditionalInfo;
-        foreach (QString key, lAdditionalKeys)
+        for(const QString &key: lAdditionalKeys)
         {
             if (key != "version" && key != "description" && key != "category")
             {
@@ -149,12 +142,11 @@ QList<PluginInfo> PluginLoader::pluginsInfo()
         PluginInfo lPluginInfo(info.baseName(), lVersion, lDescription, lCategory, lAdditionalInfo);
         rPluginsDescriptions.append(lPluginInfo);
     }
-    return rPluginsDescriptions;
+    return std::move(rPluginsDescriptions);
 }
 
-QString PluginLoader::libPath(const QString &pPluginId)
+QString PluginLoader::libPath(const QString &pPluginId) const
 {
-   QDir lPath(mPluginsFolder);
-   return lPath.absoluteFilePath(pPluginId) + pluginsExtension();
+    QDir lPath(mPluginsFolder);
+    return lPath.absoluteFilePath(pPluginId) + pluginsExtension();
 }
-

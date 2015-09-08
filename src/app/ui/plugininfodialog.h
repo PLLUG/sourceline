@@ -42,9 +42,6 @@ public:
      */
     void setPluginInfo(const QHash<QString, QString> &pInfoHash);
 
-private slots:
-    void on_okButton_clicked();
-
 private:
     Ui::PluginInfoDialog *ui;
 

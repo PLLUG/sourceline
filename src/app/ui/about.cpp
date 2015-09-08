@@ -34,7 +34,7 @@ About::~About()
     delete ui;
 }
 
-QString About::textFromFile(QString pAddress)
+QString About::textFromFile(const QString &pAddress)
 {
     QFile file(pAddress);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -42,9 +42,6 @@ QString About::textFromFile(QString pAddress)
         qDebug() << QString("Cannot open ") + pAddress;
         return QString();
     }
-
     QTextStream in(&file);
-    QString rText = in.readAll();
-
-    return rText;
+    return in.readAll();
 }

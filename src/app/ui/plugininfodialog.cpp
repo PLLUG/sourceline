@@ -7,8 +7,8 @@
 PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
     QDialog(parent,
             Qt::WindowSystemMenuHint
-          | Qt::WindowTitleHint
-          | Qt::WindowCloseButtonHint),
+            | Qt::WindowTitleHint
+            | Qt::WindowCloseButtonHint),
     ui(new Ui::PluginInfoDialog)
 {
     ui->setupUi(this);
@@ -24,8 +24,8 @@ PluginInfoDialog::PluginInfoDialog(QWidget *parent) :
 
     QString lStyleSheet = QString("QHeaderView::section {")
             + "background-color: #A9A9A9;"
-           // + "font-weight: bold;"
-           // + "border: 1px solid #808080;"
+            // + "font-weight: bold;"
+            // + "border: 1px solid #808080;"
             + "}";
 
     ui->tableView->setStyleSheet(lStyleSheet);
@@ -46,21 +46,11 @@ void PluginInfoDialog::setPluginName(const QString &pPluginName)
 void PluginInfoDialog::setPluginInfo(const QHash<QString, QString> &pInfoHash)
 {
     QHashIterator <QString, QString> i(pInfoHash);
-    QList <QStandardItem *> lItems;
-
     while (i.hasNext())
     {
         i.next();
-        lItems.append(new QStandardItem(i.key()));
-        lItems.append(new QStandardItem(i.value()));
-        mModel->appendRow(lItems);
-        lItems.clear();
+        mModel->appendRow(QList <QStandardItem *>()
+                          << new QStandardItem(i.key()) << new QStandardItem(i.value()));
     }
-
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
-}
-
-void PluginInfoDialog::on_okButton_clicked()
-{
-    close();
 }

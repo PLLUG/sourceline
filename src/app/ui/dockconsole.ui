@@ -13,7 +13,6 @@
   <property name="windowTitle">
    <string>Console</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout"/>
  </widget>
  <resources/>
  <connections/>

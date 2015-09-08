@@ -45,7 +45,7 @@ ContentForTab::ContentForTab(QWidget *parent) :
     addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, mFileView);
 
     //COMMENT: Create DockWidget DockConsole, set content for it and add this DockConsole to ContentForTabWorkplace
-    mConsole->setLayoutDirection(Qt::LeftToRight);
+//    mConsole->setLayoutDirection(Qt::LeftToRight);
     mConsole->setWidget(mConsoleContents);
     addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, mConsole);
 

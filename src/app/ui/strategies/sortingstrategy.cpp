@@ -21,6 +21,7 @@
 ***                                                                          ***
 *******************************************************************************/
 #include "sortingstrategy.h"
+
 QList<UserAction *> MenuCreationStrategy::getAllByKind(int pCommandKind, const QList<UserAction *> &pListUserActions)
 {
     QList<UserAction *> rResult;
@@ -32,8 +33,7 @@ QList<UserAction *> MenuCreationStrategy::getAllByKind(int pCommandKind, const Q
             rResult.append(lUserAction);
         }
     }
-
-    return rResult;
+    return std::move(rResult);
 }
 
 // Exmaple: QList<int> lOrderedKinds;
@@ -50,6 +50,5 @@ QList<UserAction *> MenuCreationStrategy::getAllOrderedByKinds(QList<int> pListK
             rResult.append(lUserAction);
         }
     }
-
-    return rResult;
+    return std::move(rResult);
 }

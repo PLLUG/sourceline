@@ -46,33 +46,37 @@
 FileView::FileView(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::FileView)
+  ,mMenu{nullptr}
+  ,mFileMenu{nullptr}
+  ,mDirMenu{nullptr}
+  ,mFileModel{nullptr}
 {
     ui->setupUi(this);
     QAction *actionGoUp = ui->lineEdit->addAction(QPixmap(":splash/img/up.png"), QLineEdit::TrailingPosition);
 
-//    //context menu
-//    mMenu = new QMenu(this);
-//    QAction* actionNewFolder = new QAction("New Folder",mMenu);
-//    connect(actionNewFolder, SIGNAL(triggered(bool)), this, SLOT(slotCreateNewFolder()));
-//    mMenu->addAction(actionNewFolder);
+    //    //context menu
+    //    mMenu = new QMenu(this);
+    //    QAction* actionNewFolder = new QAction("New Folder",mMenu);
+    //    connect(actionNewFolder, SIGNAL(triggered(bool)), this, SLOT(slotCreateNewFolder()));
+    //    mMenu->addAction(actionNewFolder);
 
-//    //menu for files
-//    mFileMenu = new QMenu(this);
-//    QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
-//    connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
-//    mFileMenu->addAction(actionDeleteFile);
-//    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
-//    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
-//    mFileMenu->addAction(actionRemaneFile);
+    //    //menu for files
+    //    mFileMenu = new QMenu(this);
+    //    QAction* actionDeleteFile = new QAction("Delete",mFileMenu);
+    //    connect(actionDeleteFile, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFile()));
+    //    mFileMenu->addAction(actionDeleteFile);
+    //    QAction* actionRemaneFile = new QAction("Rename",mFileMenu);
+    //    connect(actionRemaneFile, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
+    //    mFileMenu->addAction(actionRemaneFile);
 
-//    //menu for dirs
-//    mDirMenu = new QMenu(this);
-//    QAction* actionDeleteFolder = new QAction("Delete",mDirMenu);
-//    connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
-//    mDirMenu->addAction(actionDeleteFolder);
-//    QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
-//    connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
-//    mDirMenu->addAction(actionRemaneDir);
+    //    //menu for dirs
+    //    mDirMenu = new QMenu(this);
+    //    QAction* actionDeleteFolder = new QAction("Delete",mDirMenu);
+    //    connect(actionDeleteFolder, SIGNAL(triggered(bool)), this, SLOT(slotDeleteFolder()));
+    //    mDirMenu->addAction(actionDeleteFolder);
+    //    QAction* actionRemaneDir = new QAction("Rename",mFileMenu);
+    //    connect(actionRemaneDir, SIGNAL(triggered(bool)), this, SLOT(slotRenameFolderOrFile()));
+    //    mDirMenu->addAction(actionRemaneDir);
 
     mFileModel = new FileModel(this);
     ui->listView->setModel(mFileModel);
@@ -179,7 +183,7 @@ void FileView::slotDoubleClick(const QModelIndex &index)
  */
 void FileView::slotGoUp()
 {
-    QModelIndex up_index = (QModelIndex)ui->listView->rootIndex().parent();
+    QModelIndex up_index = ui->listView->rootIndex().parent();
     ui->listView->setRootIndex(up_index);
     if(up_index.isValid())
     {
@@ -188,8 +192,7 @@ void FileView::slotGoUp()
     }
     else
     {
-        QString homePath = QStandardPaths::displayName(QStandardPaths::HomeLocation);
-        cd(homePath);
+        cd(QStandardPaths::displayName(QStandardPaths::HomeLocation));
     }
 
 }
@@ -219,19 +222,19 @@ void FileView::slotGoToPath()
  */
 void FileView::slotRightBtnClick()
 {
-//    QModelIndex lIndex = ui->listView->indexAt(pos);
-//    if(mFileModel->fileInfo(lIndex).isDir())
-//    {
-//        mDirMenu->exec(QCursor::pos());
-//    }
-//    else if(mFileModel->fileInfo(lIndex).isFile())
-//    {
-//        mFileMenu->exec(QCursor::pos());
-//    }
-//    else
-//    {
-//        mMenu->exec(QCursor::pos());
-//    }
+    //    QModelIndex lIndex = ui->listView->indexAt(pos);
+    //    if(mFileModel->fileInfo(lIndex).isDir())
+    //    {
+    //        mDirMenu->exec(QCursor::pos());
+    //    }
+    //    else if(mFileModel->fileInfo(lIndex).isFile())
+    //    {
+    //        mFileMenu->exec(QCursor::pos());
+    //    }
+    //    else
+    //    {
+    //        mMenu->exec(QCursor::pos());
+    //    }
     SelectionFlags flag;
     QModelIndexList listIndexes = ui->listView->selectionModel()->selectedIndexes();
     if (listIndexes.length() == 0)
@@ -245,7 +248,7 @@ void FileView::slotRightBtnClick()
             flag = SelectionFlag::MultiSeleciton;
         }
     }
-    foreach(const QModelIndex &index, listIndexes)
+    for(const QModelIndex &index: listIndexes)
     {
         if(mFileModel->fileInfo(index).isDir())
         {
@@ -272,7 +275,7 @@ void FileView::slotLeftBtnClick()
 void FileView::slotCreateNewFolder()
 {
     //create folder
-    QModelIndex index = static_cast<QModelIndex>(ui->listView->rootIndex());
+    QModelIndex index = ui->listView->rootIndex();
     QString pathStart = mFileModel->fileInfo(index).absoluteFilePath()+QDir::toNativeSeparators("/")+"New Folder";
     QString pathForNewFolder = pathStart;
 
@@ -334,7 +337,7 @@ void FileView::slotDeleteFolder()
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
 
     //create message about delete folder and check what button was clicked
-    if (static_cast<QMessageBox::StandardButton>(QMessageBox::question(this,"About delete","Do you wanna delete this repository?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
+    if ((QMessageBox::question(this,"About delete","Do you wanna delete this repository?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
     {
         //delete folder
         if (!removeDir(path))
@@ -353,7 +356,7 @@ void FileView::slotDeleteFile()
     QString path = mFileModel->fileInfo(currentIndex).absoluteFilePath();
 
     //create message about delete file and check what button was clicked
-    if (static_cast<QMessageBox::StandardButton>(QMessageBox::question(this,"About delete","Do you wanna delete this file?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
+    if ((QMessageBox::question(this,"About delete","Do you wanna delete this file?",QMessageBox::Ok, QMessageBox::Cancel)) == QMessageBox::Ok)
     {
         //delete file
         if (!QFile::remove(path))

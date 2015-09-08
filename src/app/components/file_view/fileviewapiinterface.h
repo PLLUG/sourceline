@@ -18,7 +18,7 @@ signals:
     void invokeCommand(QByteArray pSignature, QVariant);
 
 public slots:
-    void addToMenu(QString commandId) final
+    void addToMenu(QString commandId) override final
     {
         emit invokeCommand("addToMenu(QString)", commandId);
     }

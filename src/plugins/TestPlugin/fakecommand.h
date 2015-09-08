@@ -30,7 +30,7 @@ class FakeCommand : public Command
 {
 public:
      explicit FakeCommand(QObject *parent = 0);
-     QString name() const;
+     QString name() const override;
      QString commandString() const;
      QStringList parametersList() const;
      Commands::CommandKind commandKind() const;

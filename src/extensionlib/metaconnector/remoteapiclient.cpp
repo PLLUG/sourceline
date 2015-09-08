@@ -14,7 +14,7 @@ RemoteApiClient::RemoteApiClient(QObject *parent)
     connect(mSocket, &QLocalSocket::connected, this, &RemoteApiClient::connected, Qt::UniqueConnection);
 }
 
-void RemoteApiClient::connectToProvider(QString slInstanceId)
+void RemoteApiClient::connectToProvider(const QString &slInstanceId)
 {
     mSocket->connectToServer(slInstanceId, QIODevice::WriteOnly|QIODevice::Unbuffered);
     mSocket->waitForConnected(CONNECTION_TIMEOUT);

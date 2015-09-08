@@ -31,7 +31,7 @@ QVariant FileModel::data(const QModelIndex &index, int role)
         break;
     }
 
-    return result;
+    return std::move(result);
 }
 
 /*!
@@ -39,7 +39,7 @@ QVariant FileModel::data(const QModelIndex &index, int role)
  * \param role for file
  * \param path to icon
  */
-void FileModel::setIconForAttributes(quint32 attributes, QString path)
+void FileModel::setIconForAttributes(quint32 attributes, const QString &path)
 {
     mIcons.insert(attributes, path);
 }
@@ -50,13 +50,13 @@ void FileModel::setIconForAttributes(quint32 attributes, QString path)
  */
 QString FileModel::iconPathForIndex(const QModelIndex &index)
 {
-    QString iconPath;
+    QString rIconPath;
 
     if (fileInfo(index).absoluteFilePath().contains(rootPath()))
     {
         quint32 attribute = QFileSystemModel::data(index, FileAttributeRole).toUInt();
-        iconPath = mIcons.value(attribute);
+        rIconPath = mIcons.value(attribute);
     }
-    return iconPath;
+    return std::move(rIconPath);
 }
 

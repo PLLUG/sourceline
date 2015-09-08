@@ -17,10 +17,12 @@ public:
     explicit DockConsole(QWidget *parent = 0);
     ~DockConsole();
     DockType type() const;
-private:
-    Ui::DockConsole *ui;
+
 public slots:
     void slotSetPage(int pPage);
+
+private:
+    Ui::DockConsole *ui;
 };
 
 #endif // CONSOLE_H

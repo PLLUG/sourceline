@@ -27,11 +27,11 @@
 
 #include <QFileDialog>
 
-
 ViewSettingPage::ViewSettingPage(Settings *pSettings, QWidget *parent) :
     SettingsPage(pSettings, parent)
+  ,mDialogUi{new Ui::Form}
+  ,mMainUi{nullptr}
 {
-    mDialogUi = new Ui::Form;
     QWidget *lWidget = new QWidget();
     mDialogUi->setupUi(lWidget);
     QVBoxLayout *lLayout = new QVBoxLayout;

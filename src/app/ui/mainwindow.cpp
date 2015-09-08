@@ -17,30 +17,28 @@
 #include <QHBoxLayout>
 
 MainWindow::MainWindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    QMainWindow(parent)
+  ,mTrayIcon{new QSystemTrayIcon(this)}
+  ,mTrayMenu{new QMenu(this)}
+  ,mTabBar{new CustomTabBar(this)}
+  ,mTabsAPI{new TabsAPI(this)}
+  ,ui(new Ui::MainWindow)
+  ,mAmountOpenedTabs{0}
 {
-    ui->setupUi(this);    
+    ui->setupUi(this);
     // TASK: creation of tray menu should be peformed by ApplicationBuilder
-    mTrayMenu = new QMenu(this);
     mTrayMenu->addAction(tr("Help"));
-    mTrayMenu->addAction(tr("Quit"),this,SLOT(CloseWindow()));
+    mTrayMenu->addAction(tr("Quit"),this,SLOT(slotCloseWindow()));
     mTrayMenu->activeAction();
-    mTrayIcon = new QSystemTrayIcon(this);
     mTrayIcon->setIcon(QIcon(":/splash/img/sourceline.ico"));
     mTrayIcon->setVisible(true);
     mTrayIcon->show();
     mTrayIcon->setContextMenu(mTrayMenu);
 
     // TASK: creation of PageManager should be performed by ApplicationBuilder
-    mTabsAPI = new TabsAPI(this);
-    mTabBar = new CustomTabBar(this);
-    connect(mTrayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-            this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(mTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
 
-    this->setCentralWidget(mTabBar);
-
-    mAmountOpenedTabs = 0;
+    setCentralWidget(mTabBar);
 
     slotAddNewWorkplace();
 }
@@ -53,7 +51,7 @@ MainWindow::~MainWindow()
     delete mTrayIcon;
 }
 
-void MainWindow::CloseWindow()
+void MainWindow::slotCloseWindow()
 {
     // TASK: use close action from ActionManager
     // TASK: ActionManager should create menu for tray icon
@@ -66,10 +64,10 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     switch (reason) {
     case QSystemTrayIcon::DoubleClick:
     {
-        this->show();
-        this->showNormal();
-        this->activateWindow();
-        this->raise();
+        show();
+        showNormal();
+        activateWindow();
+        raise();
     }
     default:
         ;
@@ -86,6 +84,11 @@ void MainWindow::slotAddNewWorkplace()
 {
     QString lTabName = tr("Name") + QString::number(mAmountOpenedTabs++);
     mTabsAPI->slotAddNewWorkplace(mTabBar, lTabName);
+}
+
+Ui::MainWindow *MainWindow::getUi() const
+{
+    return ui;
 }
 
 void MainWindow::resizeEvent(QResizeEvent *e)

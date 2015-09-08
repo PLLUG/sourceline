@@ -2,7 +2,7 @@
 
 #include <QCoreApplication>
 
-ProgressHandler *ProgressHandler::mInstance = 0;
+ProgressHandler *ProgressHandler::mInstance{nullptr};
 
 ProgressHandler::ProgressHandler(QObject *parent) :
     QObject(parent),

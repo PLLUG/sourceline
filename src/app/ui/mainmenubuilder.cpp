@@ -27,9 +27,9 @@
 
 MainMenuBuilder::MainMenuBuilder(QObject *parent) :
     QObject(parent)
+  ,mMenuBar{nullptr}
+  ,mActionManager{nullptr}
 {
-    mActionManager = nullptr;
-    mMenuBar = nullptr;
 }
 
 void MainMenuBuilder::setActionManager(ActionManager *pActionManager)

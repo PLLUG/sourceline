@@ -211,6 +211,7 @@ void InvocationBased::invoke(QByteArray signature, QVariant arg1, QVariant arg2,
  */
 bool InvocationBased::isMetaMethodCouldBeCalled(const QMetaMethod &method)
 {
+    Q_UNUSED(method)
     return true; // Default implementation.
 }
 
