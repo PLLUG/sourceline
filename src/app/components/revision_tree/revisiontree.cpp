@@ -56,6 +56,8 @@ RevisionTree::RevisionTree(QWidget *parent) :
     ui->revisionTableView->horizontalHeader()->setSectionsMovable(true);
     ui->revisionTableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
     ui->revisionTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+
+    ui->revisionTreeWidget->setRowHeight(mRowHeight);
 }
 
 RevisionTree::~RevisionTree()
