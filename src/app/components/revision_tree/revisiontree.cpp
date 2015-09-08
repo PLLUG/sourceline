@@ -63,6 +63,9 @@ RevisionTree::~RevisionTree()
     delete ui;
 }
 
+/*!
+ * \brief RevisionTree::read
+ */
 void RevisionTree::read()
 {
     ui->revisionTreeWidget->resetGraph();
@@ -76,44 +79,76 @@ void RevisionTree::read()
     }
 }
 
+/*!
+ * \brief RevisionTree::clearGraph Clears graph.
+ */
 void RevisionTree::clearGraph()
 {
 }
 
+/*!
+ * \brief RevisionTree::rowHeight Returns height of single row.
+ * \return Height of row.
+ */
 int RevisionTree::rowHeight() const
 {
     return mRowHeight;
 }
 
+/*!
+ * \brief RevisionTree::setRowHeight Sets new height of row.
+ * \param rowHeight New height of row.
+ */
 void RevisionTree::setRowHeight(int rowHeight)
 {
     mRowHeight = rowHeight;
 }
 
+/*!
+ * \brief RevisionModel::addNode Add new node (vertex to graph), call for each parent if node has many parents (e.g. merge)
+ * \param pParentID ID of parent, may be empty if node nas no parent (e.g. initial commit or filtered data)
+ * \param pNodeInfo Info about new node
+ */
 void RevisionTree::addNode(const std::string &pParentID, const RevisionNode &pNodeInfo)
 {
-    mModel->addNode(pParentID,pNodeInfo);
+    mModel->addNode(pParentID, pNodeInfo);
 }
 
+/*!
+ * \brief RevisionModel::putProperty Adds property for revision item.
+ * \param pRecepientId Revision item ID.
+ * \param property Property name.
+ * \param value Property value for revision item.
+ */
 void RevisionTree::putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value)
 {
     mModel->putProperty(pRecepientId,property,value);
 }
 
-void RevisionTree::slotGraphScrollChanged(int value)
+/*!
+ * \brief RevisionTree::slotGraphScrollChanged Changes value of vertical scroll
+ *  bar of table view, according to pValue.
+ * \param pValue New value for vertical scroll bar of table view.
+ */
+void RevisionTree::slotGraphScrollChanged(int pValue)
 {
     disconnect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
                this,&RevisionTree::slotTableScrollChanged);
-    ui->revisionTableView->verticalScrollBar()->setValue(value);
+    ui->revisionTableView->verticalScrollBar()->setValue(pValue);
     connect(ui->revisionTableView->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&RevisionTree::slotTableScrollChanged,Qt::UniqueConnection);
 }
 
-void RevisionTree::slotTableScrollChanged(int value)
+/*!
+ * \brief RevisionTree::slotTableScrollChanged Changes value of vertical scroll
+ * bar of revision tree widget, according to pValue.
+ * \param pValue New value for vertical scroll bar of revision tree widget.
+ */
+void RevisionTree::slotTableScrollChanged(int pValue)
 {
     disconnect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
                this,&RevisionTree::slotGraphScrollChanged);
-    ui->scrollArea->verticalScrollBar()->setValue(value);
+    ui->scrollArea->verticalScrollBar()->setValue(pValue);
     connect(ui->scrollArea->verticalScrollBar(),&QScrollBar::valueChanged,
             this,&RevisionTree::slotGraphScrollChanged,Qt::UniqueConnection);
 }

@@ -175,16 +175,27 @@ vertex RevisionModel::vertexAt(int row) const
     return mSortedVertices.at(row);
 }
 
+/*!
+ * \brief RevisionModel::sortedVertices Vector containing sorted vertices by time.
+ * \return Vector containing sorted vertices.
+ */
 const std::vector<vertex> &RevisionModel::sortedVertices() const
 {
     return mSortedVertices;
 }
 
+/*!
+ * \brief RevisionModel::beginResetGraphStructure
+ */
 void RevisionModel::beginResetGraphStructure()
 {
 
 }
 
+/*!
+ * \brief RevisionModel::endResetGraphStructure Emits signal, which notify about
+ * end of graph reset process.
+ */
 void RevisionModel::endResetGraphStructure()
 {
     emit graphReset();
