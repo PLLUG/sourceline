@@ -74,7 +74,6 @@ protected:
 private:
     static vertex findRoot(const revision_graph &pGraph);
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
-    std::vector<vertex> sortedGraphByTime(const revision_graph &graph);
 
 private:
     float mBottomOffset;

@@ -40,13 +40,13 @@ using PredMap = boost::iterator_property_map<typename std::vector<vertex>::itera
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
     QWidget{parent}
-  ,mColumnWidth{15} // width between column of revision tree
+  ,mColumnWidth{10} // width between column of revision tree
   ,mEdgeWidth{2} // width of edge for painting
   ,mLeftOffset{20} // offset from left side
   ,mRoundingRadius{3} // radius of rounding of edge
   ,mRowHeight{30} // height of row of tableView
   ,mTopOffset{45} // height of row of tableView * 3/2
-  ,mVertexRadius{6} // radius of vertex
+  ,mVertexRadius{4} // radius of vertex
   ,mModel{nullptr}
 {
     // Offset from bottom
@@ -256,34 +256,6 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         //                                 mRowHeight*row + mTopOffset},
         //                         QString::number(v));
     }
-}
-
-/*!
- * \brief sortedGraphByTime sorts graph by commit-time
- * \param graph - graph to be sorted
- * \return vector with sorted vertices
- */
-std::vector<vertex> RevisionTreeWidget::sortedGraphByTime(const revision_graph &graph)
-{
-    int verticesNumb = num_vertices(graph);
-    std::vector< vertex > rVector;
-    rVector.reserve(verticesNumb);
-
-    // Copying vertices from graph to rVector
-    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
-    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
-    {
-        rVector.push_back(*vi);
-    }
-
-    // Sorting vertices in rVector
-    std::sort(rVector.begin(), rVector.end(),
-              [&graph](const vertex &vert1, const vertex &vert2) -> bool
-    {
-        return graph[vert1].created < graph[vert2].created;
-    });
-
-    return std::move(rVector);
 }
 
 /*!

@@ -28,6 +28,7 @@
 #include <boost/graph/topological_sort.hpp>
 #include <QColor>
 #include <QVariant>
+#include <QDateTime>
 
 //maybe use labeled_graph where labeles are commit ids (and remove id from property)? - no
 //#include <boost/graph/labeled_graph.hpp>
@@ -296,4 +297,32 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
         }
     }
     return headerName;
+}
+
+/*!
+ * \brief sortedGraphByTime sorts graph by commit-time
+ * \param graph - graph to be sorted
+ * \return vector with sorted vertices
+ */
+std::vector<vertex> RevisionModel::sortedGraphByTime(const revision_graph &graph)
+{
+    int verticesNumb = num_vertices(graph);
+    std::vector< vertex > rVector;
+    rVector.reserve(verticesNumb);
+
+    // Copying vertices from graph to rVector
+    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
+    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
+    {
+        rVector.push_back(*vi);
+    }
+
+    // Sorting vertices in rVector
+    std::sort(rVector.begin(), rVector.end(),
+              [&graph](const vertex &vert1, const vertex &vert2) -> bool
+    {
+        return graph[vert1].created < graph[vert2].created;
+    });
+
+    return std::move(rVector);
 }
