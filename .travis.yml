@@ -1,0 +1,27 @@
+sudo: required
+
+language: cpp
+
+os:
+  - linux
+
+# whitelist
+branches:
+  only:
+    - master
+    - development
+
+compiler:
+  - clang
+  - gcc
+
+before_install:
+  - sudo apt-add-repository -y ppa:beineri/opt-qt55
+  - sudo apt-get update -qq
+  - sudo apt-get install -y qt-latest
+  - git submodule update --init --recursive
+
+script:
+  - cd src
+  - qmake
+  - make -j 3
