@@ -255,7 +255,7 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
  */
 QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int role) const
 {
-    QVariant headerName;
+    QVariant rHeaderName;
     if(Qt::DisplayRole == role || Qt::AccessibleTextRole == role)
     {
         if(Qt::Horizontal == orientation)
@@ -265,7 +265,7 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
             {
                 switch (section) {
                 case IdColumn:
-                    headerName = tr("Id");
+                    rHeaderName = tr("Id");
                     break;
                 default:
                     break;
@@ -276,13 +276,13 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
                 const std::string property = mPropertyNames.at(section-DefaultColumnsCount);
                 QString headerStr = QString::fromStdString(property).toLower();
                 headerStr[0] = headerStr[0].toUpper();
-                headerName.setValue(headerStr);
+                rHeaderName.setValue(headerStr);
             }
         }
         else
         {
-            headerName = QString::number(section);
+            rHeaderName = QString::number(section);
         }
     }
-    return headerName;
+    return std::move(rHeaderName);
 }

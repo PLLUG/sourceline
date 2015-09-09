@@ -60,34 +60,30 @@ void SettingStorage::slotLoadSettings(QString pSettingPath)
     QStringList lGroupsList = parsePath(pSettingPath);
     QMap<QString, QVariant> lHashSetting;
 
-    for(int i = 0; i < lGroupsList.count(); i++)
+    for(const auto &group : lGroupsList)
     {
-        mSettings->beginGroup(lGroupsList.at(i));
+        mSettings->beginGroup(group);
     }
-    QStringList lList = mSettings->allKeys();
-    for(int i = 0; i < lList.count(); i++)
+    for(const auto &lKey : mSettings->allKeys())
     {
-        QString lKey = lList.at(i);
         lHashSetting.insert(lKey, mSettings->value(lKey));
     }
-    for(int i = 0; i < lGroupsList.count(); i++)
+    for(int i = 0; i < lGroupsList.count(); ++i)
     {
         mSettings->endGroup();
     }
     emit signalSetSettings(lHashSetting);
 }
 
-QStringList SettingStorage::parsePath(QString pPath)
+QStringList SettingStorage::parsePath(const QString &pPath)
 {
     QStringList rGroupsList;
-    QStringList lTmpList = pPath.split(QRegExp("/"));
-    for(int i = 0; i < lTmpList.count(); i++)
+    for(const QString &elem: pPath.split(QRegExp("/")))
     {
-        QString elem = lTmpList.at(i);
         if(!elem.isEmpty())
         {
             rGroupsList.append(elem);
         }
     }
-    return rGroupsList;
+    return std::move(rGroupsList);
 }

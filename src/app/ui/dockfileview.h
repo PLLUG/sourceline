@@ -17,11 +17,12 @@ public:
     explicit DockFileView(QWidget *parent = 0);
     ~DockFileView();
     DockType type() const;
-private:
-    Ui::DockFileView *ui;
 
 public slots:
     void slotSetPage(int pPage);
+
+private:
+    Ui::DockFileView *ui;
 };
 
 #endif // FILEVIEW_H

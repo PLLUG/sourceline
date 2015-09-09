@@ -33,10 +33,10 @@ class CommandComponentSupplier : public ComponentSupplier
 {
 public:
     CommandComponentSupplier();
-    QString className() const;
+    QString className() const override;
     UserAction *actionFromCommand(Command *pComand);
     void setActionManager(ActionManager *pActionManager);
-    void supply(QObject *pComponent, const PluginInfo &pPluginInfo);
+    void supply(QObject *pComponent, const PluginInfo &pPluginInfo) override;
 private:
     ActionManager *mActionManager;
 };

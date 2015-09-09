@@ -7,22 +7,22 @@ TabsAPI::TabsAPI(QObject *parent):
 
 }
 
-int TabsAPI::getCurrentIndex(CustomTabBar *pTabBar)
+int TabsAPI::getCurrentIndex(CustomTabBar *pTabBar) const
 {    
     return pTabBar->currentIndex();
 }
 
-int TabsAPI::getCountTabs(CustomTabBar *pTabBar)
+int TabsAPI::getCountTabs(CustomTabBar *pTabBar) const
 {
     return pTabBar->count();
 }
 
-QWidget* getCurrentWidget(CustomTabBar *pTabBar)
+QWidget* TabsAPI::getCurrentWidget(CustomTabBar *pTabBar) const
 {
     return pTabBar->currentWidget();
 }
 
-QWidget* getWidget(CustomTabBar *pTabBar, int pIndex)
+QWidget* TabsAPI::getWidget(CustomTabBar *pTabBar, int pIndex) const
 {
     return pTabBar->widget(pIndex);
 }

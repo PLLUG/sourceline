@@ -60,26 +60,18 @@
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent)
+  ,mPluginManager{nullptr}
+  ,mStorage{nullptr}
+  ,mSettingsManager{nullptr}
+  ,mActionManager{nullptr}
+  ,mMainMenuBuilder{nullptr}
+  ,mPluginSettingsMediator{nullptr}
+  ,mGlobalAppSettings{nullptr}
+  ,mSplashScreen{nullptr}
+  ,mMainWindow{nullptr}
+  ,mAppSettingsDialog{nullptr}
+  ,mAboutDialog{nullptr}
 {
-    // Plugin Support
-    mPluginManager = 0;
-
-    // Settings
-    mStorage = 0;
-    mSettingsManager = 0;
-
-    // Main Application Classes
-    mActionManager = 0;
-    mMainMenuBuilder = 0;
-    mPluginSettingsMediator = 0;
-    mGlobalAppSettings = 0;
-
-    // Application UI
-    mSplashScreen = 0;
-    mMainWindow = 0;
-    mAppSettingsDialog = 0;
-    mAboutDialog = 0;
-
     // Init splash screen
     mSplashScreen = new SplashScreen; // removed in slotBuild()
     mSplashScreen->setSplashScreen(QPixmap(":/splash/img/SL_Splash_load.png"));
@@ -165,7 +157,7 @@ void ApplicationBuilder::initApp()
     // (loaded plugins, etc...)
     mGlobalAppSettings = new Settings(qApp);
     mGlobalAppSettings->setAutoCommit(true); // Settings have no settings page representation, so
-                                             // settings should be commited automatically after change
+    // settings should be commited automatically after change
     mSettingsManager->addSettings("global", "settings", mGlobalAppSettings);
 
     // TASK: remove setting of global app settings from mediator (fix for settings autocommit needed)
@@ -275,7 +267,7 @@ void ApplicationBuilder::loadPlugins()
         lActivePluginsList = mPluginManager->availablePlugins();
     }
 
-    foreach (const QString &lPluginId, lActivePluginsList)
+    for(const QString &lPluginId: lActivePluginsList)
     {
         qDebug("        Loading %s...", qPrintable(lPluginId));
         mPluginManager->loadPlugin(lPluginId);
@@ -315,7 +307,7 @@ void ApplicationBuilder::loadSettings()
     Settings *lViewSettings = new Settings(this);
 
     ViewSettingPage *lViewSettingPage = new ViewSettingPage(lViewSettings);
-    lViewSettingPage->setMainUi(mMainWindow->ui);
+    lViewSettingPage->setMainUi(mMainWindow->getUi());
     mAppSettingsDialog->addSettingsItem(lViewSettingPage);
 
     mSettingsManager->addSettings("main_window", lViewSettingPage->name(), lViewSettings);
@@ -328,13 +320,14 @@ void ApplicationBuilder::supplyComponents(ComponentSorter *pComponentSorter)
 {
     int lSuppliedCount = 0;
     QStringList lLoadedPluginsList = mPluginManager->loadedPlugins();
-    foreach (const QString &lPluginId, lLoadedPluginsList)
+    for(const QString &lPluginId: lLoadedPluginsList)
     {
         // Supply componenets to application
         PluginInfo lPluginInfo = mPluginManager->pluginInfo(lPluginId);
         qDebug("        Registering %s %s...", qPrintable(lPluginInfo.pluginId()), qPrintable(lPluginInfo.ver()));
         Plugin *lPlugin = mPluginManager->loadedPluginInstance(lPluginId);
-        pComponentSorter->setComponents(lPlugin->components(), lPluginInfo);
+        if(lPlugin)
+            pComponentSorter->setComponents(lPlugin->components(), lPluginInfo);
 
         // Update progress
         ++lSuppliedCount;
@@ -342,5 +335,3 @@ void ApplicationBuilder::supplyComponents(ComponentSorter *pComponentSorter)
         QApplication::processEvents();
     }
 }
-
-

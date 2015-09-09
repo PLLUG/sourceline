@@ -83,17 +83,17 @@ bool PluginManager::loadPlugin(const QString &pPluginId)
     return rResult;
 }
 
-Plugin *PluginManager::loadedPluginInstance(QString pPluginId)
+Plugin *PluginManager::loadedPluginInstance(const QString &pPluginId)
 {
     return mLoadedPluginByPluginId.value(pPluginId);
 }
 
-QStringList PluginManager::activePlugins()
+QStringList PluginManager::activePlugins() const
 {
     return mActivePlugins;
 }
 
-QStringList PluginManager::loadedPlugins()
+QStringList PluginManager::loadedPlugins() const
 {
     return mLoadedPluginByPluginId.keys();
 }

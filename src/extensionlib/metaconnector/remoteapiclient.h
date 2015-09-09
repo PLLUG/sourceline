@@ -15,7 +15,7 @@ class EXTENSIONSSHARED_EXPORT RemoteApiClient : public QObject
 public:
     explicit RemoteApiClient(QObject *parent = 0);
 
-    void connectToProvider(QString slInstanceId);
+    void connectToProvider(const QString &slInstanceId);
 
 signals:
     void connected();

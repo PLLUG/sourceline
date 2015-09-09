@@ -15,7 +15,7 @@ public:
     explicit FileViewAPI(FileView &fileView, CommandManager &commandManager, QObject *parent = 0);
 
 public slots:
-    void addToMenu(QString pCommandID) final;
+    void addToMenu(QString pCommandID) override final;
 
 private:
     FileView &mFileView;

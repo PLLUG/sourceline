@@ -44,9 +44,9 @@ public:
     QList<PluginInfo> pluginsInfo();
     PluginInfo pluginInfo(QString pPluginId);
     bool loadPlugin(const QString &pPluginId);
-    Plugin* loadedPluginInstance(QString pPluginId);
-    QStringList activePlugins();
-    QStringList loadedPlugins();
+    Plugin* loadedPluginInstance(const QString &pPluginId);
+    QStringList activePlugins() const;
+    QStringList loadedPlugins() const;
 
 signals:
     void activePluginsChanged(QStringList);

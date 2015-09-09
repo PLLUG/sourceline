@@ -7,9 +7,11 @@
 #include <QEvent>
 #include "transitionsignals.h"
 
-Workplace::Workplace(QObject *parent) : QObject(parent)
+Workplace::Workplace(QObject *parent):
+    QObject(parent)
+  ,mStateMachine{nullptr}
+  ,mTransitionSignals{new TransitionSignals(this)}
 {
-    mTransitionSignals = new TransitionSignals(this);
     initStateMachine();
 }
 

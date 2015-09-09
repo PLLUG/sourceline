@@ -12,7 +12,7 @@ public:
     void setApiRevision(int revision);
 
 protected:
-    bool isMetaMethodCouldBeCalled(const QMetaMethod &method);
+    bool isMetaMethodCouldBeCalled(const QMetaMethod &method) override;
 
 private:
     int mRevision;

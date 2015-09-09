@@ -24,29 +24,23 @@
 *******************************************************************************/
 #include <QObject>
 #include <QDir>
-#include <QList>
 #include <QStringList>
 #include "plugininfo.h"
 #include "pluginmanager_global.h"
-
 
 class PLUGINMANAGERSHARED_EXPORT PluginLoader : public QObject
 {
     Q_OBJECT
 public:
-    explicit PluginLoader(QObject *parent = 0);
-    void setPluginsFolder(QDir);
-    QStringList pluginIds();
-    QObject* load(QString);
-    PluginInfo pluginInfo(const QString &pPluginId);
-    QList<QObject*> allPlugins();
-    QList<PluginInfo> pluginsInfo();
-    QString libPath(const QString &pPluginId);
+    explicit PluginLoader(QObject *parent = nullptr);
+    void setPluginsFolder(const QDir &);
+    QStringList pluginIds() const;
+    QObject* load(const QString &);
+    PluginInfo pluginInfo(const QString &pPluginId) const;
+    QList<PluginInfo> pluginsInfo() const;
+    QString libPath(const QString &pPluginId) const;
     static QString pluginsExtension();
     static QStringList pluginsExtensionFilters();
-signals:
-
-public slots:
 
 private:
     QString defaultPluginDirPath() const;

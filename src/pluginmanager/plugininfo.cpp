@@ -22,9 +22,7 @@
 *******************************************************************************/
 #include "plugininfo.h"
 
-
-
-PluginInfo::PluginInfo(QString pPluginId, QString pVer, QString pDescr, QString pCategory, QHash<QString, QString> pAdditionalInfo):
+PluginInfo::PluginInfo(const QString &pPluginId, const QString &pVer, const QString &pDescr, const QString &pCategory, const QHash<QString, QString> &pAdditionalInfo):
     mPluginId(pPluginId),
     mVer(pVer),
     mDescr(pDescr),
@@ -35,8 +33,8 @@ PluginInfo::PluginInfo(QString pPluginId, QString pVer, QString pDescr, QString 
 
 PluginInfo::PluginInfo()
 {
-
 }
+
 QString PluginInfo::pluginId() const
 {
     return mPluginId;
@@ -46,16 +44,18 @@ QString PluginInfo::ver() const
 {
     return mVer;
 }
+
 QString PluginInfo::description() const
 {
     return mDescr;
 }
+
 QString PluginInfo::category() const
 {
     return mCategory;
 }
+
 QHash<QString, QString> PluginInfo::additionalInfo() const
 {
     return mAdditionalInfo;
 }
-

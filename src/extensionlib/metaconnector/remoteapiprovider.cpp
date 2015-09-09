@@ -43,7 +43,7 @@ void RemoteApiProvider::addApiProvider(InvocationBased *apiProvider)
 
 void RemoteApiProvider::gotConnection()
 {
-    if (mSocket = mServer->nextPendingConnection())
+    if ((mSocket = mServer->nextPendingConnection()))
     {
         connect(mSocket, &QLocalSocket::readyRead, this, &RemoteApiProvider::readyRead, Qt::UniqueConnection);
         qDebug("Got connection!");

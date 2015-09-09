@@ -19,20 +19,20 @@ public:
      * \param pTabBar - tabBar where is this tab
      * \return index current tab
      */
-    int getCurrentIndex(CustomTabBar *pTabBar);
+    int getCurrentIndex(CustomTabBar *pTabBar) const;
     /*!
      * \brief get count tabs
      * \param pTabBar - tab bar
      * \return amount tabs
      */
-    int getCountTabs(CustomTabBar *pTabBar);
+    int getCountTabs(CustomTabBar *pTabBar) const;
 
     /*!
      * \brief Get widget of current tab
      * \param pTabBar
      * \return Returns a pointer to the page currently being displayed by the tab dialog.
      */
-    QWidget* getCurrentWidget(CustomTabBar *pTabBar);
+    QWidget* getCurrentWidget(CustomTabBar *pTabBar) const;
 
     /*!
      * \brief Get widget of tab with index
@@ -40,7 +40,7 @@ public:
      * \param index of tab
      * \return Returns the tab page at index position index
      */
-    QWidget* getWidget(CustomTabBar *pTabBar, int pIndex);
+    QWidget* getWidget(CustomTabBar *pTabBar, int pIndex) const;
 
 public slots:
     /*!

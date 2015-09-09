@@ -19,7 +19,7 @@ public:
 
     QVariant data(const QModelIndex &index, int role);
 
-    void setIconForAttributes(quint32 attributes, QString path);
+    void setIconForAttributes(quint32 attributes, const QString &path);
 
 private:
     QString iconPathForIndex(const QModelIndex &);

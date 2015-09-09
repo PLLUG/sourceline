@@ -10,11 +10,11 @@ CustomTabBar::CustomTabBar(QWidget *parent) :
     ui(new Ui::CustomTabBar)
 {
     ui->setupUi(this);
-    this->setTabsClosable(true);
-    this->setMovable(true);    
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+    setTabsClosable(true);
+    setMovable(true);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slotCloseTab(int)));
+    connect(this, &CustomTabBar::tabCloseRequested, this, &CustomTabBar::slotCloseTab);
 }
 
 CustomTabBar::~CustomTabBar()
@@ -25,4 +25,12 @@ CustomTabBar::~CustomTabBar()
 void CustomTabBar::slotAddNewWorkplace(const QString &pName)
 {
     QTabWidget::addTab(new ContentForTab(this), pName);
+}
+
+void CustomTabBar::slotCloseTab(int index)
+{
+    QWidget *w = widget(index);
+    if(w)
+        w->deleteLater();
+    removeTab(index);
 }

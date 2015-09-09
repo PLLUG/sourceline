@@ -41,7 +41,7 @@ void RevisionTreeWidget::resetGraph()
     mTestOrderMap.clear();
 
     if(!mModel) return;
-    const int numVertices{num_vertices(mModel->graph())};
+    const auto numVertices = num_vertices(mModel->graph());
     if (!numVertices) return;
 
     const vertex root_vertex = findRoot(mModel->graph());
@@ -52,7 +52,7 @@ void RevisionTreeWidget::resetGraph()
     ColorMap colorMap;
     boost::associative_property_map<ColorMap> propColorMap(colorMap);
     dfs_visitor<VertexIntMap, vertex, revision_graph> dfs_vis{mColumnMap,mTestOrderMap};
-    depth_first_search(mModel->graph(),dfs_vis,propColorMap,root_vertex);
+    boost::depth_first_search(mModel->graph(),dfs_vis,propColorMap,root_vertex);
 
     //perform topological sort
     int row{0};

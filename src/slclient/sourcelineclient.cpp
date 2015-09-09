@@ -8,8 +8,8 @@
 #include "pluginmanager.h"
 
 #ifdef DEBUG
-    // Include debug window only in Debug mode.
-    #include "clientdebugwindow.h"
+// Include debug window only in Debug mode.
+#include "clientdebugwindow.h"
 #endif
 
 /*!
@@ -27,10 +27,7 @@ SourceLineClient::SourceLineClient(const QString &connectionId, QObject *parent)
 
 SourceLineClient::~SourceLineClient()
 {
-    if (mDebugWindowInstance)
-    {
-        delete mDebugWindowInstance;
-    }
+    delete mDebugWindowInstance;
 }
 
 /*!

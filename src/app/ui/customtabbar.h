@@ -22,6 +22,10 @@ public slots:
      * \param Name of workplace
      */
     void slotAddNewWorkplace(const QString &pName);
+
+private:
+    void slotCloseTab(int index);
+
 private:
     Ui::CustomTabBar *ui;
 };

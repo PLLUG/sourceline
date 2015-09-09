@@ -32,8 +32,8 @@ class FakeComponentSupplier : public ComponentSupplier
 {
 public:
     FakeComponentSupplier();
-    QString className() const;
-    void supply(QObject * pComponent, const PluginInfo &pPluginInfo);
+    QString className() const override;
+    void supply(QObject * pComponent, const PluginInfo &pPluginInfo) override;
     void setDialog(Dialog* pDialog);
 private:
     Dialog* mDialog;
