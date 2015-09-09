@@ -74,6 +74,7 @@ signals:
 private:
     void beginResetGraphStructure();
     void endResetGraphStructure();
+    std::vector<vertex> sortedGraphByTime(const revision_graph &graph);
 
 private:
     revision_graph mGraph;

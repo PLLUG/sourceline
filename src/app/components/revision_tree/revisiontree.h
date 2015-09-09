@@ -49,8 +49,8 @@ public:
     void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
 
 private slots:
-    void slotTableScrollChanged(int value);
-    void slotGraphScrollChanged(int value);
+    void slotTableScrollChanged(int pValue);
+    void slotGraphScrollChanged(int pValue);
 
 private:
     void clearGraph();

@@ -1,5 +1,28 @@
 #ifndef REVISIONTREEWIDGET_H
 #define REVISIONTREEWIDGET_H
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2015  by                                                ***
+***            Halyna Butovych (galynabutovych@gmail.com)                    ***
+***            Nazarii Plebanskii (nazar796@gmail.com)                       ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
 #include "revisionmodel.h"
 #include "revisionvertex.h"
 #include <QWidget>
@@ -14,47 +37,54 @@ class RevisionTreeWidget : public QWidget
 public:
     RevisionTreeWidget(QWidget* parent = nullptr);
 
+    static int maxColumnFromColumnMap(const VertexIntMap &pColumnMap);
     void resetGraph();
+    void setModel(RevisionModel *pModel);
 
-    int radius() const;
-    void setRadius(int radius);
-
-    float rowHeight() const;
-    void setRowHeight(float width);
-
-    float getLeftOffset() const;
-    void setLeftOffset(float leftOffset);
-
-    float getTopOffset() const;
-    void setTopOffset(float topOffset);
-
-    float getBottomOffset() const;
+    float bottomOffset() const;
     void setBottomOffset(float bottomOffset);
 
-    int getStep() const;
-    void setStep(int step);
+    float columnWidth() const;
+    void setColumnWidth(float columnWidth);
 
-    int getEdgeOffset() const;
+    int edgeOffset() const;
     void setEdgeOffset(int edgeOffset);
 
-    void setModel(RevisionModel *pModel);
+    int edgeWidth() const;
+    void setEdgeWidth(int edgeWidth);
+
+    float leftOffset() const;
+    void setLeftOffset(float leftOffset);
+
+    int roundingRadius() const;
+    void setRoundingRadius(int roundingRadius);
+
+    float rowHeight() const;
+    void setRowHeight(float rowHeight);
+
+    float topOffset() const;
+    void setTopOffset(float topOffset);
+
+    int vertexRadius() const;
+    void setVertexRadius(int vertexRadius);
 
 protected:
     void paintEvent(QPaintEvent *e) override;
 
 private:
-    std::vector<vertex> getSortedGraphByTime(const revision_graph &graph);
     static vertex findRoot(const revision_graph &pGraph);
     std::vector<RevisionVertex> revisionVertexVector(const revision_graph &pGraph);
 
 private:
-    float mLeftOffset;
-    float mTopOffset;
     float mBottomOffset;
-    int mRadius;
-    int mStep;
+    float mColumnWidth;
     int mEdgeOffset;
+    int mEdgeWidth;
+    float mLeftOffset;
+    int mRoundingRadius;
     float mRowHeight;
+    float mTopOffset;
+    int mVertexRadius;
 
     VertexIntMap mColumnMap;
     VertexIntMap mRowMap;

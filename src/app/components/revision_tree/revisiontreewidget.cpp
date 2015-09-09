@@ -1,3 +1,27 @@
+/*******************************************************************************
+***                                                                          ***
+***    SourceLine - Crossplatform VCS Client.                                ***
+***    Copyright (C) 2015  by                                                ***
+***            Halyna Butovych (galynabutovych@gmail.com)                    ***
+***            Nazarii Plebanskii (nazar796@gmail.com)                       ***
+***                                                                          ***
+***    This file is part of SourceLine Project.                              ***
+***                                                                          ***
+***    SourceLine is free software: you can redistribute it and/or modify    ***
+***    it under the terms of the GNU General Public License as published by  ***
+***    the Free Software Foundation, either version 3 of the License, or     ***
+***    (at your option) any later version.                                   ***
+***                                                                          ***
+***    SourceLine is distributed in the hope that it will be useful,         ***
+***    but WITHOUT ANY WARRANTY; without even the implied warranty of        ***
+***    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the         ***
+***    GNU General Public License for more details.                          ***
+***                                                                          ***
+***    You should have received a copy of the GNU General Public License     ***
+***    along with this program.  If not, see <http://www.gnu.org/licenses/>. ***
+***                                                                          ***
+*******************************************************************************/
+
 #include "revisiontreewidget.h"
 #include <iostream>
 #include <boost/graph/property_maps/container_property_map.hpp>
@@ -15,18 +39,20 @@ using IndexPropertyMap = boost::property_map<revision_graph, boost::vertex_index
 using PredMap = boost::iterator_property_map<typename std::vector<vertex>::iterator, IndexPropertyMap>;
 
 RevisionTreeWidget::RevisionTreeWidget(QWidget *parent):
-    QWidget{parent},
-    mLeftOffset{20}, // offset from left side
-    mTopOffset{45}, // height of row of tableView * 3/2
-    mRadius{6}, // radius of vertex
-    mStep{3}, // radius of rounding of edge
-    mRowHeight{30}, // height of row of tableView
-    mModel{nullptr}
+    QWidget{parent}
+  ,mColumnWidth{10} // width between column of revision tree
+  ,mEdgeWidth{2} // width of edge for painting
+  ,mLeftOffset{20} // offset from left side
+  ,mRoundingRadius{3} // radius of rounding of edge
+  ,mRowHeight{30} // height of row of tableView
+  ,mTopOffset{45} // height of row of tableView * 3/2
+  ,mVertexRadius{4} // radius of vertex
+  ,mModel{nullptr}
 {
     // Offset from bottom
     mBottomOffset = mRowHeight / 2;
     // Offset from center of vertex to first rounding of edge
-    mEdgeOffset = mRadius + mStep * 2;
+    mEdgeOffset = mVertexRadius + mRoundingRadius * 2;
 }
 
 /*!
@@ -64,74 +90,9 @@ void RevisionTreeWidget::resetGraph()
 
     mRevisionVertexes = revisionVertexVector(mModel->graph());
 
+    setMinimumWidth(mLeftOffset + mColumnWidth * maxColumnFromColumnMap(mColumnMap) + 2 * mVertexRadius);
     setMinimumHeight(mTopOffset + mRowHeight * (numVertices - 1) + mBottomOffset);
     updateGeometry();
-}
-
-int RevisionTreeWidget::radius() const
-{
-    return mRadius;
-}
-
-void RevisionTreeWidget::setRadius(int radius)
-{
-    mRadius = radius;
-}
-
-float RevisionTreeWidget::rowHeight() const
-{
-    return mRowHeight;
-}
-
-/*!
- * \brief RevisionTreeWidget::setItemWidth
- * \param width
- */
-void RevisionTreeWidget::setRowHeight(float width)
-{
-    mRowHeight = width;
-}
-
-float RevisionTreeWidget::getLeftOffset() const
-{
-    return mLeftOffset;
-}
-
-/*!
- * \brief RevisionTreeWidget::setLeftOffset Sets left offset.
- * \param leftOffset Offset value.
- */
-void RevisionTreeWidget::setLeftOffset(float leftOffset)
-{
-    mLeftOffset = leftOffset;
-}
-
-float RevisionTreeWidget::getTopOffset() const
-{
-    return mTopOffset;
-}
-
-/*!
- * \brief RevisionTreeWidget::setTopOffset Sets top offset.
- * \param topOffset Offset value.
- */
-void RevisionTreeWidget::setTopOffset(float topOffset)
-{
-    mTopOffset = topOffset;
-}
-
-float RevisionTreeWidget::getBottomOffset() const
-{
-    return mBottomOffset;
-}
-
-/*!
- * \brief RevisionTreeWidget::setBottomOffset Sets bottom offset.
- * \param bottomOffset Offset value.
- */
-void RevisionTreeWidget::setBottomOffset(float bottomOffset)
-{
-    mBottomOffset = bottomOffset;
 }
 
 /*!
@@ -176,7 +137,7 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 
     // Drawing of edges
     QPen lPen;
-    lPen.setWidth(2);
+    lPen.setWidth(mEdgeWidth);
     lPen.setColor(Qt::darkGray);
     BGL_FORALL_EDGES(e, mModel->graph(), revision_graph)
     {
@@ -190,7 +151,7 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
 
         // Painting of edge, only if it is within the display
         if(!((sourceRow < firstRow && targetRow < firstRow) ||
-                (sourceRow > lastRow && targetRow > lastRow)))
+             (sourceRow > lastRow && targetRow > lastRow)))
         {
             QPainterPath myPath;
             QLinearGradient gradient(QPointF(mRowHeight*sourceCol + 1.0 * mLeftOffset,
@@ -205,58 +166,58 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
             if(targetCol > sourceCol)
             {
                 // Moving to center of source vertex
-                myPath.moveTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                myPath.moveTo(QPointF(mColumnWidth*sourceCol + mLeftOffset,
                                       mRowHeight*sourceRow + mTopOffset));
                 // Drawing line to first rounding of edge
-                myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                myPath.lineTo(QPointF(mColumnWidth*sourceCol + mLeftOffset,
                                       mRowHeight*sourceRow + mTopOffset - mEdgeOffset));
                 // Drawing first rounding
-                myPath.quadTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                myPath.quadTo(QPointF(mColumnWidth*sourceCol + mLeftOffset,
                                       mRowHeight*sourceRow + mTopOffset - mEdgeOffset),
-                              QPointF(mRowHeight*sourceCol + mLeftOffset + mStep,
-                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
+                              QPointF(mColumnWidth*sourceCol + mLeftOffset + mRoundingRadius,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mRoundingRadius));
                 // Drawing line from first rounding to second rounding
-                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset - mStep,
-                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep));
+                myPath.lineTo(QPointF(mColumnWidth*targetCol + mLeftOffset - mRoundingRadius,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mRoundingRadius));
                 // Drawing second rounding
-                myPath.quadTo(QPointF(mRowHeight*targetCol + mLeftOffset - mStep,
-                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mStep),
-                              QPointF(mRowHeight*targetCol + mLeftOffset,
-                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - 2 * mStep));
+                myPath.quadTo(QPointF(mColumnWidth*targetCol + mLeftOffset - mRoundingRadius,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - mRoundingRadius),
+                              QPointF(mColumnWidth*targetCol + mLeftOffset,
+                                      mRowHeight*sourceRow + mTopOffset - mEdgeOffset - 2 * mRoundingRadius));
                 // Drawing line from second rouding to target vertex
-                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                myPath.lineTo(QPointF(mColumnWidth*targetCol + mLeftOffset,
                                       mRowHeight*targetRow + mTopOffset));
             }
             else if(targetCol < sourceCol)
             {
                 // Moving to center of target vertex
-                myPath.moveTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                myPath.moveTo(QPointF(mColumnWidth*targetCol + mLeftOffset,
                                       mRowHeight*targetRow + mTopOffset));
                 // Drawing line to first rounding of edge
-                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                myPath.lineTo(QPointF(mColumnWidth*targetCol + mLeftOffset,
                                       mRowHeight*targetRow + mTopOffset + mEdgeOffset));
                 // Drawing first rounding
-                myPath.quadTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                myPath.quadTo(QPointF(mColumnWidth*targetCol + mLeftOffset,
                                       mRowHeight*targetRow + mTopOffset + mEdgeOffset),
-                              QPointF(mRowHeight*targetCol + mLeftOffset + mStep,
-                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
+                              QPointF(mColumnWidth*targetCol + mLeftOffset + mRoundingRadius,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mRoundingRadius));
                 // Drawing line from first rounding to second rounding
-                myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset - mStep,
-                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep));
+                myPath.lineTo(QPointF(mColumnWidth*sourceCol + mLeftOffset - mRoundingRadius,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mRoundingRadius));
                 // Drawing second rounding
-                myPath.quadTo(QPointF(mRowHeight*sourceCol + mLeftOffset - mStep,
-                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mStep),
-                              QPointF(mRowHeight*sourceCol + mLeftOffset,
-                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + 2 * mStep));
+                myPath.quadTo(QPointF(mColumnWidth*sourceCol + mLeftOffset - mRoundingRadius,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + mRoundingRadius),
+                              QPointF(mColumnWidth*sourceCol + mLeftOffset,
+                                      mRowHeight*targetRow + mTopOffset + mEdgeOffset + 2 * mRoundingRadius));
                 // Drawing line from second rouding to source vertex
-                myPath.lineTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                myPath.lineTo(QPointF(mColumnWidth*sourceCol + mLeftOffset,
                                       mRowHeight*sourceRow + mTopOffset));
             }
             else
             {
-                myPath.moveTo(QPointF(mRowHeight*sourceCol + mLeftOffset,
+                myPath.moveTo(QPointF(mColumnWidth*sourceCol + mLeftOffset,
                                       mRowHeight*sourceRow + mTopOffset));
-                myPath.lineTo(QPointF(mRowHeight*targetCol + mLeftOffset,
+                myPath.lineTo(QPointF(mColumnWidth*targetCol + mLeftOffset,
                                       mRowHeight*targetRow + mTopOffset));
             }
             painter.drawPath(myPath);
@@ -276,52 +237,25 @@ void RevisionTreeWidget::paintEvent(QPaintEvent *e)
         switch(mRevisionVertexes[v].shape)
         {
         case vsSquare:
-            painter.drawRect(mLeftOffset + col*mRowHeight - mRadius, // left corner X
-                             mTopOffset + row*mRowHeight - mRadius, // left corner Y
-                             mRadius*2, mRadius*2); // sizes of sides
+            painter.drawRect(mLeftOffset + col*mColumnWidth - mVertexRadius, // left corner X
+                             mTopOffset + row*mRowHeight - mVertexRadius, // left corner Y
+                             mVertexRadius*2, mVertexRadius*2); // sizes of sides
             break;
         case vsCircle:
-            painter.drawEllipse(QPointF{mRowHeight*col + mLeftOffset, // center X
+            painter.drawEllipse(QPointF{mColumnWidth*col + mLeftOffset, // center X
                                         mRowHeight*row + mTopOffset}, // center Y
-                                mRadius, mRadius);
+                                mVertexRadius, mVertexRadius);
             break;
         }
         //        // Draws number of vertex
         //        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
         //                                 mRowHeight*row + mTopOffset},
         //                         QString::number(get(testAlgorithmIndexes,v)));
-        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
-                                 mRowHeight*row + mTopOffset},
-                         QString::number(v));
+
+        //        painter.drawText(QPointF{mRowHeight*col + mLeftOffset,
+        //                                 mRowHeight*row + mTopOffset},
+        //                         QString::number(v));
     }
-}
-
-/*!
- * \brief getSortedGraphByTime sorts graph by commit-time
- * \param graph - graph to be sorted
- * \return vector with sorted vertices
- */
-std::vector<vertex> RevisionTreeWidget::getSortedGraphByTime(const revision_graph &graph)
-{
-    int verticesNumb = num_vertices(graph);
-    std::vector< vertex > rVector;
-    rVector.reserve(verticesNumb);
-
-    // Copying vertices from graph to rVector
-    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
-    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
-    {
-        rVector.push_back(*vi);
-    }
-
-    // Sorting vertices in rVector
-    std::sort(rVector.begin(), rVector.end(),
-              [&graph](const vertex &vert1, const vertex &vert2) -> bool
-    {
-        return graph[vert1].created < graph[vert2].created;
-    });
-
-    return std::move(rVector);
 }
 
 /*!
@@ -407,31 +341,199 @@ std::vector<RevisionVertex> RevisionTreeWidget::revisionVertexVector(const revis
     return std::move(rRevisionVertexes);
 }
 
+/*!
+ * \brief RevisionTreeWidget::setModel Sets new model for RevisionTreeWidget.
+ *
+ * Model is used for getting vertices for drawing.
+ *
+ * \param pModel New model.
+ */
 void RevisionTreeWidget::setModel(RevisionModel *pModel)
 {
     mModel = pModel;
     if(mModel)
     {
-//        connect(mModel,&RevisionModel::graphReset,this,&RevisionTreeWidget::resetGraph,Qt::UniqueConnection);
+        // connect(mModel,&RevisionModel::graphReset,this,&RevisionTreeWidget::resetGraph,Qt::UniqueConnection);
     }
 }
 
-int RevisionTreeWidget::getEdgeOffset() const
+/*!
+ * \brief RevisionTreeWidget::vertexRadius Radius of vertex(commit).
+ * \return radius of vertex.
+ */
+int RevisionTreeWidget::vertexRadius() const
+{
+    return mVertexRadius;
+}
+
+/*!
+ * \brief RevisionTreeWidget::setVertexRadius Sets radius of vertex(commit).
+ * \param vertexRadius New radius of vertex.
+ */
+void RevisionTreeWidget::setVertexRadius(int vertexRadius)
+{
+    mVertexRadius = vertexRadius;
+}
+
+/*!
+ * \brief RevisionTreeWidget::topOffset Offset from top of RevisionTreeWidget.
+ * \return offset from top.
+ */
+float RevisionTreeWidget::topOffset() const
+{
+    return mTopOffset;
+}
+
+/*!
+ * \brief RevisionTreeWidget::setTopOffset Sets offset from top of RevisionTreeWidget.
+ * \param topOffset New offset from top.
+ */
+void RevisionTreeWidget::setTopOffset(float topOffset)
+{
+    mTopOffset = topOffset;
+}
+
+/*!
+ * \brief RevisionTreeWidget::rowHeight Height of single row.
+ * \return Height of row.
+ */
+float RevisionTreeWidget::rowHeight() const
+{
+    return mRowHeight;
+}
+
+/*!
+ * \brief RevisionTreeWidget::setRowHeight Sets height of row.
+ * \param rowHeight New height of row.
+ */
+void RevisionTreeWidget::setRowHeight(float rowHeight)
+{
+    mRowHeight = rowHeight;
+}
+
+/*!
+ * \brief RevisionTreeWidget::roundingRadius Radius of rounding of edges.
+ * \return Radius of rounding.
+ */
+int RevisionTreeWidget::roundingRadius() const
+{
+    return mRoundingRadius;
+}
+
+/*!
+ * \brief RevisionTreeWidget::setRoundingRadius Sets new radius of rounding.
+ * \param roundingRadius New radius of rounding.
+ */
+void RevisionTreeWidget::setRoundingRadius(int roundingRadius)
+{
+    mRoundingRadius = roundingRadius;
+}
+
+/*!
+ * \brief RevisionTreeWidget::leftOffset Offset from left of RevisionTreeWidget.
+ * \return Offset from left of RevisionTreeWidget.
+ */
+float RevisionTreeWidget::leftOffset() const
+{
+    return mLeftOffset;
+}
+
+/*!
+ * \brief RevisionTreeWidget::setLeftOffset Sets new offset from left of RevisionTreeWidget.
+ * \param leftOffset New offset from left.
+ */
+void RevisionTreeWidget::setLeftOffset(float leftOffset)
+{
+    mLeftOffset = leftOffset;
+}
+
+/*!
+ * \brief RevisionTreeWidget::edgeWidth Width of edge for drawing (thickness).
+ * \return Width of edge.
+ */
+int RevisionTreeWidget::edgeWidth() const
+{
+    return mEdgeWidth;
+}
+
+/*!
+ * \brief RevisionTreeWidget::setEdgeWidth Sets new width of edge for drawing (thickness).
+ * \param edgeWidth New width of edge.
+ */
+void RevisionTreeWidget::setEdgeWidth(int edgeWidth)
+{
+    mEdgeWidth = edgeWidth;
+}
+
+/*!
+ * \brief RevisionTreeWidget::edgeOffset Offset from center of vertex to
+ *  begining of rounding of edge.
+ * \return Edge offset.
+ */
+int RevisionTreeWidget::edgeOffset() const
 {
     return mEdgeOffset;
 }
 
+/*!
+ * \brief RevisionTreeWidget::setEdgeOffset Sets new Offset from center of
+ *  vertex to begining of rounding of edge.
+ * \param edgeOffset New edge offset.
+ */
 void RevisionTreeWidget::setEdgeOffset(int edgeOffset)
 {
     mEdgeOffset = edgeOffset;
 }
 
-int RevisionTreeWidget::getStep() const
+/*!
+ * \brief RevisionTreeWidget::bottomOffset Offset from bottom of RevisionTreeWidget.
+ * \return Offset from bottom of RevisionTreeWidget.
+ */
+float RevisionTreeWidget::bottomOffset() const
 {
-    return mStep;
+    return mBottomOffset;
 }
 
-void RevisionTreeWidget::setStep(int step)
+/*!
+ * \brief RevisionTreeWidget::setBottomOffset Sets new offset from bottom of RevisionTreeWidget.
+ * \param bottomOffset New offset from bottom.
+ */
+void RevisionTreeWidget::setBottomOffset(float bottomOffset)
 {
-    mStep = step;
+    mBottomOffset = bottomOffset;
+}
+
+/*!
+ * \brief RevisionTreeWidget::columnWidth Width of single column.
+ * \return Width of single colomn.
+ */
+float RevisionTreeWidget::columnWidth() const
+{
+    return mColumnWidth;
+}
+
+/*!
+ * \brief RevisionTreeWidget::setColumnWidth Sets new column width.
+ * \param width New column width.
+ */
+void RevisionTreeWidget::setColumnWidth(float width)
+{
+    mColumnWidth = width;
+}
+
+/*!
+ * \brief RevisionTreeWidget::maxColumnFromColumnMap Returns maximum number of
+ * colomn, which we are taking from columnMap.
+ * \param pColumnMap Column map, from which is taking maximum number of colomn.
+ * \return Maximum number of colomn.
+ */
+int RevisionTreeWidget::maxColumnFromColumnMap(const VertexIntMap &pColumnMap)
+{
+    auto rMaxCol = std::max_element(pColumnMap.cbegin(), pColumnMap.cend(),
+                                    [](const std::pair<vertex, int> &iter1,
+                                    const std::pair<vertex, int> &iter2)
+    {
+        return iter1.second < iter2.second;
+    });
+    return rMaxCol->second;
 }

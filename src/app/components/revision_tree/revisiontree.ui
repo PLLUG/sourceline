@@ -31,7 +31,7 @@
         <rect>
          <x>0</x>
          <y>0</y>
-         <width>73</width>
+         <width>69</width>
          <height>476</height>
         </rect>
        </property>
@@ -74,6 +74,9 @@ QHeaderView::section:checked
 {
     background-color: rgb(47, 85, 27);
 }</string>
+      </property>
+      <property name="horizontalScrollBarPolicy">
+       <enum>Qt::ScrollBarAlwaysOn</enum>
       </property>
      </widget>
     </widget>
