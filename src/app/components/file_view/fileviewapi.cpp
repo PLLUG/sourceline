@@ -6,8 +6,8 @@
 
 FileViewAPI::FileViewAPI(FileView &fileView, CommandManager &commandManager, QObject *parent) :
     IFileViewAPI(parent)
-  , mFileView{fileView}
-  , mCommandManager{commandManager}
+  , mFileView(fileView)
+  , mCommandManager(commandManager)
 {
 
 }
