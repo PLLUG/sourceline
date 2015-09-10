@@ -51,7 +51,8 @@ public:
         MultiSeleciton = 0x04
     };
     Q_DECLARE_FLAGS(SelectionFlags, SelectionFlag)
-    Q_FLAG(SelectionFlags)
+//    Q_FLAG(SelectionFlags)
+    //TODO: Q_FLAG was introduced in Qt5.5
 
     explicit FileView(QWidget *parent = 0);
     ~FileView();
