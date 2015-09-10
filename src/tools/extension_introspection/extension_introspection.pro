@@ -34,6 +34,6 @@ include(./../../extensionlib/extensionlib.pri)
 # Plugin management support library
 include(./../../pluginmanager/pluginmanager.pri)
 
-include($$_PRO_FILE_PWD_/../../app/components/file_view/FileView.pri)
+include($$PWD/../../app/components/file_view/FileView.pri)
 
 LIBS += -lslapi
