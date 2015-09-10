@@ -34,7 +34,7 @@ void RemoteApiClient::slotInvoke(QByteArray slInterfaceId, QByteArray signature,
 {
     QByteArray data;
     QDataStream stream(&data, QIODevice::WriteOnly|QIODevice::Unbuffered);
-    stream.setVersion(QDataStream::Qt_5_5);
+//    stream.setVersion(QDataStream::Qt_5_5);
 
     stream << slInterfaceId;
     stream << signature;

@@ -60,7 +60,7 @@ void RemoteApiProvider::readyRead()
             qDebug("Empty!!!!!!");
         }
         QDataStream stream(&data, QIODevice::ReadOnly|QIODevice::Unbuffered);
-        stream.setVersion(QDataStream::Qt_5_5);
+//        stream.setVersion(QDataStream::Qt_5_5);
 
         QByteArray slInterfaceId;
         stream >> slInterfaceId;
