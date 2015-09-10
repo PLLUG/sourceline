@@ -1,6 +1,6 @@
 # sourceline
 
-[![status](https://travis-ci.org/PLLUG/sourceline.svg)](https://travis-ci.org/PLLUG/sourceline)
+[![Build Status](https://semaphoreci.com/api/v1/projects/3c022afb-0103-4b56-b485-09e670b2df62/536192/shields_badge.svg)](https://semaphoreci.com/galka/sourceline)
 
 ## Description
 The aim of the project is to create cross-platform client for popular version control systems (VCS), such as Subversion, Git, Mercurial.
