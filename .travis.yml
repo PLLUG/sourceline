@@ -22,7 +22,7 @@ compiler:
 before_install:
   - sudo apt-add-repository -y ppa:beineri/opt-qt55
   - sudo apt-get update -qq
-  - sudo apt-get install -y qt55base qt55-meta-minimal
+  - sudo apt-get install -y qt55base qt55-meta-full qmake
   - qmake -v
   - qmake-qt5 -v
   - git submodule update --init --recursive
