@@ -21,13 +21,11 @@ HEADERS += \
     gitplugin_global.h \
     gitplugin.h \
     gitsettings.h \
-    commandapi.h \
     clonecommand.h
 
 SOURCES += \
     gitplugin.cpp \
     gitsettings.cpp \
-    commandapi.cpp \
     clonecommand.cpp
 
 OTHER_FILES += \
