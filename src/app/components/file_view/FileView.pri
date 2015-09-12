@@ -27,8 +27,6 @@ HEADERS += \
     $$PWD/ui/texteditforrename.h \
     $$PWD/ui/exploreritemdelegate.h \
     $$PWD/filemodel.h \
-    $$PWD/ifileviewapi.h \
-    $$PWD/fileviewapiinterface.h \
     $$PWD/fileviewapi.h
 
 SOURCES += \

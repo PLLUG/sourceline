@@ -43,5 +43,5 @@ void TestCommand::trigger(/*Aggregator &api*/)
 
 void TestCommand::processResult(Aggregator &api)
 {
-
+    Q_UNUSED(api)
 }

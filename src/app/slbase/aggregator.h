@@ -56,7 +56,7 @@ public:
         T * rObj = nullptr;
         for (QObject *o: mContents)
         {
-            if(rObj = qobject_cast<T*>(o))
+            if((rObj = qobject_cast<T*>(o)))
             {
                 break;
             }

@@ -25,8 +25,8 @@ void CommandManager::slotCommandRegistered(QString pCommandID)
 void CommandManager::slotInvokeCommand(QString pCommandID)
 {
     qDebug() << "About to invoke command";
-    PublicCommandAPI *lCommandAPI;
-    if(lCommandAPI = mCommandsAPI.value(pCommandID))
+    PublicCommandAPI *lCommandAPI = mCommandsAPI.value(pCommandID);
+    if(lCommandAPI)
     {
         qDebug() << "PluginAPI::slotInvokeCommand";
         lCommandAPI->trigger();

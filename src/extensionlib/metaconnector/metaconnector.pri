@@ -21,5 +21,3 @@ HEADERS += \
     $$PWD/invocationbased.h \
     $$PWD/remoteapiclient.h \
     $$PWD/remoteapiprovider.h
-
-HEADERS += $$PWD/genericargumentholder.h

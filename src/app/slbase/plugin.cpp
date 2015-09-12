@@ -31,6 +31,7 @@ Plugin::Plugin(QObject *pParent) :
 
 QList<Command *> Plugin::commands(Commands::CommandKind kind)
 {
+    Q_UNUSED(kind);
     return mListCommands;
 }
 

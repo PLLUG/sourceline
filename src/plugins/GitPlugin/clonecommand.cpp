@@ -31,6 +31,6 @@ void CloneCommand::trigger()
 
 void CloneCommand::processResult(Aggregator &api)
 {
-
+    Q_UNUSED(api)
 }
 
