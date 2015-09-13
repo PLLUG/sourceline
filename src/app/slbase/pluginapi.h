@@ -1,6 +1,8 @@
 #ifndef PLUGINAPI_H
 #define PLUGINAPI_H
 
+#include "ipluginapi.h"
+
 #include <QObject>
 #include <QHash>
 #include <QString>
@@ -9,17 +11,15 @@ class TestCommand;
 class InvocationBased;
 class Command;
 
-class PluginAPI : public QObject
+class PluginAPI : public IPLuginAPI
 {
     Q_OBJECT
 public:
     explicit PluginAPI(QObject *parent = 0);
 
-signals:
-    void newCommandRegistered(QString pID);
+    virtual void registerCommand(Command *command) final;
 
 public slots:
-    void slotRegisterCommand(Command *pCommand);
     void slotInvokeCommand(QString pCommandID, QByteArray pSignature);
 
 private:

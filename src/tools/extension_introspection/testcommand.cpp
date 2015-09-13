@@ -32,7 +32,7 @@ void TestCommand::init(Aggregator &api)
 
 //    api.registerCommand(this);
     PluginAPI *pluginAPI = api.object<PluginAPI>();
-    pluginAPI->slotRegisterCommand(this);
+    pluginAPI->registerCommand(this);
 }
 
 void TestCommand::trigger(/*Aggregator &api*/)

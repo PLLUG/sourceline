@@ -1,15 +1,13 @@
 #ifndef REMOTEAPICLIENT_H
 #define REMOTEAPICLIENT_H
 
-#include <QObject>
-#include <QByteArray>
-#include <QVariant>
 
+#include "remoteapipoint.h"
 #include "extensions_global.h"
 
 class QLocalSocket;
 
-class EXTENSIONSSHARED_EXPORT RemoteApiClient : public QObject
+class EXTENSIONSSHARED_EXPORT RemoteApiClient : public RemoteApiPoint
 {
     Q_OBJECT
 public:
@@ -19,14 +17,6 @@ public:
 
 signals:
     void connected();
-
-public slots:
-    void slotInvoke(QByteArray slInterfaceId, QByteArray signature,
-                     QVariant param1,
-                     QVariant param2,
-                     QVariant param3,
-                     QVariant param4,
-                     QVariant param5);
 
 private:
     QLocalSocket *mSocket;

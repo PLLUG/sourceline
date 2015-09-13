@@ -3,17 +3,17 @@
 #include "command.h"
 //#include "testcommand.h"
 
-PluginAPI::PluginAPI(QObject *parent) : QObject(parent)
+PluginAPI::PluginAPI(QObject *parent) : IPLuginAPI(parent)
 {
 
 }
 
-void PluginAPI::slotRegisterCommand(Command *pCommand)
+void PluginAPI::registerCommand(Command *command)
 {
     InvocationBased *lInvocationBasedCommand = new InvocationBased();
-    lInvocationBasedCommand->setTarget(pCommand);
+    lInvocationBasedCommand->setTarget(command);
 
-    QString lCommandID = pCommand->name();
+    QString lCommandID = command->name();
 
     mRegisteredCommands.insert(lCommandID, lInvocationBasedCommand);
 

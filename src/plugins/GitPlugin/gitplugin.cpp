@@ -8,9 +8,9 @@ GitPlugin::GitPlugin(QObject *pParent) :
 {
 }
 
-void GitPlugin::init(CommandAPI *cAPI)
+void GitPlugin::init()
 {
-    Q_UNUSED(cAPI);
+//    Q_UNUSED(cAPI);
     CloneCommand *cloneCommand = new CloneCommand(this);
     registerCommand(cloneCommand);
     // create clone command
