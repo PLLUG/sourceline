@@ -51,7 +51,7 @@ public:
      * If Aggregator doesn't have suitable children, getter returns null pointer.
      */
     template <typename T>
-    T* object()
+    T* object() const
     {
         T * rObj = nullptr;
         for (QObject *o: mContents)

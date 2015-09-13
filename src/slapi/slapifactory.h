@@ -1,11 +1,13 @@
 #ifndef SLAPIFACTORY_H
 #define SLAPIFACTORY_H
 
+class Aggregator;
+class QObject;
 
 class SLAPIFactory
 {
 public:
-    SLAPIFactory();
+    static Aggregator *create(QObject *parent = nullptr);
 };
 
 #endif // SLAPIFACTORY_H
