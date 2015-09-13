@@ -24,15 +24,18 @@
 *******************************************************************************/
 #include <QtPlugin>
 #include "defs.h"
+#include "aggregator.h"
 
 class Command;
 
 class PluginInterface
 {
 public:
+    virtual void init(const Aggregator &aggregate) = 0;
+
     virtual QObjectList components() const = 0;
 
-    virtual QList<Command *> commands(Commands::CommandKind kind = Commands::UknownCommand) = 0;
+    virtual QList<Command *> commands(Commands::CommandKind kind = Commands::UknownKind) = 0;
 };
 
 #define PluginInterface_iid "org.PLUG.SL.PluginInterface"

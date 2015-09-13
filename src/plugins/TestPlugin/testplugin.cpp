@@ -37,3 +37,8 @@ TestPlugin::TestPlugin(QObject *pParent) :
     //FakeCommand *lFakeCommand = new FakeCommand(this);
     //this->addComponent(lFakeCommand);
 }
+
+void TestPlugin::init(const Aggregator &aggregate)
+{
+
+}

@@ -8,8 +8,10 @@ PluginAPI::PluginAPI(QObject *parent) : IPLuginAPI(parent)
 
 }
 
-void PluginAPI::registerCommand(Command *command)
+void PluginAPI::registerCommand(const QMetaObject &metaObj, Commands::CommandKind kind)
 {
+    Command *command = nullptr;
+
     InvocationBased *lInvocationBasedCommand = new InvocationBased();
     lInvocationBasedCommand->setTarget(command);
 

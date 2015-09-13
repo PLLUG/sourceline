@@ -17,7 +17,7 @@ class PluginAPI : public IPLuginAPI
 public:
     explicit PluginAPI(QObject *parent = 0);
 
-    virtual void registerCommand(Command *command) final;
+    virtual void registerCommand(const QMetaObject &metaObj, Commands::CommandKind kind) final;
 
 public slots:
     void slotInvokeCommand(QString pCommandID, QByteArray pSignature);

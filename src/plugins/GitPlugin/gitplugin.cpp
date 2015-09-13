@@ -1,6 +1,7 @@
 #include "gitplugin.h"
 #include <QDebug>
 
+// Command to register
 #include "clonecommand.h"
 
 GitPlugin::GitPlugin(QObject *pParent) :
@@ -8,11 +9,11 @@ GitPlugin::GitPlugin(QObject *pParent) :
 {
 }
 
-void GitPlugin::init()
+void GitPlugin::init(const Aggregator &aggregate)
 {
-//    Q_UNUSED(cAPI);
-    CloneCommand *cloneCommand = new CloneCommand(this);
-    registerCommand(cloneCommand);
+    REGISTER_COMMAND(aggregate, CloneCommand, Commands::InitializeRepository)
+//    CloneCommand *cloneCommand = new CloneCommand(this);
+//    registerCommand(cloneCommand);
     // create clone command
     // call CommandAPI->registerCommand(Command *), pass clone command as a parameter
 }

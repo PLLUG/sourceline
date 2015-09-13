@@ -28,17 +28,8 @@ namespace Commands
 {
     enum CommandKind
     {
-        UknownCommand = 0,
-        ChekoutCommand,
-        ExportCommand,
-        CommitCommand,
-        ImportCommand,
-        MergeCommand,
-        ResolveCommand,
-        IntegrateCommand,
-        PromoteCommand,
-        ShareCommand,
-        UpdateCommand
+        UknownKind = 0,
+        InitializeRepository
     };
 }
 

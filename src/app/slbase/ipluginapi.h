@@ -2,6 +2,7 @@
 #define IPLUGINAPI
 
 #include <QObject>
+#include "defs.h"
 
 class Command;
 
@@ -12,7 +13,7 @@ public:
     IPLuginAPI(QObject *parent = nullptr) : QObject(parent) { }
     virtual ~IPLuginAPI() { }
 
-    virtual void registerCommand(Command *command) = 0;
+    virtual void registerCommand(const QMetaObject &metaObj, Commands::CommandKind kind) = 0;
 
 signals:
     void newCommandRegistered(QString pID);

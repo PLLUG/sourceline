@@ -47,7 +47,7 @@ UserAction *CommandComponentSupplier::actionFromCommand(Command *pComand)
     UserAction *rUserAction = new UserAction();
     rUserAction->setIcon(pComand->icon());
     rUserAction->setText(pComand->name());
-    rUserAction->setCommandKind(Commands::ImportCommand);
+    rUserAction->setCommandKind(Commands::UknownKind);
     return rUserAction;
 }
 

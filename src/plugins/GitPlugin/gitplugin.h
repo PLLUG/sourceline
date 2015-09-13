@@ -3,6 +3,7 @@
 
 #include "plugin.h"
 #include "gitplugin_global.h"
+#include "aggregator.h"
 //#include "commandapi.h"
 //#include "clonecommand.h"
 
@@ -15,7 +16,7 @@ class GITPLUGINSHARED_EXPORT GitPlugin :
 public:
     explicit GitPlugin(QObject *pParent = 0);
 
-    void init(/*CommandAPI * cAPI*/);
+    void init(const Aggregator &aggregate) final;
 };
 
 #endif // GITPLUGIN_H

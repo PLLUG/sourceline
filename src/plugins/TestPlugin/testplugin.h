@@ -34,6 +34,8 @@ class TESTPLUGINSHARED_EXPORT TestPlugin :
     Q_PLUGIN_METADATA(IID "org.qt-project.Qt.QDummyPlugin" FILE "TestPlugin.json")
 public:
     explicit TestPlugin(QObject *pParent = 0);
+
+    void init(const Aggregator &aggregate) final;
 };
 
 #endif // TESTPLUGIN_H
