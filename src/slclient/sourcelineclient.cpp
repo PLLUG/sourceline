@@ -6,6 +6,10 @@
 
 #include "pluginloader.h"
 #include "pluginmanager.h"
+#include "aggregator.h"
+#include "plugin.h"
+#include "command.h"
+#include "slapifactory.h"
 
 #ifdef DEBUG
 // Include debug window only in Debug mode.
@@ -82,6 +86,30 @@ void SourceLineClient::initPlugins()
         qDebug("        Loading %s...", qPrintable(lPluginId));
         mPluginManager->loadPlugin(lPluginId);
         ++lLoadedCount;
+    }
+
+    Aggregator *a = SLAPIFactory::create(this);
+    for (const QString &pluginId: mPluginManager->loadedPlugins())
+    {
+        Plugin *pluginInstance = mPluginManager->loadedPluginInstance(pluginId);
+        pluginInstance->init(*a);
+    }
+
+//    for (QObject *o: a->contents())
+//    {
+//        connect(o, SIGNAL(invokeCommand(QByteArray, QVariant, QVariant, QVariant, QVariant, QVariant)),
+//            mRemoteClient, SLOT());
+
+//        slotInvoke(QByteArray slInterfaceId, QByteArray signature, QVariant param1,
+//                            QVariant param2, QVariant param3, QVariant param4, QVariant param5);
+
+//    }
+
+    PluginAPI *pluginApi = a->object<PluginAPI>();
+    Q_CHECK_PTR(pluginApi);
+    for (Command *command: pluginApi->commands(Commands::InitializeRepository))
+    {
+        command->init(*a);
     }
 }
 

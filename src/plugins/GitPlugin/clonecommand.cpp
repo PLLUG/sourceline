@@ -17,9 +17,6 @@ QString CloneCommand::name() const
 
 void CloneCommand::init(Aggregator &api)
 {
-//    PluginAPI *pluginAPI = api.object<PluginAPI>();
-//    pluginAPI->slotRegisterCommand(this);
-
     IFileViewAPI *fileViewApi =  api.object<IFileViewAPI>();
     fileViewApi->addToMenu(name());
 }

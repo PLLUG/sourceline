@@ -15,12 +15,12 @@ public:
         IFileViewAPI(parent) {}
 
 signals:
-    void invokeCommand(QByteArray pSignature, QVariant);
+    void invokeCommand(QByteArray pSignature, QVariant, QVariant, QVariant, QVariant, QVariant);
 
 public slots:
     void addToMenu(QString commandId) override final
     {
-        emit invokeCommand("addToMenu(QString)", commandId);
+        emit invokeCommand("addToMenu(QString)", commandId, QVariant(), QVariant(), QVariant(), QVariant());
     }
 
 };

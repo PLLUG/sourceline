@@ -34,3 +34,5 @@ include(./../extensionlib/extensionlib.pri)
 # Plugin management library
 include(./../pluginmanager/pluginmanager.pri)
 
+LIBS  += -lslapi
+

@@ -34,6 +34,11 @@ public:
     explicit Aggregator(QObject *parent = nullptr) : QObject(parent) {}
     virtual ~Aggregator() {}
 
+    QObjectList contents() const
+    {
+        return mContents;
+    }
+
     /*!
      * \brief Set obj as children of Aggregator class.
      */
