@@ -26,13 +26,12 @@
 #include <boost/property_map/dynamic_property_map.hpp>
 #include <boost/graph/adjacency_list.hpp>
 #include <map>
-#include "revisionnode.h"
 
 using revision_graph = boost::adjacency_list<
 boost::listS,
 boost::vecS,
 boost::bidirectionalS, // bidirectional because we want to show lists of parents and children of nodes
-RevisionNode>;
+std::string>;
 //TODO: choose the best containers for V and E
 
 using vertex = boost::graph_traits<revision_graph>::vertex_descriptor;
@@ -59,7 +58,7 @@ public:
     QVariant headerData(int section, Qt::Orientation orientation, int role) const override;
 
     void debugTree(const revision_graph &graph) const;
-    void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
+    void addNode(const std::string &pParentID, const std::string &pNodeId);
 
     void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
 
@@ -74,7 +73,7 @@ signals:
 private:
     void beginResetGraphStructure();
     void endResetGraphStructure();
-    std::vector<vertex> sortedGraphByTime(const revision_graph &graph);
+//    std::vector<vertex> sortedGraphByTime(const revision_graph &graph);
 
 private:
     revision_graph mGraph;

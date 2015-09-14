@@ -26,7 +26,6 @@
 #include <boost/graph/adjacency_list.hpp>
 #include <set>
 #include <map>
-#include "revisionnode.h"
 template <typename IndexMap, typename vertex, typename graph>
 class bfs_visitor : public boost::default_bfs_visitor
 {

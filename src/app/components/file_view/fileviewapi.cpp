@@ -9,8 +9,8 @@ FileViewAPI::FileViewAPI(FileView &fileView, CommandManager &commandManager, QOb
   , mFileView(fileView)
   , mCommandManager(commandManager)
 {
-
 }
+
 void FileViewAPI::addToMenu(QString pCommandID)
 {
 //    PublicCommandAPI *commandApi = mCommandManager->command(pCommandID);

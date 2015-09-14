@@ -78,7 +78,13 @@ void RevisionTreeWidget::resetGraph()
     ColorMap colorMap;
     boost::associative_property_map<ColorMap> propColorMap(colorMap);
     dfs_visitor<VertexIntMap, vertex, revision_graph> dfs_vis{mColumnMap,mTestOrderMap};
-    boost::depth_first_search(mModel->graph(),dfs_vis,propColorMap,root_vertex);
+    //    boost::depth_first_search(mModel->graph(),dfs_vis,propColorMap,root_vertex);
+    boost::depth_first_visit(mModel->graph(),root_vertex,dfs_vis,propColorMap
+//                             ,[](vertex v, const revision_graph & g)
+//    {
+//        return false;
+//    }
+    );
 
     //perform topological sort
     int row{0};

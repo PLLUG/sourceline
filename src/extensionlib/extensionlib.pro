@@ -41,12 +41,14 @@ include($$_PRO_FILE_PWD_/metaconnector/metaconnector.pri)
 
 SOURCES += \
     $$PWD/settingspage.cpp \
-    $$PWD/settings.cpp
+    $$PWD/settings.cpp \
+    $$PWD/apibase.cpp \
 
 HEADERS +=\
     $$PWD/extensions_global.h\
     $$PWD/settingspage.h \
-    $$PWD/settings.h
+    $$PWD/settings.h \
+    $$PWD/apibase.h \
 
 # Copy headers and pri file
 COPYFILES_PATH = $$_PRO_FILE_PWD_

@@ -25,19 +25,24 @@
 SOURCES += \
     $$PWD/revisiontree.cpp \
     $$PWD/revisionmodel.cpp \
-    $$PWD/revisiontreewidget.cpp
+    $$PWD/revisiontreewidget.cpp \
+    $$PWD/revisiontreeapi.cpp
 
 HEADERS  += \
     $$PWD/revisiontree.h \
     $$PWD/revisionmodel.h \
-    $$PWD/revisionnode.h \
     $$PWD/revisiontreewidget.h \
     $$PWD/revisionvertex.h \
     $$PWD/bfs_visitor.h \
-    $$PWD/dfs_visitor.h
+    $$PWD/dfs_visitor.h \
+    $$PWD/irevisiontreeapi.h \
+    $$PWD/revisiontreeapiinterface.h \
+    $$PWD/revisiontreeapi.h
 
 FORMS    += \
     $$PWD/revisiontree.ui
+
+include($$PWD/revisiontreeapi.pri)
 
 INCLUDEPATH += $$PWD
 

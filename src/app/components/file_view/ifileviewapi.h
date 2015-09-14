@@ -3,12 +3,13 @@
 
 #include <QObject>
 #include <QString>
+#include "apibase.h"
 
-class IFileViewAPI : public QObject
+class IFileViewAPI : public ApiBase
 {
     Q_OBJECT
 public:
-    IFileViewAPI(QObject *parent) : QObject(parent) {}
+    IFileViewAPI(QObject *parent) : ApiBase(parent) {}
 
 public slots:
     virtual void addToMenu(QString commandId) = 0;
