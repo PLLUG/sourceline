@@ -7,7 +7,7 @@ class CloneCommand : public Command
 {
     Q_OBJECT
 public:
-    explicit CloneCommand(QObject *parent = 0);
+    Q_INVOKABLE explicit CloneCommand(QObject *parent = 0);
 
 
     virtual QString name() const override;

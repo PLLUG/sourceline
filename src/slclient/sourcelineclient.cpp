@@ -1,6 +1,7 @@
 #include "sourcelineclient.h"
 
 #include <QTimer>
+
 #include "remoteapiclient.h"
 #include "texteditinterface.h"
 
@@ -26,6 +27,7 @@ SourceLineClient::SourceLineClient(const QString &connectionId, QObject *parent)
   , mConnectionId{connectionId}
   , mRemoteClient{new RemoteApiClient(this)}
   , mDebugWindowInstance{nullptr}
+  , mApiCallMapper{new QSignalMapper{this}}
 {
 }
 
@@ -92,24 +94,34 @@ void SourceLineClient::initPlugins()
     for (const QString &pluginId: mPluginManager->loadedPlugins())
     {
         Plugin *pluginInstance = mPluginManager->loadedPluginInstance(pluginId);
-        pluginInstance->init(*a);
+        if (pluginInstance)
+        {
+            pluginInstance->init(*a);
+        }
     }
 
-//    for (QObject *o: a->contents())
-//    {
-//        connect(o, SIGNAL(invokeCommand(QByteArray, QVariant, QVariant, QVariant, QVariant, QVariant)),
-//            mRemoteClient, SLOT());
-
-//        slotInvoke(QByteArray slInterfaceId, QByteArray signature, QVariant param1,
-//                            QVariant param2, QVariant param3, QVariant param4, QVariant param5);
-
-//    }
+    for (QObject *o: a->contents())
+    {
+        connect(o, SIGNAL(invokeCommand(QByteArray, QVariant, QVariant, QVariant, QVariant, QVariant)),
+            this, SLOT(apiCall(QByteArray,QVariant,QVariant,QVariant,QVariant,QVariant)), Qt::UniqueConnection);
+    }
 
     PluginAPI *pluginApi = a->object<PluginAPI>();
     Q_CHECK_PTR(pluginApi);
     for (Command *command: pluginApi->commands(Commands::InitializeRepository))
     {
         command->init(*a);
+    }
+}
+
+void SourceLineClient::apiCall(QByteArray signature, QVariant param1, QVariant param2,
+                               QVariant param3, QVariant param4, QVariant param5)
+{
+    const QMetaObject *superclassMetaObj = sender()->metaObject()->superClass();
+    if (superclassMetaObj)
+    {
+        QByteArray interfaceId = superclassMetaObj->className();
+        mRemoteClient->slotInvoke(interfaceId, signature, param1, param2, param3, param4, param5);
     }
 }
 

@@ -10,7 +10,7 @@ PluginAPI::PluginAPI(QObject *parent) : IPLuginAPI(parent)
 
 void PluginAPI::registerCommand(const QMetaObject &metaObj, Commands::CommandKind kind)
 {
-    if (mCommandMetaObjectByKind.values().contains(&metaObj))
+    if (!mCommandMetaObjectByKind.values().contains(&metaObj))
     {
         mCommandMetaObjectByKind.insertMulti(kind, &metaObj);
     }
@@ -25,7 +25,8 @@ QList<Command *> PluginAPI::commands(Commands::CommandKind kind)
     {
         for (const QMetaObject *metaObj: mCommandMetaObjectByKind.values(kind))
         {
-            if (Command *command = qobject_cast<Command *>(metaObj->newInstance(Q_ARG(QObject*, nullptr))))
+            QObject *instance = metaObj->newInstance();
+            if (Command *command = dynamic_cast<Command *>(instance))
             {
                 // We need InvocationBased for every command - to be able to
                 // communicate with SL app. SL app will use Command API to trigger commands.

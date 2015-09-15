@@ -2,6 +2,7 @@
 #define SOURCELINECLIENT_H
 
 #include <QObject>
+#include <QVariant>
 
 class RemoteApiClient;
 class TextEditInterface;
@@ -24,6 +25,8 @@ public:
 private slots:
     void test();
     void initPlugins();
+
+    void apiCall(QByteArray, QVariant, QVariant, QVariant, QVariant, QVariant);
 
 private:
     QString mConnectionId;
