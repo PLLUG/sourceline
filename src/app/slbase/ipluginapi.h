@@ -6,6 +6,9 @@
 
 class Command;
 
+/*!
+ * \brief The IPLuginAPI class is an abstract class for Plugin API interface and API implementation.
+ */
 class IPLuginAPI : public QObject
 {
     Q_OBJECT
