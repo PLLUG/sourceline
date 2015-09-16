@@ -8,9 +8,11 @@ HEADERS += \
     $$PWD/ipluginapi.h \
     $$PWD/icommand.h \
     $$PWD/comamndinterface.h \
-    $$PWD/iplugininterfaceadapter.h
+    $$PWD/iplugininterfaceadapter.h \
+    $$PWD/pluginapiinterface.h
 
 SOURCES += \
     $$PWD/command.cpp \
     $$PWD/plugin.cpp \
-    $$PWD/pluginapi.cpp
+    $$PWD/pluginapi.cpp \
+    $$PWD/pluginapiinterface.cpp
