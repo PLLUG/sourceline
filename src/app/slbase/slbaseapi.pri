@@ -5,7 +5,9 @@ HEADERS += \
     $$PWD/plugin-interface.h \
     $$PWD/plugin.h \
     $$PWD/pluginapi.h \
-    $$PWD/ipluginapi.h
+    $$PWD/ipluginapi.h \
+    $$PWD/icommand.h \
+    $$PWD/comamndinterface.h
 
 SOURCES += \
     $$PWD/command.cpp \

@@ -39,4 +39,6 @@ SOURCES += \
 FORMS += \
     $$PWD/ui/fileview.ui
 
+INCLUDEPATH += $$PWD
+
 include($$PWD/fileviewapi.pri)

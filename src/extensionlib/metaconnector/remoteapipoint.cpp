@@ -49,10 +49,10 @@ void RemoteApiPoint::addApiProvider(InvocationBased *apiProvider)
     if (QObject *target = apiProvider->target())
     {
         const QMetaObject *metaObj = target->metaObject();
-        QByteArray slInterfaceId = metaObj->className();
+        QByteArray slInterfaceId = metaObj->superClass()->className();
 
-//        mApiProviderByInterfaceId.insert(slInterfaceId, apiProvider);
-        mApiProviderByInterfaceId.insert(QByteArray("ClientExplorer"), apiProvider);
+        qDebug() << "ADDED API PROVIDER:" << slInterfaceId;
+        mApiProviderByInterfaceId.insert(slInterfaceId, apiProvider);
     }
 }
 

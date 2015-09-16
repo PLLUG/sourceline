@@ -27,7 +27,6 @@ SourceLineClient::SourceLineClient(const QString &connectionId, QObject *parent)
   , mConnectionId{connectionId}
   , mRemoteClient{new RemoteApiClient(this)}
   , mDebugWindowInstance{nullptr}
-  , mApiCallMapper{new QSignalMapper{this}}
 {
 }
 
