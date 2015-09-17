@@ -35,7 +35,6 @@ HEADERS  += \
     $$PWD/revisionvertex.h \
     $$PWD/bfs_visitor.h \
     $$PWD/dfs_visitor.h \
-    $$PWD/irevisiontreeapi.h \
     $$PWD/revisiontreeapiinterface.h \
     $$PWD/revisiontreeapi.h
 

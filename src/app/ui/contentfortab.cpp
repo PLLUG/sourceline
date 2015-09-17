@@ -56,6 +56,7 @@ ContentForTab::ContentForTab(QWidget *parent) :
 
     // TODO: move to git log command
     QProcess *mProcess{new QProcess{this}};
+//    mProcess->setWorkingDirectory("somedir");
 
     connect(mProcess, static_cast<void (QProcess::*)(int exitCode, QProcess::ExitStatus exitStatus)>(&QProcess::finished), this, [=]()
     {
