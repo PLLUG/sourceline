@@ -30,7 +30,7 @@ class UserAction : public QAction
 {
 public:
     explicit UserAction(QObject *parent = 0);
-    explicit UserAction(const QString &text, QObject *parent);
+    explicit UserAction(const QString &pText, QObject *parent);
     Commands::CommandKind commandKind() const;
     void setCommandKind(Commands::CommandKind pCommandKind);
 private:

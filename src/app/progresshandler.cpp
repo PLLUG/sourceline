@@ -2,7 +2,7 @@
 
 #include <QCoreApplication>
 
-ProgressHandler *ProgressHandler::mInstance = 0;
+ProgressHandler *ProgressHandler::mInstance{nullptr};
 
 ProgressHandler::ProgressHandler(QObject *parent) :
     QObject(parent),
@@ -40,11 +40,11 @@ void ProgressHandler::setStageCount(int pStageCount)
     mStageCount = pStageCount;
 }
 
-void ProgressHandler::setCurrentStageProgress(int progress)
+void ProgressHandler::setCurrentStageProgress(int pProgress)
 {
-    if ((progress >= 0) && (progress <= 100))
+    if ((pProgress >= 0) && (pProgress <= 100))
     {
-        mStageProgress = progress;
+        mStageProgress = pProgress;
         calculateProgress();
     }
 }

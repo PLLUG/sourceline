@@ -31,10 +31,10 @@ DirectOrderSortingStrategy::DirectOrderSortingStrategy()
 
 QMenu *DirectOrderSortingStrategy::createMenu(const QList<UserAction *> &pListUserActions)
 {
-   QMenu *lMenu = new QMenu();
-   foreach (UserAction *lUserAction, pListUserActions)
+   QMenu *rMenu = new QMenu();
+   for(UserAction *lUserAction: pListUserActions)
    {
-      lMenu->addAction(lUserAction);
+      rMenu->addAction(lUserAction);
    }
-   return lMenu;
+   return rMenu;
 }

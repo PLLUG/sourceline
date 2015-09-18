@@ -1,7 +1,7 @@
 ################################################################################
 ###                                                                          ###
 ###    SourceLine - Crossplatform VCS Client                                 ###
-###    Copyright (C) 2014  by                                                ###
+###    Copyright (C) 2014, 2015  by                                          ###
 ###                   Alex Chmykhalo (alexchmykhalo@users.sourceforge.net)   ###
 ###                                                                          ###
 ###    This file is part of SourceLine Project.                              ###
@@ -27,6 +27,11 @@ CONFIG += ordered
 
 SUBDIRS += \
     extensionlib \
+    slapi \
+    pluginmanager \
     app \
+    slclient \
     plugins \
     tools
+
+OTHER_FILES += $$_PRO_FILE_PWD_/../README.md

@@ -16,12 +16,13 @@ class DockFileView : public GenericDockWidget
 public:
     explicit DockFileView(QWidget *parent = 0);
     ~DockFileView();
-    DockTypes::DockType type() const;
-private:
-    Ui::DockFileView *ui;
+    DockType type() const;
 
 public slots:
     void slotSetPage(int pPage);
+
+private:
+    Ui::DockFileView *ui;
 };
 
 #endif // FILEVIEW_H

@@ -33,8 +33,8 @@
 #include "pluginsupport/supliers/fakecomponentsupplier.h"
 #include "pluginsupport/supliers/settingspagesupplier.h"
 #include "pluginsupport/supliers/commandcomponentsupplier.h"
-#include "pluginsupport/pluginloader.h"
-#include "pluginsupport/pluginmanager.h"
+#include "pluginloader.h"
+#include "pluginmanager.h"
 #include "pluginsupport/pluginsettingsmediator.h"
 
 // Settings
@@ -60,26 +60,18 @@
 
 ApplicationBuilder::ApplicationBuilder(QObject *parent) :
     QObject(parent)
+  ,mPluginManager{nullptr}
+  ,mStorage{nullptr}
+  ,mSettingsManager{nullptr}
+  ,mActionManager{nullptr}
+  ,mMainMenuBuilder{nullptr}
+  ,mPluginSettingsMediator{nullptr}
+  ,mGlobalAppSettings{nullptr}
+  ,mSplashScreen{nullptr}
+  ,mMainWindow{nullptr}
+  ,mAppSettingsDialog{nullptr}
+  ,mAboutDialog{nullptr}
 {
-    // Plugin Support
-    mPluginManager = 0;
-
-    // Settings
-    mStorage = 0;
-    mSettingsManager = 0;
-
-    // Main Application Classes
-    mActionManager = 0;
-    mMainMenuBuilder = 0;
-    mPluginSettingsMediator = 0;
-    mGlobalAppSettings = 0;
-
-    // Application UI
-    mSplashScreen = 0;
-    mMainWindow = 0;
-    mAppSettingsDialog = 0;
-    mAboutDialog = 0;
-
     // Init splash screen
     mSplashScreen = new SplashScreen; // removed in slotBuild()
     mSplashScreen->setSplashScreen(QPixmap(":/splash/img/SL_Splash_load.png"));
@@ -100,7 +92,7 @@ ApplicationBuilder::~ApplicationBuilder()
 
 void ApplicationBuilder::slotBuild()
 {
-    qDebug("SourceLine : Building Application");
+    qDebug("    SourceLine : Building Application");
     ProgressHandler::instance()->setStageCount(5);
 
     /*!
@@ -165,7 +157,7 @@ void ApplicationBuilder::initApp()
     // (loaded plugins, etc...)
     mGlobalAppSettings = new Settings(qApp);
     mGlobalAppSettings->setAutoCommit(true); // Settings have no settings page representation, so
-                                             // settings should be commited automatically after change
+    // settings should be commited automatically after change
     mSettingsManager->addSettings("global", "settings", mGlobalAppSettings);
 
     // TASK: remove setting of global app settings from mediator (fix for settings autocommit needed)
@@ -205,7 +197,6 @@ void ApplicationBuilder::createUi()
     createUiActions(mMainWindow);
     ProgressHandler::instance()->setCurrentStageProgress(66);
 
-
     ProgressHandler::instance()->finishStage();
 }
 
@@ -213,7 +204,7 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 {
     UserAction *lActionOpen = new UserAction(tr("&Open Repository..."), mMainWindow);
     // TASK: add implementation for opening existing repository
-    mActionManager->add(FileMenuGroup, lActionOpen);
+    mActionManager->add(MenuGroup::FileMenuGroup, lActionOpen);
 
     UserAction *lActionAddNewWorkplace = new UserAction(tr("&New Workplace"), this);
     connect(lActionAddNewWorkplace, SIGNAL(triggered()), pMainWindow, SLOT(slotAddNewWorkplace()));
@@ -221,29 +212,29 @@ void ApplicationBuilder::createUiActions(MainWindow *pMainWindow)
 
     UserAction *lActionQuit = new UserAction(tr("&Quit"), this);
     connect(lActionQuit, SIGNAL(triggered()), pMainWindow, SLOT(slotQuit()));
-    mActionManager->add(FileMenuGroup, lActionQuit);
+    mActionManager->add(MenuGroup::FileMenuGroup, lActionQuit);
 
     UserAction *lActionAboutSL = new UserAction(tr("&About SourseLine..."), this);
     connect(lActionAboutSL, SIGNAL(triggered()), mAboutDialog, SLOT(show()), Qt::UniqueConnection);
-    mActionManager->add(HelpMenuGroup, lActionAboutSL);
+    mActionManager->add(MenuGroup::HelpMenuGroup, lActionAboutSL);
 
     UserAction *lActionPlugins = new UserAction(tr("&Plugins Settings"), this);
     connect(lActionPlugins, SIGNAL(triggered()), mPluginSettingsMediator, SLOT(slotExecPluginSettings()));
-    mActionManager->add(HelpMenuGroup, lActionPlugins);
+    mActionManager->add(MenuGroup::HelpMenuGroup, lActionPlugins);
 
     UserAction *lActionSettings = new UserAction(tr("&Settings"), this);
     connect(lActionSettings, SIGNAL(triggered()), mAppSettingsDialog, SLOT(show()));
-    mActionManager->add(ViewMenuGroup, lActionSettings);
+    mActionManager->add(MenuGroup::ViewMenuGroup, lActionSettings);
 }
 
 void ApplicationBuilder::createAppMenus()
 {
     DirectOrderSortingStrategy* lDirectOrderSortingStrategy = new DirectOrderSortingStrategy;
 
-    mActionManager->setMenuCreationStategy(FileMenuGroup, lDirectOrderSortingStrategy);
-    mActionManager->setMenuCreationStategy(ViewMenuGroup, lDirectOrderSortingStrategy);
-    mActionManager->setMenuCreationStategy(EditMenuGroup, lDirectOrderSortingStrategy);
-    mActionManager->setMenuCreationStategy(HelpMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::FileMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::ViewMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::EditMenuGroup, lDirectOrderSortingStrategy);
+    mActionManager->setMenuCreationStategy(MenuGroup::HelpMenuGroup, lDirectOrderSortingStrategy);
     mMainMenuBuilder->initMenu();
 }
 
@@ -276,7 +267,7 @@ void ApplicationBuilder::loadPlugins()
         lActivePluginsList = mPluginManager->availablePlugins();
     }
 
-    foreach (const QString &lPluginId, lActivePluginsList)
+    for(const QString &lPluginId: lActivePluginsList)
     {
         qDebug("        Loading %s...", qPrintable(lPluginId));
         mPluginManager->loadPlugin(lPluginId);
@@ -316,7 +307,7 @@ void ApplicationBuilder::loadSettings()
     Settings *lViewSettings = new Settings(this);
 
     ViewSettingPage *lViewSettingPage = new ViewSettingPage(lViewSettings);
-    lViewSettingPage->setMainUi(mMainWindow->ui);
+    lViewSettingPage->setMainUi(mMainWindow->getUi());
     mAppSettingsDialog->addSettingsItem(lViewSettingPage);
 
     mSettingsManager->addSettings("main_window", lViewSettingPage->name(), lViewSettings);
@@ -329,13 +320,14 @@ void ApplicationBuilder::supplyComponents(ComponentSorter *pComponentSorter)
 {
     int lSuppliedCount = 0;
     QStringList lLoadedPluginsList = mPluginManager->loadedPlugins();
-    foreach (const QString &lPluginId, lLoadedPluginsList)
+    for(const QString &lPluginId: lLoadedPluginsList)
     {
         // Supply componenets to application
         PluginInfo lPluginInfo = mPluginManager->pluginInfo(lPluginId);
         qDebug("        Registering %s %s...", qPrintable(lPluginInfo.pluginId()), qPrintable(lPluginInfo.ver()));
         Plugin *lPlugin = mPluginManager->loadedPluginInstance(lPluginId);
-        pComponentSorter->setComponents(lPlugin->components(), lPluginInfo);
+        if(lPlugin)
+            pComponentSorter->setComponents(lPlugin->components(), lPluginInfo);
 
         // Update progress
         ++lSuppliedCount;
@@ -343,5 +335,3 @@ void ApplicationBuilder::supplyComponents(ComponentSorter *pComponentSorter)
         QApplication::processEvents();
     }
 }
-
-

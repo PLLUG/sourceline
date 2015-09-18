@@ -20,9 +20,10 @@ public:
     // TASK: add version pri file
 
 private:
-    Ui::About *ui;
+    QString textFromFile(const QString &pAddress);
 
-    QString textFromFile(QString address);
+private:
+    Ui::About *ui;
 };
 
 #endif // ABOUT_H

@@ -15,9 +15,9 @@ DockFileView::~DockFileView()
     delete ui;
 }
 
-DockTypes::DockType DockFileView::type() const
+DockType DockFileView::type() const
 {
-    return DockTypes::FileView;
+    return DockType::FileView;
 }
 
 void DockFileView::slotSetPage(int pPage)

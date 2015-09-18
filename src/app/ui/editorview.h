@@ -15,7 +15,7 @@ class EditorView : public GenericDockWidget
 
 public:
     explicit EditorView(QWidget *parent = 0);
-    DockTypes::DockType type() const;
+    DockType type() const;
     ~EditorView();
 
 private:

@@ -4,8 +4,8 @@
 #include <QMainWindow>
 #include <QSystemTrayIcon>
 #include <QStringList>
-#include "contentfortabworkplace.h"
 #include "settings_dialog/settingsmanager.h"
+#include "contentfortab.h"
 
 class TabsAPI;
 class CustomTabBar;
@@ -26,31 +26,18 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(SettingsManager *pSettingsManager, SettingStorage *pStorage, QWidget *parent = 0);
     ~MainWindow();
-    Ui::MainWindow *ui;
 
     QStringList openedTabs() const;
+    Ui::MainWindow *getUi() const;
 
 public slots:
     void setOpenedTabs(QVariant pOpenedTabs);
 
-private:
-    QSystemTrayIcon *TrayIcon;
-    QMenu *trayMenu;
-    CustomTabBar *mTabBar;
-    TabsAPI *mTabsAPI;
-    int mAmountOpenedTabs;
-    Settings *mSettings;
-    SettingStorage *mStorage;
-    SettingsManager *mSettingsManager;
-    mutable QStringList mListOpenedTabs;
-    void resizeEvent(QResizeEvent *e);
-
-    void closeEvent(QCloseEvent *pEvent);
-
 signals:
-    void mysignal();
-
     void openedTabsChanged(QStringList openedTabs);
+
+protected:
+    void closeEvent(QCloseEvent *) override final;
 
 private slots:
 
@@ -62,7 +49,7 @@ private slots:
     /*!
      * \brief Close window
      */
-    void CloseWindow();
+    void slotCloseWindow();
 
     /*!
      * \brief slot Quit also close window
@@ -73,6 +60,18 @@ private slots:
      * \brief slotAddNewWorkplace add new worplace on window
      */
     void slotAddNewWorkplace();
+
+private:
+    QSystemTrayIcon *mTrayIcon;
+    QMenu *mTrayMenu;
+    CustomTabBar *mTabBar;
+    TabsAPI *mTabsAPI;
+    Ui::MainWindow *ui;
+    int mAmountOpenedTabs;
+    SettingStorage *mStorage;
+    SettingsManager *mSettingsManager;
+    Settings *mSettings;
+    mutable QStringList mListOpenedTabs;
 };
 
 #endif // MAINWINDOW_H

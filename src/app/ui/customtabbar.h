@@ -29,7 +29,7 @@
 
 class QWidget;
 class Settings;
-class ContentForTabWorkplace;
+class ContentForTab;
 class SettingStorage;
 
 namespace Ui {
@@ -72,7 +72,7 @@ private:
     SettingsManager *mSettingsManager;
 
 private:
-    ContentForTabWorkplace *getWidget(int pIndex);
+    ContentForTab *getWidget(int pIndex);
 };
 
 #endif // CUSTOMTABBAR_H

@@ -24,4 +24,5 @@
 TEMPLATE = subdirs
 
 SUBDIRS += \
-    TestPlugin
+    TestPlugin \
+    GitPlugin

@@ -87,9 +87,9 @@ void AppSettingsDialog::slotBtnApply()
     mSettingPages.at(ui->stackedWidget->currentIndex())->settings()->commit();
 }
 
-void AppSettingsDialog::slotOnListItemClicked(int index)
+void AppSettingsDialog::slotOnListItemClicked(int pIndex)
 {
-    ui->stackedWidget->setCurrentIndex(index);
+    ui->stackedWidget->setCurrentIndex(pIndex);
 }
 
 void AppSettingsDialog::slotPageModified()

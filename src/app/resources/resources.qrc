@@ -20,4 +20,11 @@
         <file>txt/about-dialog/GPL v3.txt</file>
         <file>txt/about-dialog/PLLUG.txt</file>
     </qresource>
+    <qresource prefix="/Icons">
+        <file>Icons/exclamation.png</file>
+    </qresource>
+    <qresource prefix="/Overlays">
+        <file>overlays/modified.png</file>
+        <file>overlays/normal.png</file>
+    </qresource>
 </RCC>

@@ -42,7 +42,6 @@ QMenu *ActionManager::menuByMenuGroup(MenuGroup pMenuGroups) const
     return mStrategyByMenuGroup[pMenuGroups]->createMenu(mActions[pMenuGroups]);
 }
 
-
 void ActionManager::setMenuCreationStategy(MenuGroup pMenuGroups, MenuCreationStrategy *pStategy)
 {
      mStrategyByMenuGroup[pMenuGroups] = pStategy;

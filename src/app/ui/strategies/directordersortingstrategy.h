@@ -29,7 +29,7 @@ class DirectOrderSortingStrategy : public MenuCreationStrategy
 {
 public:
     DirectOrderSortingStrategy();
-    QMenu *createMenu(const QList<UserAction *> &pListUserActions);
+    QMenu *createMenu(const QList<UserAction *> &pListUserActions) override;
 
 };
 

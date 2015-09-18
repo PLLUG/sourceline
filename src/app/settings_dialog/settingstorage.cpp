@@ -36,7 +36,6 @@ SettingStorage::SettingStorage(QObject *parent) :
 
 void SettingStorage::slotSaveSettings(QString pSettingPath, QMap<QString, QVariant> pHashData)
 {
-
     QStringList lGroupsList = parsePath(pSettingPath);
 
     for(int i = 0; i < lGroupsList.count(); i++)
@@ -61,35 +60,30 @@ void SettingStorage::slotLoadSettings(QString pSettingPath)
     QStringList lGroupsList = parsePath(pSettingPath);
     QMap<QString, QVariant> lHashSetting;
 
-    for(int i = 0; i < lGroupsList.count(); i++)
+    for(const auto &group : lGroupsList)
     {
-        mSettings->beginGroup(lGroupsList.at(i));
+        mSettings->beginGroup(group);
     }
-    QStringList lList = mSettings->allKeys();
-    for(int i = 0; i < lList.count(); i++)
+    for(const auto &lKey : mSettings->allKeys())
     {
-        QString lKey = lList.at(i);
-        qDebug() << "load: " << lKey << lHashSetting.value(lKey).toString();
         lHashSetting.insert(lKey, mSettings->value(lKey));
     }
-    for(int i = 0; i < lGroupsList.count(); i++)
+    for(int i = 0; i < lGroupsList.count(); ++i)
     {
         mSettings->endGroup();
     }
     emit signalSetSettings(lHashSetting);
 }
 
-QStringList SettingStorage::parsePath(QString pPath)
+QStringList SettingStorage::parsePath(const QString &pPath)
 {
-    QStringList lGroupsList;
-    QStringList lTmpList = pPath.split(QRegExp("/"));
-    for(int i = 0; i < lTmpList.count(); i++)
+    QStringList rGroupsList;
+    for(const QString &elem: pPath.split(QRegExp("/")))
     {
-        QString elem = lTmpList.at(i);
         if(!elem.isEmpty())
         {
-            lGroupsList.append(elem);
+            rGroupsList.append(elem);
         }
     }
-    return lGroupsList;
+    return std::move(rGroupsList);
 }

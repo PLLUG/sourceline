@@ -28,9 +28,10 @@
 
 PluginSettingsMediator::PluginSettingsMediator(QObject *parent) :
     QObject(parent),
-    mDialog(NULL),
-    mManager(NULL),
-    mInfoDialog(NULL)
+    mSettings{nullptr},
+    mDialog{nullptr},
+    mManager{nullptr},
+    mInfoDialog{nullptr}
 {
 }
 
@@ -42,7 +43,8 @@ void PluginSettingsMediator::setPluginManager(PluginManager *pManager)
 void PluginSettingsMediator::setPluginDialog(DialogPlugins *pDialog)
 {
     mDialog = pDialog;
-    connect(mDialog, SIGNAL(signalButtonPressed(QString)), this, SLOT(slotShowPluginInfo(QString)));
+    //TODO: fix connect
+//    connect(mDialog, SIGNAL(signalButtonPressed(QString)), this, SLOT(slotShowPluginInfo(QString)));
 }
 
 void PluginSettingsMediator::setPluginInfoDialog(/*PropertyInfoDialog(?)*/PluginInfoDialog *pDialog)
@@ -62,14 +64,13 @@ void PluginSettingsMediator::slotExecPluginSettings()
     mDialog->setPlugins(lPluginsInfo);
     QList<QString> lActivatedPlugins = mManager->activePlugins();
     mDialog->setActivatedPlugins(lActivatedPlugins);
-    int lResult = mDialog->exec();
-    if (QDialog::Accepted == lResult)
+    if (QDialog::Accepted == mDialog->exec())
     {
         QStringList lActivePluginsList = mDialog->activePlugins();
         // Init plugins ....
         mManager->slotSetActivePlugins(lActivePluginsList);
         mSettings->commit();
-        if (mDialog->restartApplication())
+        if (mDialog->isRestartRequstedByUser())
         {
             // Notify application - restart needed
         }

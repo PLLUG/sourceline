@@ -24,7 +24,6 @@
 #include "ui_dialogplugins.h"
 #include "settings.h"
 #include "plugininfodialog.h"
-#include <QFile>
 #include <QTreeWidgetItem>
 #include <QTextStream>
 #include <QPushButton>
@@ -35,15 +34,18 @@
 DialogPlugins::DialogPlugins(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DialogPlugins),
+    mMapper{nullptr},
     mIsApplyAndRestartPressed(false)
 {
     ui->setupUi(this);
 }
+
 DialogPlugins::~DialogPlugins()
 {
     delete ui;
 }
-void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
+
+void DialogPlugins::setPlugins(const QList<PluginInfo> &pPlugins)
 {
     mPlugins = pPlugins;
     ui->pluginsTree->clear();
@@ -51,17 +53,26 @@ void DialogPlugins::setPlugins(QList<PluginInfo> pPlugins)
     connect(ui->applyAndRestartButton, SIGNAL(clicked()), this, SLOT(slotApplyAndRestartPressed()), Qt::UniqueConnection);
 }
 
+/*!
+ * \brief DialogPlugins::createPluginsTree create Plugins ui
+ * \param pPlugins is plugin description
+ */
 void DialogPlugins::createPluginsTree()
 {
     ui->pluginsTree->setColumnCount(4);
     ui->pluginsTree->setHeaderLabels(QStringList()  << tr("Plugin Group/Name^") << tr("Ver") << tr("Short Description") << "");
     mMapper = new QSignalMapper(this);
-    foreach (const PluginInfo &lPluginInfo, mPlugins)
+    for(const PluginInfo &lPluginInfo: mPlugins)
     {
-       addPluginInfo(lPluginInfo);
+        addPluginInfo(lPluginInfo);
     }
     connect(mMapper, SIGNAL(mapped(QString)), this, SLOT(slotButtonPressed(QString)), Qt::UniqueConnection);
 }
+
+/*!
+ * \brief DialogPlugins::addPluginInfo Adds plugin to list and all necessary information about it
+ * \param pPluginInfo object which include description about plugin
+ */
 void DialogPlugins::addPluginInfo(const PluginInfo& pPluginInfo)
 {
     QString lCategory = pPluginInfo.category();
@@ -75,14 +86,29 @@ void DialogPlugins::addPluginInfo(const PluginInfo& pPluginInfo)
         addPluginToCategory(lCategoriesList[0], pPluginInfo.pluginId(), pPluginInfo.ver(), pPluginInfo.description());
     }
 }
+
+/*!
+ * \brief DialogPlugins::addCategory add plugin category into Plugins Tree
+ * \param pCategory plugin Category. Plugins with the same categories are grouped together.
+ * \param pName is plugin unique id
+ * \param pVer is plugin version
+ * \param pDescr is plugin short description
+ */
 void DialogPlugins::addCategory(const QString& pCategory, const QString& pPluginId, const QString &pVer, const QString &pDescr)
 {
-      QTreeWidgetItem *lCategoryItem =new QTreeWidgetItem(ui->pluginsTree);
-      ui->pluginsTree->addTopLevelItem(lCategoryItem);
-      lCategoryItem->setText(0, pCategory);
-      addPluginToCategory(lCategoryItem, pPluginId, pVer, pDescr);
+    QTreeWidgetItem *lCategoryItem = new QTreeWidgetItem(ui->pluginsTree);
+    ui->pluginsTree->addTopLevelItem(lCategoryItem);
+    lCategoryItem->setText(0, pCategory);
+    addPluginToCategory(lCategoryItem, pPluginId, pVer, pDescr);
 }
 
+/*!
+ * \brief add plugin into subtre QTreeWidgetItem which describe just category
+ * \param pParent is QTreeWidgetItem which have the same categoty as plugin
+ * \param pName is plugin unique id
+ * \param pVer is plugin version
+ * \param pDescr is plugin short description
+ */
 void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString& pPluginId, const QString &pVer, const  QString &pDescr)
 {
     QTreeWidgetItem *lPluginItem =new QTreeWidgetItem(pParent);
@@ -95,27 +121,37 @@ void DialogPlugins::addPluginToCategory(QTreeWidgetItem *pParent, const QString&
     pParent->addChild(lPluginItem);
 }
 
+/*!
+ * \brief function creates button for ui part.
+ * \param pPluginItem is QTreeWidgetItem which include info about plugin in row in Plugin tree
+ * \return pointer to button widget which will be in row with plugin description
+ */
 QWidget* DialogPlugins::createButton(QTreeWidgetItem* pPluginItem)
 {
     QSize lSize( 20,20 );
-    QPushButton *lPushButton = new QPushButton( QIcon( ":/splash/img/pluginInformation.gif" ), QString::null, this);
-    lPushButton->setAutoFillBackground( true );
-    lPushButton->setIconSize( lSize );
-    lPushButton->setMinimumSize( lSize );
-    lPushButton->setMaximumSize( lSize );
-    lPushButton->setToolTip( QString( tr("info about plugin %1?") ).arg( pPluginItem->text(0) ) );
+    QPushButton *rPushButton = new QPushButton( QIcon( ":/splash/img/pluginInformation.gif" ), QString::null, this);
+    rPushButton->setAutoFillBackground( true );
+    rPushButton->setIconSize( lSize );
+    rPushButton->setMinimumSize( lSize );
+    rPushButton->setMaximumSize( lSize );
+    rPushButton->setToolTip( QString( tr("info about plugin %1?") ).arg( pPluginItem->text(0) ) );
 
-    mMapper->setMapping(lPushButton, pPluginItem->text(0));
-    connect(lPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
-    return lPushButton;
+    mMapper->setMapping(rPushButton, pPluginItem->text(0));
+    connect(rPushButton, SIGNAL(clicked()), mMapper, SLOT(map()), Qt::UniqueConnection);
+    return rPushButton;
 }
 
+/*!
+ * \brief DialogPlugins::slotButtonPressed Shows plugins when when user clicks on info button in row with plugin description
+ * \param pluginId Plugin identifier, for which info button was pressed.
+ */
 void DialogPlugins::slotButtonPressed(QString pPluginId)
 {
-    foreach (const PluginInfo& lPluginInfo, mPlugins)
+    for(const PluginInfo& lPluginInfo: mPlugins)
     {
         if (lPluginInfo.pluginId() == pPluginId)
         {
+            //TODO: fix memory leak
             PluginInfoDialog *lPluginInfoDialog = new PluginInfoDialog(this);
             lPluginInfoDialog->setPluginName(pPluginId);
             lPluginInfoDialog->setPluginInfo(lPluginInfo.additionalInfo());
@@ -123,9 +159,15 @@ void DialogPlugins::slotButtonPressed(QString pPluginId)
             return;
         }
     }
-    QMessageBox::critical(this, "Error", "No additional info available");
+    QMessageBox::critical(this, tr("Error"), tr("No additional info available"));
 }
-QString DialogPlugins::requestInfoForPlugin(QString pPluginId)
+
+/*!
+ * \brief DialogPlugins::requestInfoForPlugin Returns plugins description(used when user clicks on info button in row with plugin description).
+ * \param pPluginId Plugin identifier, for which info button was pressed.
+ * \return Plugins description(used when user clicks on info button in row with plugin description).
+ */
+QString DialogPlugins::requestInfoForPlugin(const QString &pPluginId)
 {
     int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
     for (int i = 0; i < lCountOfTopLevelItem; ++i)
@@ -141,30 +183,43 @@ QString DialogPlugins::requestInfoForPlugin(QString pPluginId)
             }
         }
     }
-    return "";
+    return tr("");
 }
-QStringList DialogPlugins::activePlugins()
+
+/*!
+ * \brief DialogPlugins::activePlugins Returns plugins that was enabled by user. Returns valid value after dialog execution.
+ * \return List of active plugin identifiers.
+ */
+QStringList DialogPlugins::activePlugins() const
 {
-    QList<QTreeWidgetItem *> lSelectedPlugins = ui->pluginsTree->selectedItems();
     QStringList rSelectedPlugins;
-    foreach (QTreeWidgetItem* lPlugin, lSelectedPlugins)
+    for(const QTreeWidgetItem* lPlugin: ui->pluginsTree->selectedItems())
     {
-        rSelectedPlugins.append(lPlugin->text(0));
+        if(lPlugin->columnCount())
+            rSelectedPlugins.append(lPlugin->text(0));
     }
-    return rSelectedPlugins;
+    return std::move(rSelectedPlugins);
 }
+
+/*!
+ * \brief DialogPlugins::slotApplyAndRestartPressed Change mIsApplyAndRestartPressed to true.
+ */
 void DialogPlugins::slotApplyAndRestartPressed()
 {
     mIsApplyAndRestartPressed = true;
     emit accept();
 }
 
-bool DialogPlugins::restartApplication()
+/*!
+ * \brief DialogPlugins::isRestartRequstedByUser Shows when user wants to restart application to immediately appy all changes.
+ * \return Returns True if restart is requested, false otherwise.
+ */
+bool DialogPlugins::isRestartRequstedByUser() const
 {
     return mIsApplyAndRestartPressed;
 }
 
-void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
+void DialogPlugins::setActivatedPlugins(const QList<QString> &pActivatedPlugins)
 {
     int lCountOfTopLevelItem = ui->pluginsTree->topLevelItemCount();
     for (int i = 0; i < lCountOfTopLevelItem; ++i)
@@ -181,4 +236,3 @@ void DialogPlugins::setActivatedPlugins(QList<QString> pActivatedPlugins)
         }
     }
 }
-

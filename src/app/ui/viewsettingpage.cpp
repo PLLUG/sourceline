@@ -27,11 +27,11 @@
 
 #include <QFileDialog>
 
-
 ViewSettingPage::ViewSettingPage(Settings *pSettings, QWidget *parent) :
     SettingsPage(pSettings, parent)
+  ,mDialogUi{new Ui::Form}
+  ,mMainUi{nullptr}
 {
-    mDialogUi = new Ui::Form;
     QWidget *lWidget = new QWidget();
     mDialogUi->setupUi(lWidget);
     QVBoxLayout *lLayout = new QVBoxLayout;
@@ -61,15 +61,15 @@ ViewSettingPage::~ViewSettingPage()
     delete mDialogUi;
 }
 
-void ViewSettingPage::setMainUi(Ui::MainWindow *lMainUi)
+void ViewSettingPage::setMainUi(Ui::MainWindow *pMainUi)
 {
-    mMainUi = lMainUi;
+    mMainUi = pMainUi;
 }
 
 void ViewSettingPage::slotBtnOpen()
 {
-    consolePath = QFileDialog::getOpenFileName();
-    mDialogUi->lineEdit->setText(consolePath);
+    mConsolePath = QFileDialog::getOpenFileName();
+    mDialogUi->lineEdit->setText(mConsolePath);
 //    ConsoleView *lConsoleView = qobject_cast<ConsoleView *>(mMainUi->uiConsole->widget());
 //    if(lConsoleView)
 //    {

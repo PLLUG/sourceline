@@ -34,17 +34,14 @@ About::~About()
     delete ui;
 }
 
-QString About::textFromFile(QString address)
+QString About::textFromFile(const QString &pAddress)
 {
-    QFile file(address);
+    QFile file(pAddress);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
     {
-        qDebug() << QString("Cannot open ") + address;
+        qDebug() << QString("Cannot open ") + pAddress;
         return QString();
     }
-
     QTextStream in(&file);
-    QString rText = in.readAll();
-
-    return rText;
+    return in.readAll();
 }

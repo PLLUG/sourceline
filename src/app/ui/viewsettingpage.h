@@ -42,7 +42,7 @@ public:
     explicit ViewSettingPage(Settings *pSettings, QWidget *parent = 0);
     ~ViewSettingPage();
 
-    void setMainUi(Ui::MainWindow *lMainUi);
+    void setMainUi(Ui::MainWindow *pMainUi);
 
 signals:
     void signalGetSettings(QString pPath);
@@ -61,7 +61,7 @@ public slots:
 private:
     Ui::Form *mDialogUi;
     Ui::MainWindow *mMainUi;
-    QString consolePath;
+    QString mConsolePath;
 
 };
 

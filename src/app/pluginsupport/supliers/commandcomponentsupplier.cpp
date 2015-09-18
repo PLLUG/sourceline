@@ -25,12 +25,11 @@
 #include <command.h>
 #include "../../ui/useraction.h"
 #include "../../ui/actionmanager.h"
-#include "pluginsupport/plugininfo.h"
+#include "plugininfo.h"
 
 CommandComponentSupplier::CommandComponentSupplier() :
-    mActionManager(0)
+    mActionManager(nullptr)
 {
-
 }
 
 QString CommandComponentSupplier::className() const
@@ -45,11 +44,11 @@ void CommandComponentSupplier::setActionManager(ActionManager *pActionManager)
 
 UserAction *CommandComponentSupplier::actionFromCommand(Command *pComand)
 {
-    UserAction *lUserAction = new UserAction();
-    lUserAction->setIcon(pComand->icon());
-    lUserAction->setText(pComand->name());
-    lUserAction->setCommandKind(Commands::ImportCommand);
-    return lUserAction;
+    UserAction *rUserAction = new UserAction();
+    rUserAction->setIcon(pComand->icon());
+    rUserAction->setText(pComand->name());
+    rUserAction->setCommandKind(Commands::ImportCommand);
+    return rUserAction;
 }
 
 void CommandComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPluginInfo)
@@ -57,6 +56,6 @@ void CommandComponentSupplier::supply(QObject *pComponent, const PluginInfo &pPl
     Q_UNUSED(pPluginInfo);
     if (Command* lCommand = qobject_cast<Command*>(pComponent))
     {
-        mActionManager->add(HelpMenuGroup, actionFromCommand(lCommand));
+        mActionManager->add(MenuGroup::HelpMenuGroup, actionFromCommand(lCommand));
     }
 }

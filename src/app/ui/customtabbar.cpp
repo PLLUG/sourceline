@@ -23,30 +23,30 @@
 
 #include "customtabbar.h"
 #include "ui_customtabbar.h"
-#include "contentfortabworkplace.h"
 #include "settings.h"
 #include "settings_dialog/settingstorage.h"
+#include "contentfortab.h"
 
 #include <QDebug>
 #include <QWidget>
 
 CustomTabBar::CustomTabBar(SettingsManager *pSettingsManager, SettingStorage *pStorage, QWidget *parent) :
-    QTabWidget(parent),
-    ui(new Ui::CustomTabBar)
+    QTabWidget(parent)
+  ,ui(new Ui::CustomTabBar)
+  ,mSettings{new Settings(this)}
+  ,mStorage{pStorage}
+  ,mSettingsManager{pSettingsManager}
 {
     ui->setupUi(this);
-    this->setTabsClosable(true);
-    this->setMovable(true);
-    this->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
-
-    connect(this, SIGNAL(tabCloseRequested(int)), this, SLOT(slotCloseWorkplace(int)));
-    connect(this, SIGNAL(currentChanged(int)),this,SLOT(setAllTabsInvisibleExceptCurrentTab(int)));    
-    mSettings = new Settings(this);
+    connect(this, SIGNAL(currentChanged(int)),this,SLOT(setAllTabsInvisibleExceptCurrentTab(int)));
     mSettings->setAutoCommit(true);
-    mSettingsManager = pSettingsManager;
     mSettingsManager->addSettings("settingsTabs", "tab", mSettings);
-    mStorage = pStorage;
-    //mStorage->slotLoadSettings(mSettingsManager->pathBySettings(mSettings));
+
+    setTabsClosable(true);
+    setMovable(true);
+    setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
+
+    connect(this, &CustomTabBar::tabCloseRequested, this, &CustomTabBar::slotCloseWorkplace);
 }
 
 CustomTabBar::~CustomTabBar()
@@ -61,16 +61,17 @@ void CustomTabBar::loadSettingsForTabs()
 
 void CustomTabBar::slotAddNewWorkplace(const QString &pName)
 {
-    QTabWidget::addTab(new ContentForTabWorkplace(this, pName), pName);
-    setCurrentIndex(this->count()-1);    
+    QTabWidget::addTab(new ContentForTab(this, pName), pName);
+    setCurrentIndex(count()-1);
     mSettings->add(pName, getWidget(currentIndex()), "tabState");
     mSettings->subscribe(pName, getWidget(currentIndex()), SLOT(setTabState(QVariant)));
 }
 
 void CustomTabBar::slotCloseWorkplace(int pIndex)
 {
+    //TODO:check
     getWidget(pIndex)->close();
-    getWidget(pIndex)->~ContentForTabWorkplace();
+    getWidget(pIndex)->deleteLater();
 }
 
 void CustomTabBar::setAllTabsInvisibleExceptCurrentTab(int pIndex)
@@ -96,7 +97,7 @@ void CustomTabBar::setAllTabsInvisibleExceptCurrentTab(int pIndex)
     }*/
 }
 
-ContentForTabWorkplace* CustomTabBar::getWidget(int pIndex)
+ContentForTab* CustomTabBar::getWidget(int pIndex)
 {
-    return dynamic_cast<ContentForTabWorkplace*>(widget(pIndex));
+    return dynamic_cast<ContentForTab*>(widget(pIndex));
 }
