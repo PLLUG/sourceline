@@ -23,13 +23,19 @@
 #include "commandprocessmediator.h"
 #include <QProcess>
 #include <QVariant>
+#include <QSysInfo>
 
 CommandProcessMediator::CommandProcessMediator(QObject *parent) : QObject(parent)
 {
     mProcess = new CommandProcess(this);
-    // !!hardcode!! , dont work on linux , set for "shell" property "sh"
+    if(OsInfo()=="windows") //This temporary solution,wrong implementation check OS
+    {
     mProcess->setProperty("shell","C:/Windows/System32/cmd");
     mProcess->setProperty("shellParam",QStringList()<< "/k");
+    }else
+    {
+        mProcess->setProperty("shell","sh");
+    }
     mProcess->start();
 
     connect(this, SIGNAL(execute(QString)), mProcess, SLOT(execute(QString)));
