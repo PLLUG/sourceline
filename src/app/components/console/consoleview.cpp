@@ -47,7 +47,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
     ui->plainTextEdit->putData(clearAppend("█▀▀▀█░█▀▀▀█░█░░█░█▀▀█░█▀▀█░█▀▀▀░█░░░░▀█▀░█▄░░█░█▀▀▀ \n"
                                            "▀▀▀▄▄░█░░░█░█░░█░█▄▄▀░█░░░░█▀▀▀░█░░░░░█░░█░█░█░█▀▀▀ \n"
                                            "█▄▄▄█░█▄▄▄█░█▄▄█░█░░█░█▄▄█░█▄▄▄░█▄▄█░▄█▄░█░░▀█░█▄▄▄ \n\n"
-                                           "ⓢⓞⓤⓡⓒⓔⓛⓘⓝⓔ\n"));
+                                           "\n"));
 
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
 

@@ -27,8 +27,9 @@
 
 CommandProcessMediator::CommandProcessMediator(QObject *parent) : QObject(parent)
 {
+
     mProcess = new CommandProcess(this);
-    if(OsInfo()=="windows") //This temporary solution,wrong implementation check OS
+    if(QSysInfo::productType()=="windows") //This temporary solution,wrong implementation check OS
     {
     mProcess->setProperty("shell","C:/Windows/System32/cmd");
     mProcess->setProperty("shellParam",QStringList()<< "/k");
