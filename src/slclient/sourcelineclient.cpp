@@ -105,12 +105,12 @@ void SourceLineClient::initPlugins()
             this, SLOT(apiCall(QByteArray,QVariant,QVariant,QVariant,QVariant,QVariant)), Qt::UniqueConnection);
     }
 
-    PluginAPI *pluginApi = a->object<PluginAPI>();
-    Q_CHECK_PTR(pluginApi);
-    for (Command *command: pluginApi->commands(Commands::InitializeRepository))
-    {
-        command->init(*a);
-    }
+//    PluginAPI *pluginApi = a->object<PluginAPI>();
+//    Q_CHECK_PTR(pluginApi);
+//    for (Command *command: pluginApi->commands(Commands::InitializeRepository))
+//    {
+//        command->init(*a);
+//    }
 }
 
 void SourceLineClient::apiCall(QByteArray signature, QVariant param1, QVariant param2,

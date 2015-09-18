@@ -3,7 +3,6 @@
 #include "invocationbased.h"
 #include "clientprocess.h"
 #include "remoteapiprovider.h"
-#include "commandmanager.h"
 
 #include "fileviewapi.h"
 

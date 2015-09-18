@@ -15,11 +15,9 @@ QT      += widgets
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    commandmanager.cpp \
     clientprocess.cpp
 
 HEADERS  += mainwindow.h \
-    commandmanager.h \
     clientprocess.h
 
 FORMS    += mainwindow.ui

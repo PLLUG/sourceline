@@ -25,10 +25,10 @@
 #include <QObject>
 #include "plugin-interface.h"
 
-#include "pluginapi.h"
+#include "ipluginapi.h"
 
 #define REGISTER_COMMAND(aggregator, CommandClass, kind)\
-    aggregator.object<PluginAPI>()->registerCommand(CommandClass::staticMetaObject, kind);
+    aggregator.object<IPLuginAPI>()->registerCommand(CommandClass::staticMetaObject, kind);
 
 class Plugin :
         public QObject,
