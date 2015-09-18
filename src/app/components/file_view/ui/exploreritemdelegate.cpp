@@ -58,13 +58,14 @@ void ExplorerItemDelegate::paint(QPainter *painter, const QStyleOptionViewItem &
     painter->setBrush(QColor(Qt::black));
     painter->setPen(Qt::NoPen);
 
-    if (mFModel->data(index, FileModel::FileAttributeIconRole).toString() != "")
+    if (!mFModel->data(index, FileModel::FileAttributeIconRole).isNull())
     {
-        QPixmap lPixmap;
-        lPixmap = QPixmap(mFModel->data(index, FileModel::FileAttributeIconRole).toString());
-        int l = 16;
-        QRect rect(optv4.rect.center().x() + 2, optv4.rect.topRight().y() + 18, l, l);
-        painter->drawPixmap(rect, lPixmap.scaled(l, l, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+        QPixmap lPixmap = QPixmap(mFModel->data(index, FileModel::FileAttributeIconRole).toString());
+        int sizeLayout = 16;
+
+        //rect in bottom-right corner
+        QRect rect(optv4.rect.center().x() + 2, optv4.rect.topRight().y() + 18, sizeLayout, sizeLayout);
+        painter->drawPixmap(rect, lPixmap.scaled(sizeLayout, sizeLayout, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
     }
     painter->restore();
 }
