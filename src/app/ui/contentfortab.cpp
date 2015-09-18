@@ -7,6 +7,7 @@
 #include "ui/revisiontreedock.h"
 #include "../components/file_view/fileview.h"
 #include "components/revision_tree/revisiontree.h"
+#include <QDateTime>
 
 #include <QProcess>
 
@@ -55,6 +56,7 @@ ContentForTab::ContentForTab(QWidget *parent) :
 
     // TODO: move to git log command
     QProcess *mProcess{new QProcess{this}};
+//    mProcess->setWorkingDirectory("somedir");
 
     connect(mProcess, static_cast<void (QProcess::*)(int exitCode, QProcess::ExitStatus exitStatus)>(&QProcess::finished), this, [=]()
     {
@@ -84,10 +86,7 @@ ContentForTab::ContentForTab(QWidget *parent) :
                 message = dataList.at(5);
             }
 
-            RevisionNode newCommit = {
-                hash.toStdString(),
-                QDateTime::fromTime_t(time.toInt())
-            };
+            auto newCommit = hash.toStdString();
 
             QStringList parentList = parents.split(" ");
             if(parentList.empty())

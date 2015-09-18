@@ -14,9 +14,6 @@ public:
     explicit PublicFileViewAPI(QObject *parent = 0) :
         IFileViewAPI(parent) {}
 
-signals:
-    void invokeCommand(QByteArray pSignature, QVariant);
-
 public slots:
     void addToMenu(QString commandId) override final
     {
