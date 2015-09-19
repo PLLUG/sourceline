@@ -99,11 +99,11 @@ void SourceLineClient::initPlugins()
         }
     }
 
-    for (QObject *o: a->contents())
-    {
-        connect(o, SIGNAL(invokeCommand(QByteArray, QVariant, QVariant, QVariant, QVariant, QVariant)),
-            this, SLOT(apiCall(QByteArray,QVariant,QVariant,QVariant,QVariant,QVariant)), Qt::UniqueConnection);
-    }
+//    for (QObject *o: a->contents())
+//    {
+//        connect(o, SIGNAL(invokeCommand(QByteArray, QVariant, QVariant, QVariant, QVariant, QVariant)),
+//            this, SLOT(apiCall(QByteArray,QVariant,QVariant,QVariant,QVariant,QVariant)), Qt::UniqueConnection);
+//    }
 
 //    PluginAPI *pluginApi = a->object<PluginAPI>();
 //    Q_CHECK_PTR(pluginApi);

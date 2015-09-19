@@ -59,6 +59,8 @@ ClientDebugWindow::ClientDebugWindow(QWidget *parent) :
     QVBoxLayout *mainLayout = new QVBoxLayout();
     mainLayout->addWidget(mLogTextEdit);
     setLayout(mainLayout);
+
+    resize(800, 400);
 }
 
 void ClientDebugWindow::writeMessage(const QByteArray &msg)
@@ -72,7 +74,10 @@ void ClientDebugWindow::writeMessage(const QByteArray &msg)
  */
 void ClientDebugWindow::updateLog()
 {
-    mLogTextEdit->appendPlainText(mBuffer);
-    mBuffer.clear();
+    if (!mBuffer.isEmpty())
+    {
+        mLogTextEdit->appendPlainText(mBuffer);
+        mBuffer.clear();
+    }
 }
 
