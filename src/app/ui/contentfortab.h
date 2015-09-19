@@ -19,7 +19,7 @@ class ContentForTab;
 class ContentForTab : public QMainWindow
 {
     Q_OBJECT
-
+    Q_PROPERTY(QByteArray tabState READ tabState WRITE setTabState NOTIFY tabStateChanged)
 public:
     explicit ContentForTab(QWidget *parent = 0, QString TabName = QString());
     ~ContentForTab();

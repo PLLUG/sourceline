@@ -37,18 +37,29 @@ ContentForTab::ContentForTab(QWidget *parent, QString TabName) :
     //COMMENT: Create DockWidget HistoryTree, set content for it and add this HistoryTree to ContentForTabWorkplace
     mHistoryTree->setWidget(mRevisionTreeContents);
     addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, mHistoryTree);
+    connect(mHistoryTree, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mHistoryTree, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
+
 
     //COMMENT: Create DockWidget EditorView and add this EditorView to ContentForTabWorkplace
     addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, mEditorView);
+    connect(mEditorView, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mEditorView, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
 
     //COMMENT: Create DockWidget DockFileView, set content for it and add this DockFileView to ContentForTabWorkplace
     mFileView->setWidget(mFileViewContents);
     addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, mFileView);
+    connect(mFileView, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mFileView, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
+
 
     //COMMENT: Create DockWidget DockConsole, set content for it and add this DockConsole to ContentForTabWorkplace
 //    mConsole->setLayoutDirection(Qt::LeftToRight);
     mConsole->setWidget(mConsoleContents);
     addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, mConsole);
+    connect(mConsole, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mConsole, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
+
 
     splitDockWidget(mEditorView, mConsole, Qt::Vertical);
     tabifyDockWidget(mEditorView, mFileView);
