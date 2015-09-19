@@ -1,33 +1,21 @@
 #include "pluginapi.h"
-#include "invocationbased.h"
-#include "command.h"
-//#include "testcommand.h"
 
-PluginAPI::PluginAPI(QObject *parent) : QObject(parent)
+PluginAPI::PluginAPI(QObject *parent)
+    : QObject(parent)
+    , mCommandManager{nullptr}
 {
 
 }
 
-void PluginAPI::slotRegisterCommand(Command *pCommand)
+void PluginAPI::setCommandManager(CommandManager *commandManager)
 {
-    InvocationBased *lInvocationBasedCommand = new InvocationBased();
-    lInvocationBasedCommand->setTarget(pCommand);
-
-    QString lCommandID = pCommand->name();
-
-    mRegisteredCommands.insert(lCommandID, lInvocationBasedCommand);
-
-    emit newCommandRegistered(lCommandID);
+    mCommandManager = commandManager;
 }
 
-#include <QDebug>
-void PluginAPI::slotInvokeCommand(QString pCommandID, QByteArray pSignature)
+void PluginAPI::registerCommandId(QString commandId)
 {
-    InvocationBased *lInvocationBasedCommand = nullptr;
-    if((lInvocationBasedCommand = mRegisteredCommands.value(pCommandID)))
-    {
-        qDebug() << "PluginAPI::slotInvokeCommand";
-        lInvocationBasedCommand->invoke(pSignature);
-    }
+
 }
+
+
 

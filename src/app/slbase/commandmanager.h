@@ -5,7 +5,7 @@
 #include <QString>
 #include <QHash>
 
-class PublicCommandAPI;
+class CommandInterface;
 class PluginAPI;
 
 class CommandManager : public QObject
@@ -14,7 +14,7 @@ class CommandManager : public QObject
 public:
     explicit CommandManager(QObject *parent = 0);
 
-    PublicCommandAPI* command(QString pCommandID);
+    CommandInterface* command(QString pCommandID);
 signals:
     void invokeCommand(QString pCommandID, QByteArray pSignature);
 public slots:
@@ -23,7 +23,7 @@ public slots:
     void slotInvoke(QString pCommandID, QByteArray pSignature);
 
 private:
-    QHash<QString, PublicCommandAPI*> mCommandsAPI;
+    QHash<QString, CommandInterface*> mCommandsAPI;
 
 };
 

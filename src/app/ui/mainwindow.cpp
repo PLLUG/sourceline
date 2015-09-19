@@ -131,9 +131,28 @@ void MainWindow::slotQuit()
     qApp->quit();
 }
 
+#include "invocationbased.h"
+#include "slbase/clientprocess.h"
+#include "remoteapiprovider.h"
+#include "fileviewapi.h"
 void MainWindow::slotAddNewWorkplace()
 {
     mTabsAPI->slotAddNewWorkplace(mTabBar, tr("Name") + QString::number(mAmountOpenedTabs++));
+
+    InvocationBased *fileViewInvocationBased = new InvocationBased(this);
+//    fileViewInvocationBased->setTarget(w.api());
+
+    InvocationBased *commandApiInvocationBased = new InvocationBased(this);
+//    commandApiInvocationBased->setTarget(w.commandManager());
+
+    RemoteApiProvider *apiProvider = new RemoteApiProvider(this);
+    apiProvider->addApiProvider(fileViewInvocationBased);
+    apiProvider->addApiProvider(commandApiInvocationBased);
+
+    ClientProcess *client = new ClientProcess(*apiProvider);
+    client->setConnectionId("sl");
+    client->setAllowClientDebugMode(true);
+    client->start();
 }
 
 Ui::MainWindow *MainWindow::getUi() const

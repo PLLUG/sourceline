@@ -25,7 +25,7 @@ TEMPLATE = app
 TARGET = SourceLine
 
 include($$PWD/../general.pri)
-DESTDIR = $$SL_LIB_DIRECTORY
+DESTDIR = $$SL_BIN_DIRECTORY
 
 QT += widgets
 

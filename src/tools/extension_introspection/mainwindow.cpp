@@ -5,20 +5,24 @@
 #include "pluginloader.h"
 #include "commandmanager.h"
 #include "pluginapi.h"
-#include "testcommand.h"
+//#include "testcommand.h"
 #include "aggregator.h"
-#include "fileviewapi.h"
 #include "invocationbased.h"
-#include "publicfileviewapi.h"
-#include "file_view/fileview.h"
+//#include "publicfileviewapi.h"
+#include "fileview.h"
+#include "fileviewapi.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
+    ui(new Ui::MainWindow),
+    mCommandManager(new CommandManager(this))
 {
     ui->setupUi(this);
+
     FileView* lFileView = new FileView();
     setCentralWidget(lFileView);
+
+    mApi = new FileViewAPI(*lFileView, *mCommandManager, this);
 
 //    CommandManager *lCommandManager = new CommandManager();
 //    PluginAPI *lPluginAPI = new PluginAPI();
@@ -51,4 +55,14 @@ MainWindow::MainWindow(QWidget *parent) :
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+FileViewAPI *MainWindow::api() const
+{
+    return mApi;
+}
+
+CommandManager *MainWindow::commandManager() const
+{
+    return mCommandManager;
 }

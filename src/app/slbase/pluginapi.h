@@ -1,29 +1,31 @@
 #ifndef PLUGINAPI_H
 #define PLUGINAPI_H
 
+#include "iplugininterfaceadapter.h"
+#include "defs.h"
+
 #include <QObject>
 #include <QHash>
 #include <QString>
 
 class TestCommand;
-class InvocationBased;
-class Command;
+class CommandManager;
 
-class PluginAPI : public QObject
+/*!
+ * \brief The PluginAPI class implements plugin initialization and plugin information API.
+ */
+class PluginAPI : public QObject, public IPluginInterfaceAdapter
 {
     Q_OBJECT
 public:
     explicit PluginAPI(QObject *parent = 0);
-
-signals:
-    void newCommandRegistered(QString pID);
+    void setCommandManager(CommandManager *commandManager);
 
 public slots:
-    void slotRegisterCommand(Command *pCommand);
-    void slotInvokeCommand(QString pCommandID, QByteArray pSignature);
+    void registerCommandId(QString commandId) final;
 
 private:
-    QHash<QString, InvocationBased*> mRegisteredCommands;
+    CommandManager *mCommandManager;
 };
 
 #endif // PLUGINAPI_H

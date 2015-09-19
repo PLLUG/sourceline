@@ -25,6 +25,7 @@
 *******************************************************************************/
 
 #include <QObject>
+#include <QDebug>
 
 class Aggregator: public QObject
 {
@@ -33,6 +34,11 @@ class Aggregator: public QObject
 public:
     explicit Aggregator(QObject *parent = nullptr) : QObject(parent) {}
     virtual ~Aggregator() {}
+
+    QObjectList contents() const
+    {
+        return mContents;
+    }
 
     /*!
      * \brief Set obj as children of Aggregator class.
@@ -51,12 +57,14 @@ public:
      * If Aggregator doesn't have suitable children, getter returns null pointer.
      */
     template <typename T>
-    T* object()
+    T* object() const
     {
         T * rObj = nullptr;
         for (QObject *o: mContents)
         {
-            if(rObj = qobject_cast<T*>(o))
+            // TODO: investigate issue with qobject_cast
+            rObj = dynamic_cast<T*>(o);
+            if(rObj)
             {
                 break;
             }

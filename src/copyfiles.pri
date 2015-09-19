@@ -5,7 +5,7 @@
 #COPYFILES_TARGET_DIR =
 
 ## === define copy files for installation and build ===
-copytarget.path    = $$_COPYFILES_PATH
+copytarget.path    = $$COPYFILES_PATH
 copytarget.files  += $$COPYFILES_FILELIST
 
 ## wildcard for filename1 filename2 filename3 ...

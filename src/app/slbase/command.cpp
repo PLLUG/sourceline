@@ -28,7 +28,7 @@
 const QChar ARGUMENT_SEPARATOR(' ');
 
 Command::Command(QObject *parent) :
-    QObject(parent)
+    ICommand(parent)
 {
 }
 

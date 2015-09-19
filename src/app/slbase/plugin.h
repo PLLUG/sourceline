@@ -25,6 +25,11 @@
 #include <QObject>
 #include "plugin-interface.h"
 
+#include "ipluginapi.h"
+
+#define REGISTER_COMMAND(aggregator, CommandClass, kind)\
+    aggregator.object<IPLuginAPI>()->registerCommand(CommandClass::staticMetaObject, kind);
+
 class Plugin :
         public QObject,
         public PluginInterface
@@ -34,7 +39,7 @@ class Plugin :
 public:
     explicit Plugin(QObject *pParent = 0);
 
-    QList<Command *> commands(Commands::CommandKind kind = Commands::UknownCommand) final;
+    QList<Command *> commands(Commands::CommandKind kind = Commands::UknownKind) final;
 
     QObjectList components() const;
 

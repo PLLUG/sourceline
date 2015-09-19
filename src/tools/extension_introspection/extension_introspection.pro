@@ -15,15 +15,9 @@ QT      += widgets
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    testcommand.cpp \
-    commandmanager.cpp \
-    publiccommandapi.cpp \
     clientprocess.cpp
 
 HEADERS  += mainwindow.h \
-    testcommand.h \
-    commandmanager.h \
-    publiccommandapi.h \
     clientprocess.h
 
 FORMS    += mainwindow.ui
@@ -34,6 +28,6 @@ include(./../../extensionlib/extensionlib.pri)
 # Plugin management support library
 include(./../../pluginmanager/pluginmanager.pri)
 
-include($$_PRO_FILE_PWD_/../../app/components/file_view/FileView.pri)
+include($$PWD/../../app/components/file_view/FileView.pri)
 
 LIBS += -lslapi

@@ -24,7 +24,7 @@
 ***                                                                          ***
 *******************************************************************************/
 
-#include <QObject>
+#include "icommand.h"
 
 #include <QIcon>
 //#include "defs.h"
@@ -35,7 +35,7 @@ class Aggregator;
  * \brief The abstract Command class implements command that could be executed by vcs or command
  *  interpreter in SL process execution environment.
  */
-class Command : public QObject
+class Command : public ICommand
 {
     Q_OBJECT
 public:
@@ -95,7 +95,7 @@ public:
      * \brief Should be called when user runs command using associated UI controls.
      * \param api SL public API aggregator.
      */
-    virtual void trigger(/*Aggregator &api*/) = 0;
+//    virtual void trigger(/*Aggregator &api*/) = 0;
 
     /*!
      * \brief Processes command output and performs appropriate actions.
