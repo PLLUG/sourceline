@@ -169,7 +169,7 @@ void ApplicationBuilder::initApp()
 void ApplicationBuilder::createUi()
 {
     // Application main window
-    mMainWindow = new MainWindow;
+    mMainWindow = new MainWindow(mSettingsManager, mStorage);
     mMainWindow->lower();
 
     // Helper class for building main menu
@@ -263,7 +263,7 @@ void ApplicationBuilder::loadPlugins()
 
     if (lActivePluginsList.isEmpty())
     {
-        qDebug("        No plugin settings present: loading all available pluggins");
+        qDebug("No plugin settings present: loading all available pluggins");
         lActivePluginsList = mPluginManager->availablePlugins();
     }
 

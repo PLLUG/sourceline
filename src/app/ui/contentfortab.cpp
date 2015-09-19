@@ -8,10 +8,10 @@
 #include "../components/file_view/fileview.h"
 #include "components/revision_tree/revisiontree.h"
 #include <QDateTime>
-
+#include <QCloseEvent>
 #include <QProcess>
 
-ContentForTab::ContentForTab(QWidget *parent) :
+ContentForTab::ContentForTab(QWidget *parent, QString TabName) :
     QMainWindow(parent)
   ,ui(new Ui::ContentForTab)
   ,mHistoryTree{new RevisionTreeDock{this}}
@@ -37,18 +37,29 @@ ContentForTab::ContentForTab(QWidget *parent) :
     //COMMENT: Create DockWidget HistoryTree, set content for it and add this HistoryTree to ContentForTabWorkplace
     mHistoryTree->setWidget(mRevisionTreeContents);
     addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, mHistoryTree);
+    connect(mHistoryTree, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mHistoryTree, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
+
 
     //COMMENT: Create DockWidget EditorView and add this EditorView to ContentForTabWorkplace
     addDockWidget(Qt::DockWidgetArea::BottomDockWidgetArea, mEditorView);
+    connect(mEditorView, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mEditorView, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
 
     //COMMENT: Create DockWidget DockFileView, set content for it and add this DockFileView to ContentForTabWorkplace
     mFileView->setWidget(mFileViewContents);
     addDockWidget(Qt::DockWidgetArea::LeftDockWidgetArea, mFileView);
+    connect(mFileView, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mFileView, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
+
 
     //COMMENT: Create DockWidget DockConsole, set content for it and add this DockConsole to ContentForTabWorkplace
 //    mConsole->setLayoutDirection(Qt::LeftToRight);
     mConsole->setWidget(mConsoleContents);
     addDockWidget(Qt::DockWidgetArea::RightDockWidgetArea, mConsole);
+    connect(mConsole, SIGNAL(dockLocationChanged(Qt::DockWidgetArea)), this, SLOT(sentSignalTabStateChanged()));
+    connect(mConsole, SIGNAL(dockSizeChanged()), this, SLOT(sentSignalTabStateChanged()));
+
 
     splitDockWidget(mEditorView, mConsole, Qt::Vertical);
     tabifyDockWidget(mEditorView, mFileView);
@@ -115,5 +126,50 @@ ContentForTab::ContentForTab(QWidget *parent) :
 ContentForTab::~ContentForTab()
 {
     delete ui;
+}
+
+QByteArray ContentForTab::tabState() const
+{
+    return saveState();
+}
+
+bool ContentForTab::isContentVisible()
+{
+    return mIsVisble;
+}
+
+/*!
+ * \brief Set Visible For All Component
+ * \param pVisible
+ */
+void ContentForTab::setVisibleForContent(bool pVisible)
+{
+    mHistoryTree->setVisible(pVisible);
+    mFileView->setVisible(pVisible);
+    mConsole->setVisible(pVisible);
+    mIsVisble = pVisible;
+}
+
+void ContentForTab::setTabState(QVariant pTabState)
+{
+    QByteArray lTabState = pTabState.toByteArray();
+    if (tabState() == lTabState)
+        return;
+    blockSignals(true);
+    restoreState(lTabState);
+    blockSignals(false);
+    emit tabStateChanged(lTabState);
+}
+
+void ContentForTab::sentSignalTabStateChanged()
+{
+    emit tabStateChanged(tabState());
+}
+
+void ContentForTab::closeEvent(QCloseEvent *pEvent)
+{
+    emit tabStateChanged(tabState());
+    pEvent->accept();
+    QMainWindow::closeEvent(pEvent);
 }
 

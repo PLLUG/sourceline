@@ -2,6 +2,7 @@
 #define CONTENTFORTAB_H
 
 #include <QMainWindow>
+#include <QSettings>
 
 class RevisionTreeDock;
 class EditorView;
@@ -18,10 +19,24 @@ class ContentForTab;
 class ContentForTab : public QMainWindow
 {
     Q_OBJECT
-
+    Q_PROPERTY(QByteArray tabState READ tabState WRITE setTabState NOTIFY tabStateChanged)
 public:
-    explicit ContentForTab(QWidget *parent = 0);
+    explicit ContentForTab(QWidget *parent = 0, QString TabName = QString());
     ~ContentForTab();
+
+    QByteArray tabState() const;
+    bool isContentVisible();
+    void setVisibleForContent(bool pVisible);
+
+public slots:
+    void setTabState(QVariant pTabState);
+    void sentSignalTabStateChanged();
+
+private:
+    void closeEvent(QCloseEvent *pEvent);
+
+signals:
+    void tabStateChanged(QByteArray pTabState);
 
 private:
     Ui::ContentForTab *ui;
@@ -33,6 +48,9 @@ private:
     FileView *mFileViewContents;
     DockConsole *mConsole;
     ConsoleView *mConsoleContents;
+    bool mIsVisble;
+    QString mPathToSettingsFile;
+    QSettings *mSettings;
 };
 
 #endif // CONTENTFORTAB_H

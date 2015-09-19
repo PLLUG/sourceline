@@ -7,6 +7,7 @@
 #include "customtabbar.h"
 #include "settings_dialog/settingstorage.h"
 #include "settings_dialog/settingsmanager.h"
+#include "settings.h"
 
 #include <QMessageBox>
 #include <QFile>
@@ -14,16 +15,21 @@
 #include <QSettings>
 #include <QDebug>
 #include <QTabWidget>
-#include <QHBoxLayout>
+#include <QStringList>
+#include <QCloseEvent>
+#include <QString>
 
-MainWindow::MainWindow(QWidget *parent) :
+MainWindow::MainWindow(SettingsManager *pSettingsManager, SettingStorage *pStorage, QWidget *parent) :
     QMainWindow(parent)
   ,mTrayIcon{new QSystemTrayIcon(this)}
   ,mTrayMenu{new QMenu(this)}
-  ,mTabBar{new CustomTabBar(this)}
+  ,mTabBar{nullptr}
   ,mTabsAPI{new TabsAPI(this)}
   ,ui(new Ui::MainWindow)
   ,mAmountOpenedTabs{0}
+  ,mStorage(pStorage)
+  ,mSettingsManager(pSettingsManager)
+  ,mSettings{new Settings(this)}
 {
     ui->setupUi(this);
     // TASK: creation of tray menu should be peformed by ApplicationBuilder
@@ -35,12 +41,27 @@ MainWindow::MainWindow(QWidget *parent) :
     mTrayIcon->show();
     mTrayIcon->setContextMenu(mTrayMenu);
 
+    setMinimumSize(800,600);
+
     // TASK: creation of PageManager should be performed by ApplicationBuilder
+    mTabBar = new CustomTabBar(pSettingsManager, mStorage, this);
+    setCentralWidget(mTabBar);
+    //connect(mTabBar, &CustomTabBar::tabCloseRequested, mTabBar, &CustomTabBar::removeTab);
+
+    mSettings->setAutoCommit(true);
+    mSettingsManager->addSettings("listTabsForOpening", "listTabs", mSettings);
+
+    mSettings->add("tabs", this, "openedTabs");
+    mSettings->subscribe("tabs", this, SLOT(setOpenedTabs(QVariant)));
+
+    mStorage->slotLoadSettings(mSettingsManager->pathBySettings(mSettings));
+
     connect(mTrayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
 
-    setCentralWidget(mTabBar);
-
-    slotAddNewWorkplace();
+    if(!mListOpenedTabs.count())
+    {
+        slotAddNewWorkplace();
+    }
 }
 
 MainWindow::~MainWindow()
@@ -49,6 +70,36 @@ MainWindow::~MainWindow()
     delete ui;
     delete mTrayMenu;
     delete mTrayIcon;
+}
+
+QStringList MainWindow::openedTabs() const
+{
+    mListOpenedTabs.clear();
+
+    for(int i = 0; i < mTabsAPI->getCountTabs(mTabBar); i++)
+    {
+        QString nameTab = mTabsAPI->getNameOfTabById(mTabBar, i);
+        mListOpenedTabs << nameTab;
+    }
+
+    return mListOpenedTabs;
+}
+
+void MainWindow::setOpenedTabs(QVariant pOpenedTabs)
+{
+    QStringList lListOpenedTabs = pOpenedTabs.toStringList();
+    if (lListOpenedTabs == mListOpenedTabs)
+        return;
+
+    foreach(const QString &lTabName, lListOpenedTabs)
+    {
+        mTabsAPI->slotAddNewWorkplace(mTabBar, lTabName);
+        mAmountOpenedTabs++;
+    }
+
+    mTabsAPI->loadSettingsForTabs(mTabBar);
+
+    mListOpenedTabs = lListOpenedTabs;
 }
 
 void MainWindow::slotCloseWindow()
@@ -86,8 +137,7 @@ void MainWindow::slotQuit()
 #include "fileviewapi.h"
 void MainWindow::slotAddNewWorkplace()
 {
-    QString lTabName = tr("Name") + QString::number(mAmountOpenedTabs++);
-    mTabsAPI->slotAddNewWorkplace(mTabBar, lTabName);
+    mTabsAPI->slotAddNewWorkplace(mTabBar, tr("Name") + QString::number(mAmountOpenedTabs++));
 
     InvocationBased *fileViewInvocationBased = new InvocationBased(this);
 //    fileViewInvocationBased->setTarget(w.api());
@@ -103,7 +153,6 @@ void MainWindow::slotAddNewWorkplace()
     client->setConnectionId("sl");
     client->setAllowClientDebugMode(true);
     client->start();
-    qDebug() << "!!!!!";
 }
 
 Ui::MainWindow *MainWindow::getUi() const
@@ -111,7 +160,9 @@ Ui::MainWindow *MainWindow::getUi() const
     return ui;
 }
 
-void MainWindow::resizeEvent(QResizeEvent *e)
+void MainWindow::closeEvent(QCloseEvent *pEvent)
 {
-    Q_UNUSED(e);
+    emit openedTabsChanged(mListOpenedTabs);
+    pEvent->accept();
+    QMainWindow::closeEvent(pEvent);
 }
