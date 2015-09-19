@@ -24,7 +24,6 @@
 *******************************************************************************/
 #include <QWidget>
 #include "revisionmodel.h"
-#include <vector>
 
 namespace Ui {
 class RevisionTree;
@@ -45,7 +44,7 @@ public:
     int rowHeight() const;
     void setRowHeight(int rowHeight);
 
-    void addNode(const std::string &pParentID, const RevisionNode &pNodeInfo);
+    void addNode(const std::string &pParentID, const std::string &pNodeId);
     void putProperty(const std::string &pRecepientId, const std::string &property, const QVariant &value);
 
 private slots:

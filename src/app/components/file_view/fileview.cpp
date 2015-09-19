@@ -134,7 +134,7 @@ void FileView::registerAction(QAction *pAction, SelectionFlags pSelecitonFlags)
     {
         mMenuBySelectionFlags.insert(pSelecitonFlags,new QMenu(this));
     }
-    mMenuBySelectionFlags[pSelecitonFlags]->addAction(pAction);
+    mMenuBySelectionFlags.value(pSelecitonFlags)->addAction(pAction);
 }
 
 /*!
@@ -222,19 +222,6 @@ void FileView::slotGoToPath()
  */
 void FileView::slotRightBtnClick()
 {
-    //    QModelIndex lIndex = ui->listView->indexAt(pos);
-    //    if(mFileModel->fileInfo(lIndex).isDir())
-    //    {
-    //        mDirMenu->exec(QCursor::pos());
-    //    }
-    //    else if(mFileModel->fileInfo(lIndex).isFile())
-    //    {
-    //        mFileMenu->exec(QCursor::pos());
-    //    }
-    //    else
-    //    {
-    //        mMenu->exec(QCursor::pos());
-    //    }
     SelectionFlags flag;
     QModelIndexList listIndexes = ui->listView->selectionModel()->selectedIndexes();
     if (listIndexes.length() == 0)
@@ -259,7 +246,10 @@ void FileView::slotRightBtnClick()
             flag = flag | SelectionFlag::FileSelection;
         }
     }
-    mMenuBySelectionFlags[flag]->exec(QCursor::pos());
+    if (mMenuBySelectionFlags.contains(flag))
+    {
+        mMenuBySelectionFlags.value(flag)->exec(QCursor::pos());
+    }
 }
 
 void FileView::slotLeftBtnClick()

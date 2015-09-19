@@ -44,8 +44,10 @@ ConsoleView::ConsoleView(QWidget *parent) :
 
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
-    ui->plainTextEdit->putData(clearAppend("\t<SL-CONSOLE>\n\nINTRO:\n*If you double click console will be cleared,\n"
-                                           "*Do not put exit command , it will close console and you will not be able to use that.\n\n"));
+    ui->plainTextEdit->putData(clearAppend("█▀▀▀█░█▀▀▀█░█░░█░█▀▀█░█▀▀█░█▀▀▀░█░░░░▀█▀░█▄░░█░█▀▀▀ \n"
+                                           "▀▀▀▄▄░█░░░█░█░░█░█▄▄▀░█░░░░█▀▀▀░█░░░░░█░░█░█░█░█▀▀▀ \n"
+                                           "█▄▄▄█░█▄▄▄█░█▄▄█░█░░█░█▄▄█░█▄▄▄░█▄▄█░▄█▄░█░░▀█░█▄▄▄ \n\n"
+                                           "\n"));
 
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
 

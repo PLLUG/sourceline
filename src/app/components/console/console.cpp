@@ -37,6 +37,7 @@ Console::Console(QWidget *parent)
     mColorInputText = Qt::green;
     mReadOnlyLen = 2;
 
+int c = document()->maximumBlockCount();
     document()->setMaximumBlockCount(mMaximumBlockCount);
     QPalette p = palette();
     p.setColor(QPalette::Base, mColorBase);

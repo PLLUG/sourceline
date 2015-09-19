@@ -1,5 +1,5 @@
 include($$PWD/../../../extensionlib/extensionlib.pri)
 
 HEADERS += \
-    $$PWD/ifileviewapi.h \
-    $$PWD/fileviewapiinterface.h
+    $$PWD/irevisiontreeapi.h \
+    $$PWD/irevisiontreeapi.h

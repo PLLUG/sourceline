@@ -30,14 +30,7 @@
 #include <QVariant>
 #include <QDateTime>
 
-//maybe use labeled_graph where labeles are commit ids (and remove id from property)? - no
-//#include <boost/graph/labeled_graph.hpp>
-//using labeled_graph = boost::labeled_graph<revision_graph,
-//std::string // node ID
-//>;
-
-//boost bundled properties
-//modified adjacency_list.hpp because of compile error
+//maybe use labeled_graph where labeles are commit ids
 
 std::ostream& operator<<(std::ostream& os, const QVariant& pVariant)
 {
@@ -72,15 +65,15 @@ void RevisionModel::debugTree(const revision_graph &graph) const
  * \param pParentID ID of parent, may be empty if node nas no parent (e.g. initial commit or filtered data)
  * \param pNodeInfo Info about new node
  */
-void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pNodeInfo)
+void RevisionModel::addNode(const std::string &pParentID, const std::string &pNodeId)
 {
     vertex v_new = boost::graph_traits<revision_graph>::null_vertex();
     vertex v_parent = boost::graph_traits<revision_graph>::null_vertex();
     //find vertexes in graph if they are present
     BGL_FORALL_VERTICES(v, mGraph, revision_graph)
     {
-        const auto &name = mGraph[v].name;
-        if(pNodeInfo.name == name)
+        const auto &name = mGraph[v];
+        if(pNodeId == name)
         {
             v_new = v;
             if(boost::graph_traits<revision_graph>::null_vertex() != v_parent || pParentID.empty())
@@ -102,20 +95,17 @@ void RevisionModel::addNode(const std::string &pParentID, const RevisionNode &pN
         // node has no parent if parent is empty
         if(!pParentID.empty())
         {
-            RevisionNode parentNodeInfo;
-            parentNodeInfo.name = pParentID;
-            v_parent = boost::add_vertex(parentNodeInfo, mGraph);
+            v_parent = boost::add_vertex(pParentID, mGraph);
         }
     }
     if(boost::graph_traits<revision_graph>::null_vertex() == v_new)
     {
         //create if not found
-        v_new = boost::add_vertex(pNodeInfo, mGraph);
+        v_new = boost::add_vertex(pNodeId, mGraph);
     }
     else
     {
-        // node already in, modify data, because probably it was empty
-        mGraph[v_new].created = pNodeInfo.created;
+        // node already in
     }
     if(boost::graph_traits<revision_graph>::null_vertex() != v_parent &&
             boost::graph_traits<revision_graph>::null_vertex() != v_new &&
@@ -235,7 +225,7 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
         {
             switch (index.column()) {
             case IdColumn:
-                return QString::fromStdString(mGraph[v].name);
+                return QString::fromStdString(mGraph[v]);
                 break;
             default:
                 break;
@@ -244,7 +234,7 @@ QVariant RevisionModel::data(const QModelIndex &index, int role) const
         else
         {
             const std::string property = mPropertyNames.at(index.column()-DefaultColumnsCount);
-            const std::string &name = mGraph[v].name;
+            const std::string &name = mGraph[v];
             return boost::get(property, mProperties, name,boost::type<QVariant>());
         }
     }
@@ -299,30 +289,31 @@ QVariant RevisionModel::headerData(int section, Qt::Orientation orientation, int
     return std::move(rHeaderName);
 }
 
+//TODO: make more general when filtering and sorting will be implemented
 /*!
  * \brief sortedGraphByTime sorts graph by commit-time
  * \param graph - graph to be sorted
  * \return vector with sorted vertices
  */
-std::vector<vertex> RevisionModel::sortedGraphByTime(const revision_graph &graph)
-{
-    int verticesNumb = num_vertices(graph);
-    std::vector< vertex > rVector;
-    rVector.reserve(verticesNumb);
+//std::vector<vertex> RevisionModel::sortedGraphByTime(const revision_graph &graph)
+//{
+//    int verticesNumb = num_vertices(graph);
+//    std::vector< vertex > rVector;
+//    rVector.reserve(verticesNumb);
 
-    // Copying vertices from graph to rVector
-    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
-    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
-    {
-        rVector.push_back(*vi);
-    }
+//    // Copying vertices from graph to rVector
+//    boost::graph_traits< revision_graph >::vertex_iterator vi, vi_end;
+//    for(boost::tie(vi, vi_end) = boost::vertices(graph); vi != vi_end; ++vi)
+//    {
+//        rVector.push_back(*vi);
+//    }
 
-    // Sorting vertices in rVector
-    std::sort(rVector.begin(), rVector.end(),
-              [&graph](const vertex &vert1, const vertex &vert2) -> bool
-    {
-        return graph[vert1].created < graph[vert2].created;
-    });
+//    // Sorting vertices in rVector
+//    std::sort(rVector.begin(), rVector.end(),
+//              [&graph](const vertex &vert1, const vertex &vert2) -> bool
+//    {
+//        return graph[vert1].created < graph[vert2].created;
+//    });
 
-    return std::move(rVector);
-}
+//    return std::move(rVector);
+//}

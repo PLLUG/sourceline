@@ -26,7 +26,6 @@
 #include <boost/property_map/dynamic_property_map.hpp>
 #include <map>
 #include <iostream>
-#include "revisionnode.h"
 
 template <typename IndexMap, typename vertex, typename graph>
 class dfs_visitor : public boost::default_dfs_visitor

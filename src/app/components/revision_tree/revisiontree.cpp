@@ -55,7 +55,8 @@ RevisionTree::RevisionTree(QWidget *parent) :
 
     ui->revisionTableView->horizontalHeader()->setSectionsMovable(true);
     ui->revisionTableView->verticalHeader()->setSectionResizeMode(QHeaderView::Fixed);
-    ui->revisionTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    ui->revisionTableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    ui->revisionTableView->horizontalHeader()->setStretchLastSection(true);
 
     ui->revisionTreeWidget->setRowHeight(mRowHeight);
 }
@@ -111,9 +112,9 @@ void RevisionTree::setRowHeight(int rowHeight)
  * \param pParentID ID of parent, may be empty if node nas no parent (e.g. initial commit or filtered data)
  * \param pNodeInfo Info about new node
  */
-void RevisionTree::addNode(const std::string &pParentID, const RevisionNode &pNodeInfo)
+void RevisionTree::addNode(const std::string &pParentID, const std::string &pNodeId)
 {
-    mModel->addNode(pParentID, pNodeInfo);
+    mModel->addNode(pParentID, pNodeId);
 }
 
 /*!
