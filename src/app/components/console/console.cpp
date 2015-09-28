@@ -57,6 +57,15 @@ void Console::setLocalEchoEnabled(bool set)
     mLocalEchoEnabled = set;
 }
 
+void Console::readLine() //created for test alternative read input line
+{
+    moveCursor(QTextCursor::End, QTextCursor::MoveAnchor);
+    moveCursor(QTextCursor::StartOfLine, QTextCursor::MoveAnchor);
+    moveCursor(QTextCursor::End, QTextCursor::KeepAnchor);
+    QString command =  textCursor().selectedText();
+    qDebug() << command;
+}
+
 void Console::keyPressEvent(QKeyEvent *e)
 {
     switch (e->key()) {
@@ -71,6 +80,7 @@ void Console::keyPressEvent(QKeyEvent *e)
         break;
     case Qt::Key_Return:
     case Qt::Key_Enter:
+        readLine();
         emit signalSendCmd(mCurrentCmd);
         mPreviousCmd = mCurrentCmd;
         mCurrentCmd.clear();

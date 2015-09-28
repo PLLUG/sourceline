@@ -46,6 +46,7 @@ signals:
 
 private:
     void moveCursorToEnd();
+    void readLine();
 
 private:
     bool mLocalEchoEnabled;
