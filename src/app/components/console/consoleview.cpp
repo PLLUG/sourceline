@@ -26,15 +26,6 @@
 #include <QDebug>
 #include <QSysInfo>
 #include "commandprocessmediator.h"
-// make input work
-// remove platform dependent ifs +
-// amke Q_PROPERTY for commandprocess +
-//    * pommand interpreter
-// make methods to commandprocess
-//     * start() +
-//     * shutdown() +
-// all console input send to process stdin
-
 
 ConsoleView::ConsoleView(QWidget *parent) :
     QWidget(parent),
@@ -44,10 +35,7 @@ ConsoleView::ConsoleView(QWidget *parent) :
 
     ui->setupUi(this);
     ui->plainTextEdit->setLocalEchoEnabled(true);
-    ui->plainTextEdit->putData(clearAppend("█▀▀▀█░█▀▀▀█░█░░█░█▀▀█░█▀▀█░█▀▀▀░█░░░░▀█▀░█▄░░█░█▀▀▀ \n"
-                                           "▀▀▀▄▄░█░░░█░█░░█░█▄▄▀░█░░░░█▀▀▀░█░░░░░█░░█░█░█░█▀▀▀ \n"
-                                           "█▄▄▄█░█▄▄▄█░█▄▄█░█░░█░█▄▄█░█▄▄▄░█▄▄█░▄█▄░█░░▀█░█▄▄▄ \n\n"
-                                           "\n"));
+    ui->plainTextEdit->putData(clearAppend("Try help."));
 
     connect(ui->plainTextEdit, SIGNAL(signalSendCmd(QString)), this, SLOT(slotExec(QString)));
 
